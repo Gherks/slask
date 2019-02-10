@@ -6,3 +6,5 @@ Slask/bin/
 Slask/node_modules/
 
 Slask/obj/
+
+Slask/wwwroot/ClientApp/
