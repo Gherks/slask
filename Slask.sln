@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slask", "Slask\Slask.csproj", "{EFAEA8E4-0D2F-4BB4-9328-BC3ED6F4BEB5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EFAEA8E4-0D2F-4BB4-9328-BC3ED6F4BEB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFAEA8E4-0D2F-4BB4-9328-BC3ED6F4BEB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFAEA8E4-0D2F-4BB4-9328-BC3ED6F4BEB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFAEA8E4-0D2F-4BB4-9328-BC3ED6F4BEB5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A4CE8064-6B35-47D4-963D-EDE442BE3BDB}
+	EndGlobalSection
+EndGlobal
