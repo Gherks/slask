@@ -8,3 +8,15 @@ Slask/node_modules/
 Slask/obj/
 
 Slask/wwwroot/
+
+Slask.API/bin/
+
+Slask.API/obj/
+
+Slask.API/node_modules/
+
+Slask.Data/bin/
+
+Slask.Data/obj/
+
+Slask.Data/node_modules/
