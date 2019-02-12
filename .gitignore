@@ -9,6 +9,14 @@ Slask/obj/
 
 Slask/wwwroot/
 
+Slask.Web/bin/
+
+Slask.Web/node_modules/
+
+Slask.Web/obj/
+
+Slask.Web/wwwroot/
+
 Slask.API/bin/
 
 Slask.API/obj/
