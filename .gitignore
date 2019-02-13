@@ -1,13 +1,13 @@
 
 \.vs/
 
-Slask/bin/
+Slask.Web/bin/
 
-Slask/node_modules/
+Slask.Web/node_modules/
 
-Slask/obj/
+Slask.Web/obj/
 
-Slask/wwwroot/
+Slask.Web/wwwroot/
 
 Slask.API/bin/
 
