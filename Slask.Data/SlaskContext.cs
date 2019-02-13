@@ -1,17 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Slask.Domain;
 
-namespace Slask.Data.Models
+namespace Slask.Data
 {
     public class SlaskContext : DbContext
     {
         public SlaskContext(DbContextOptions<SlaskContext> options)
             : base(options)
         { }
-        public DbSet<>  { get; set; }
-        public DbSet<>  { get; set; }
+
+        public DbSet<Tournament> Tournaments { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }
