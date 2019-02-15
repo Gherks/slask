@@ -34,3 +34,5 @@ Slask.Domain/bin/
 Slask.Domain/obj/
 
 Slask.Domain/node_modules/
+
+*.csproj.user
