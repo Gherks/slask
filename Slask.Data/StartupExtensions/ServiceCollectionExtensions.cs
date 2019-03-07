@@ -1,12 +1,12 @@
-using Microsoft.Extensions.DependencyInjection;
-using Slask.Domain.Services;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Slask.Data.Services;
 
-namespace Slask.Domain.StartupExtensions
+namespace Slask.Data.StartupExtensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddDomainServices(this IServiceCollection services)
+        public static IServiceCollection AddDataServices(this IServiceCollection services)
         {
             //services.AddTransient(typeof(PlayersService));
             services.AddTransient(typeof(PlayersService).Assembly);
