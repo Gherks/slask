@@ -16,4 +16,8 @@
     <Folder Include="Properties\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Slask.Domain\Slask.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
