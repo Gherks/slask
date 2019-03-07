@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Data", "Slask.Data\Slask.Data.csproj", "{2A568178-6FE6-4E5D-BF2C-1F9D8986FF1D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.API", "Slask.API\Slask.API.csproj", "{7775B8D5-3876-4658-AF85-8B56F67BE02E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Domain", "Slask.Domain\Slask.Domain.csproj", "{2E95B6EC-26DA-422B-BC5D-84765853F1F8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Web", "Slask.Web\Slask.Web.csproj", "{3E36CADB-4117-4330-ABE6-46F529462405}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slask.Domain", "Slask.Domain\Slask.Domain.csproj", "{1539F032-4F1D-4B63-B5BA-036B488808CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slask.Data", "Slask.Data\Slask.Data.csproj", "{11BADFCB-5955-44FC-95CA-B48A87A16DA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,22 +17,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2A568178-6FE6-4E5D-BF2C-1F9D8986FF1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A568178-6FE6-4E5D-BF2C-1F9D8986FF1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A568178-6FE6-4E5D-BF2C-1F9D8986FF1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2A568178-6FE6-4E5D-BF2C-1F9D8986FF1D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7775B8D5-3876-4658-AF85-8B56F67BE02E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7775B8D5-3876-4658-AF85-8B56F67BE02E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7775B8D5-3876-4658-AF85-8B56F67BE02E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7775B8D5-3876-4658-AF85-8B56F67BE02E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E95B6EC-26DA-422B-BC5D-84765853F1F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E95B6EC-26DA-422B-BC5D-84765853F1F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E95B6EC-26DA-422B-BC5D-84765853F1F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E95B6EC-26DA-422B-BC5D-84765853F1F8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3E36CADB-4117-4330-ABE6-46F529462405}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3E36CADB-4117-4330-ABE6-46F529462405}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E36CADB-4117-4330-ABE6-46F529462405}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E36CADB-4117-4330-ABE6-46F529462405}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1539F032-4F1D-4B63-B5BA-036B488808CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1539F032-4F1D-4B63-B5BA-036B488808CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1539F032-4F1D-4B63-B5BA-036B488808CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1539F032-4F1D-4B63-B5BA-036B488808CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11BADFCB-5955-44FC-95CA-B48A87A16DA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11BADFCB-5955-44FC-95CA-B48A87A16DA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11BADFCB-5955-44FC-95CA-B48A87A16DA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11BADFCB-5955-44FC-95CA-B48A87A16DA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
