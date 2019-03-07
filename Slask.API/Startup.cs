@@ -1,11 +1,11 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Slask.Data;
-using Slask.Domain.StartupExtensions;
+using Slask.Data.StartupExtensions;
 
 namespace Slask.API
 {
@@ -21,7 +21,7 @@ namespace Slask.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDomainServices();
+            services.AddDataServices();
             var connectionString = Configuration.GetConnectionString("SqlServer");
             services.AddDbContext<SlaskContext>
                 (options => 
