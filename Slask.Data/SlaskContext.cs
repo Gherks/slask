@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Slask.Data.Models;
+using Slask.Domain;
 
 namespace Slask.Data
 {
