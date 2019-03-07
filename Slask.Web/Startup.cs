@@ -25,7 +25,7 @@ namespace Slask
 
             app.UseMvc(cfg => 
             {
-                cfg.MapRoute("Foo",
+                cfg.MapRoute("default",
                     "/{controller}/{action}/{id?}",
                     new { controller = "App", Action = "Index" });
             });
