@@ -13,6 +13,7 @@ namespace Slask.Domain.Services
         {
             this.slaskContext = slaskContext;
         }
+
         public async Task<IList<Player>> GetAll()
         {
             var players = await slaskContext.Players.Select(a => new Player()
@@ -22,7 +23,6 @@ namespace Slask.Domain.Services
             }).ToListAsync();
 
             return players;
-            
         }
     }
 }

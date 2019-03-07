@@ -7,7 +7,9 @@ namespace Slask.Data
     {
         public SlaskContext(DbContextOptions<SlaskContext> options)
             : base(options)
-        { }
+        {
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Player>().HasData(
