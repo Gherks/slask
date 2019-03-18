@@ -5,9 +5,18 @@ namespace Slask.Data
 {
     public class SlaskContext : DbContext
     {
+        public SlaskContext()
+        {
+        }
+
         public SlaskContext(DbContextOptions<SlaskContext> options)
             : base(options)
         {
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Server = (localdb)\\MSSQLLocalDB; Database = SlaskDB; Trusted_Connection = True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
