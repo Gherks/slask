@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Slask.Data;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Slask.Domain;
 
-namespace Slask.Domain.Services
+namespace Slask.Data.Services
 {
     public class PlayersService
     {
@@ -15,6 +14,7 @@ namespace Slask.Domain.Services
         {
             this.slaskContext = slaskContext;
         }
+
         public async Task<IList<Player>> GetAll()
         {
             var players = await slaskContext.Players.Select(a => new Player()
@@ -24,7 +24,6 @@ namespace Slask.Domain.Services
             }).ToListAsync();
 
             return players;
-            
         }
     }
 }
