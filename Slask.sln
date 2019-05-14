@@ -1,15 +1,15 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.329
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.API", "Slask.API\Slask.API.csproj", "{7775B8D5-3876-4658-AF85-8B56F67BE02E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Web", "Slask.Web\Slask.Web.csproj", "{3E36CADB-4117-4330-ABE6-46F529462405}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slask.Domain", "Slask.Domain\Slask.Domain.csproj", "{1539F032-4F1D-4B63-B5BA-036B488808CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Domain", "Slask.Domain\Slask.Domain.csproj", "{1539F032-4F1D-4B63-B5BA-036B488808CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slask.Data", "Slask.Data\Slask.Data.csproj", "{11BADFCB-5955-44FC-95CA-B48A87A16DA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Persistance", "Slask.Data\Slask.Persistance.csproj", "{11BADFCB-5955-44FC-95CA-B48A87A16DA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
