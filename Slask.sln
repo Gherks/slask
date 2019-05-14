@@ -13,6 +13,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Persistance", "Slask.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Application", "Slask.Application\Slask.Application.csproj", "{75AA3CE2-82F5-4FD3-A259-399BE230E57E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBLogger.Domain", "DBLogger.Domain\DBLogger.Domain.csproj", "{4A615F22-9D58-4232-A56B-DEEA0D7E5A0D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBLogger.Persistance", "DBLogger.Persistance\DBLogger.Persistance.csproj", "{0BD006BC-34BC-43EF-BD53-FBB2068A2C97}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4A615F22-9D58-4232-A56B-DEEA0D7E5A0D} = {4A615F22-9D58-4232-A56B-DEEA0D7E5A0D}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +46,14 @@ Global
 		{75AA3CE2-82F5-4FD3-A259-399BE230E57E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75AA3CE2-82F5-4FD3-A259-399BE230E57E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75AA3CE2-82F5-4FD3-A259-399BE230E57E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A615F22-9D58-4232-A56B-DEEA0D7E5A0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A615F22-9D58-4232-A56B-DEEA0D7E5A0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A615F22-9D58-4232-A56B-DEEA0D7E5A0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A615F22-9D58-4232-A56B-DEEA0D7E5A0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BD006BC-34BC-43EF-BD53-FBB2068A2C97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BD006BC-34BC-43EF-BD53-FBB2068A2C97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BD006BC-34BC-43EF-BD53-FBB2068A2C97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BD006BC-34BC-43EF-BD53-FBB2068A2C97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
