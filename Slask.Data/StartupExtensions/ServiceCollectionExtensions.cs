@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Slask.Data.Services;
 
@@ -9,7 +9,7 @@ namespace Slask.Data.StartupExtensions
         public static IServiceCollection AddDataServices(this IServiceCollection services)
         {
             //services.AddTransient(typeof(PlayersService));
-            services.AddTransient(typeof(PlayersService).Assembly);
+            services.AddTransient(typeof(PlayerService).Assembly);
             //services.AddTransient<PlayersService, PlayersService>();
             return services;
         }
