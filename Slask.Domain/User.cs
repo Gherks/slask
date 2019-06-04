@@ -1,8 +1,10 @@
-﻿namespace Slask.Domain
+﻿using System;
+
+namespace Slask.Domain
 {
     public class User
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
     }
 }

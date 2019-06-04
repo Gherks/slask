@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Slask.Domain
 {
@@ -10,7 +11,7 @@ namespace Slask.Domain
             MiscBets = new List<Bets.MiscBet>();
         }
 
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public List<Bets.MatchBet> MatchBets { get; set; }
         public List<Bets.MiscBet> MiscBets { get; set; }
     }
