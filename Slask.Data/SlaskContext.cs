@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Slask.Domain;
 
 namespace Slask.Data
@@ -6,6 +6,11 @@ namespace Slask.Data
     public class SlaskContext : DbContext
     {
         public SlaskContext()
+        {
+        }
+
+        public SlaskContext(DbContextOptions options)
+            : base(options)
         {
         }
 
