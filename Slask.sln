@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.IntegrationTests", "S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.UnitTests", "Slask.UnitTests\Slask.UnitTests.csproj", "{58170127-EE68-43EA-9FD4-5689166A10FD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{90E4A13B-836A-4B08-943E-C53CF45C6C6D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,6 +56,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B607049B-6420-485A-B592-683B4129009B} = {90E4A13B-836A-4B08-943E-C53CF45C6C6D}
+		{58170127-EE68-43EA-9FD4-5689166A10FD} = {90E4A13B-836A-4B08-943E-C53CF45C6C6D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A4CE8064-6B35-47D4-963D-EDE442BE3BDB}
