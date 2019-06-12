@@ -9,7 +9,6 @@ namespace Slask.Data.StartupExtensions
         public static IServiceCollection AddDataServices(this IServiceCollection services)
         {
             //services.AddTransient(typeof(PlayersService));
-            services.AddTransient(typeof(PlayerService).Assembly);
             //services.AddTransient<PlayersService, PlayersService>();
             return services;
         }
