@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Slask.Domain;
 
-namespace Slask.Data
+namespace Slask.Persistance
 {
     public class SlaskContext : DbContext
     {

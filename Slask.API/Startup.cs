@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Slask.Data;
-using Slask.Data.StartupExtensions;
+using Slask.Persistance;
+using Slask.Persistance.StartupExtensions;
 
 namespace Slask.API
 {
