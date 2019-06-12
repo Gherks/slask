@@ -1,5 +1,5 @@
 ﻿using System;
-using Slask.Data.Services;
+using Slask.Persistance.Services;
 using Slask.Domain;
 
 namespace Slask.UnitTests.TestContexts

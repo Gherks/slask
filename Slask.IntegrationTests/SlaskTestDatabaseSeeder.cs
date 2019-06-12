@@ -1,4 +1,4 @@
-﻿using Slask.Data;
+﻿using Slask.Persistance;
 using Slask.Domain;
 
 namespace Slask.IntegrationTests

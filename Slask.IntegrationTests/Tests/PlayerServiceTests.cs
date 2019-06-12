@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using Slask.Data;
-using Slask.Data.Services;
+using Slask.Persistance;
+using Slask.Persistance.Services;
 using Slask.Domain;
 using System;
 using Xunit;

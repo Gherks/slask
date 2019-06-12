@@ -1,7 +1,7 @@
 ﻿using System;
 using Slask.Domain;
 
-namespace Slask.Data.Services
+namespace Slask.Persistance.Services
 {
     public class UserService
     {

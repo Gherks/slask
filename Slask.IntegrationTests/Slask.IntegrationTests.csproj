@@ -21,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Slask.Data\Slask.Data.csproj" />
     <ProjectReference Include="..\Slask.Domain\Slask.Domain.csproj" />
+    <ProjectReference Include="..\Slask.Persistance\Slask.Persistance.csproj" />
   </ItemGroup>
 
 </Project>

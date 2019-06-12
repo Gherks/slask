@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Slask.Data;
+using Slask.Persistance;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
