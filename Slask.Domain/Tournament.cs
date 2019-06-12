@@ -5,7 +5,7 @@ namespace Slask.Domain
 {
     public class Tournament
     {
-        public Tournament()
+        private Tournament()
         {
             Rounds = new List<Round>();
             Players = new List<Player>();
@@ -14,11 +14,40 @@ namespace Slask.Domain
             MiscBetCatalogue = new List<MiscBetCatalogue>();
         }
 
-        public Guid Id { get; set; }
-        public List<Round> Rounds { get; set; }
-        public List<Player> Players { get; set; }
-        public List<Better> Betters { get; set; }
-        public List<Settings> Settings { get; set; }
-        public List<MiscBetCatalogue> MiscBetCatalogue { get; set; }
+        public Guid Id { get; private set; }
+        public string Name { get; private set; }
+        public List<Round> Rounds { get; private set; }
+        public List<Player> Players { get; private set; }
+        public List<Better> Betters { get; private set; }
+        public List<Settings> Settings { get; private set; }
+        public List<MiscBetCatalogue> MiscBetCatalogue { get; private set; }
+
+        public void Rename(string name)
+        {
+            name = name.Trim();
+            if(name.Length > 0)
+            {
+                Name = name;
+            }
+        }
+
+        public Round AddRound(string name, int type, int bestOf, int advanceAmount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static Tournament Create(string name)
+        {
+            return new Tournament
+            {
+                Id = Guid.NewGuid(),
+                Name = name
+            };
+        }
+
+        public Better AddBetter(User user)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
