@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
-using Slask.UnitTests.TestContexts;
+using Slask.TestCore;
 using Xunit;
 
 namespace Slask.UnitTests.ServiceTests
@@ -8,32 +8,32 @@ namespace Slask.UnitTests.ServiceTests
     public class UserServiceTests
     {
         [Fact]
-        public void CanCreateUser()
+        public void CanGetUserByName()
         {
-            UserServiceContext services = UserServiceContext.GivenServices();
-            User user = services.WhenCreatedUser();
+            UserServiceContext services = GivenServices();
+            User createdUser = services.WhenUserCreated();
+            User fetchedUser = services.UserService.GetUserByName(createdUser.Name);
 
-            user.Should().NotBeNull();
-            user.Name.Should().Be("Stålberto");
+            fetchedUser.Should().NotBeNull();
+            fetchedUser.Id.Should().Be(createdUser.Id);
+            fetchedUser.Name.Should().Be(createdUser.Name);
         }
 
         [Fact]
-        public void UserMustHaveAName()
+        public void CanGetUserById()
         {
-            UserServiceContext services = UserServiceContext.GivenServices();
-            User user = services.UserService.CreateUser("");
+            UserServiceContext services = GivenServices();
+            User createdUser = services.WhenUserCreated();
+            User fetchedUser = services.UserService.GetUserById(createdUser.Id);
 
-            user.Should().BeNull();
+            fetchedUser.Should().NotBeNull();
+            fetchedUser.Id.Should().Be(createdUser.Id);
+            fetchedUser.Name.Should().Be(createdUser.Name);
         }
 
-        [Fact]
-        public void UserMustBeUnqiueByName()
+        private UserServiceContext GivenServices()
         {
-            UserServiceContext services = UserServiceContext.GivenServices();
-            services.WhenCreatedUser();
-            User duplicateUser = services.UserService.CreateUser("Stålberto");
-
-            duplicateUser.Should().BeNull();
+            return UserServiceContext.GivenServices(new UnitTestSlaskContextCreator());
         }
     }
 }

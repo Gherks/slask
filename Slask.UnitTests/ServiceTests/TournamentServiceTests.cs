@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
-using Slask.UnitTests.TestContexts;
+using Slask.TestCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -9,32 +10,12 @@ namespace Slask.UnitTests.ServiceTests
 {
     public class TournamentServiceTests
     {
-        [Fact]
-        public void TournamentCanBeCreated()
-        {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Tournament tournament = services.WhenCreatedTournament();
-
-            tournament.Should().NotBeNull();
-            tournament.Name.Should().Be("WCS 2019");
-        }
-
-        [Fact]
-        public void CanGetTournamentByName()
-        {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Tournament createdTournament = services.WhenCreatedTournament();
-            Tournament fetchedTournament = services.TournamentService.GetTournamentByName(createdTournament.Name);
-
-            fetchedTournament.Should().NotBeNull();
-            fetchedTournament.Name.Should().Be("WCS 2019");
-        }
 
         [Fact]
         public void CanGetTournamentById()
         {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Tournament createdTournament = services.WhenCreatedTournament();
+            TournamentServiceContext services = GivenServices();
+            Tournament createdTournament = services.WhenTournamentCreated();
             Tournament fetchedTournament = services.TournamentService.GetTournamentById(createdTournament.Id);
 
             fetchedTournament.Should().NotBeNull();
@@ -42,188 +23,157 @@ namespace Slask.UnitTests.ServiceTests
         }
 
         [Fact]
-        public void TournamentNameMustBeUnique()
+        public void CanGetTournamentByName()
         {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            services.WhenCreatedTournament();
-            Tournament duplicateNamedTournament = services.WhenCreatedTournament();
+            TournamentServiceContext services = GivenServices();
+            Tournament createdTournament = services.WhenTournamentCreated();
+            Tournament fetchedTournament = services.TournamentService.GetTournamentByName(createdTournament.Name);
 
-            duplicateNamedTournament.Should().BeNull();
-        }
-
-        [Fact]
-        public void TournamentCanAddRound()
-        {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Round round = services.WhenAddedRoundToTournament();
-
-            round.Should().NotBeNull();
-            round.Name.Should().Be("Group A");
-            (round.BestOf % 2).Should().NotBe(0);
-        }
-
-        [Fact]
-        public void TournamentDoesNotAcceptRoundsWithEvenBestOfs()
-        {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Tournament tournament = services.WhenCreatedTournament();
-            Round round = tournament.AddRound("Group A", 1, 4, 8);
-
-            round.Should().BeNull();
-        }
-
-        [Fact]
-        public void TournamentMatchMustContainTwoPlayers()
-        {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Group group = services.WhenAddedGroupToTournament();
-
-            Player player1 = Player.Create("Maru");
-            Player player2 = Player.Create("Stork");
-            Match matchMissingFirstPlayer = group.AddMatch(null, MatchPlayer.Create(player2));
-            Match matchMissingSecondPlayer = group.AddMatch(MatchPlayer.Create(player1), null);
-            Match matchMissingBothPlayers = group.AddMatch(MatchPlayer.Create(player1), MatchPlayer.Create(player2));
-
-            matchMissingFirstPlayer.Should().BeNull();
-            matchMissingSecondPlayer.Should().BeNull();
-            matchMissingBothPlayers.Should().BeNull();
-        }
-
-        [Fact]
-        public void TournamentMatchMustContainDifferentMatchPlayers()
-        {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Group group = services.WhenAddedGroupToTournament();
-
-            MatchPlayer matchPlayer = MatchPlayer.Create(Player.Create("Maru"));
-            Match match = group.AddMatch(matchPlayer, matchPlayer);
-
-            match.Should().BeNull();
-        }
-
-        [Fact]
-        public void TournamentMatchMustContainDifferentPlayers()
-        {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Group group = services.WhenAddedGroupToTournament();
-
-            Player player = Player.Create("Maru");
-            Match match = group.AddMatch(MatchPlayer.Create(player), MatchPlayer.Create(player));
-
-            match.Should().BeNull();
-        }
-
-        [Fact]
-        public void NewPlayerIsAddedToTournamentPlayerListWhenAddedToMatch()
-        {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Match match = services.WhenAddedMatchToTournament();
-
-            Tournament tournament = services.TournamentService.GetTournamentByName("WCS 2019");
-            tournament.Players.Contains(match.MatchPlayer1.Player).Should().BeTrue();
-            tournament.Players.Contains(match.MatchPlayer2.Player).Should().BeTrue();
+            fetchedTournament.Should().NotBeNull();
+            fetchedTournament.Name.Should().Be("WCS 2019");
         }
 
         [Fact]
         public void CanAddBetterToTournamentWithUserService()
         {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Better better = services.WhenAddedBetterToTournament();
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = services.WhenAddedBetterToTournament();
 
-            better.Should().NotBeNull();
+            tournament.Betters.First().Should().NotBeNull();
         }
 
         [Fact]
         public void CanOnlyAddUserAsBetterOncePerTournament()
         {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            services.WhenAddedBetterToTournament();
-            Better better = services.WhenAddedBetterToTournament();
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = services.WhenAddedBetterToTournament();
+            Better better = tournament.AddBetter(services.UserService.GetUserByName(tournament.Betters.First().User.Name));
 
             better.Should().BeNull();
         }
 
         [Fact]
-        public void CanGetAllRoundsInTournamentByTournamentName()
+        public void PlayerNamesAreAddedToListWhenNewPlayersAreAddedTournament()
         {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
+            throw new NotImplementedException();
+
+            //TournamentServiceContext services = GivenServices();
+            //Tournament tournament = services.WhenAddedMatchesToTournament();
+
+            //tournament.Players.Should().NotBeNull();
+            //tournament.Players.Count.Should().Be(8);
+
+            //tournament.Players.FirstOrDefault(player => player.Name.Contains("Maru")).Should().NotBeNull();
+            //tournament.Players.FirstOrDefault(player => player.Name.Contains("Stork")).Should().NotBeNull();
+            //tournament.Players.FirstOrDefault(player => player.Name.Contains("Taeja")).Should().NotBeNull();
+            //tournament.Players.FirstOrDefault(player => player.Name.Contains("Rain")).Should().NotBeNull();
+            //tournament.Players.FirstOrDefault(player => player.Name.Contains("Bomber")).Should().NotBeNull();
+            //tournament.Players.FirstOrDefault(player => player.Name.Contains("FanTaSy")).Should().NotBeNull();
+            //tournament.Players.FirstOrDefault(player => player.Name.Contains("Stephano")).Should().NotBeNull();
+            //tournament.Players.FirstOrDefault(player => player.Name.Contains("Thorzain")).Should().NotBeNull();
         }
 
         [Fact]
-        public void CanGetAllRoundsInTournamentByTournamentId()
+        public void CanGetAllPlayerNamesInTournamentByTournamentName()
         {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
+            throw new NotImplementedException();
+            //TournamentServiceContext services = GivenServices();
+            //Tournament tournament = services.WhenAddedMatchesToTournament();
+
+            //List<Player> players = services.TournamentService.GetAllPlayersByName(tournament.Name);
+
+            //players.Should().NotBeNullOrEmpty();
+            //players.Count.Should().Be(8);
+
+            //players.FirstOrDefault(player => player.Name.Contains("Maru")).Should().NotBeNull();
+            //players.FirstOrDefault(player => player.Name.Contains("Stork")).Should().NotBeNull();
+            //players.FirstOrDefault(player => player.Name.Contains("Taeja")).Should().NotBeNull();
+            //players.FirstOrDefault(player => player.Name.Contains("Rain")).Should().NotBeNull();
+            //players.FirstOrDefault(player => player.Name.Contains("Bomber")).Should().NotBeNull();
+            //players.FirstOrDefault(player => player.Name.Contains("FanTaSy")).Should().NotBeNull();
+            //players.FirstOrDefault(player => player.Name.Contains("Stephano")).Should().NotBeNull();
+            //players.FirstOrDefault(player => player.Name.Contains("Thorzain")).Should().NotBeNull();
         }
 
         [Fact]
-        public void CanGetAllPlayersInTournamentByTournamentName()
+        public void CanGetAllPlayerNamesInTournamentByTournamentId()
         {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Tournament tournament = services.WhenTournamentWithMatchesHasBeenCreated();
+            throw new NotImplementedException();
+            //TournamentServiceContext services = GivenServices();
+            //Tournament tournament = services.WhenAddedMatchesToTournament();
 
-            List<Player> players = services.TournamentService.GetAllPlayersByName(tournament.Name);
+            //List<Player> players = services.TournamentService.GetAllPlayersById(tournament.Id);
 
-            players.FirstOrDefault(player => player.Name.Contains("Maru")).Should().NotBeNull();
-            players.FirstOrDefault(player => player.Name.Contains("Stork")).Should().NotBeNull();
-            players.FirstOrDefault(player => player.Name.Contains("Taeja")).Should().NotBeNull();
-            players.FirstOrDefault(player => player.Name.Contains("Rain")).Should().NotBeNull();
-            players.FirstOrDefault(player => player.Name.Contains("Bomber")).Should().NotBeNull();
-            players.FirstOrDefault(player => player.Name.Contains("FanTaSy")).Should().NotBeNull();
-            players.FirstOrDefault(player => player.Name.Contains("Stephano")).Should().NotBeNull();
-            players.FirstOrDefault(player => player.Name.Contains("Thorzain")).Should().NotBeNull();
+            //players.Should().NotBeNullOrEmpty();
+            //players.Count.Should().Be(8);
+
+            //players.FirstOrDefault(player => player.Name.Contains("Maru")).Should().NotBeNull();
+            //players.FirstOrDefault(player => player.Name.Contains("Stork")).Should().NotBeNull();
+            //players.FirstOrDefault(player => player.Name.Contains("Taeja")).Should().NotBeNull();
+            //players.FirstOrDefault(player => player.Name.Contains("Rain")).Should().NotBeNull();
+            //players.FirstOrDefault(player => player.Name.Contains("Bomber")).Should().NotBeNull();
+            //players.FirstOrDefault(player => player.Name.Contains("FanTaSy")).Should().NotBeNull();
+            //players.FirstOrDefault(player => player.Name.Contains("Stephano")).Should().NotBeNull();
+            //players.FirstOrDefault(player => player.Name.Contains("Thorzain")).Should().NotBeNull();
+        }
+
+        [Fact] 
+        public void CanGetAllPlayerInstancesInTournamentByPlayerNameId()
+        {
+            throw new NotImplementedException();
+            //TournamentServiceContext services = GivenServices();
+            //Tournament tournament = services.WhenAddedMatchesToTournament();
+            //Player createdPlayer = tournament.Players.First();
+
+            //Player fetchedPlayer = services.TournamentService.GetAllPlayersByPlayerNameId(createdPlayer.Id);
+
+            //fetchedPlayer.Should().NotBeNull();
+            //fetchedPlayer.Id.Should().Be(createdPlayer.Id);
+            //fetchedPlayer.Name.Should().Be(createdPlayer.Name);
         }
 
         [Fact]
-        public void CanGetAllPlayersInTournamentByTournamentId()
+        public void CanGetAllPlayerInstancesInTournamentByPlayerName()
         {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Tournament tournament = services.WhenTournamentWithMatchesHasBeenCreated();
+            throw new NotImplementedException();
+            //TournamentServiceContext services = GivenServices();
+            //Tournament tournament = services.WhenAddedMatchesToTournament();
+            //Player createdPlayer = tournament.Players.First();
 
-            List<Player> players = services.TournamentService.GetAllPlayersById(tournament.Id);
+            //Player fetchedPlayer = services.TournamentService.GetAllPlayersByName(createdPlayer.Name);
 
-            players.FirstOrDefault(player => player.Name.Contains("Maru")).Should().NotBeNull();
-            players.FirstOrDefault(player => player.Name.Contains("Stork")).Should().NotBeNull();
-            players.FirstOrDefault(player => player.Name.Contains("Taeja")).Should().NotBeNull();
-            players.FirstOrDefault(player => player.Name.Contains("Rain")).Should().NotBeNull();
-            players.FirstOrDefault(player => player.Name.Contains("Bomber")).Should().NotBeNull();
-            players.FirstOrDefault(player => player.Name.Contains("FanTaSy")).Should().NotBeNull();
-            players.FirstOrDefault(player => player.Name.Contains("Stephano")).Should().NotBeNull();
-            players.FirstOrDefault(player => player.Name.Contains("Thorzain")).Should().NotBeNull();
-        }
-
-        [Fact]
-        public void CanGetStatusOfMatchInTournament()
-        {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Tournament tournament = services.WhenTournamentWithMatchesHasBeenCreated();
-        }
-
-        [Fact]
-        public void CanGetWinningMatchPlayerOfMatchInTournament()
-        {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Tournament tournament = services.WhenTournamentWithMatchesHasBeenCreated();
-        }
-
-        [Fact]
-        public void CanGetLosingMatchPlayerOfMatchInTournament()
-        {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Tournament tournament = services.WhenTournamentWithMatchesHasBeenCreated();
+            //fetchedPlayer.Should().NotBeNull();
+            //fetchedPlayer.Id.Should().Be(createdPlayer.Id);
+            //fetchedPlayer.Name.Should().Be(createdPlayer.Name);
         }
 
         [Fact]
         public void CanGetAllBettersInTournamentByTournamentName()
         {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Tournament tournament = services.WhenTournamentWithBettersHasBeenCreated();
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = services.WhenAddedBetterToTournament();
+
+            List<Better> betters = services.TournamentService.GetBettersByTournamentName(tournament.Name);
+
+            betters.Should().NotBeNullOrEmpty();
+            betters.Count.Should().Be(1);
         }
 
         [Fact]
         public void CanGetAllBettersInTournamentByTournamentId()
         {
-            TournamentServiceContext services = TournamentServiceContext.GivenServices();
-            Tournament tournament = services.WhenTournamentWithBettersHasBeenCreated();
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = services.WhenAddedBetterToTournament();
+
+            List<Better> betters = services.TournamentService.GetBettersByTournamentId(tournament.Id);
+
+            betters.Should().NotBeNullOrEmpty();
+            betters.Count.Should().Be(1);
+        }
+
+        private TournamentServiceContext GivenServices()
+        {
+            return TournamentServiceContext.GivenServices(new UnitTestSlaskContextCreator());
         }
     }
 }
