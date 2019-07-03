@@ -11,5 +11,10 @@ namespace Slask.Domain
 
         public Guid Id { get; private set; }
         public string Name { get; private set; }
+
+        public void RenameTo(string v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

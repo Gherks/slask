@@ -15,17 +15,30 @@ namespace Slask.Domain
         public Guid RoundId { get; private set; }
         public Round Round { get; private set; }
 
-        public static Group Create()
+        public static Group Create(Round parentRound)
         {
+            if(parentRound == null)
+            {
+                return null;
+            }
+
             return new Group
             {
-                Id = Guid.NewGuid()
+                Id = Guid.NewGuid(),
+                Round = parentRound
             };
         }
 
-        public Match AddMatch(MatchPlayer matchPlayer1, MatchPlayer matchPlayer2)
+        public Match AddMatch(string player1Name, string player2Name, DateTime startDateTime)
         {
-            throw new NotImplementedException();
+            Match match = Match.Create(player1Name, player2Name, startDateTime);
+
+            if (match != null)
+            {
+                Matches.Add(match);
+            }
+
+            return match;
         }
     }
 }

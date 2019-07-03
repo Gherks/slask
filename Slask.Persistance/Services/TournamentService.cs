@@ -18,7 +18,7 @@ namespace Slask.Persistance.Services
             throw new NotImplementedException();
         }
 
-        public Tournament GetTournamentByName(string name)
+        public Better AddBetter(User user)
         {
             throw new NotImplementedException();
         }
@@ -28,12 +28,27 @@ namespace Slask.Persistance.Services
             throw new NotImplementedException();
         }
 
-        public List<Player> GetAllPlayersByName(string name)
+        public Tournament GetTournamentByName(string name)
         {
             throw new NotImplementedException();
         }
 
-        public List<Player> GetAllPlayersById(Guid id)
+        public PlayerNameReference GetPlayerNameReferenceByPlayerNameReferenceId(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PlayerNameReference GetPlayerNameReferenceByPlayerName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Better> GetBettersByTournamentId(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Better> GetBettersByTournamentName(string name)
         {
             throw new NotImplementedException();
         }

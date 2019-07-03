@@ -12,7 +12,17 @@ namespace Slask.Persistance.Services
             _slaskContext = slaskContext;
         }
 
-        public User CreateUser(string v1)
+        public User CreateUser(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public User GetUserByName(string v)
+        {
+            throw new NotImplementedException();
+        }
+
+        public User GetUserById(Guid id)
         {
             throw new NotImplementedException();
         }
