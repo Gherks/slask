@@ -1,4 +1,9 @@
-﻿using Xunit;
+﻿using FluentAssertions;
+using Slask.Domain;
+using Slask.TestCore;
+using System;
+using System.Linq;
+using Xunit;
 
 namespace Slask.IntegrationTests.Tests
 {
@@ -20,13 +25,48 @@ namespace Slask.IntegrationTests.Tests
         [Fact]
         public void CanAddBetterToTournamentWithUserService()
         {
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = services.WhenAddedBetterToTournament();
 
+            tournament.Betters.First().Should().NotBeNull();
+            tournament.Betters.First().User.Should().Be(services.UserService.GetUserByName("Stålberto"));
         }
 
         [Fact]
         public void CanOnlyAddUserAsBetterOncePerTournament()
         {
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = services.WhenAddedBetterToTournament();
+            Better createdBetter = tournament.Betters.First();
 
+            Better duplicateBetter = services.TournamentService.AddBetter(createdBetter.User);
+
+            duplicateBetter.Should().NotBeNull();
+        }
+
+        [Fact]
+        public void CannotAddSamePlayerTwiceToMatch()
+        {
+            TournamentServiceContext services = GivenServices();
+            Group group = services.WhenAddedGroupToTournament();
+            Match match = group.AddMatch("Maru", "Maru", DateTime.Now.AddSeconds(1));
+
+            match.Should().BeNull();
+        }
+
+        [Fact]
+        public void BothPlayersMustHaveANameWhenAddingPlayersToMatch()
+        {
+            TournamentServiceContext services = GivenServices();
+            Group group = services.WhenAddedGroupToTournament();
+            Match match = group.AddMatch("Maru", "", DateTime.Now.AddSeconds(1));
+
+            match.Should().BeNull();
+        }
+
+        private TournamentServiceContext GivenServices()
+        {
+            return TournamentServiceContext.GivenServices(new IntegrationTestSlaskContextCreator());
         }
     }
 }

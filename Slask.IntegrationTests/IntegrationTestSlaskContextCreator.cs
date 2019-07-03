@@ -1,17 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Slask.Persistance;
+using Slask.TestCore;
 using System.Data.SqlClient;
 
 namespace Slask.IntegrationTests
 {
-    public class IntegrationTestBase
+    public class IntegrationTestSlaskContextCreator : SlaskContextCreatorInterface
     {
-        protected static SlaskContext CreateSlaskTestContext(bool beginTransaction = true)
+        public override SlaskContext CreateContext()
         {
             DbContextOptionsBuilder builder = new DbContextOptionsBuilder();
             builder.UseSqlServer(SlaskTestConnectionString.ConnectionString);
 
-            SlaskContext slaskTestContext = new SlaskContext(builder.Options);
+            return new SlaskContext(builder.Options);
+        }
+
+        public override SlaskContext CreateContext(bool beginTransaction = false)
+        {
+            SlaskContext slaskTestContext = CreateContext();
 
             if (beginTransaction)
             {

@@ -1,14 +1,9 @@
-﻿using FluentAssertions;
-using Slask.Persistance;
-using Slask.Persistance.Services;
-using Slask.Domain;
-using System;
-using Xunit;
+﻿using Xunit;
 
 namespace Slask.IntegrationTests
 {
     [Collection("Integration test collection")]
-    public class PlayerServiceTests : IntegrationTestBase
+    public class PlayerServiceTests
     {
         [Fact]
         public void CanCreatePlayer()

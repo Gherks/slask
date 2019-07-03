@@ -9,10 +9,8 @@ using System.Reflection;
 
 namespace Slask.IntegrationTests
 {
-    public class TestSetup : IntegrationTestBase, IDisposable
+    public class TestSetup : IntegrationTestSlaskContextCreator, IDisposable
     {
-        public int foo;
-
         public TestSetup()
         {
             DestroyDatabase();
@@ -31,7 +29,7 @@ namespace Slask.IntegrationTests
                 ON (NAME = 'SlaskTest',
                 FILENAME = '{Filename}')");
 
-            using (SlaskContext slaskTestContext = CreateSlaskTestContext(beginTransaction: false))
+            using (SlaskContext slaskTestContext = CreateContext(beginTransaction: false))
             {
                 slaskTestContext.Database.Migrate();
                 SlaskTestDatabaseSeeder.Seed(slaskTestContext);
