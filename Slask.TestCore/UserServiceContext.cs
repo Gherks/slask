@@ -1,6 +1,6 @@
-﻿using Slask.Persistance.Services;
+﻿using Slask.Persistence.Services;
 using Slask.Domain;
-using Slask.Persistance;
+using Slask.Persistence;
 
 namespace Slask.TestCore
 {

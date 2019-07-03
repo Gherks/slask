@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Slask.Domain;
 
-namespace Slask.Persistance.Services
+namespace Slask.Persistence.Services
 {
     public class TournamentService
     {

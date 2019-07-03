@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Slask.Domain\Slask.Domain.csproj" />
-    <ProjectReference Include="..\Slask.Persistance\Slask.Persistance.csproj" />
+    <ProjectReference Include="..\Slask.Persistence\Slask.Persistence.csproj" />
     <ProjectReference Include="..\Slask.TestCore\Slask.TestCore.csproj" />
   </ItemGroup>
 

@@ -1,8 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using Slask.Persistance.Services;
+using Slask.Persistence.Services;
 
-namespace Slask.Persistance.StartupExtensions
+namespace Slask.Persistence.StartupExtensions
 {
     public static class ServiceCollectionExtensions
     {

@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Slask.Persistance;
+using Slask.Persistence;
 using Slask.TestCore;
 using System.Data.SqlClient;
 
