@@ -2,6 +2,7 @@
 using Slask.Persistence.Services;
 using Slask.Domain;
 using Slask.Persistence;
+using Slask.Common;
 
 namespace Slask.TestCore
 {
@@ -15,7 +16,7 @@ namespace Slask.TestCore
             TournamentService = new TournamentService(SlaskContext);
         }
 
-        public Tournament WhenTournamentCreated()
+        public Tournament WhenCreatedTournament()
         {
             Tournament tournament = TournamentService.CreateTournament("WCS 2019");
             SlaskContext.SaveChanges();
@@ -23,73 +24,115 @@ namespace Slask.TestCore
             return tournament;
         }
 
-        public Round WhenAddedRoundToTournament()
+        public Round WhenCreatedRoundRobinRoundInTournament()
         {
-            Tournament tournament = WhenTournamentCreated();
-            Round round = tournament.AddRound("Group A", 1, 5, 8);
+            Tournament tournament = WhenCreatedTournament();
+            Round round = tournament.AddRoundRobinRound("Round-Robin Group A", 5, 4);
             SlaskContext.SaveChanges();
 
             return round;
         }
 
-        public Group WhenAddedGroupToTournament()
+        public Round WhenCreatedDualTournamentRoundInTournament()
         {
-            Round round = WhenAddedRoundToTournament();
+            Tournament tournament = WhenCreatedTournament();
+            Round round = tournament.AddDualTournamentRound("Dual Tournament Group B", 5);
+            SlaskContext.SaveChanges();
+
+            return round;
+        }
+
+        public Round WhenCreatedBracketRoundInTournament()
+        {
+            Tournament tournament = WhenCreatedTournament();
+            Round round = tournament.AddBracketRound("Bracket Round Group C", 5);
+            SlaskContext.SaveChanges();
+
+            return round;
+        }
+
+        public Group WhenCreatedGroupInRoundRobinRoundInTournament()
+        {
+            Round round = WhenCreatedRoundRobinRoundInTournament();
             Group group = round.AddGroup();
             SlaskContext.SaveChanges();
 
             return group;
         }
 
-        public Match WhenAddedMatchToTournament()
+        public Group WhenCreatedGroupInDualTournamentRoundInTournament()
         {
-            Group group = WhenAddedGroupToTournament();
-            Match match = group.AddMatch("Maru", "Stork", DateTime.Now.AddSeconds(1));
+            Round round = WhenCreatedDualTournamentRoundInTournament();
+            Group group = round.AddGroup();
             SlaskContext.SaveChanges();
 
-            return match;
+            return group;
         }
 
-        public Tournament WhenAddedMatchesToTournament()
+        public Group WhenCreatedGroupInBracketRoundInTournament()
         {
-            Group group = WhenAddedGroupToTournament();
-            group.AddMatch("Taeja", "Rain", DateTime.Now.AddSeconds(1));
-            group.AddMatch("Bomber", "FanTaSy", DateTime.Now.AddSeconds(1));
-            group.AddMatch("Stephano", "Thorzain", DateTime.Now.AddSeconds(1));
+            Round round = WhenCreatedBracketRoundInTournament();
+            Group group = round.AddGroup();
+            SlaskContext.SaveChanges();
+
+            return group;
+        }
+
+        public Tournament WhenCreatedMatchesInRoundRobinRoundInTournament()
+        {
+            Group group = WhenCreatedGroupInRoundRobinRoundInTournament();
+            AddMatchesToGroup(group);
             SlaskContext.SaveChanges();
 
             return group.Round.Tournament;
         }
 
-        public Match WhenAddedMatchToTournamentAndMatchIsFinished()
+        public Tournament WhenCreatedMatchesInDualTournamentRoundInTournament()
         {
-            Group group = WhenAddedGroupToTournament();
-            Match match = group.AddMatch("Maru", "Stork", DateTime.Now);
+            Group group = WhenCreatedGroupInDualTournamentRoundInTournament();
+            AddMatchesToGroup(group);
+            SlaskContext.SaveChanges();
+
+            return group.Round.Tournament;
+        }
+
+        public Tournament WhenCreatedMatchesInBracketRoundInTournament()
+        {
+            Group group = WhenCreatedGroupInBracketRoundInTournament();
+            AddMatchesToGroup(group);
+            SlaskContext.SaveChanges();
+
+            return group.Round.Tournament;
+        }
+
+        public Match WhenCreatedMatchInRoundRobinRoundInTournamentAndMatchIsFinished()
+        {
+            Group group = WhenCreatedGroupInRoundRobinRoundInTournament();
+            Match match = group.AddMatch("Maru", "Stork", DateTimeHelper.Now);
 
             int winningScore = (int)Math.Ceiling(group.Round.BestOf / 2.0);
             match.Player1.AddScore(winningScore);
-
             SlaskContext.SaveChanges();
 
             return match;
         }
 
-        public Tournament WhenAddedBetterToTournament()
+        public Tournament WhenCreatedBetterInTournament()
         {
-            User user = WhenUserCreated();
-            Tournament tournament = WhenTournamentCreated();
+            User user = WhenCreatedUser();
+            Tournament tournament = WhenCreatedTournament();
             tournament.AddBetter(user);
             SlaskContext.SaveChanges();
 
             return tournament;
         }
 
-        public Tournament WhenCreatedACompleteTournament()
+        private void AddMatchesToGroup(Group group)
         {
-            Tournament tournament = WhenAddedMatchesToTournament();
-            User user = WhenUserCreated();
-
-            return tournament;
+            group.AddMatch("Maru", "Stork", DateTimeHelper.Now.AddSeconds(1));
+            group.AddMatch("Taeja", "Rain", DateTimeHelper.Now.AddSeconds(1));
+            group.AddMatch("Bomber", "FanTaSy", DateTimeHelper.Now.AddSeconds(1));
+            group.AddMatch("Stephano", "Thorzain", DateTimeHelper.Now.AddSeconds(1));
         }
 
         public static new TournamentServiceContext GivenServices(SlaskContextCreatorInterface slaskContextCreator)

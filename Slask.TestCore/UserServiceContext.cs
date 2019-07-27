@@ -14,9 +14,19 @@ namespace Slask.TestCore
             UserService = new UserService(SlaskContext);
         }
 
-        public User WhenUserCreated()
+        public User WhenCreatedUser()
         {
             User user = UserService.CreateUser("Stålberto");
+            SlaskContext.SaveChanges();
+
+            return user;
+        }
+
+        public User WhenCreatedUsers()
+        {
+            User user = UserService.CreateUser("Stålberto");
+            UserService.CreateUser("Bönis");
+            UserService.CreateUser("Guggelito");
             SlaskContext.SaveChanges();
 
             return user;
