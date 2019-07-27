@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Slask.Domain
 {
@@ -11,6 +10,15 @@ namespace Slask.Domain
 
         public Guid Id { get; private set; }
         public string Name { get; private set; }
+
+        public User Create(string name)
+        {
+            return new User
+            {
+                Id = Guid.NewGuid(),
+                Name = name
+            };
+        }
 
         public void RenameTo(string v)
         {

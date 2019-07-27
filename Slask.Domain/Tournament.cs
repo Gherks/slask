@@ -9,7 +9,7 @@ namespace Slask.Domain
         private Tournament()
         {
             Rounds = new List<Round>();
-            PlayerNameReferences = new List<PlayerNameReference>();
+            PlayerReferences = new List<PlayerReference>();
             Betters = new List<Better>();
             Settings = new List<Settings>();
             MiscBetCatalogue = new List<MiscBetCatalogue>();
@@ -18,7 +18,7 @@ namespace Slask.Domain
         public Guid Id { get; private set; }
         public string Name { get; private set; }
         public List<Round> Rounds { get; private set; }
-        public List<PlayerNameReference> PlayerNameReferences { get; private set; }
+        public List<PlayerReference> PlayerReferences { get; private set; }
         public List<Better> Betters { get; private set; }
         public List<Settings> Settings { get; private set; }
         public List<MiscBetCatalogue> MiscBetCatalogue { get; private set; }
@@ -41,7 +41,17 @@ namespace Slask.Domain
             }
         }
 
-        public Round AddRound(string name, int type, int bestOf, int advanceAmount)
+        public Round AddRoundRobinRound(string name, int bestOf, int advanceAmount)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Round AddDualTournamentRound(string name, int bestOf)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Round AddBracketRound(string name, int bestOf)
         {
             throw new NotImplementedException();
         }
@@ -51,16 +61,26 @@ namespace Slask.Domain
             throw new NotImplementedException();
         }
 
-        public PlayerNameReference GetPlayerNameReferenceByPlayerNameReferenceId(Guid id)
+        public Round GetRoundByRoundId(Guid id)
         {
-            return PlayerNameReferences.FirstOrDefault(playerNameReference => playerNameReference.Id == id);
+            throw new NotImplementedException();
         }
 
-        public PlayerNameReference GetPlayerNameReferenceByPlayerName(string name)
+        public Round GetRoundByRoundName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PlayerReference GetPlayerReferenceByPlayerId(Guid id)
+        {
+            return PlayerReferences.FirstOrDefault(playerReference => playerReference.Id == id);
+        }
+
+        public PlayerReference GetPlayerReferenceByPlayerName(string name)
         {
             string lowerCaseName = name.ToLower();
 
-            return PlayerNameReferences.FirstOrDefault(playerNameReference => playerNameReference.Name.ToLower().Contains(lowerCaseName));
+            return PlayerReferences.FirstOrDefault(playerReference => playerReference.Name.ToLower() == lowerCaseName);
         }
 
         public Better GetBetterById(Guid id)

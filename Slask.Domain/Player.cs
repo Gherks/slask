@@ -10,46 +10,31 @@ namespace Slask.Domain
         }
 
         public Guid Id { get; private set; }
+        public  PlayerReference PlayerReference
+        {
+            get { return PlayerReference; }
+            set
+            {
+                if(value != null)
+                {
+                    PlayerReference = value;
+                }
+            }
+        }
         public int Score { get; private set; }
-        private PlayerNameReference PlayerNameReference { get; set; }
         public Guid MatchId { get; private set; }
         public Match Match { get; private set; }
 
         [NotMapped]
         public string Name
         {
-            get { return PlayerNameReference != null ? PlayerNameReference.Name : null; }
+            get { return PlayerReference != null ? PlayerReference.Name : null; }
             private set { }
         }
 
-        public void IncrementScore()
+        public static Player Create(Match match)
         {
-            Score++;
-        }
-
-        public void DecrementScore()
-        {
-            Score--;
-        }
-
-        public void AddScore(int value)
-        {
-            Score += value;
-        }
-
-        public void RenameTo(string v)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SubtractScore(int value)
-        {
-            Score -= value;
-        }
-
-        public static Player Create(string name, Match match)
-        {
-            if (name == "" || match == null)
+            if (match == null)
             {
                 return null;
             }
@@ -57,11 +42,35 @@ namespace Slask.Domain
             return new Player
             {
                 Id = Guid.NewGuid(),
-                PlayerNameReference = PlayerNameReference.Create(name, match.Group.Round.Tournament),
+                PlayerReference = null,
                 Score = 0,
                 MatchId = match.Id,
-                Match = match,
+                Match = match
             };
+        }
+
+        public void IncrementScore()
+        {
+            Score++;
+            Match.Group.MatchScoreChanged();
+        }
+
+        public void DecrementScore()
+        {
+            Score--;
+            Match.Group.MatchScoreChanged();
+        }
+
+        public void AddScore(int value)
+        {
+            Score += value;
+            Match.Group.MatchScoreChanged();
+        }
+
+        public void SubtractScore(int value)
+        {
+            Score -= value;
+            Match.Group.MatchScoreChanged();
         }
     }
 }

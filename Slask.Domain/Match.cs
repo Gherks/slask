@@ -1,94 +1,98 @@
-﻿using System;
+﻿using Slask.Common;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace Slask.Domain
 {
+    public enum MatchState
+    {
+        HasNotBegun,
+        IsBeingPlayed,
+        IsFinished
+    }
+
     public class Match
     {
         private Match()
         {
             Players = new List<Player>();
-        }
-
-        public bool ContainsPlayer(string playerName)
-        {
-            if(playerName == "")
-            {
-                return false;
-            }
-
-            return Player1.Name == playerName || Player2.Name == playerName;
-        }
-
-        public bool ContainsPlayer(Guid playerId)
-        {
-            if (playerId == Guid.Empty)
-            {
-                return false;
-            }
-
-            return Player1.Id == playerId || Player2.Id == playerId;
-        }
-
-        public void ChangeStartDateTime(DateTime dateTime)
-        {
-            throw new NotImplementedException();
+            Players.Add(Player.Create(this));
+            Players.Add(Player.Create(this));
         }
 
         public Guid Id { get; private set; }
         private List<Player> Players { get; set; }
         public DateTime StartDateTime { get; private set; }
         public Guid GroupId { get; private set; }
-        public Group Group { get; private set; }
+        public GroupBase Group { get; private set; }
 
         [NotMapped]
         public Player Player1
         {
-            get { return Players.Count >= 1 ? Players[0] : null; }
-            private set { }
+            get { return Players[0]; }
+            private set {}
         }
+
         [NotMapped]
         public Player Player2
         {
-            get { return Players.Count >= 2 ? Players[1] : null; }
-            private set { }
-        }
-        public enum State
-        {
-            HasNotBegun,
-            IsBeingPlayed,
-            IsFinished
+            get { return Players[1]; }
+            private set {}
         }
 
-        public static Match Create(string player1Name, string player2Name, DateTime startDateTime)
+        public static Match Create()
         {
-            bool anyNameIsEmpty = player1Name == "" || player2Name == "";
-            bool namesAreIdentical = player1Name == player2Name;
-            bool dateTimeIsInThePast = startDateTime < DateTime.Now;
-
-            if (anyNameIsEmpty || namesAreIdentical || dateTimeIsInThePast)
-            {
-                // LOG ISSUE HERE
-                return null;
-            }
-
-            Match match = new Match()
+            return new Match()
             {
                 Id = Guid.NewGuid(),
-                StartDateTime = startDateTime
+                StartDateTime = DateTimeHelper.Now.AddYears(1)
             };
-
-            Player player1 = Player.Create(player1Name, match);
-            Player player2 = Player.Create(player2Name, match);
-
-            match.Players.Add(player1);
-            match.Players.Add(player2);
-
-            return match;
         }
 
-        public State GetState()
+        public bool AssignPlayerReferenceFromGroup(string playerReferenceName)
+        {
+            PlayerReference playerReference =  Group.GetPlayerReference(playerReferenceName);
+
+            if(ValidateNewPlayerReference(playerReference))
+            {
+                return false;
+            }
+
+            if (Player1.PlayerReference == null)
+            {
+                Player1.PlayerReference = playerReference;
+                return true;
+            }
+
+            Player2.PlayerReference = playerReference;
+            return true;
+        }
+
+        public Player FindPlayer(Guid id)
+        {
+            return Players.Where(player => player.Id == id).FirstOrDefault();
+        }
+
+        public Player FindPlayer(string name)
+        {
+            return Players.Where(player => player.Name == name).FirstOrDefault();
+        }
+
+        public bool ChangeStartDateTime(DateTime dateTime)
+        {
+            if(DateTimeProvider.Current.Now > dateTime)
+            {
+                // LOGG
+                return false;
+            }
+
+            StartDateTime = dateTime;
+            return true;
+        }
+
+        public MatchState GetState()
         {
             throw new NotImplementedException();
         }
@@ -101,6 +105,30 @@ namespace Slask.Domain
         public Player GetLosingPlayer()
         {
             throw new NotImplementedException();
+        }
+
+        private bool ValidateNewPlayerReference(PlayerReference playerReference)
+        {
+            if (playerReference == null)
+            {
+                return false;
+            }
+
+            bool matchIsFilled = Player1.PlayerReference != null && Player2.PlayerReference != null;
+
+            if (matchIsFilled)
+            {
+                return false;
+            }
+
+            bool alreadyAddedToMatch = FindPlayer(playerReference.Name) != null; 
+
+            if (alreadyAddedToMatch)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
