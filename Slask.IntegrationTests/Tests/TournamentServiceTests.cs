@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Slask.Common;
 using Slask.Domain;
 using Slask.TestCore;
 using System;
@@ -26,7 +27,7 @@ namespace Slask.IntegrationTests.Tests
         public void CanAddBetterToTournamentWithUserService()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenAddedBetterToTournament();
+            Tournament tournament = services.WhenCreatedBetterInTournament();
 
             tournament.Betters.First().Should().NotBeNull();
             tournament.Betters.First().User.Should().Be(services.UserService.GetUserByName("Stålberto"));
@@ -36,7 +37,7 @@ namespace Slask.IntegrationTests.Tests
         public void CanOnlyAddUserAsBetterOncePerTournament()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenAddedBetterToTournament();
+            Tournament tournament = services.WhenCreatedBetterInTournament();
             Better createdBetter = tournament.Betters.First();
 
             Better duplicateBetter = services.TournamentService.AddBetter(createdBetter.User);
@@ -49,7 +50,7 @@ namespace Slask.IntegrationTests.Tests
         {
             TournamentServiceContext services = GivenServices();
             Group group = services.WhenAddedGroupToTournament();
-            Match match = group.AddMatch("Maru", "Maru", DateTime.Now.AddSeconds(1));
+            Match match = group.AddMatch("Maru", "Maru", DateTimeHelper.Now.AddSeconds(1));
 
             match.Should().BeNull();
         }
@@ -59,7 +60,7 @@ namespace Slask.IntegrationTests.Tests
         {
             TournamentServiceContext services = GivenServices();
             Group group = services.WhenAddedGroupToTournament();
-            Match match = group.AddMatch("Maru", "", DateTime.Now.AddSeconds(1));
+            Match match = group.AddMatch("Maru", "", DateTimeHelper.Now.AddSeconds(1));
 
             match.Should().BeNull();
         }
