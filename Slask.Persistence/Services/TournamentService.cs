@@ -33,12 +33,12 @@ namespace Slask.Persistence.Services
             throw new NotImplementedException();
         }
 
-        public PlayerNameReference GetPlayerNameReferenceByPlayerNameReferenceId(Guid id)
+        public List<PlayerReference> GetPlayerReferencesByTournamentId(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public PlayerNameReference GetPlayerNameReferenceByPlayerName(string name)
+        public List<PlayerReference> GetPlayerReferencesByTournamentName(string name)
         {
             throw new NotImplementedException();
         }
