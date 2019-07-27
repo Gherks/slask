@@ -9,11 +9,11 @@ using System.Collections.Generic;
 
 namespace Slask.TestCore
 {
-    public class TournamentServiceContextTheSecond : UserServiceContext
+    public class TournamentServiceContext : UserServiceContext
     {
         public TournamentService TournamentService { get; }
 
-        protected TournamentServiceContextTheSecond(SlaskContext slaskContext)
+        protected TournamentServiceContext(SlaskContext slaskContext)
             : base(slaskContext)
         {
             TournamentService = new TournamentService(SlaskContext);
@@ -450,9 +450,9 @@ namespace Slask.TestCore
         //    return tournament;
         //}
 
-        public static new TournamentServiceContextTheSecond GivenServices(SlaskContextCreatorInterface slaskContextCreator)
+        public static new TournamentServiceContext GivenServices(SlaskContextCreatorInterface slaskContextCreator)
         {
-            return new TournamentServiceContextTheSecond(slaskContextCreator.CreateContext());
+            return new TournamentServiceContext(slaskContextCreator.CreateContext());
         }
     }
 }
