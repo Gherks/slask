@@ -8,14 +8,12 @@ namespace Slask.Domain
     {
         private Better()
         {
-            MatchBets = new List<MatchBet>();
-            MiscBets = new List<MiscBet>();
+            Bets = new List<BetBase>();
         }
 
         public Guid Id { get; private set; }
         public User User { get; private set; }
-        public List<MatchBet> MatchBets { get; private set; }
-        public List<MiscBet> MiscBets { get; private set; }
+        public List<BetBase> Bets { get; private set; }
         public Guid TournamentId { get; private set; }
         public Tournament Tournament { get; private set; }
 
@@ -26,6 +24,11 @@ namespace Slask.Domain
                 Id = Guid.NewGuid(),
                 User = user
             };
+        }
+
+        public void PlaceMatchBet(Match match, Player player)
+        {
+            throw new NotImplementedException();
         }
     }
 }
