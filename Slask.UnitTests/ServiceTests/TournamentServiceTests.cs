@@ -15,7 +15,7 @@ namespace Slask.UnitTests.ServiceTests
         public void CanGetTournamentById()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament createdTournament = services.WhenTournamentCreated();
+            Tournament createdTournament = services.WhenCreatedTournament();
             Tournament fetchedTournament = services.TournamentService.GetTournamentById(createdTournament.Id);
 
             fetchedTournament.Should().NotBeNull();
@@ -26,7 +26,7 @@ namespace Slask.UnitTests.ServiceTests
         public void CanGetTournamentByName()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament createdTournament = services.WhenTournamentCreated();
+            Tournament createdTournament = services.WhenCreatedTournament();
             Tournament fetchedTournament = services.TournamentService.GetTournamentByName(createdTournament.Name);
 
             fetchedTournament.Should().NotBeNull();
@@ -37,7 +37,7 @@ namespace Slask.UnitTests.ServiceTests
         public void CanAddBetterToTournamentWithUserService()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenAddedBetterToTournament();
+            Tournament tournament = services.WhenCreatedBetterInTournament();
 
             tournament.Betters.First().Should().NotBeNull();
         }
@@ -46,7 +46,7 @@ namespace Slask.UnitTests.ServiceTests
         public void CanOnlyAddUserAsBetterOncePerTournament()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenAddedBetterToTournament();
+            Tournament tournament = services.WhenCreatedBetterInTournament();
             Better better = tournament.AddBetter(services.UserService.GetUserByName(tournament.Betters.First().User.Name));
 
             better.Should().BeNull();
@@ -55,103 +55,69 @@ namespace Slask.UnitTests.ServiceTests
         [Fact]
         public void PlayerNamesAreAddedToListWhenNewPlayersAreAddedTournament()
         {
-            throw new NotImplementedException();
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = services.WhenAddedMatchesToTournament();
 
-            //TournamentServiceContext services = GivenServices();
-            //Tournament tournament = services.WhenAddedMatchesToTournament();
+            tournament.PlayerReferences.Should().NotBeNull();
+            tournament.PlayerReferences.Count.Should().Be(8);
 
-            //tournament.Players.Should().NotBeNull();
-            //tournament.Players.Count.Should().Be(8);
-
-            //tournament.Players.FirstOrDefault(player => player.Name.Contains("Maru")).Should().NotBeNull();
-            //tournament.Players.FirstOrDefault(player => player.Name.Contains("Stork")).Should().NotBeNull();
-            //tournament.Players.FirstOrDefault(player => player.Name.Contains("Taeja")).Should().NotBeNull();
-            //tournament.Players.FirstOrDefault(player => player.Name.Contains("Rain")).Should().NotBeNull();
-            //tournament.Players.FirstOrDefault(player => player.Name.Contains("Bomber")).Should().NotBeNull();
-            //tournament.Players.FirstOrDefault(player => player.Name.Contains("FanTaSy")).Should().NotBeNull();
-            //tournament.Players.FirstOrDefault(player => player.Name.Contains("Stephano")).Should().NotBeNull();
-            //tournament.Players.FirstOrDefault(player => player.Name.Contains("Thorzain")).Should().NotBeNull();
-        }
-
-        [Fact]
-        public void CanGetAllPlayerNamesInTournamentByTournamentName()
-        {
-            throw new NotImplementedException();
-            //TournamentServiceContext services = GivenServices();
-            //Tournament tournament = services.WhenAddedMatchesToTournament();
-
-            //List<Player> players = services.TournamentService.GetAllPlayersByName(tournament.Name);
-
-            //players.Should().NotBeNullOrEmpty();
-            //players.Count.Should().Be(8);
-
-            //players.FirstOrDefault(player => player.Name.Contains("Maru")).Should().NotBeNull();
-            //players.FirstOrDefault(player => player.Name.Contains("Stork")).Should().NotBeNull();
-            //players.FirstOrDefault(player => player.Name.Contains("Taeja")).Should().NotBeNull();
-            //players.FirstOrDefault(player => player.Name.Contains("Rain")).Should().NotBeNull();
-            //players.FirstOrDefault(player => player.Name.Contains("Bomber")).Should().NotBeNull();
-            //players.FirstOrDefault(player => player.Name.Contains("FanTaSy")).Should().NotBeNull();
-            //players.FirstOrDefault(player => player.Name.Contains("Stephano")).Should().NotBeNull();
-            //players.FirstOrDefault(player => player.Name.Contains("Thorzain")).Should().NotBeNull();
+            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Maru").Should().NotBeNull();
+            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stork").Should().NotBeNull();
+            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Taeja").Should().NotBeNull();
+            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Rain").Should().NotBeNull();
+            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Bomber").Should().NotBeNull();
+            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "FanTaSy").Should().NotBeNull();
+            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stephano").Should().NotBeNull();
+            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Thorzain").Should().NotBeNull();
         }
 
         [Fact]
         public void CanGetAllPlayerNamesInTournamentByTournamentId()
         {
-            throw new NotImplementedException();
-            //TournamentServiceContext services = GivenServices();
-            //Tournament tournament = services.WhenAddedMatchesToTournament();
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = services.WhenAddedMatchesToTournament();
 
-            //List<Player> players = services.TournamentService.GetAllPlayersById(tournament.Id);
+            List<PlayerReference> playerReferences = services.TournamentService.GetPlayerReferencesByTournamentId(tournament.Id);
 
-            //players.Should().NotBeNullOrEmpty();
-            //players.Count.Should().Be(8);
+            playerReferences.Should().NotBeNullOrEmpty();
+            playerReferences.Count.Should().Be(8);
 
-            //players.FirstOrDefault(player => player.Name.Contains("Maru")).Should().NotBeNull();
-            //players.FirstOrDefault(player => player.Name.Contains("Stork")).Should().NotBeNull();
-            //players.FirstOrDefault(player => player.Name.Contains("Taeja")).Should().NotBeNull();
-            //players.FirstOrDefault(player => player.Name.Contains("Rain")).Should().NotBeNull();
-            //players.FirstOrDefault(player => player.Name.Contains("Bomber")).Should().NotBeNull();
-            //players.FirstOrDefault(player => player.Name.Contains("FanTaSy")).Should().NotBeNull();
-            //players.FirstOrDefault(player => player.Name.Contains("Stephano")).Should().NotBeNull();
-            //players.FirstOrDefault(player => player.Name.Contains("Thorzain")).Should().NotBeNull();
-        }
-
-        [Fact] 
-        public void CanGetAllPlayerInstancesInTournamentByPlayerNameId()
-        {
-            throw new NotImplementedException();
-            //TournamentServiceContext services = GivenServices();
-            //Tournament tournament = services.WhenAddedMatchesToTournament();
-            //Player createdPlayer = tournament.Players.First();
-
-            //Player fetchedPlayer = services.TournamentService.GetAllPlayersByPlayerNameId(createdPlayer.Id);
-
-            //fetchedPlayer.Should().NotBeNull();
-            //fetchedPlayer.Id.Should().Be(createdPlayer.Id);
-            //fetchedPlayer.Name.Should().Be(createdPlayer.Name);
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Maru").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stork").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Taeja").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Rain").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Bomber").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "FanTaSy").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stephano").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Thorzain").Should().NotBeNull();
         }
 
         [Fact]
-        public void CanGetAllPlayerInstancesInTournamentByPlayerName()
+        public void CanGetAllPlayerNamesInTournamentByTournamentName()
         {
-            throw new NotImplementedException();
-            //TournamentServiceContext services = GivenServices();
-            //Tournament tournament = services.WhenAddedMatchesToTournament();
-            //Player createdPlayer = tournament.Players.First();
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = services.WhenAddedMatchesToTournament();
 
-            //Player fetchedPlayer = services.TournamentService.GetAllPlayersByName(createdPlayer.Name);
+            List<PlayerReference> playerReferences = services.TournamentService.GetPlayerReferencesByTournamentName(tournament.Name);
 
-            //fetchedPlayer.Should().NotBeNull();
-            //fetchedPlayer.Id.Should().Be(createdPlayer.Id);
-            //fetchedPlayer.Name.Should().Be(createdPlayer.Name);
+            playerReferences.Should().NotBeNullOrEmpty();
+            playerReferences.Count.Should().Be(8);
+
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Maru").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stork").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Taeja").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Rain").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Bomber").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "FanTaSy").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stephano").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Thorzain").Should().NotBeNull();
         }
 
         [Fact]
         public void CanGetAllBettersInTournamentByTournamentName()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenAddedBetterToTournament();
+            Tournament tournament = services.WhenCreatedBetterInTournament();
 
             List<Better> betters = services.TournamentService.GetBettersByTournamentName(tournament.Name);
 
@@ -163,7 +129,7 @@ namespace Slask.UnitTests.ServiceTests
         public void CanGetAllBettersInTournamentByTournamentId()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenAddedBetterToTournament();
+            Tournament tournament = services.WhenCreatedBetterInTournament();
 
             List<Better> betters = services.TournamentService.GetBettersByTournamentId(tournament.Id);
 

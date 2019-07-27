@@ -11,7 +11,7 @@ namespace Slask.UnitTests.DomainTests
         public void EnsureUserIsValidWhenCreated()
         {
             UserServiceContext services = GivenServices();
-            User user = services.WhenUserCreated();
+            User user = services.WhenCreatedUser();
 
             user.Should().NotBeNull();
             user.Id.Should().NotBeEmpty();
@@ -22,7 +22,7 @@ namespace Slask.UnitTests.DomainTests
         public void UserCanBeRenamed()
         {
             UserServiceContext services = GivenServices();
-            User user = services.WhenUserCreated();
+            User user = services.WhenCreatedUser();
 
             user.RenameTo("Bönis");
 
@@ -33,7 +33,7 @@ namespace Slask.UnitTests.DomainTests
         public void UserCannotBeRenamedToEmptyName()
         {
             UserServiceContext services = GivenServices();
-            User user = services.WhenUserCreated();
+            User user = services.WhenCreatedUser();
 
             user.RenameTo("");
 
@@ -44,7 +44,7 @@ namespace Slask.UnitTests.DomainTests
         public void CannotCreateUserWithNameAlreadyInUseNoMatterLetterCasing()
         {
             UserServiceContext services = GivenServices();
-            User createdUser = services.WhenUserCreated();
+            User createdUser = services.WhenCreatedUser();
             User duplicateUser = services.UserService.CreateUser(createdUser.Name.ToUpper());
 
             duplicateUser.Should().BeNull();
@@ -54,7 +54,7 @@ namespace Slask.UnitTests.DomainTests
         public void UserCannotBeRenamedToNameAlreadyInUseNoMatterLetterCasing()
         {
             UserServiceContext services = GivenServices();
-            User firstUser = services.WhenUserCreated();
+            User firstUser = services.WhenCreatedUser();
             User secondUser = services.UserService.CreateUser("Bönis");
 
             secondUser.RenameTo(firstUser.Name.ToUpper());

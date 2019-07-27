@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
 using Slask.TestCore;
+using System.Linq;
 using Xunit;
 
 namespace Slask.UnitTests.DomainTests
@@ -8,55 +9,26 @@ namespace Slask.UnitTests.DomainTests
     public class PlayerTests
     {
         [Fact]
-        public void EnsurePlayerIsValidWhenAddedToTournament()
+        public void EnsurePlayerIsValidWhenAddedToMatchInTournament()
         {
             TournamentServiceContext services = GivenServices();
-            Match match = services.WhenAddedMatchToTournament();
+            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
+            Match match = tournament.Rounds.First().Groups.First().Matches.First();
+            Player player = match.Player1;
 
-            match.Player1.Should().NotBeNull();
-            match.Player1.Name.Should().Be("Maru");
-            match.Player1.Score.Should().Be(0);
-            match.Player1.Match.Should().NotBeNull();
-        }
-
-        [Fact]
-        public void PlayerCanBeRenamed()
-        {
-            TournamentServiceContext services = GivenServices();
-            Match match = services.WhenAddedMatchToTournament();
-
-            match.Player1.RenameTo("Taeja");
-
-            match.Player1.Name.Should().Be("Taeja");
-        }
-
-        [Fact]
-        public void PlayerCannotBeRenamedToEmptyName()
-        {
-            TournamentServiceContext services = GivenServices();
-            Match match = services.WhenAddedMatchToTournament();
-
-            match.Player1.RenameTo("");
-
-            match.Player1.Name.Should().Be("Maru");
-        }
-
-        [Fact]
-        public void PlayerCannotBeRenamedToSameNameAsOpponentNoMatterLetterCasing()
-        {
-            TournamentServiceContext services = GivenServices();
-            Match match = services.WhenAddedMatchToTournament();
-
-            match.Player1.RenameTo(match.Player2.Name.ToUpper());
-
-            match.Player1.Name.Should().Be("Maru");
+            player.Should().NotBeNull();
+            player.PlayerReference.Should().BeNull();
+            player.Score.Should().Be(0);
+            player.MatchId.Should().Be(match.Id);
+            player.Match.Should().Be(match);
         }
 
         [Fact]
         public void ScoreInitiallyAtZero()
         {
             TournamentServiceContext services = GivenServices();
-            Match match = services.WhenAddedMatchToTournament();
+            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
+            Match match = tournament.Rounds.First().Groups.First().Matches.First();
 
             match.Player1.Score.Should().Be(0);
         }
@@ -65,7 +37,8 @@ namespace Slask.UnitTests.DomainTests
         public void CanIncrementScore()
         {
             TournamentServiceContext services = GivenServices();
-            Match match = services.WhenAddedMatchToTournament();
+            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
+            Match match = tournament.Rounds.First().Groups.First().Matches.First();
 
             match.Player1.IncrementScore();
 
@@ -76,7 +49,8 @@ namespace Slask.UnitTests.DomainTests
         public void CanDecrementScore()
         {
             TournamentServiceContext services = GivenServices();
-            Match match = services.WhenAddedMatchToTournament();
+            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
+            Match match = tournament.Rounds.First().Groups.First().Matches.First();
 
             match.Player1.DecrementScore();
 
@@ -87,7 +61,8 @@ namespace Slask.UnitTests.DomainTests
         public void CanIncreaseScoreByFive()
         {
             TournamentServiceContext services = GivenServices();
-            Match match = services.WhenAddedMatchToTournament();
+            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
+            Match match = tournament.Rounds.First().Groups.First().Matches.First();
 
             match.Player1.SubtractScore(5);
 
@@ -98,7 +73,8 @@ namespace Slask.UnitTests.DomainTests
         public void CanDecreaseScoreByFive()
         {
             TournamentServiceContext services = GivenServices();
-            Match match = services.WhenAddedMatchToTournament();
+            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
+            Match match = tournament.Rounds.First().Groups.First().Matches.First();
 
             match.Player1.SubtractScore(5);
 

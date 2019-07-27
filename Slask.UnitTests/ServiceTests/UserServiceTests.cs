@@ -11,7 +11,7 @@ namespace Slask.UnitTests.ServiceTests
         public void CanGetUserByName()
         {
             UserServiceContext services = GivenServices();
-            User createdUser = services.WhenUserCreated();
+            User createdUser = services.WhenCreatedUser();
             User fetchedUser = services.UserService.GetUserByName(createdUser.Name);
 
             fetchedUser.Should().NotBeNull();
@@ -23,7 +23,7 @@ namespace Slask.UnitTests.ServiceTests
         public void CanGetUserById()
         {
             UserServiceContext services = GivenServices();
-            User createdUser = services.WhenUserCreated();
+            User createdUser = services.WhenCreatedUser();
             User fetchedUser = services.UserService.GetUserById(createdUser.Id);
 
             fetchedUser.Should().NotBeNull();

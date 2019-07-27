@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Slask.Common;
 using Slask.Domain;
 using Slask.TestCore;
 using System;
@@ -14,13 +15,13 @@ namespace Slask.UnitTests.DomainTests
         public void EnsureTournamentIsValidWhenCreated()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenTournamentCreated();
+            Tournament tournament = services.WhenCreatedTournament();
 
             tournament.Should().NotBeNull();
             tournament.Id.Should().NotBeEmpty();
             tournament.Name.Should().NotBeEmpty();
             tournament.Rounds.Should().BeEmpty();
-            tournament.PlayerNameReferences.Should().BeEmpty();
+            tournament.PlayerReferences.Should().BeEmpty();
             tournament.Betters.Should().BeEmpty();
             tournament.Settings.Should().BeEmpty();
             tournament.MiscBetCatalogue.Should().BeEmpty();
@@ -39,7 +40,7 @@ namespace Slask.UnitTests.DomainTests
         public void TournamentCanBeRenamed()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenTournamentCreated();
+            Tournament tournament = services.WhenCreatedTournament();
 
             tournament.RenameTo("BHA Open 2019");
 
@@ -50,7 +51,7 @@ namespace Slask.UnitTests.DomainTests
         public void TournamentCannotBeRenamedToEmptyName()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenTournamentCreated();
+            Tournament tournament = services.WhenCreatedTournament();
 
             tournament.RenameTo("");
 
@@ -61,7 +62,7 @@ namespace Slask.UnitTests.DomainTests
         public void CannotCreateTournamentWithNameAlreadyInUseNoMatterLetterCasing()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament firstTournament = services.WhenTournamentCreated();
+            Tournament firstTournament = services.WhenCreatedTournament();
             Tournament secondTournament = services.TournamentService.CreateTournament(firstTournament.Name.ToUpper());
 
             secondTournament.Should().BeNull();
@@ -71,7 +72,7 @@ namespace Slask.UnitTests.DomainTests
         public void TournamentCannotBeRenamedToNameAlreadyInUseNoMatterLetterCasing()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament firstTournament = services.WhenTournamentCreated();
+            Tournament firstTournament = services.WhenCreatedTournament();
             Tournament secondTournament = services.TournamentService.CreateTournament("BHA Open 2019");
 
             secondTournament.RenameTo(firstTournament.Name.ToUpper());
@@ -82,53 +83,78 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CanGetPlayerInTournamentByPlayerNameEvenWhenNotMatchingLetterCasing()
         {
-            throw new NotImplementedException();
-            //TournamentServiceContext services = GivenServices();
-            //Tournament tournament = services.WhenAddedMatchesToTournament();
-            //Player createdPlayer = tournament.Players.First();
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
+            PlayerReference createdPlayerReference = tournament.PlayerReferences.First();
 
-            //Player fetchedPlayer = tournament.GetPlayerByName(createdPlayer.Name.ToLower());
+            PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByPlayerName(createdPlayerReference.Name.ToLower());
 
-            //fetchedPlayer.Should().NotBeNull();
-            //fetchedPlayer.Id.Should().Be(createdPlayer.Id);
-            //fetchedPlayer.Name.Should().Be(createdPlayer.Name);
+            fetchedPlayerReference.Should().NotBeNull();
+            fetchedPlayerReference.Id.Should().Be(createdPlayerReference.Id);
+            fetchedPlayerReference.Name.Should().Be(createdPlayerReference.Name);
         }
 
         [Fact]
-        public void CanGetPlayerInTournamentByPlayerId()
-        {
-            throw new NotImplementedException();
-            //TournamentServiceContext services = GivenServices();
-            //Tournament tournament = services.WhenAddedMatchesToTournament();
-            //Player createdPlayer = tournament.Players.First();
-
-            //Player fetchedPlayer = tournament.GetPlayerById(createdPlayer.Id);
-
-            //fetchedPlayer.Should().NotBeNull();
-            //fetchedPlayer.Id.Should().Be(createdPlayer.Id);
-            //fetchedPlayer.Name.Should().Be(createdPlayer.Name);
-        }
-
-        [Fact]
-        public void CanGetPlayerInTournamentByPlayerName()
-        {
-            throw new NotImplementedException();
-            //TournamentServiceContext services = GivenServices();
-            //Tournament tournament = services.WhenAddedMatchesToTournament();
-            //Player createdPlayer = tournament.Players.First();
-
-            //Player fetchedPlayer = tournament.GetPlayerByName(createdPlayer.Name);
-
-            //fetchedPlayer.Should().NotBeNull();
-            //fetchedPlayer.Id.Should().Be(createdPlayer.Id);
-            //fetchedPlayer.Name.Should().Be(createdPlayer.Name);
-        }
-
-        [Fact]
-        public void CanGetBetterInTournamentByPlayerId()
+        public void CanGetRoundInTournamentByRoundId()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenAddedBetterToTournament();
+            Round createdRound = services.WhenCreatedRoundRobinRoundInTournament();
+            Tournament tournament = createdRound.Tournament;
+
+            Round fetchedRound = tournament.GetRoundByRoundId(createdRound.Id);
+
+            fetchedRound.Should().NotBeNull();
+            fetchedRound.Id.Should().Be(createdRound.Id);
+            fetchedRound.Name.Should().Be(createdRound.Name);
+        }
+
+        [Fact]
+        public void CanGetRoundInTournamentByRoundName()
+        {
+            TournamentServiceContext services = GivenServices();
+            Round createdRound = services.WhenCreatedRoundRobinRoundInTournament();
+            Tournament tournament = createdRound.Tournament;
+
+            Round fetchedRound = tournament.GetRoundByRoundName(createdRound.Name);
+
+            fetchedRound.Should().NotBeNull();
+            fetchedRound.Id.Should().Be(createdRound.Id);
+            fetchedRound.Name.Should().Be(createdRound.Name);
+        }
+
+        [Fact]
+        public void CanGetPlayerReferenceInTournamentByPlayerId()
+        {
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
+            PlayerReference createdPlayerReference = tournament.PlayerReferences.First();
+
+            PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByPlayerId(createdPlayerReference.Id);
+
+            fetchedPlayerReference.Should().NotBeNull();
+            fetchedPlayerReference.Id.Should().Be(createdPlayerReference.Id);
+            fetchedPlayerReference.Name.Should().Be(createdPlayerReference.Name);
+        }
+
+        [Fact]
+        public void CanGetPlayerReferenceInTournamentByPlayerName()
+        {
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
+            PlayerReference createdPlayerReference = tournament.PlayerReferences.First();
+
+            PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByPlayerName(createdPlayerReference.Name);
+
+            fetchedPlayerReference.Should().NotBeNull();
+            fetchedPlayerReference.Id.Should().Be(createdPlayerReference.Id);
+            fetchedPlayerReference.Name.Should().Be(createdPlayerReference.Name);
+        }
+
+        [Fact]
+        public void CanGetBetterInTournamentByBetterId()
+        {
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = services.WhenCreatedBetterInTournament();
             Better createdBetter = tournament.Betters.First();
 
             Better fetchedBetter = tournament.GetBetterById(createdBetter.Id);
@@ -140,10 +166,10 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
-        public void CanGetBetterInTournamentByPlayerName()
+        public void CanGetBetterInTournamentByBetterName()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenAddedBetterToTournament();
+            Tournament tournament = services.WhenCreatedBetterInTournament();
             Better createdBetter = tournament.Betters.First();
 
             Better fetchedBetter = tournament.GetBetterByName(createdBetter.User.Name);
@@ -158,7 +184,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanGetBetterInTournamentByPlayerNameEvenWhenNotMatchingLetterCasing()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenAddedBetterToTournament();
+            Tournament tournament = services.WhenCreatedBetterInTournament();
             Better createdBetter = tournament.Betters.First();
 
             Better fetchedBetter = tournament.GetBetterByName(createdBetter.User.Name.ToLower());
@@ -173,7 +199,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanOnlyAddUserAsBetterOncePerTournament()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenAddedBetterToTournament();
+            Tournament tournament = services.WhenCreatedBetterInTournament();
             Better createdBetter = tournament.Betters.First();
 
             Better duplicateBetter = tournament.AddBetter(createdBetter.User);
@@ -185,7 +211,7 @@ namespace Slask.UnitTests.DomainTests
         public void TournamentCanAddRound()
         {
             TournamentServiceContext services = GivenServices();
-            Round round = services.WhenAddedRoundToTournament();
+            Round round = services.WhenCreatedRoundRobinRoundInTournament();
 
             round.Should().NotBeNull();
             round.Name.Should().Be("Group A");
@@ -193,72 +219,70 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
-        public void TournamentDoesNotAcceptRoundsWithEvenBestOfs()
+        public void TournamentDoesNotAcceptRoundRobinRoundsWithEvenBestOfs()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenTournamentCreated();
-            Round round = tournament.AddRound("Group A", 1, 4, 8);
+            Tournament tournament = services.WhenCreatedTournament();
+            Round round = tournament.AddRoundRobinRound("Group A", 4, 8);
 
             round.Should().BeNull();
         }
 
         [Fact]
-        public void TournamentMatchMustContainTwoPlayers()
+        public void TournamentDoesNotAcceptDualTournamentRoundsWithEvenBestOfs()
         {
             TournamentServiceContext services = GivenServices();
-            Group group = services.WhenAddedGroupToTournament();
-            Match matchMissingFirstPlayer = group.AddMatch("Maru", "", DateTime.Now.AddSeconds(1));
-            Match matchMissingSecondPlayer = group.AddMatch("", "Stork", DateTime.Now.AddSeconds(1));
-            Match matchMissingBothPlayers = group.AddMatch("", "", DateTime.Now.AddSeconds(1));
+            Tournament tournament = services.WhenCreatedTournament();
+            Round round = tournament.AddDualTournamentRound("Group A", 4);
 
-            matchMissingFirstPlayer.Should().BeNull();
-            matchMissingSecondPlayer.Should().BeNull();
-            matchMissingBothPlayers.Should().BeNull();
+            round.Should().BeNull();
         }
 
         [Fact]
-        public void TournamentMatchMustContainDifferentPlayers()
+        public void TournamentDoesNotAcceptBracketRoundsWithEvenBestOfs()
         {
             TournamentServiceContext services = GivenServices();
-            Group group = services.WhenAddedGroupToTournament();
-            Match match = group.AddMatch("Maru", "Maru", DateTime.Now.AddSeconds(1));
+            Tournament tournament = services.WhenCreatedTournament();
+            Round round = tournament.AddBracketRound("Bracket A", 4);
 
-            match.Should().BeNull();
+            round.Should().BeNull();
         }
 
         [Fact]
         public void CanDetermineStatusOfMatchInTournamentAsNotBegun()
         {
             TournamentServiceContext services = GivenServices();
-            Match match = services.WhenAddedMatchToTournament();
+            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
+            Match match = tournament.GetRoundByRoundName("Round-Robin Group A").Groups.First().Matches.First();
 
-            match.GetState().Should().Be(Match.State.HasNotBegun);
+            match.GetState().Should().Be(MatchState.HasNotBegun);
         }
 
         [Fact]
         public void CanDetermineStatusOfMatchInTournamentAsIsBeingPlayed()
         {
             TournamentServiceContext services = GivenServices();
-            Group group = services.WhenAddedGroupToTournament();
-            Match match = group.AddMatch("Maru", "Stork", DateTime.Now);
+            Group group = services.WhenCreatedGroupInRoundRobinRoundInTournament();
+            Match match = group.AddMatch("Maru", "Stork", DateTimeHelper.Now);
 
-            match.GetState().Should().Be(Match.State.IsBeingPlayed);
+            match.GetState().Should().Be(MatchState.IsBeingPlayed);
         }
 
         [Fact]
         public void CanDetermineStatusOfMatchInTournamentAsIsFinished()
         {
             TournamentServiceContext services = GivenServices();
-            Match match = services.WhenAddedMatchToTournamentAndMatchIsFinished();
+            Match match = services.WhenCreatedMatchInRoundRobinRoundInTournamentAndMatchIsFinished();
 
-            match.GetState().Should().Be(Match.State.IsFinished);
+            match.GetState().Should().Be(MatchState.IsFinished);
         }
 
         [Fact]
         public void CannotGetWinningPlayerOfMatchInTournamentBeforeItIsFinished()
         {
             TournamentServiceContext services = GivenServices();
-            Match match = services.WhenAddedMatchToTournament();
+            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
+            Match match = tournament.GetRoundByRoundName("Round-Robin Group A").Groups.First().Matches.First();
 
             match.GetWinningPlayer().Should().BeNull();
         }
@@ -267,7 +291,8 @@ namespace Slask.UnitTests.DomainTests
         public void CannotGetLosingPlayerOfMatchInTournamentBeforeItIsFinished()
         {
             TournamentServiceContext services = GivenServices();
-            Match match = services.WhenAddedMatchToTournament();
+            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
+            Match match = tournament.GetRoundByRoundName("Round-Robin Group A").Groups.First().Matches.First();
 
             match.GetLosingPlayer().Should().BeNull();
         }
@@ -276,7 +301,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanGetWinningPlayerOfMatchInTournamentWhenMatchIsFinished()
         {
             TournamentServiceContext services = GivenServices();
-            Match match = services.WhenAddedMatchToTournamentAndMatchIsFinished();
+            Match match = services.WhenCreatedMatchInRoundRobinRoundInTournamentAndMatchIsFinished();
 
             match.GetWinningPlayer().Should().Be(match.Player1);
         }
@@ -285,32 +310,66 @@ namespace Slask.UnitTests.DomainTests
         public void CanGetLosingPlayerOfMatchInTournamentWhenMatchIsFinished()
         {
             TournamentServiceContext services = GivenServices();
-            Match match = services.WhenAddedMatchToTournamentAndMatchIsFinished();
+            Match match = services.WhenCreatedMatchInRoundRobinRoundInTournamentAndMatchIsFinished();
 
             match.GetLosingPlayer().Should().Be(match.Player2);
         }
 
         [Fact]
-        public void PlayerNameReferencesMustBeUniqueWithinTournament()
+        public void PlayerReferencesMustBeUniqueByNameWithinTournament()
+        {
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
+            Match match = tournament.GetRoundByRoundName("Round-Robin Group A").Groups.First().Matches.First();
+
+            GroupBase group = match.Group;
+            group.AddMatch(match.Player1.Name, match.Player2.Name, DateTimeHelper.Now.AddSeconds(1));
+            group.AddMatch(match.Player1.Name, match.Player2.Name, DateTimeHelper.Now.AddSeconds(1));
+
+            List<PlayerReference> maruPlayers = tournament.PlayerReferences.Where(playerReference => playerReference.Name == match.Player1.Name).ToList();
+            List<PlayerReference> storkPlayers = tournament.PlayerReferences.Where(playerReference => playerReference.Name == match.Player2.Name).ToList();
+
+            maruPlayers.Should().NotBeNullOrEmpty();
+            maruPlayers.Count.Should().Be(1);
+
+            storkPlayers.Should().NotBeNullOrEmpty();
+            storkPlayers.Count.Should().Be(1);
+        }
+
+        [Fact]
+        public void AdvanceAmountInRoundMustBeDivisibleByTheNumberOfGroupsInRound()
         {
             throw new NotImplementedException();
-            //TournamentServiceContext services = GivenServices();
-            //Match match = services.WhenAddedMatchToTournament();
+        }
 
-            //Group group = match.Group;
-            //group.AddMatch(match.Player1.Name, match.Player2.Name, DateTime.Now.AddSeconds(1));
-            //group.AddMatch(match.Player1.Name, match.Player2.Name, DateTime.Now.AddSeconds(1));
+        [Fact]
+        public void CantAddMorePlayersToGroupThanAdvancementAmount()
+        {
+            throw new NotImplementedException();
+        }
 
-            //Tournament tournament = group.Round.Tournament;
+        [Fact]
+        public void OnlyWinnersCanAdvanceToNextMatch()
+        {
+            throw new NotImplementedException();
+        }
 
-            //List<Player> maruPlayers = tournament.Players.Where(player => player.Name.Contains(match.Player1.Name)).ToList();
-            //List<Player> storkPlayers = tournament.Players.Where(player => player.Name.Contains(match.Player2.Name)).ToList();
+        [Fact]
+        public void GroupInDualTournamentRoundMustHaveExactlyFourPlayersBeforeFirstMatchInGroupIsCreated()
+        {
+            throw new NotImplementedException();
+        }
 
-            //maruPlayers.Should().NotBeNullOrEmpty();
-            //maruPlayers.Count.Should().Be(1);
+        [Fact]
+        public void DualTournamentRoundCanNeverContainMoreThanFiveMatches()
+        {
+            throw new NotImplementedException();
+        }
 
-            //storkPlayers.Should().NotBeNullOrEmpty();
-            //storkPlayers.Count.Should().Be(1);
+        [Fact]
+        public void OnlyTwoMatchesCanBe()
+        {
+            throw new NotImplementedException();
         }
 
         private TournamentServiceContext GivenServices()
