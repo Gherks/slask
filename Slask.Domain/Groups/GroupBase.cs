@@ -82,25 +82,6 @@ namespace Slask.Domain
             throw new NotImplementedException();
         }
 
-        //private Match AddMatch()
-        //{
-        //    if (!MatchCanBeAdded() || !ParametersAreValid(player1Name, player2Name, startDateTime))
-        //    {
-        //        return null;
-        //    }
-
-        //    PlayerReference playerReference1 = GetPlayerReferenceWithName(player1Name);
-        //    PlayerReference playerReference2 = GetPlayerReferenceWithName(player2Name);
-
-        //    if (playerReference1 == null || playerReference2 == null)
-        //    {
-        //        return null;
-        //    }
-
-        //    Matches.Add(Match.Create());
-        //    return Matches.Last();
-        //}
-
         private PlayerReference GetPlayerReferenceWithName(string name)
         {
             return ParticipatingPlayers.Where(reference => reference.Name == name).FirstOrDefault();
