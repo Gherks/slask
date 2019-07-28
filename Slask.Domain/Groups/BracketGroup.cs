@@ -9,14 +9,5 @@ namespace Slask.Domain
         private BracketGroup()
         {
         }
-
-        protected override bool MatchCanBeAdded()
-        {
-            // 
-            // CannotAddMorePlayersWhenFirstMatchStarted
-            // EveryOtherMatchAnotherOneIsCreatedUntilFinal
-
-            return false;
-        }
     }
 }
