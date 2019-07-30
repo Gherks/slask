@@ -12,8 +12,11 @@ namespace Slask.Domain
 
         protected override void UpdateMatchLayout()
         {
-            // numMatches = (ParticipatingPlayers.Count - 1) * (ParticipatingPlayers.Count / 2)
-            // but what happens when uneven amount of players is participating? check wikipedia maybe
+            // Even amount
+            // numMatches = (ParticipatingPlayers.Count / 2) * (ParticipatingPlayers.Count - 1)
+
+            // Uneven amount
+            // numMatches = ((ParticipatingPlayers.Count - 1) / 2) * (ParticipatingPlayers.Count)
         }
     }
 }

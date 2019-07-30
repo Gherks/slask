@@ -30,6 +30,7 @@ namespace Slask.Domain
             {
                 Id = Guid.NewGuid(),
                 IsReady = false,
+                RoundId = round.Id,
                 Round = round
             };
         }

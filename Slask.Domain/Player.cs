@@ -61,13 +61,13 @@ namespace Slask.Domain
             Match.Group.MatchScoreChanged();
         }
 
-        public void AddScore(int value)
+        public void IncreaseScore(int value)
         {
             Score += value;
             Match.Group.MatchScoreChanged();
         }
 
-        public void SubtractScore(int value)
+        public void DecreaseScore(int value)
         {
             Score -= value;
             Match.Group.MatchScoreChanged();

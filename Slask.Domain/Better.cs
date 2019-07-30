@@ -17,12 +17,19 @@ namespace Slask.Domain
         public Guid TournamentId { get; private set; }
         public Tournament Tournament { get; private set; }
 
-        public static Better Create(User user)
+        public static Better Create(User user, Tournament tournament)
         {
+            if(user == null || tournament == null)
+            {
+                return null;
+            }
+
             return new Better
             {
                 Id = Guid.NewGuid(),
-                User = user
+                User = user,
+                TournamentId = tournament.Id,
+                Tournament = tournament
             };
         }
 

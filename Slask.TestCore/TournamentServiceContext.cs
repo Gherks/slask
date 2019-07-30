@@ -19,16 +19,19 @@ namespace Slask.TestCore
             TournamentService = new TournamentService(SlaskContext);
         }
 
-        public Tournament WhenTournamentCreated()
+        public Tournament HomestoryCup_01_CreateTournament()
         {
-            Tournament tournament = TournamentService.CreateTournament("WCS 2019");
+            Tournament tournament = TournamentService.CreateTournament("Homestory Cup");
             SlaskContext.SaveChanges();
 
             return tournament;
         }
 
-        public Tournament WhenBettersAddedToTournament(Tournament tournament)
+        public Tournament HomestoryCup_02_BettersAddedToTournament()
         {
+            Tournament tournament = HomestoryCup_01_CreateTournament();
+
+            WhenCreatedUsers();
             tournament.AddBetter(UserService.GetUserByName("Stålberto"));
             tournament.AddBetter(UserService.GetUserByName("Bönis"));
             tournament.AddBetter(UserService.GetUserByName("Guggelito"));
@@ -37,37 +40,27 @@ namespace Slask.TestCore
             return tournament;
         }
 
-        public Tournament WhenCreatedTournamentWithBettersAdded()
+        public Round HomestoryCup_03_AddRoundRobinRound()
         {
-            WhenCreatedUsers();
-            Tournament tournament = WhenTournamentCreated();
-            WhenBettersAddedToTournament(tournament);
-
-            SlaskContext.SaveChanges();
-            return tournament;
-        }
-
-        public Round TournamentCreationPart1_AddedGroupStage()
-        {
-            Tournament tournament = WhenCreatedTournamentWithBettersAdded();
-            Round groupStage = tournament.AddRoundRobinRound("Round Robin Tournament", 3, 4);
+            Tournament tournament = HomestoryCup_02_BettersAddedToTournament();
+            Round groupStage = tournament.AddRoundRobinRound("Round Robin Round", 3, 4);
 
             SlaskContext.SaveChanges();
             return groupStage;
         }
 
-        public RoundRobinGroup TournamentCreationPart2_AddedRoundRobinGroup()
+        public RoundRobinGroup HomestoryCup_04_AddGroupToRoundRobinRound()
         {
-            Round groupStage = TournamentCreationPart1_AddedGroupStage();
+            Round groupStage = HomestoryCup_03_AddRoundRobinRound();
             RoundRobinGroup group = groupStage.AddGroup<RoundRobinGroup>();
 
             SlaskContext.SaveChanges();
             return group;
         }
 
-        public RoundRobinGroup TournamentCreationPart3_AddedPlayersToRoundRobinGroup()
+        public RoundRobinGroup HomestoryCup_05_AddedPlayersToRoundRobinGroup()
         {
-            RoundRobinGroup group = TournamentCreationPart2_AddedRoundRobinGroup();
+            RoundRobinGroup group = HomestoryCup_04_AddGroupToRoundRobinRound();
 
             group.AddPlayerReference("Maru");
             group.AddPlayerReference("Stork");
@@ -82,22 +75,22 @@ namespace Slask.TestCore
             return group;
         }
 
-        public RoundRobinGroup TournamentCreationPart4_StartDateTimeSetToMatchesInRoundRobinGroup()
+        public RoundRobinGroup HomestoryCup_06_StartDateTimeSetToMatchesInRoundRobinGroup()
         {
-            RoundRobinGroup group = TournamentCreationPart3_AddedPlayersToRoundRobinGroup();
+            RoundRobinGroup group = HomestoryCup_05_AddedPlayersToRoundRobinGroup();
 
             for (int index = 0; index < group.Matches.Count; ++index)
             {
-                group.Matches[index].ChangeStartDateTime(DateTimeHelper.Now.AddHours(index));
+                group.Matches[index].SetStartDateTime(DateTimeHelper.Now.AddHours(index));
             }
 
             SlaskContext.SaveChanges();
             return group;
         }
 
-        public RoundRobinGroup TournamentCreationPart5_AdminFlagsRoundRobinGroupAsReady()
+        public RoundRobinGroup HomestoryCup_07_AdminFlagsRoundRobinGroupAsReady()
         {
-            RoundRobinGroup group = TournamentCreationPart4_StartDateTimeSetToMatchesInRoundRobinGroup();
+            RoundRobinGroup group = HomestoryCup_06_StartDateTimeSetToMatchesInRoundRobinGroup();
 
             group.SetIsReady(true);
 
@@ -105,9 +98,9 @@ namespace Slask.TestCore
             return group;
         }
 
-        public RoundRobinGroup TournamentCreationPart6_BetsPlacedOnMatchesInRoundRobinGroup()
+        public RoundRobinGroup HomestoryCup_08_BetsPlacedOnMatchesInRoundRobinGroup()
         {
-            RoundRobinGroup group = TournamentCreationPart5_AdminFlagsRoundRobinGroupAsReady();
+            RoundRobinGroup group = HomestoryCup_07_AdminFlagsRoundRobinGroupAsReady();
             Tournament tournament = group.Round.Tournament;
 
             Better betterStalberto = tournament.GetBetterByName("Stålberto");
@@ -140,32 +133,32 @@ namespace Slask.TestCore
             return group;
         }
 
-        public RoundRobinGroup TournamentCreationPart7_CompleteFirstMatchInRoundRobinGroup()
+        public RoundRobinGroup HomestoryCup_09_CompleteFirstMatchInRoundRobinGroup()
         {
-            RoundRobinGroup group = TournamentCreationPart6_BetsPlacedOnMatchesInRoundRobinGroup();
+            RoundRobinGroup group = HomestoryCup_08_BetsPlacedOnMatchesInRoundRobinGroup();
 
-            group.Matches.First().Player1.AddScore(2);
+            group.Matches.First().Player1.IncreaseScore(2);
 
             SlaskContext.SaveChanges();
             return group;
         }
 
-        public RoundRobinGroup TournamentCreationPart8_CompleteAllMatchesInRoundRobinGroup()
+        public RoundRobinGroup HomestoryCup_10_CompleteAllMatchesInRoundRobinGroup()
         {
-            RoundRobinGroup group = TournamentCreationPart7_CompleteFirstMatchInRoundRobinGroup();
+            RoundRobinGroup group = HomestoryCup_09_CompleteFirstMatchInRoundRobinGroup();
 
             for(int index = 1; index < group.Matches.Count; ++index)
             {
-                group.Matches[index].Player1.AddScore(2);
+                group.Matches[index].Player1.IncreaseScore(2);
             }
 
             SlaskContext.SaveChanges();
             return group;
         }
 
-        public Round TournamentCreationPart9_AddBracketRound()
+        public Round HomestoryCup_11_AddBracketRound()
         {
-            RoundRobinGroup group = TournamentCreationPart8_CompleteAllMatchesInRoundRobinGroup();
+            RoundRobinGroup group = HomestoryCup_10_CompleteAllMatchesInRoundRobinGroup();
             Tournament tournament = group.Round.Tournament;
 
             Round round = tournament.AddBracketRound("Bracket", 5);
@@ -174,9 +167,9 @@ namespace Slask.TestCore
             return round;
         }
 
-        public BracketGroup TournamentCreationPart10_AddGroupToBracketRound()
+        public BracketGroup HomestoryCup_12_AddGroupToBracketRound()
         {
-            Round round = TournamentCreationPart9_AddBracketRound();
+            Round round = HomestoryCup_11_AddBracketRound();
 
             BracketGroup group = round.AddGroup<BracketGroup>();
 
@@ -184,9 +177,9 @@ namespace Slask.TestCore
             return group;
         }
 
-        public BracketGroup TournamentCreationPart11_AddWinningPlayersToBracketGroup()
+        public BracketGroup HomestoryCup_13_AddWinningPlayersToBracketGroup()
         {
-            BracketGroup group = TournamentCreationPart10_AddGroupToBracketRound();
+            BracketGroup group = HomestoryCup_12_AddGroupToBracketRound();
             List<Player> winningPlayers = group.Round.GetWinningPlayersOfPreviousRound();
 
             foreach (Player player in winningPlayers)
@@ -198,22 +191,22 @@ namespace Slask.TestCore
             return group;
         }
 
-        public BracketGroup TournamentCreationPart12_StartDateTimeSetToMatchesInBracketGroup()
+        public BracketGroup HomestoryCup_14_StartDateTimeSetToMatchesInBracketGroup()
         {
-            BracketGroup group = TournamentCreationPart11_AddWinningPlayersToBracketGroup();
+            BracketGroup group = HomestoryCup_13_AddWinningPlayersToBracketGroup();
 
             for (int index = 0; index < group.Matches.Count; ++index)
             {
-                group.Matches[index].ChangeStartDateTime(DateTimeHelper.Now.AddDays(1).AddHours(index));
+                group.Matches[index].SetStartDateTime(DateTimeHelper.Now.AddDays(1).AddHours(index));
             }
 
             SlaskContext.SaveChanges();
             return group;
         }
 
-        public BracketGroup TournamentCreationPart13_AdminFlagsBracketGroupAsReady()
+        public BracketGroup HomestoryCup_15_AdminFlagsBracketGroupAsReady()
         {
-            BracketGroup group = TournamentCreationPart12_StartDateTimeSetToMatchesInBracketGroup();
+            BracketGroup group = HomestoryCup_14_StartDateTimeSetToMatchesInBracketGroup();
 
             group.SetIsReady(true);
 
@@ -221,9 +214,9 @@ namespace Slask.TestCore
             return group;
         }
 
-        public BracketGroup TournamentCreationPart14_BetsPlacedOnMatchesInBracketGroup()
+        public BracketGroup HomestoryCup_16_BetsPlacedOnMatchesInBracketGroup()
         {
-            BracketGroup group = TournamentCreationPart13_AdminFlagsBracketGroupAsReady();
+            BracketGroup group = HomestoryCup_15_AdminFlagsBracketGroupAsReady();
             Tournament tournament = group.Round.Tournament;
 
             Better betterStalberto = tournament.GetBetterByName("Stålberto");
@@ -256,23 +249,23 @@ namespace Slask.TestCore
             return group;
         }
 
-        public BracketGroup TournamentCreationPart15_CompleteFirstMatchInBracketGroup()
+        public BracketGroup HomestoryCup_17_CompleteFirstMatchInBracketGroup()
         {
-            BracketGroup group = TournamentCreationPart14_BetsPlacedOnMatchesInBracketGroup();
+            BracketGroup group = HomestoryCup_16_BetsPlacedOnMatchesInBracketGroup();
 
-            group.Matches.First().Player1.AddScore(3);
+            group.Matches.First().Player1.IncreaseScore(3);
 
             SlaskContext.SaveChanges();
             return group;
         }
 
-        public BracketGroup TournamentCreationPart16_CompleteAllMatchesInBracketGroup()
+        public BracketGroup HomestoryCup_18_CompleteAllMatchesInBracketGroup()
         {
-            BracketGroup group = TournamentCreationPart15_CompleteFirstMatchInBracketGroup();
+            BracketGroup group = HomestoryCup_17_CompleteFirstMatchInBracketGroup();
 
             for (int index = 1; index < group.Matches.Count; ++index)
             {
-                group.Matches[index].Player1.AddScore(3);
+                group.Matches[index].Player1.IncreaseScore(3);
             }
 
             SlaskContext.SaveChanges();

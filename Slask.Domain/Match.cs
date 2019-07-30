@@ -80,7 +80,7 @@ namespace Slask.Domain
             return Players.Where(player => player.Name == name).FirstOrDefault();
         }
 
-        public bool ChangeStartDateTime(DateTime dateTime)
+        public bool SetStartDateTime(DateTime dateTime)
         {
             if(DateTimeProvider.Current.Now > dateTime)
             {

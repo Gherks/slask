@@ -1,5 +1,9 @@
-﻿using Slask.TestCore;
+﻿using FluentAssertions;
+using Slask.Domain;
+using Slask.TestCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Slask.UnitTests.DomainTests
@@ -7,20 +11,21 @@ namespace Slask.UnitTests.DomainTests
     public class RoundTests
     {
         [Fact]
-        public void CanCreateRoundRobinRound()
+        public void TournamentCanAddRound()
         {
             TournamentServiceContext services = GivenServices();
-            services.WhenCreatedGroupInBracketRoundInTournament();
+            Round round = services.HomestoryCup_03_AddRoundRobinRound();
 
-            throw new NotImplementedException();
+            round.Should().NotBeNull();
+            round.Name.Should().Be("Round Robin Round");
+            (round.BestOf % 2).Should().NotBe(0);
+
+            // COMPLETE
         }
 
         [Fact]
         public void CanCreateDualTournamentRound()
         {
-            TournamentServiceContext services = GivenServices();
-            services.WhenCreatedGroupInDualTournamentRoundInTournament();
-
             throw new NotImplementedException();
         }
 
@@ -28,42 +33,51 @@ namespace Slask.UnitTests.DomainTests
         public void CanCreateBracketRound()
         {
             TournamentServiceContext services = GivenServices();
-            services.WhenCreatedGroupInBracketRoundInTournament();
+            BracketGroup group = services.HomestoryCup_12_AddGroupToBracketRound();
 
-            throw new NotImplementedException();
+            group.Should().NotBeNull();
+            group.Id.Should().NotBeEmpty();
+            group.IsReady.Should().BeFalse();
+            group.ParticipatingPlayers.Should().BeEmpty();
+            group.Matches.Should().BeEmpty();
+            group.RoundId.Should().Be(group.Round.Id);
+            group.Round.Should().Be(group.Round);
         }
 
         [Fact]
         public void OnlyWinningPlayersCanAdvanceToNextRound()
         {
             TournamentServiceContext services = GivenServices();
-            services.WhenCreatedGroupInBracketRoundInTournament();
+            BracketGroup group = services.HomestoryCup_13_AddWinningPlayersToBracketGroup();
 
-            throw new NotImplementedException();
+            group.ParticipatingPlayers.Where(playerReference => playerReference.Name == "").FirstOrDefault().Should().NotBeNull();
+            group.ParticipatingPlayers.Where(playerReference => playerReference.Name == "").FirstOrDefault().Should().NotBeNull();
+            group.ParticipatingPlayers.Where(playerReference => playerReference.Name == "").FirstOrDefault().Should().NotBeNull();
+            group.ParticipatingPlayers.Where(playerReference => playerReference.Name == "").FirstOrDefault().Should().NotBeNull();
         }
 
         [Fact]
-        public void CanOnlyAddAdvancingPlayersWhenPreviousRoundExist()
+        public void FetchingWinningPlayersWithFirstRoundReturnsEmptyList()
         {
             TournamentServiceContext services = GivenServices();
+            RoundRobinGroup group = services.HomestoryCup_04_AddGroupToRoundRobinRound();
 
-            throw new NotImplementedException();
+            List<Player> fetchedPlayers = group.Round.GetWinningPlayersOfPreviousRound();
+
+            fetchedPlayers.Should().NotBeNull();
+            fetchedPlayers.Count.Should().Be(0);
         }
 
         [Fact]
         public void CannotAddGroupsToRoundThatDoesNotMatchByType()
         {
             TournamentServiceContext services = GivenServices();
+            Round round = services.HomestoryCup_03_AddRoundRobinRound();
 
-            throw new NotImplementedException();
-        }
+            round.AddGroup<BracketGroup>();
 
-        [Fact]
-        public void AllGroupsWithinRoundMustBeOfSameType()
-        {
-            TournamentServiceContext services = GivenServices();
-
-            throw new NotImplementedException();
+            round.Groups.Should().NotBeNull();
+            round.Groups.Count.Should().Be(0);
         }
 
         private TournamentServiceContext GivenServices()

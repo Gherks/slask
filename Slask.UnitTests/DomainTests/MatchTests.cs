@@ -10,84 +10,104 @@ namespace Slask.UnitTests.DomainTests
 {
     public class MatchTests
     {
+        // public void CannotAddPointsToPlayersInMatchThatHasNotStarted
+
         [Fact]
-        public void EnsureMatchIsValidWhenAddedToTournament()
+        public void CanCreateMatch()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
-            Match match = tournament.GetRoundByRoundName("Round-Robin Group A").Groups.First().Matches.First();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
 
-            match.Should().NotBeNull();
-            match.Player1.Should().NotBeNull();
-            match.Player2.Should().NotBeNull();
-            match.StartDateTime.Should().NotBeBefore(DateTimeHelper.Now);
-            match.Group.Should().NotBeNull();
+            group.Matches.Count.Should().Be(28);
+
+            foreach(Match match in group.Matches)
+            {
+                match.Should().NotBeNull();
+                match.Player1.Should().NotBeNull();
+                match.Player2.Should().NotBeNull();
+                match.StartDateTime.Should().NotBeBefore(DateTimeHelper.Now);
+                match.GroupId.Should().Be(group.Id);
+                match.Group.Should().Be(group);
+            }
         }
 
         [Fact]
-        public void TournamentMatchMustContainTwoPlayers()
+        public void MatchMustContainDifferentPlayers()
         {
             TournamentServiceContext services = GivenServices();
-            Group group = services.WhenCreatedGroupInRoundRobinRoundInTournament();
-            Match matchMissingBothPlayers = group.AddMatch("", "", DateTimeHelper.Now.AddSeconds(1));
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
 
-            matchMissingFirstPlayer.Should().BeNull();
-            matchMissingSecondPlayer.Should().BeNull();
-            matchMissingBothPlayers.Should().BeNull();
-        }
-
-        [Fact]
-        public void TournamentMatchMustContainDifferentPlayers()
-        {
-            TournamentServiceContext services = GivenServices();
-            Group group = services.WhenCreatedGroupInRoundRobinRoundInTournament();
-            Match match = group.AddMatch("Maru", "Maru", DateTimeHelper.Now.AddSeconds(1));
-
-            match.Should().BeNull();
+            foreach (Match match in group.Matches)
+            {
+                match.Player1.Should().NotBe(match.Player2);
+            }
         }
 
         [Fact]
         public void CanFindPlayerInMatchByPlayerName()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
-            Match match = tournament.GetRoundByRoundName("Round-Robin Group A").Groups.First().Matches.First();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            Match match = group.Matches.First();
 
-            match.ContainsPlayer(match.Player1.Name).Should().BeTrue();
+            Player foundPlayer = match.FindPlayer(match.Player1.Name);
+
+            foundPlayer.Should().NotBeNull();
+            foundPlayer.Id.Should().Be(match.Player1.Id);
+            foundPlayer.Name.Should().Be(match.Player1.Name);
+        }
+
+        [Fact]
+        public void ReturnsNullWhenLookingForNonExistingPlayerInMatchByPlayerName()
+        {
+            TournamentServiceContext services = GivenServices();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            Match match = group.Matches.First();
+
+            Player foundPlayer = match.FindPlayer("non-existing-player");
+
+            foundPlayer.Should().BeNull();
         }
 
         [Fact]
         public void CanFindPlayerInMatchByPlayerId()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
-            Match match = tournament.GetRoundByRoundName("Round-Robin Group A").Groups.First().Matches.First();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            Match match = group.Matches.First();
 
-            match.ContainsPlayer(match.Player1.Id).Should().BeTrue();
+            Player foundPlayer = match.FindPlayer(match.Player1.Id);
+
+            foundPlayer.Should().NotBeNull();
+            foundPlayer.Id.Should().Be(match.Player1.Id);
+            foundPlayer.Name.Should().Be(match.Player1.Name);
         }
 
         [Fact]
-        public void MatchStartDateTimeMustBeInTheFuture()
+        public void ReturnsNullWhenLookingForNonExistingPlayerInMatchByPlayerId()
         {
             TournamentServiceContext services = GivenServices();
-            Group group = services.WhenCreatedGroupInRoundRobinRoundInTournament();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            Match match = group.Matches.First();
 
-            Match match = group.AddMatch("Maru", "Stork", DateTimeHelper.Now.AddSeconds(-1));
+            Player foundPlayer = match.FindPlayer(Guid.NewGuid());
 
-            match.Should().BeNull();
+            foundPlayer.Should().BeNull();
+            foundPlayer.Id.Should().Be(match.Player1.Id);
+            foundPlayer.Name.Should().Be(match.Player1.Name);
         }
 
         [Fact]
-        public void MatchStartDateCannotBeChangedToSometimeInThePast()
+        public void MatchStartDateTimeCannotBeChangedToSometimeInThePast()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
-            Match match = tournament.GetRoundByRoundName("Round-Robin Group A").Groups.First().Matches.First();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            Match match = group.Matches.First();
+            DateTime initialDateTime = match.StartDateTime;
 
-            DateTime currentMathTime = match.StartDateTime;
-            match.ChangeStartDateTime(DateTimeHelper.Now.AddSeconds(-1));
+            match.SetStartDateTime(DateTimeHelper.Now.AddSeconds(-1));
 
-            match.StartDateTime.Should().Be(currentMathTime);
+            match.StartDateTime.Should().Be(initialDateTime);
         }
 
         private TournamentServiceContext GivenServices()

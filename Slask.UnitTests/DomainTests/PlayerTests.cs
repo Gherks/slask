@@ -9,36 +9,27 @@ namespace Slask.UnitTests.DomainTests
     public class PlayerTests
     {
         [Fact]
-        public void EnsurePlayerIsValidWhenAddedToMatchInTournament()
+        public void CanCreatePlayer()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
-            Match match = tournament.Rounds.First().Groups.First().Matches.First();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            Match match = group.Matches.First();
             Player player = match.Player1;
 
             player.Should().NotBeNull();
-            player.PlayerReference.Should().BeNull();
+            player.Id.Should().NotBeEmpty();
+            player.PlayerReference.Should().NotBeNull();
             player.Score.Should().Be(0);
             player.MatchId.Should().Be(match.Id);
             player.Match.Should().Be(match);
         }
 
         [Fact]
-        public void ScoreInitiallyAtZero()
+        public void CanIncrementPlayerScore()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
-            Match match = tournament.Rounds.First().Groups.First().Matches.First();
-
-            match.Player1.Score.Should().Be(0);
-        }
-
-        [Fact]
-        public void CanIncrementScore()
-        {
-            TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
-            Match match = tournament.Rounds.First().Groups.First().Matches.First();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            Match match = group.Matches.First();
 
             match.Player1.IncrementScore();
 
@@ -46,39 +37,65 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
-        public void CanDecrementScore()
+        public void CanDecrementPlayerScore()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
-            Match match = tournament.Rounds.First().Groups.First().Matches.First();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            Match match = group.Matches.First();
+
+            match.Player1.IncrementScore();
+            match.Player1.DecrementScore();
+
+            match.Player1.Score.Should().Be(0);
+        }
+
+        [Fact]
+        public void CanIncreasePlayerScoreByTwo()
+        {
+            TournamentServiceContext services = GivenServices();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            Match match = group.Matches.First();
+
+            match.Player1.IncreaseScore(2);
+
+            match.Player1.Score.Should().Be(2);
+        }
+
+        [Fact]
+        public void CanDecreasePlayerScoreByTwo()
+        {
+            TournamentServiceContext services = GivenServices();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            Match match = group.Matches.First();
+
+            match.Player1.IncreaseScore(2);
+            match.Player1.DecreaseScore(2);
+
+            match.Player1.Score.Should().Be(0);
+        }
+
+        [Fact]
+        public void CannotDecrementPlayerScoreBelowZero()
+        {
+            TournamentServiceContext services = GivenServices();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            Match match = group.Matches.First();
 
             match.Player1.DecrementScore();
 
-            match.Player1.Score.Should().Be(-1);
+            match.Player1.Score.Should().Be(0);
         }
 
         [Fact]
-        public void CanIncreaseScoreByFive()
+        public void CannotDecreasePlayerScoreBelowZero()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
-            Match match = tournament.Rounds.First().Groups.First().Matches.First();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            Match match = group.Matches.First();
 
-            match.Player1.SubtractScore(5);
+            match.Player1.DecreaseScore(1);
 
-            match.Player1.Score.Should().Be(-5);
-        }
-
-        [Fact]
-        public void CanDecreaseScoreByFive()
-        {
-            TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
-            Match match = tournament.Rounds.First().Groups.First().Matches.First();
-
-            match.Player1.SubtractScore(5);
-
-            match.Player1.Score.Should().Be(-5);
+            match.Player1.Score.Should().Be(0);
         }
 
         private TournamentServiceContext GivenServices()

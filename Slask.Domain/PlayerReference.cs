@@ -15,6 +15,11 @@ namespace Slask.Domain
 
         public static PlayerReference Create(string name, Tournament tournament)
         {
+            if(tournament == null)
+            {
+                return null;
+            }
+
             PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByPlayerName(name);
 
             if (fetchedPlayerReference == null)

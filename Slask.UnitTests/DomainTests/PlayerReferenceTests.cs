@@ -1,4 +1,5 @@
-﻿using Slask.Domain;
+﻿using FluentAssertions;
+using Slask.Domain;
 using Slask.TestCore;
 using System.Linq;
 using Xunit;
@@ -7,39 +8,53 @@ namespace Slask.UnitTests.DomainTests
 {
     public class PlayerReferenceTests
     {
-
         [Fact]
-        public void PlayerCanBeRenamed()
+        public void CanCreatePlayerReference()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
-            Player player = tournament.Rounds.First().Groups.First().Matches.First().Player1.;
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            PlayerReference playerReference = group.Matches.First().Player1.PlayerReference;
 
-            player.RenameTo("Taeja");
-
-            player.Name.Should().Be("Taeja");
+            playerReference.Should().NotBeNull();
+            playerReference.Id.Should().NotBeEmpty();
+            playerReference.Name.Should().Be("Maru");
+            playerReference.TournamentId.Should().Be(group.Round.Tournament.Id);
+            playerReference.Tournament.Should().Be(group.Round.Tournament);
         }
 
         [Fact]
-        public void PlayerCannotBeRenamedToEmptyName()
+        public void PlayerReferenceCanBeRenamed()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
-            Match match = tournament.Rounds.First().Groups.First().Matches.First();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            PlayerReference playerReference = group.Matches.First().Player1.PlayerReference;
 
-            match.Player1.RenameTo("");
+            playerReference.RenameTo("Idra");
 
-            match.Player1.Name.Should().Be("Maru");
+            playerReference.Name.Should().Be("Idra");
+        }
+
+
+        [Fact]
+        public void PlayerReferenceCannotBeRenamedToEmptyName()
+        {
+            TournamentServiceContext services = GivenServices();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            PlayerReference playerReference = group.Matches.First().Player1.PlayerReference;
+
+            playerReference.RenameTo("");
+
+            playerReference.Name.Should().Be("Maru");
         }
 
         [Fact]
-        public void PlayerCannotBeRenamedToSameNameAsOpponentNoMatterLetterCasing()
+        public void PlayerReferenceCannotBeRenamedToSameAsOtherPlayerReferenceNoMatterLetterCasing()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.WhenCreatedMatchesInRoundRobinRoundInTournament();
-            Match match = tournament.Rounds.First().Groups.First().Matches.First();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            Match match = group.Matches.First();
 
-            match.Player1.RenameTo(match.Player2.Name.ToUpper());
+            match.Player1.PlayerReference.RenameTo(match.Player2.Name.ToUpper());
 
             match.Player1.Name.Should().Be("Maru");
         }
