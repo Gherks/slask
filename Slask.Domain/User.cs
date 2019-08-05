@@ -19,10 +19,5 @@ namespace Slask.Domain
                 Name = name
             };
         }
-
-        public void RenameTo(string v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
