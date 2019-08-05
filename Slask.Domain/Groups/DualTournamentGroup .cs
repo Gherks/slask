@@ -15,10 +15,26 @@ namespace Slask.Domain
             Matches.Add(Match.Create());
             Matches.Add(Match.Create());
         }
-                
+
+        public static DualTournamentGroup Create(Round round)
+        {
+            if (round == null)
+            {
+                return null;
+            }
+
+            return new DualTournamentGroup
+            {
+                Id = Guid.NewGuid(),
+                IsReady = false,
+                RoundId = round.Id,
+                Round = round
+            };
+        }
+
         public override void MatchScoreChanged()
         {
-            
+
         }
     }
 }

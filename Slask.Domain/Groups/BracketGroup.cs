@@ -9,5 +9,21 @@ namespace Slask.Domain
         private BracketGroup()
         {
         }
+
+        public static BracketGroup Create(Round round)
+        {
+            if (round == null)
+            {
+                return null;
+            }
+
+            return new BracketGroup
+            {
+                Id = Guid.NewGuid(),
+                IsReady = false,
+                RoundId = round.Id,
+                Round = round
+            };
+        }
     }
 }

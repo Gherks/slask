@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,28 +12,12 @@ namespace Slask.Domain
             Matches = new List<Match>();
         }
 
-        public Guid Id { get; private set; }
-        public bool IsReady { get; private set; }
-        public List<PlayerReference> ParticipatingPlayers { get; private set; }
-        public List<Match> Matches { get; private set; }
-        public Guid RoundId { get; private set; }
-        public Round Round { get; private set; }
-
-        public static GroupBase Create(Round round)
-        {
-            if(round == null)
-            {
-                return null;
-            }
-
-            return new GroupBase
-            {
-                Id = Guid.NewGuid(),
-                IsReady = false,
-                RoundId = round.Id,
-                Round = round
-            };
-        }
+        public Guid Id { get; protected set; }
+        public bool IsReady { get; protected set; }
+        public List<PlayerReference> ParticipatingPlayers { get; protected set; }
+        public List<Match> Matches { get; protected set; }
+        public Guid RoundId { get; protected set; }
+        public Round Round { get; protected set; }
 
         public void AddPlayerReference(string name)
         {
