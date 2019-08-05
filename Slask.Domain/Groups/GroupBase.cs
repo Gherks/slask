@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,9 +27,9 @@ namespace Slask.Domain
             {
                 playerReference = GetPlayerReferenceFromTournamentRegistryByName(name);
 
-                if(playerReference == null)
+                if (playerReference == null)
                 {
-                    playerReference = RegisterPlayerToTournament(name);
+                    playerReference = PlayerReference.Create(name, Round.Tournament);
                 }
 
                 ParticipatingPlayers.Add(playerReference);
@@ -50,16 +50,6 @@ namespace Slask.Domain
         private PlayerReference GetPlayerReferenceFromTournamentRegistryByName(string name)
         {
             return Round.Tournament.GetPlayerReferenceByPlayerName(name);
-        }
-
-        private PlayerReference RegisterPlayerToTournament(string name)
-        {
-            Tournament tournament = Round.Tournament;
-
-            PlayerReference playerReference = PlayerReference.Create(name, tournament);
-            tournament.PlayerReferences.Add(playerReference);
-
-            return playerReference;
         }
 
         public void SetIsReady(bool isReady)
