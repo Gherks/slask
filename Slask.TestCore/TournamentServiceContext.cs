@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Slask.Common;
 using Slask.Persistence.Services;
 using Slask.Domain;
@@ -52,7 +52,8 @@ namespace Slask.TestCore
         public RoundRobinGroup HomestoryCup_04_AddGroupToRoundRobinRound()
         {
             Round groupStage = HomestoryCup_03_AddRoundRobinRound();
-            RoundRobinGroup group = groupStage.AddGroup<RoundRobinGroup>();
+
+            RoundRobinGroup group = (RoundRobinGroup)groupStage.AddGroup();
 
             SlaskContext.SaveChanges();
             return group;
