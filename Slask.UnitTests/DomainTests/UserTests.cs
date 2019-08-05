@@ -29,15 +29,12 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
-        public void CannotBeRenameUserToNameAlreadyInUseNoMatterLetterCasing()
+        public void CannotCreateUserWithEmptyName()
         {
             UserServiceContext services = GivenServices();
-            User firstUser = services.WhenCreatedUser();
-            User secondUser = services.UserService.CreateUser("Bönis");
+            User user = services.UserService.CreateUser("");
 
-            secondUser.RenameTo(firstUser.Name.ToUpper());
-
-            secondUser.Name.Should().Be("Bönis");
+            user.Should().BeNull();
         }
 
         private UserServiceContext GivenServices()

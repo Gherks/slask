@@ -34,6 +34,17 @@ namespace Slask.UnitTests.DomainTests
             playerReference.Name.Should().Be("Idra");
         }
 
+        [Fact]
+        public void PlayerReferenceCannotBeRenamedToSameAsOtherPlayerReferenceNoMatterLetterCasing()
+        {
+            TournamentServiceContext services = GivenServices();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            Match match = group.Matches.First();
+
+            match.Player1.PlayerReference.RenameTo(match.Player2.Name.ToUpper());
+
+            match.Player1.Name.Should().Be("Maru");
+        }
 
         [Fact]
         public void PlayerReferenceCannotBeRenamedToEmptyName()
@@ -45,18 +56,6 @@ namespace Slask.UnitTests.DomainTests
             playerReference.RenameTo("");
 
             playerReference.Name.Should().Be("Maru");
-        }
-
-        [Fact]
-        public void PlayerReferenceCannotBeRenamedToSameAsOtherPlayerReferenceNoMatterLetterCasing()
-        {
-            TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
-            Match match = group.Matches.First();
-
-            match.Player1.PlayerReference.RenameTo(match.Player2.Name.ToUpper());
-
-            match.Player1.Name.Should().Be("Maru");
         }
 
         private TournamentServiceContext GivenServices()
