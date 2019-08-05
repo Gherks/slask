@@ -32,18 +32,15 @@ namespace Slask.Domain
             };
         }
 
-        public void RenameTo(string name)
+        public void ChangeName(string name)
         {
-            name = name.Trim();
-            if (name.Length > 0)
-            {
-                Name = name;
-            }
+            Name = name;
         }
 
         public Round AddRoundRobinRound(string name, int bestOf, int advanceAmount)
         {
-            throw new NotImplementedException();
+            Rounds.Add(Round.Create(name, RoundType.RoundRobin, bestOf, advanceAmount));
+            return Rounds.Last();
         }
 
         public Round AddDualTournamentRound(string name, int bestOf)
@@ -53,12 +50,22 @@ namespace Slask.Domain
 
         public Round AddBracketRound(string name, int bestOf)
         {
-            throw new NotImplementedException();
+            Rounds.Add(Round.Create(name, RoundType.RoundRobin, bestOf, 1));
+            return Rounds.Last();
         }
 
         public Better AddBetter(User user)
         {
-            throw new NotImplementedException();
+            bool betterAlreadyExists = GetBetterByName(user.Name) != null;
+
+            if(betterAlreadyExists)
+            {
+                return null;
+            }
+
+            Betters.Add(Better.Create(user, this));
+
+            return Betters.Last();
         }
 
         public Round GetRoundByRoundId(Guid id)
@@ -78,19 +85,17 @@ namespace Slask.Domain
 
         public PlayerReference GetPlayerReferenceByPlayerName(string name)
         {
-            string lowerCaseName = name.ToLower();
-
-            return PlayerReferences.FirstOrDefault(playerReference => playerReference.Name.ToLower() == lowerCaseName);
+            return PlayerReferences.FirstOrDefault(playerReference => playerReference.Name.ToLower() == name.ToLower());
         }
 
         public Better GetBetterById(Guid id)
         {
-            throw new NotImplementedException();
+            return Betters.FirstOrDefault(better => better.Id == id);
         }
 
         public Better GetBetterByName(string name)
         {
-            throw new NotImplementedException();
+            return Betters.FirstOrDefault(better => better.User.Name.ToLower() == name.ToLower());
         }
     }
 }

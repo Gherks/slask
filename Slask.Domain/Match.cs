@@ -103,17 +103,32 @@ namespace Slask.Domain
 
         public MatchState GetState()
         {
-            throw new NotImplementedException();
+            if(StartDateTime > DateTimeHelper.Now)
+            {
+                return MatchState.HasNotBegun;
+            }
+
+            return AnyPlayerHasWon() ? MatchState.IsFinished : MatchState.IsBeingPlayed;
         }
 
         public Player GetWinningPlayer()
         {
-            throw new NotImplementedException();
+            if(AnyPlayerHasWon())
+            {
+                return Player1.Score > Player2.Score ? Player1 : Player2;
+            }
+
+            return null;
         }
 
         public Player GetLosingPlayer()
         {
-            throw new NotImplementedException();
+            if (AnyPlayerHasWon())
+            {
+                return Player1.Score < Player2.Score ? Player1 : Player2;
+            }
+
+            return null;
         }
 
         private bool ValidateNewPlayerReference(PlayerReference playerReference)
@@ -138,6 +153,11 @@ namespace Slask.Domain
             }
 
             return true;
+        }
+
+        private bool AnyPlayerHasWon()
+        {
+            return Player1.Score >= Group.Round.BestOf || Player2.Score >= Group.Round.BestOf;
         }
     }
 }
