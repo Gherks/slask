@@ -33,28 +33,6 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
-        public void TournamentCanBeRenamed()
-        {
-            TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.HomestoryCup_01_CreateTournament();
-
-            tournament.RenameTo("BHA Open 2019");
-
-            tournament.Name.Should().Be("BHA Open 2019");
-        }
-
-        [Fact]
-        public void TournamentCannotBeRenamedToEmptyName()
-        {
-            TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.HomestoryCup_01_CreateTournament();
-
-            tournament.RenameTo("");
-
-            tournament.Name.Should().Be("Homestory Cup");
-        }
-
-        [Fact]
         public void CanGetRoundInTournamentByRoundId()
         {
             TournamentServiceContext services = GivenServices();
