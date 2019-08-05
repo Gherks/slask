@@ -17,38 +17,27 @@ namespace Slask.Domain
     {
         private Match()
         {
-            Players = new List<Player>();
-            Players.Add(Player.Create(this));
-            Players.Add(Player.Create(this));
         }
 
         public Guid Id { get; private set; }
-        private List<Player> Players { get; set; }
         public DateTime StartDateTime { get; private set; }
+        public Player Player1 { get; private set; }
+        public Player Player2 { get; private set; }
         public Guid GroupId { get; private set; }
         public GroupBase Group { get; private set; }
 
-        [NotMapped]
-        public Player Player1
-        {
-            get { return Players[0]; }
-            private set {}
-        }
-
-        [NotMapped]
-        public Player Player2
-        {
-            get { return Players[1]; }
-            private set {}
-        }
-
         public static Match Create()
         {
-            return new Match()
+            Match match = new Match()
             {
                 Id = Guid.NewGuid(),
                 StartDateTime = DateTimeHelper.Now.AddYears(1)
             };
+
+            match.Player1 = Player.Create(match);
+            match.Player2 = Player.Create(match);
+
+            return match;
         }
 
         public bool AssignPlayerReferenceFromGroup(string playerReferenceName)
@@ -72,12 +61,32 @@ namespace Slask.Domain
 
         public Player FindPlayer(Guid id)
         {
-            return Players.Where(player => player.Id == id).FirstOrDefault();
+            if (Player1 != null && Player1.Id == id)
+            {
+                return Player1;
+            }
+
+            if (Player2 != null && Player2.Id == id)
+            {
+                return Player2;
+            }
+
+            return null;
         }
 
         public Player FindPlayer(string name)
         {
-            return Players.Where(player => player.Name == name).FirstOrDefault();
+            if (Player1 != null && Player1.Name == name)
+            {
+                return Player1;
+            }
+
+            if (Player2 != null && Player2.Name == name)
+            {
+                return Player2;
+            }
+
+            return null;
         }
 
         public bool SetStartDateTime(DateTime dateTime)

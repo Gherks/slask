@@ -27,6 +27,23 @@ namespace Slask.Persistence
             }
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Match>()
+                .HasOne(p => p.Player1)
+                .WithOne()
+                .HasForeignKey(typeof(Player), "Player1Id")
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Match>()
+                .HasOne(p => p.Player2)
+                .WithOne()
+                .HasForeignKey(typeof(Player), "Player2Id")
+                .OnDelete(DeleteBehavior.Cascade);
+        }
+
         public DbSet<Tournament> Tournaments { get; set; }
         public DbSet<User> Users { get; set; }
     }
