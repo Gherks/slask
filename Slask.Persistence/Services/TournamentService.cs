@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Slask.Domain;
@@ -93,6 +93,29 @@ namespace Slask.Persistence.Services
             }
 
             return tournament.Betters;
+        }
+
+        public bool RenameTournament(Guid id, string name)
+        {
+            name = name.Trim();
+
+            bool nameIsNotEmpty = name != "";
+            bool nameIsNotInUse = GetTournamentByName(name) == null;
+
+            if (nameIsNotEmpty && nameIsNotInUse)
+            {
+                Tournament tournament = GetTournamentById(id);
+
+                if (tournament != null)
+                {
+                    tournament.ChangeName(name);
+                    _slaskContext.SaveChanges();
+
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
