@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Slask.Domain
@@ -10,12 +10,12 @@ namespace Slask.Domain
         }
 
         public Guid Id { get; private set; }
-        public  PlayerReference PlayerReference
+        public PlayerReference PlayerReference
         {
             get { return PlayerReference; }
             set
             {
-                if(value != null)
+                if (value != null)
                 {
                     PlayerReference = value;
                 }
