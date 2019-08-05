@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Slask.Common;
 using Slask.Persistence.Services;
 using Slask.Domain;
@@ -172,7 +172,7 @@ namespace Slask.TestCore
         {
             Round round = HomestoryCup_11_AddBracketRound();
 
-            BracketGroup group = round.AddGroup<BracketGroup>();
+            BracketGroup group = (BracketGroup)round.AddGroup();
 
             SlaskContext.SaveChanges();
             return group;

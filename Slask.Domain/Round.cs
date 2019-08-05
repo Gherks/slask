@@ -39,9 +39,9 @@ namespace Slask.Domain // Change to 'Slask.Domain.Round' so the Enum makes more 
             };
         }
 
-        public GroupType AddGroup<GroupType>()
+        public GroupBase AddGroup()
         {
-            switch(Type)
+            switch (Type)
             {
                 case RoundType.RoundRobin:
                     Groups.Add(RoundRobinGroup.Create(this));
@@ -53,10 +53,10 @@ namespace Slask.Domain // Change to 'Slask.Domain.Round' so the Enum makes more 
                     Groups.Add(BracketGroup.Create(this));
                     break;
                 default:
-                    break;
+                    return null;
             }
 
-            return (GroupType)Convert.ChangeType(Groups.Last(), typeof(GroupType));
+            return Groups.Last();
         }
 
         public List<Player> GetWinningPlayersOfPreviousRound()

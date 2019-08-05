@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Domain;
 using Slask.TestCore;
 using System;
@@ -74,7 +74,7 @@ namespace Slask.UnitTests.DomainTests
             TournamentServiceContext services = GivenServices();
             Round round = services.HomestoryCup_03_AddRoundRobinRound();
 
-            round.AddGroup<BracketGroup>();
+            round.AddGroup();
 
             round.Groups.Should().NotBeNull();
             round.Groups.Count.Should().Be(0);
