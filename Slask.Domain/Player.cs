@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Slask.Domain
@@ -28,7 +28,7 @@ namespace Slask.Domain
         [NotMapped]
         public string Name
         {
-            get { return PlayerReference != null ? PlayerReference.Name : null; }
+            get { return PlayerReference != null ? PlayerReference.Name : ""; }
             private set { }
         }
 
