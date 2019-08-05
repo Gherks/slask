@@ -26,18 +26,23 @@ namespace Slask.Domain
             };
         }
 
+        // Make tests that verifies match add/remove matches
+
         protected override void UpdateMatchLayout()
         {
-
-
             int numMatches = CalculateMatchAmount();
 
-            for (int index = 0; index < numMatches; ++index)
+            while (Matches.Count < numMatches)
             {
                 Matches.Add(Match.Create());
-
-                // Assign PlayerReferences to players in matches
             }
+
+            if (Matches.Count > numMatches)
+            {
+                Matches.RemoveRange(Matches.Count - 1, Matches.Count - numMatches);
+            }
+
+            // Assign PlayerReferences to players in matches
         }
 
         private int CalculateMatchAmount()
