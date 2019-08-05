@@ -39,12 +39,12 @@ namespace Slask.Domain
 
         public PlayerReference GetPlayerReference(Guid id)
         {
-            return ParticipatingPlayers.Where(playerReference => playerReference.Id == id).FirstOrDefault();
+            return ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Id == id);
         }
 
         public PlayerReference GetPlayerReference(string name)
         {
-            return ParticipatingPlayers.Where(playerReference => playerReference.Name == name).FirstOrDefault();
+            return ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == name);
         }
 
         private PlayerReference GetPlayerReferenceFromTournamentRegistryByName(string name)
