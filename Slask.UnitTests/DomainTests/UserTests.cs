@@ -19,28 +19,6 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
-        public void UserCanBeRenamed()
-        {
-            UserServiceContext services = GivenServices();
-            User user = services.WhenCreatedUser();
-
-            user.RenameTo("Bönis");
-
-            user.Name.Should().Be("Bönis");
-        }
-
-        [Fact]
-        public void UserCannotBeRenamedToEmptyName()
-        {
-            UserServiceContext services = GivenServices();
-            User user = services.WhenCreatedUser();
-
-            user.RenameTo("");
-
-            user.Name.Should().Be("Bönis");
-        }
-
-        [Fact]
         public void CannotCreateUserWithNameAlreadyInUseNoMatterLetterCasing()
         {
             UserServiceContext services = GivenServices();
