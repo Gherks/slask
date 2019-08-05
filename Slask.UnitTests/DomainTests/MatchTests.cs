@@ -20,7 +20,7 @@ namespace Slask.UnitTests.DomainTests
 
             group.Matches.Count.Should().Be(28);
 
-            foreach(Match match in group.Matches)
+            foreach (Match match in group.Matches)
             {
                 match.Should().NotBeNull();
                 match.Player1.Should().NotBeNull();

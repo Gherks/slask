@@ -58,7 +58,7 @@ namespace Slask.Domain
         {
             bool betterAlreadyExists = GetBetterByName(user.Name) != null;
 
-            if(betterAlreadyExists)
+            if (betterAlreadyExists)
             {
                 return null;
             }

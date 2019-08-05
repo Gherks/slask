@@ -15,7 +15,7 @@ namespace Slask.Domain
 
         public static PlayerReference Create(string name, Tournament tournament)
         {
-            if(tournament == null)
+            if (tournament == null)
             {
                 return null;
             }

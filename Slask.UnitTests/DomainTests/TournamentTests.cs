@@ -181,7 +181,7 @@ namespace Slask.UnitTests.DomainTests
             TournamentServiceContext services = GivenServices();
             Tournament tournament = services.HomestoryCup_01_CreateTournament();
 
-            for(int bestOf = 0; bestOf <= 64; bestOf += 2)
+            for (int bestOf = 0; bestOf <= 64; bestOf += 2)
             {
                 Round round = tournament.AddBracketRound("Bracket A", bestOf);
                 round.Should().BeNull();
@@ -269,7 +269,7 @@ namespace Slask.UnitTests.DomainTests
             BracketGroup group = services.HomestoryCup_18_CompleteAllMatchesInBracketGroup();
             Tournament tournament = group.Round.Tournament;
 
-            foreach(PlayerReference currentPlayerReference in tournament.PlayerReferences)
+            foreach (PlayerReference currentPlayerReference in tournament.PlayerReferences)
             {
                 List<PlayerReference> playerReferences = tournament.PlayerReferences.Where(
                     playerReference => playerReference.Name == currentPlayerReference.Name).ToList();

@@ -42,9 +42,9 @@ namespace Slask.Domain
 
         public bool AssignPlayerReferenceFromGroup(string playerReferenceName)
         {
-            PlayerReference playerReference =  Group.GetPlayerReference(playerReferenceName);
+            PlayerReference playerReference = Group.GetPlayerReference(playerReferenceName);
 
-            if(ValidateNewPlayerReference(playerReference))
+            if (ValidateNewPlayerReference(playerReference))
             {
                 return false;
             }
@@ -91,7 +91,7 @@ namespace Slask.Domain
 
         public bool SetStartDateTime(DateTime dateTime)
         {
-            if(DateTimeProvider.Current.Now > dateTime)
+            if (DateTimeProvider.Current.Now > dateTime)
             {
                 // LOGG
                 return false;
@@ -103,7 +103,7 @@ namespace Slask.Domain
 
         public MatchState GetState()
         {
-            if(StartDateTime > DateTimeHelper.Now)
+            if (StartDateTime > DateTimeHelper.Now)
             {
                 return MatchState.HasNotBegun;
             }
@@ -113,7 +113,7 @@ namespace Slask.Domain
 
         public Player GetWinningPlayer()
         {
-            if(AnyPlayerHasWon())
+            if (AnyPlayerHasWon())
             {
                 return Player1.Score > Player2.Score ? Player1 : Player2;
             }
@@ -145,7 +145,7 @@ namespace Slask.Domain
                 return false;
             }
 
-            bool alreadyAddedToMatch = FindPlayer(playerReference.Name) != null; 
+            bool alreadyAddedToMatch = FindPlayer(playerReference.Name) != null;
 
             if (alreadyAddedToMatch)
             {

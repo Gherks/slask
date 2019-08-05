@@ -28,7 +28,7 @@ namespace Slask.UnitTests.ServiceTests
             tournament.MiscBetCatalogue.Should().BeEmpty();
         }
 
-    [Fact]
+        [Fact]
         public void CannotCreateTournamentWithEmptyName()
         {
             TournamentServiceContext services = GivenServices();

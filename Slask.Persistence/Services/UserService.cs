@@ -27,7 +27,7 @@ namespace Slask.Persistence.Services
 
             _slaskContext.Add(user);
             _slaskContext.SaveChanges();
-            
+
             return user;
         }
 

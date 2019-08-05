@@ -148,7 +148,7 @@ namespace Slask.TestCore
         {
             RoundRobinGroup group = HomestoryCup_09_CompleteFirstMatchInRoundRobinGroup();
 
-            for(int index = 1; index < group.Matches.Count; ++index)
+            for (int index = 1; index < group.Matches.Count; ++index)
             {
                 group.Matches[index].Player1.IncreaseScore(2);
             }

@@ -19,7 +19,7 @@ namespace Slask.Domain
 
         public static Better Create(User user, Tournament tournament)
         {
-            if(user == null || tournament == null)
+            if (user == null || tournament == null)
             {
                 return null;
             }

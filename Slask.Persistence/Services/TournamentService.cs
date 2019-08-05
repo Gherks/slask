@@ -47,7 +47,7 @@ namespace Slask.Persistence.Services
         {
             Tournament tournament = GetTournamentById(id);
 
-            if(tournament == null)
+            if (tournament == null)
             {
                 // LOGG
                 return null;

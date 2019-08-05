@@ -15,7 +15,7 @@ namespace Slask.IntegrationTests
         {
             DestroyDatabase();
             CreateDatabase();
-        }            
+        }
 
         public void Dispose()
         {
@@ -56,7 +56,7 @@ namespace Slask.IntegrationTests
 
         private static void ExecuteSqlCommand(SqlConnectionStringBuilder connectionStringBuilder, string commandText)
         {
-            using(SqlConnection connection = new SqlConnection(connectionStringBuilder.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(connectionStringBuilder.ConnectionString))
             {
                 connection.Open();
                 using (var command = connection.CreateCommand())
