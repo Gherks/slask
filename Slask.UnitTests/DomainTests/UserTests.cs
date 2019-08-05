@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Domain;
 using Slask.TestCore;
 using Xunit;
@@ -51,7 +51,7 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
-        public void UserCannotBeRenamedToNameAlreadyInUseNoMatterLetterCasing()
+        public void CannotBeRenameUserToNameAlreadyInUseNoMatterLetterCasing()
         {
             UserServiceContext services = GivenServices();
             User firstUser = services.WhenCreatedUser();
