@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Slask.Domain;
 
 namespace Slask.Persistence.Services
@@ -12,19 +13,32 @@ namespace Slask.Persistence.Services
             _slaskContext = slaskContext;
         }
 
-        public User CreateUser(string username)
+        public User CreateUser(string name)
         {
-            throw new NotImplementedException();
+            bool nameIsEmpty = name == "";
+            bool userAlreadyExists = GetUserByName(name) != null;
+
+            if (nameIsEmpty || userAlreadyExists)
+            {
+                return null;
+            }
+
+            User user = User.Create(name);
+
+            _slaskContext.Add(user);
+            _slaskContext.SaveChanges();
+            
+            return user;
         }
 
-        public User GetUserByName(string v)
+        public User GetUserByName(string name)
         {
-            throw new NotImplementedException();
+            return _slaskContext.Users.Where(user => user.Name == name).FirstOrDefault();
         }
 
         public User GetUserById(Guid id)
         {
-            throw new NotImplementedException();
+            return _slaskContext.Users.Where(user => user.Id == id).FirstOrDefault();
         }
     }
 }

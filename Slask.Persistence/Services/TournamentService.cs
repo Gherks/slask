@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Slask.Domain;
 
 namespace Slask.Persistence.Services
@@ -13,44 +14,85 @@ namespace Slask.Persistence.Services
             _slaskContext = slaskContext;
         }
 
-        public Tournament CreateTournament(string v)
+        public Tournament CreateTournament(string name)
         {
-            throw new NotImplementedException();
-        }
+            bool nameIsEmpty = name == "";
+            bool tournamentAlreadyExists = GetTournamentByName(name) != null;
 
-        public Better AddBetter(User user)
-        {
-            throw new NotImplementedException();
+            if (nameIsEmpty || tournamentAlreadyExists)
+            {
+                // LOGG
+                return null;
+            }
+
+            Tournament tournament = Tournament.Create(name);
+
+            _slaskContext.Add(tournament);
+            _slaskContext.SaveChanges();
+
+            return tournament;
         }
 
         public Tournament GetTournamentById(Guid id)
         {
-            throw new NotImplementedException();
+            return _slaskContext.Tournaments.Where(tournament => tournament.Id == id).FirstOrDefault();
         }
 
         public Tournament GetTournamentByName(string name)
         {
-            throw new NotImplementedException();
+            return _slaskContext.Tournaments.Where(tournament => tournament.Name == name).FirstOrDefault();
         }
 
         public List<PlayerReference> GetPlayerReferencesByTournamentId(Guid id)
         {
-            throw new NotImplementedException();
+            Tournament tournament = GetTournamentById(id);
+
+            if(tournament == null)
+            {
+                // LOGG
+                return null;
+            }
+
+            return tournament.PlayerReferences;
         }
 
         public List<PlayerReference> GetPlayerReferencesByTournamentName(string name)
         {
-            throw new NotImplementedException();
+            Tournament tournament = GetTournamentByName(name);
+
+            if (tournament == null)
+            {
+                // LOGG
+                return null;
+            }
+
+            return tournament.PlayerReferences;
         }
 
         public List<Better> GetBettersByTournamentId(Guid id)
         {
-            throw new NotImplementedException();
+            Tournament tournament = GetTournamentById(id);
+
+            if (tournament == null)
+            {
+                // LOGG
+                return null;
+            }
+
+            return tournament.Betters;
         }
 
         public List<Better> GetBettersByTournamentName(string name)
         {
-            throw new NotImplementedException();
+            Tournament tournament = GetTournamentByName(name);
+
+            if (tournament == null)
+            {
+                // LOGG
+                return null;
+            }
+
+            return tournament.Betters;
         }
     }
 }
