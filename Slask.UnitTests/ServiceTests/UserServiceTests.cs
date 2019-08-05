@@ -60,11 +60,11 @@ namespace Slask.UnitTests.ServiceTests
         }
 
         [Fact]
-        public void CanGetUserByName()
+        public void CanGetUserByNameNoMatterLetterCasing()
         {
             UserServiceContext services = GivenServices();
             User createdUser = services.WhenCreatedUser();
-            User fetchedUser = services.UserService.GetUserByName(createdUser.Name);
+            User fetchedUser = services.UserService.GetUserByName(createdUser.Name.ToUpper());
 
             fetchedUser.Should().NotBeNull();
             fetchedUser.Id.Should().Be(createdUser.Id);
