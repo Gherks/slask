@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Slask.Domain;
 using Slask.TestCore;
 using System;
@@ -50,10 +50,10 @@ namespace Slask.UnitTests.DomainTests
             TournamentServiceContext services = GivenServices();
             BracketGroup group = services.HomestoryCup_13_AddWinningPlayersToBracketGroup();
 
-            group.ParticipatingPlayers.Where(playerReference => playerReference.Name == "").FirstOrDefault().Should().NotBeNull();
-            group.ParticipatingPlayers.Where(playerReference => playerReference.Name == "").FirstOrDefault().Should().NotBeNull();
-            group.ParticipatingPlayers.Where(playerReference => playerReference.Name == "").FirstOrDefault().Should().NotBeNull();
-            group.ParticipatingPlayers.Where(playerReference => playerReference.Name == "").FirstOrDefault().Should().NotBeNull();
+            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == "").Should().NotBeNull();
+            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == "").Should().NotBeNull();
+            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == "").Should().NotBeNull();
+            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == "").Should().NotBeNull();
         }
 
         [Fact]

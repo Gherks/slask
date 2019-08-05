@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using Slask.Domain;
 
@@ -33,12 +33,12 @@ namespace Slask.Persistence.Services
 
         public User GetUserByName(string name)
         {
-            return _slaskContext.Users.Where(user => user.Name == name).FirstOrDefault();
+            return _slaskContext.Users.FirstOrDefault(user => user.Name.ToLower() == name.ToLower());
         }
 
         public User GetUserById(Guid id)
         {
-            return _slaskContext.Users.Where(user => user.Id == id).FirstOrDefault();
+            return _slaskContext.Users.FirstOrDefault(user => user.Id == id);
         }
     }
 }

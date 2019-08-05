@@ -21,7 +21,7 @@ namespace Slask.Domain
 
         public void AddPlayerReference(string name)
         {
-            PlayerReference playerReference = ParticipatingPlayers.Where(reference => reference.Name == name).FirstOrDefault();
+            PlayerReference playerReference = ParticipatingPlayers.FirstOrDefault(reference => reference.Name == name);
 
             if (playerReference == null)
             {
@@ -69,7 +69,7 @@ namespace Slask.Domain
 
         private PlayerReference GetPlayerReferenceWithName(string name)
         {
-            return ParticipatingPlayers.Where(reference => reference.Name == name).FirstOrDefault();
+            return ParticipatingPlayers.FirstOrDefault(reference => reference.Name == name);
         }
 
         public virtual void MatchScoreChanged()

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Slask.Domain;
@@ -35,12 +35,12 @@ namespace Slask.Persistence.Services
 
         public Tournament GetTournamentById(Guid id)
         {
-            return _slaskContext.Tournaments.Where(tournament => tournament.Id == id).FirstOrDefault();
+            return _slaskContext.Tournaments.FirstOrDefault(tournament => tournament.Id == id);
         }
 
         public Tournament GetTournamentByName(string name)
         {
-            return _slaskContext.Tournaments.Where(tournament => tournament.Name == name).FirstOrDefault();
+            return _slaskContext.Tournaments.FirstOrDefault(tournament => tournament.Name.ToLower() == name.ToLower());
         }
 
         public List<PlayerReference> GetPlayerReferencesByTournamentId(Guid id)
