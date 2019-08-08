@@ -17,25 +17,36 @@ namespace Slask.Domain
     {
         private Match()
         {
+            Players = new List<Player>();
+            Players.Add(Player.Create(this));
+            Players.Add(Player.Create(this));
         }
 
         public Guid Id { get; private set; }
         public DateTime StartDateTime { get; private set; }
-        public Player Player1 { get; private set; }
-        public Player Player2 { get; private set; }
+        private List<Player> Players { get; set; }
         public Guid GroupId { get; private set; }
         public GroupBase Group { get; private set; }
 
-        public static Match Create()
+        // Ignored by SlaskContext
+        public Player Player1 { get { return Players[0]; } private set { } }
+        public Player Player2 { get { return Players[1]; } private set { } }
+
+        public static Match Create(GroupBase group)
         {
+            if(group == null)
+            {
+                // LOGG
+                return null;
+            }
+
             Match match = new Match()
             {
                 Id = Guid.NewGuid(),
-                StartDateTime = DateTimeHelper.Now.AddYears(1)
+                StartDateTime = DateTimeHelper.Now.AddYears(1),
+                GroupId = group.Id,
+                Group = group
             };
-
-            match.Player1 = Player.Create(match);
-            match.Player2 = Player.Create(match);
 
             return match;
         }

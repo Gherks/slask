@@ -31,17 +31,8 @@ namespace Slask.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Match>()
-                .HasOne(p => p.Player1)
-                .WithOne()
-                .HasForeignKey(typeof(Player), "Player1Id")
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Match>()
-                .HasOne(p => p.Player2)
-                .WithOne()
-                .HasForeignKey(typeof(Player), "Player2Id")
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Match>().Ignore(player => player.Player1);
+            modelBuilder.Entity<Match>().Ignore(player => player.Player2);
         }
 
         public DbSet<Tournament> Tournaments { get; set; }
