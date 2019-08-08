@@ -26,6 +26,21 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
+        public void CanCreateBracketRound()
+        {
+            TournamentServiceContext services = GivenServices();
+            BracketGroup group = services.HomestoryCup_12_AddGroupToBracketRound();
+
+            group.Should().NotBeNull();
+            group.Id.Should().NotBeEmpty();
+            group.IsReady.Should().BeFalse();
+            group.ParticipatingPlayers.Should().BeEmpty();
+            group.Matches.Should().BeEmpty();
+            group.RoundId.Should().Be(group.Round.Id);
+            group.Round.Should().Be(group.Round);
+        }
+
+        [Fact]
         public void PlayerReferenceIsAddedToTournamentWhenBrandNewPlayerIsAddedToMatch()
         {
             var timeMock = new Mock<DateTimeProvider>();
