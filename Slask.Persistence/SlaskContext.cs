@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Slask.Domain;
 
 namespace Slask.Persistence
@@ -31,8 +31,8 @@ namespace Slask.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Match>().Ignore(player => player.Player1);
-            modelBuilder.Entity<Match>().Ignore(player => player.Player2);
+            modelBuilder.Entity<Match>().Ignore(match => match.Player1);
+            modelBuilder.Entity<Match>().Ignore(match => match.Player2);
         }
 
         public DbSet<Tournament> Tournaments { get; set; }
