@@ -11,37 +11,40 @@ namespace Slask.UnitTests.DomainTests
     public class RoundTests
     {
         [Fact]
-        public void TournamentCanAddRound()
+        public void CanCreateRoundInTournament()
         {
             TournamentServiceContext services = GivenServices();
             Round round = services.HomestoryCup_03_AddRoundRobinRound();
 
             round.Should().NotBeNull();
+            round.Id.Should().NotBeEmpty();
             round.Name.Should().Be("Round Robin Round");
-            (round.BestOf % 2).Should().NotBe(0);
+            round.Type.Should().Be(RoundType.RoundRobin);
+            round.BestOf.Should().Be(3);
+            round.AdvanceAmount.Should().Be(4);
+            round.Groups.Should().BeEmpty();
+            round.TournamentId.Should().NotBeEmpty();
+            round.Tournament.Should().NotBeNull();
+        }
 
-            // COMPLETE
+        [Fact]
+        public void CannotCreateRoundsWithEvenBestOfs()
+        {
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = services.HomestoryCup_01_CreateTournament();
+
+            for (int bestOf = 0; bestOf < 21; bestOf += 2)
+            {
+                tournament.AddRoundRobinRound("Round Robin Round", bestOf, 4).Should().BeNull();
+                tournament.AddDualTournamentRound("Dual Tournament Round", bestOf).Should().BeNull();
+                tournament.AddBracketRound("Round Robin Round", bestOf).Should().BeNull();
+            }
         }
 
         [Fact]
         public void CanCreateDualTournamentRound()
         {
             throw new NotImplementedException();
-        }
-
-        [Fact]
-        public void CanCreateBracketRound()
-        {
-            TournamentServiceContext services = GivenServices();
-            BracketGroup group = services.HomestoryCup_12_AddGroupToBracketRound();
-
-            group.Should().NotBeNull();
-            group.Id.Should().NotBeEmpty();
-            group.IsReady.Should().BeFalse();
-            group.ParticipatingPlayers.Should().BeEmpty();
-            group.Matches.Should().BeEmpty();
-            group.RoundId.Should().Be(group.Round.Id);
-            group.Round.Should().Be(group.Round);
         }
 
         [Fact]
