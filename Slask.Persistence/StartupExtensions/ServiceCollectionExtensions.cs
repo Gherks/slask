@@ -8,10 +8,8 @@ namespace Slask.Persistence.StartupExtensions
     {
         public static IServiceCollection AddDataServices(this IServiceCollection services)
         {
-            //services.AddTransient(typeof(PlayersService));
             services.AddTransient(typeof(UserService).Assembly);
             services.AddTransient(typeof(TournamentService).Assembly);
-            //services.AddTransient<PlayersService, PlayersService>();
             return services;
         }
 
