@@ -17,9 +17,9 @@ namespace Slask.Persistence.Services
         public Tournament CreateTournament(string name)
         {
             bool nameIsEmpty = name == "";
-            bool tournamentAlreadyExists = GetTournamentByName(name) != null;
+            bool tournamentAlreadyExist = GetTournamentByName(name) != null;
 
-            if (nameIsEmpty || tournamentAlreadyExists)
+            if (nameIsEmpty || tournamentAlreadyExist)
             {
                 // LOGG
                 return null;
