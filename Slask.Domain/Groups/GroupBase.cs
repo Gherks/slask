@@ -77,7 +77,7 @@ namespace Slask.Domain
 
             while (Matches.Count < playerPairingAmount)
             {
-                Matches.Add(Match.Create());
+                Matches.Add(Match.Create(this));
             }
 
             if (Matches.Count > playerPairingAmount)

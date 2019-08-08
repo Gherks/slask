@@ -14,6 +14,11 @@ namespace Slask.Domain
 
         public static MiscBetPlayerEntry Create(Player player, int value)
         {
+            if (player == null)
+            {
+                return null;
+            }
+
             return new MiscBetPlayerEntry
             {
                 Id = Guid.NewGuid(),

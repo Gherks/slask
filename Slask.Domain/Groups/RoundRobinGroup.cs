@@ -34,7 +34,7 @@ namespace Slask.Domain
 
             while (Matches.Count < numMatches)
             {
-                Matches.Add(Match.Create());
+                Matches.Add(Match.Create(this));
             }
 
             if (Matches.Count > numMatches)

@@ -16,12 +16,19 @@ namespace Slask.Domain
         public Guid TournamentId { get; private set; }
         public Tournament Tournament { get; private set; }
 
-        public static MiscBetCatalogue Create(int type)
+        public static MiscBetCatalogue Create(int type, Tournament tournament)
         {
+            if(tournament == null)
+            {
+                return null;
+            }
+
             return new MiscBetCatalogue
             {
                 Id = Guid.NewGuid(),
-                Type = type
+                Type = type,
+                TournamentId = tournament.Id,
+                Tournament = tournament
             };
         }
     }

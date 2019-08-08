@@ -27,15 +27,22 @@ namespace Slask.Domain // Change to 'Slask.Domain.Round' so the Enum makes more 
         public Guid TournamentId { get; private set; }
         public Tournament Tournament { get; private set; }
 
-        public static Round Create(string name, RoundType type, int bestOf, int advanceAmount)
+        public static Round Create(string name, RoundType type, int bestOf, int advanceAmount, Tournament tournament)
         {
+            if(tournament == null)
+            {
+                return null;
+            }
+
             return new Round
             {
                 Id = Guid.NewGuid(),
                 Name = name,
                 Type = type,
                 BestOf = bestOf,
-                AdvanceAmount = advanceAmount
+                AdvanceAmount = advanceAmount,
+                TournamentId = tournament.Id,
+                Tournament = tournament
             };
         }
 

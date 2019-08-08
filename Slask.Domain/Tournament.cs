@@ -39,7 +39,7 @@ namespace Slask.Domain
 
         public Round AddRoundRobinRound(string name, int bestOf, int advanceAmount)
         {
-            Rounds.Add(Round.Create(name, RoundType.RoundRobin, bestOf, advanceAmount));
+            Rounds.Add(Round.Create(name, RoundType.RoundRobin, bestOf, advanceAmount, this));
             return Rounds.Last();
         }
 
@@ -50,7 +50,7 @@ namespace Slask.Domain
 
         public Round AddBracketRound(string name, int bestOf)
         {
-            Rounds.Add(Round.Create(name, RoundType.RoundRobin, bestOf, 1));
+            Rounds.Add(Round.Create(name, RoundType.RoundRobin, bestOf, 1, this));
             return Rounds.Last();
         }
 

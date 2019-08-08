@@ -13,6 +13,11 @@ namespace Slask.Domain.Bets
 
         public static MatchBet Create(Match match, Player player)
         {
+            if (match == null || player == null)
+            {
+                return null;
+            }
+
             return new MatchBet
             {
                 Match = match,
