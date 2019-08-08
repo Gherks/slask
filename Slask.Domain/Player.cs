@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Slask.Domain
 {
@@ -25,7 +24,7 @@ namespace Slask.Domain
         public Guid MatchId { get; private set; }
         public Match Match { get; private set; }
 
-        [NotMapped]
+        // Ignored by SlaskContext
         public string Name
         {
             get { return PlayerReference != null ? PlayerReference.Name : ""; }
