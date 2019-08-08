@@ -9,11 +9,6 @@ namespace Slask.Domain
     {
         private DualTournamentGroup()
         {
-            Matches.Add(Match.Create());
-            Matches.Add(Match.Create());
-            Matches.Add(Match.Create());
-            Matches.Add(Match.Create());
-            Matches.Add(Match.Create());
         }
 
         public static DualTournamentGroup Create(Round round)
@@ -23,13 +18,21 @@ namespace Slask.Domain
                 return null;
             }
 
-            return new DualTournamentGroup
+            DualTournamentGroup group = new DualTournamentGroup
             {
                 Id = Guid.NewGuid(),
                 IsReady = false,
                 RoundId = round.Id,
                 Round = round
             };
+
+            group.Matches.Add(Match.Create(group));
+            group.Matches.Add(Match.Create(group));
+            group.Matches.Add(Match.Create(group));
+            group.Matches.Add(Match.Create(group));
+            group.Matches.Add(Match.Create(group));
+
+            return group;
         }
 
         public override void MatchScoreChanged()
