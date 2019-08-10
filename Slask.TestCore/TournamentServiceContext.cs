@@ -9,6 +9,18 @@ using System.Collections.Generic;
 
 namespace Slask.TestCore
 {
+    /* 
+     * Can simulate two different tournament scenarios with several checkpoints where tests can be executed. Betters are
+     * created and added to each tournament. Every better bets on matches as they become available.
+     * 
+     * Scenario 1: Homestory Cup
+     * Consists of two rounds. First one is a Round Robin round where four players advances to the second round, the 
+     * bracket round.
+     * 
+     * Scenario 2: BHA Open
+     * Consists of one Dual Tournament round, with two groups that is played simultaneously. No winner is determined 
+     * in this scenario. Use previous scenario if that is needed.
+     */
     public class TournamentServiceContext : UserServiceContext
     {
         public TournamentService TournamentService { get; }
@@ -30,30 +42,26 @@ namespace Slask.TestCore
         public Tournament HomestoryCup_02_BettersAddedToTournament()
         {
             Tournament tournament = HomestoryCup_01_CreateTournament();
+            AddBettersToTournament(tournament);
 
-            WhenCreatedUsers();
-            tournament.AddBetter(UserService.GetUserByName("Stålberto"));
-            tournament.AddBetter(UserService.GetUserByName("Bönis"));
-            tournament.AddBetter(UserService.GetUserByName("Guggelito"));
             SlaskContext.SaveChanges();
-
             return tournament;
         }
 
         public Round HomestoryCup_03_AddRoundRobinRound()
         {
             Tournament tournament = HomestoryCup_02_BettersAddedToTournament();
-            Round groupStage = tournament.AddRoundRobinRound("Round Robin Round", 3, 4);
+            Round round = tournament.AddRoundRobinRound("Round Robin Round", 3, 4);
 
             SlaskContext.SaveChanges();
-            return groupStage;
+            return round;
         }
 
         public RoundRobinGroup HomestoryCup_04_AddGroupToRoundRobinRound()
         {
-            Round groupStage = HomestoryCup_03_AddRoundRobinRound();
+            Round round = HomestoryCup_03_AddRoundRobinRound();
 
-            RoundRobinGroup group = (RoundRobinGroup)groupStage.AddGroup();
+            RoundRobinGroup group = (RoundRobinGroup)round.AddGroup();
 
             SlaskContext.SaveChanges();
             return group;
@@ -102,33 +110,7 @@ namespace Slask.TestCore
         public RoundRobinGroup HomestoryCup_08_BetsPlacedOnMatchesInRoundRobinGroup()
         {
             RoundRobinGroup group = HomestoryCup_07_AdminFlagsRoundRobinGroupAsReady();
-            Tournament tournament = group.Round.Tournament;
-
-            Better betterStalberto = tournament.GetBetterByName("Stålberto");
-            Better betterBonis = tournament.GetBetterByName("Bönis");
-            Better betterGuggelito = tournament.GetBetterByName("Guggelito");
-
-            Random random = new Random(1337);
-            int matchCounter = 0;
-            foreach (Domain.Match match in group.Matches)
-            {
-                matchCounter++;
-
-                if (matchCounter == 2)
-                {
-                    continue;
-                }
-
-                betterStalberto.PlaceMatchBet(match, random.Next(1) == 0 ? match.Player1 : match.Player2);
-                betterBonis.PlaceMatchBet(match, random.Next(1) == 0 ? match.Player1 : match.Player2);
-
-                if (matchCounter == 3)
-                {
-                    continue;
-                }
-
-                betterGuggelito.PlaceMatchBet(match, random.Next(1) == 0 ? match.Player1 : match.Player2);
-            }
+            BettersPlacesBetsOnAllMatchesInGroups(group);
 
             SlaskContext.SaveChanges();
             return group;
@@ -162,7 +144,7 @@ namespace Slask.TestCore
             RoundRobinGroup group = HomestoryCup_10_CompleteAllMatchesInRoundRobinGroup();
             Tournament tournament = group.Round.Tournament;
 
-            Round round = tournament.AddBracketRound("Bracket", 5);
+            Round round = tournament.AddBracketRound("Bracket Round", 5);
 
             SlaskContext.SaveChanges();
             return round;
@@ -181,7 +163,8 @@ namespace Slask.TestCore
         public BracketGroup HomestoryCup_13_AddWinningPlayersToBracketGroup()
         {
             BracketGroup group = HomestoryCup_12_AddGroupToBracketRound();
-            List<Player> winningPlayers = group.Round.GetWinningPlayersOfPreviousRound();
+            Round previousRound = group.Round.GetPreviousRound();
+            List<Player> winningPlayers = previousRound.GetWinningPlayers();
 
             foreach (Player player in winningPlayers)
             {
@@ -218,33 +201,7 @@ namespace Slask.TestCore
         public BracketGroup HomestoryCup_16_BetsPlacedOnMatchesInBracketGroup()
         {
             BracketGroup group = HomestoryCup_15_AdminFlagsBracketGroupAsReady();
-            Tournament tournament = group.Round.Tournament;
-
-            Better betterStalberto = tournament.GetBetterByName("Stålberto");
-            Better betterBonis = tournament.GetBetterByName("Bönis");
-            Better betterGuggelito = tournament.GetBetterByName("Guggelito");
-
-            Random random = new Random(1337);
-            int matchCounter = 0;
-            foreach (Domain.Match match in group.Matches)
-            {
-                matchCounter++;
-
-                if (matchCounter == 2)
-                {
-                    continue;
-                }
-
-                betterStalberto.PlaceMatchBet(match, random.Next(1) == 0 ? match.Player1 : match.Player2);
-                betterBonis.PlaceMatchBet(match, random.Next(1) == 0 ? match.Player1 : match.Player2);
-
-                if (matchCounter == 3)
-                {
-                    continue;
-                }
-
-                betterGuggelito.PlaceMatchBet(match, random.Next(1) == 0 ? match.Player1 : match.Player2);
-            }
+            BettersPlacesBetsOnAllMatchesInGroups(group);
 
             SlaskContext.SaveChanges();
             return group;
@@ -272,181 +229,173 @@ namespace Slask.TestCore
             SlaskContext.SaveChanges();
             return group;
         }
+        public Tournament BHAOpen_01_CreateTournament()
+        {
+            Tournament tournament = TournamentService.CreateTournament("BHA Open");
+            SlaskContext.SaveChanges();
 
-        //public Tournament WhenCreatedACompleteTournamentWithStagesRoundRobinIntoBracket()
-        //{
-        //    #region Wall of Text
+            return tournament;
+        }
 
-        //    WhenCreatedUsers();
-        //    Tournament tournament = WhenTournamentCreated();
-        //    WhenBettersAddedToTournament(tournament);
+        public Tournament BHAOpen_02_BettersAddedToTournament()
+        {
+            Tournament tournament = BHAOpen_01_CreateTournament();
+            AddBettersToTournament(tournament);
 
-        //    //////////////////////////////////////////////////////////////////////////
+            SlaskContext.SaveChanges();
+            return tournament;
+        }
 
-        //    Round groupStage = tournament.AddRoundRobinRound("Round Robin Tournament", 3, 4);
+        public Round BHAOpen_03_AddDualTournamentRound()
+        {
+            Tournament tournament = BHAOpen_02_BettersAddedToTournament();
+            Round round = tournament.AddDualTournamentRound("Dual Tournament Round", 3);
 
-        //    //////////////////////////////////////////////////////////////////////////
+            SlaskContext.SaveChanges();
+            return round;
+        }
 
-        //    RoundRobinGroup roundRobinGroup = groupStage.AddGroup<RoundRobinGroup>();
+        public List<DualTournamentGroup> BHAOpen_04_AddGroupsToDualTournamentRound()
+        {
+            Round round = BHAOpen_03_AddDualTournamentRound();
+            List<DualTournamentGroup> groups = new List<DualTournamentGroup>();
+            groups.Add((DualTournamentGroup)round.AddGroup());
+            groups.Add((DualTournamentGroup)round.AddGroup());
 
-        //    //////////////////////////////////////////////////////////////////////////
+            SlaskContext.SaveChanges();
+            return groups;
+        }
 
-        //    // Players added                IF FIRST ROUND PLAYERS CAN BE ADDED FREELY, OTHERWISE THEY NEED TO BE PICKED FROM A POOL OF PREVIOUS ADVANCES
-        //    roundRobinGroup.AddPlayerReference("Maru");
-        //    roundRobinGroup.AddPlayerReference("Stork");
-        //    roundRobinGroup.AddPlayerReference("Taeja");
-        //    roundRobinGroup.AddPlayerReference("Rain");
-        //    roundRobinGroup.AddPlayerReference("Bomber");
-        //    roundRobinGroup.AddPlayerReference("FanTaSy");
-        //    roundRobinGroup.AddPlayerReference("Stephano");
-        //    roundRobinGroup.AddPlayerReference("Thorzain");
+        public List<DualTournamentGroup> BHAOpen_05_AddedPlayersToDualTournamentGroups()
+        {
+            List<DualTournamentGroup> groups = BHAOpen_04_AddGroupsToDualTournamentRound();
 
-        //    //////////////////////////////////////////////////////////////////////////
+            groups[0].AddPlayerReference("Stålberto");
+            groups[0].AddPlayerReference("Bönis");
+            groups[0].AddPlayerReference("Guggelito");
+            groups[0].AddPlayerReference("Danneboi");
 
-        //    // Valid dates in future set    DEFAULT TIME SET IS 1 WEEK AHEAD, EACH CONSEQUTIVE MATCH SEPARATED BY 1 HOUR
-        //    for(int index = 0; index < roundRobinGroup.Matches.Count; ++index)
-        //    {
-        //        roundRobinGroup.Matches[index].ChangeStartDateTime(DateTimeHelper.Now.AddHours(index));
-        //    }
+            groups[1].AddPlayerReference("Bernard");
+            groups[1].AddPlayerReference("Papa Puert");
+            groups[1].AddPlayerReference("Klubbaxerino");
+            groups[1].AddPlayerReference("Segmarken");
+            
+            SlaskContext.SaveChanges();
+            return groups;
+        }
 
-        //    //////////////////////////////////////////////////////////////////////////
+        public List<DualTournamentGroup> BHAOpen_06_StartDateTimeSetToMatchesInDualTournamentGroups()
+        {
+            List<DualTournamentGroup> groups = BHAOpen_05_AddedPlayersToDualTournamentGroups();
 
-        //    // Admin flags roundRobinGroup as ready        LOCK/UNLOCKING FEATURE NEEDS TO BE ADDED TO GROUP, GROUP VALIDITY SHOULD BE DONE BEFORE BETTING IS ENABLED - THIS FLAG IS NEEDED SO AUTO-SEED IS POSSIBLE AND ADMIN CAN EDIT GROUP BEFORE BETTING COMMENCES
+            foreach (DualTournamentGroup group in groups)
+            {
+                for (int index = 0; index < group.Matches.Count; ++index)
+                {
+                    group.Matches[index].SetStartDateTime(DateTimeHelper.Now.AddHours(index));
+                }
+            }
 
-        //    roundRobinGroup.SetIsReady(true);
+            SlaskContext.SaveChanges();
+            return groups;
+        }
 
-        //    //////////////////////////////////////////////////////////////////////////
+        public List<DualTournamentGroup> BHAOpen_07_AdminFlagsDualTournamentGroupsAsReady()
+        {
+            List<DualTournamentGroup> groups = BHAOpen_06_StartDateTimeSetToMatchesInDualTournamentGroups();
 
-        //    // Betting ensues               BETTING IS ENABLED FOR EACH MATCH UNTIL STARTDATETIME IS PAST
+            foreach (DualTournamentGroup group in groups)
+            {
+                group.SetIsReady(true);
+            }
 
-        //    Better betterStalberto = tournament.GetBetterByName("Stålberto");
-        //    Better betterBonis = tournament.GetBetterByName("Bönis");
-        //    Better betterGuggelito = tournament.GetBetterByName("Guggelito");
+            SlaskContext.SaveChanges();
+            return groups;
+        }
 
-        //    Random random = new Random(1337);
-        //    int matchCounter = 0;
-        //    foreach (Domain.Match match in roundRobinGroup.Matches)
-        //    {
-        //        matchCounter++;
+        public List<DualTournamentGroup> BHAOpen_08_BetsPlacedOnMatchesInDualTournamentGroups()
+        {
+            List<DualTournamentGroup> groups = BHAOpen_07_AdminFlagsDualTournamentGroupsAsReady();
 
-        //        if(matchCounter == 2)
-        //        {
-        //            continue;
-        //        }
+            foreach (DualTournamentGroup group in groups)
+            {
+                BettersPlacesBetsOnAllMatchesInGroups(group);
+            }
 
-        //        betterStalberto.PlaceMatchBet(match, random.Next(1) == 0 ? match.Player1 : match.Player2);
-        //        betterBonis.PlaceMatchBet(match, random.Next(1) == 0 ? match.Player1 : match.Player2);
+            SlaskContext.SaveChanges();
+            return groups;
+        }
 
-        //        if (matchCounter == 3)
-        //        {
-        //            continue;
-        //        }
+        public List<DualTournamentGroup> BHAOpen_09_CompleteFirstMatchInDualTournamentGroups()
+        {
+            List<DualTournamentGroup> groups = BHAOpen_08_BetsPlacedOnMatchesInDualTournamentGroups();
 
-        //        betterGuggelito.PlaceMatchBet(match, random.Next(1) == 0 ? match.Player1 : match.Player2);
-        //    }
+            foreach (DualTournamentGroup group in groups)
+            {
+                group.Matches.First().Player1.IncreaseScore(2);
+            }
 
-        //    //////////////////////////////////////////////////////////////////////////
+            SlaskContext.SaveChanges();
+            return groups;
+        }
 
-        //    // First match is played        BETTING IS LOCKED FOR FIRST MATCH
+        public List<DualTournamentGroup> BHAOpen_10_CompleteAllMatchesInDualTournamentGroups()
+        {
+            List<DualTournamentGroup> groups = BHAOpen_09_CompleteFirstMatchInDualTournamentGroups();
 
-        //    roundRobinGroup.Matches.First().Player1.AddScore(2);
+            foreach (DualTournamentGroup group in groups)
+            {
+                for (int index = 1; index < group.Matches.Count; ++index)
+                {
+                    group.Matches[index].Player1.IncreaseScore(2);
+                }
+            }
 
-        //    //////////////////////////////////////////////////////////////////////////
-
-        //    // All other matches are played
-
-        //    for (int index = 1; index < roundRobinGroup.Matches.Count; ++index)
-        //    {
-        //        roundRobinGroup.Matches[index].Player1.AddScore(2);
-        //    }
-
-        //    //////////////////////////////////////////////////////////////////////////
-
-        //    // RoundRobinGroup played, winners move onto the bracket stage
-
-        //    Round bracketRound = tournament.AddBracketRound("Bracket", 5);
-
-        //    //////////////////////////////////////////////////////////////////////////
-
-        //    BracketGroup bracketGroup = bracketRound.AddGroup<BracketGroup>();
-
-        //    //////////////////////////////////////////////////////////////////////////
-
-        //    List<Player> winningPlayers = bracketGroup.Round.GetWinningPlayersOfPreviousRound();
-
-        //    foreach (Player player in winningPlayers)
-        //    {
-        //        bracketGroup.AddPlayerReference(player.Name);
-        //    }
-
-        //    //////////////////////////////////////////////////////////////////////////
-
-        //    for (int index = 0; index < bracketGroup.Matches.Count; ++index)
-        //    {
-        //        bracketGroup.Matches[index].ChangeStartDateTime(DateTimeHelper.Now.AddDays(1).AddHours(index));
-        //    }
-
-        //    //////////////////////////////////////////////////////////////////////////
-
-        //    bracketGroup.SetIsReady(true);
-
-        //    //////////////////////////////////////////////////////////////////////////
-
-        //    //Random random = new Random(1337);
-        //    //int matchCounter = 0;
-        //    foreach (Domain.Match match in bracketGroup.Matches)
-        //    {
-        //        matchCounter++;
-
-        //        if (matchCounter == 2)
-        //        {
-        //            continue;
-        //        }
-
-        //        betterStalberto.PlaceMatchBet(match, random.Next(1) == 0 ? match.Player1 : match.Player2);
-        //        betterBonis.PlaceMatchBet(match, random.Next(1) == 0 ? match.Player1 : match.Player2);
-
-        //        if (matchCounter == 3)
-        //        {
-        //            continue;
-        //        }
-
-        //        betterGuggelito.PlaceMatchBet(match, random.Next(1) == 0 ? match.Player1 : match.Player2);
-        //    }
-
-        //    //////////////////////////////////////////////////////////////////////////
-
-        //    bracketGroup.Matches.First().Player1.AddScore(3);
-
-        //    //////////////////////////////////////////////////////////////////////////
-
-        //    // All other matches are played
-
-        //    for (int index = 1; index < bracketGroup.Matches.Count; ++index)
-        //    {
-        //        bracketGroup.Matches[index].Player1.AddScore(3);
-        //    }
-
-        //    #endregion
-
-        //    //////////////////////////////////////////////////////////////////////////
-
-        //    //// Play matches, add score
-
-        //    bracketGroup.Matches[0].Player1.AddScore(3); // Maru advances, Taeja eliminated
-        //    bracketGroup.Matches[1].Player1.AddScore(3); // Bomber advances, Stephano eliminated
-        //    bracketGroup.Matches[2].Player1.AddScore(3); // Maru wins, Bomber loses
-
-        //    //////////////////////////////////////////////////////////////////////////
-
-        //    SlaskContext.SaveChanges();
-
-        //    return tournament;
-        //}
+            SlaskContext.SaveChanges();
+            return groups;
+        }
 
         public static new TournamentServiceContext GivenServices(SlaskContextCreatorInterface slaskContextCreator)
         {
             return new TournamentServiceContext(slaskContextCreator.CreateContext());
+        }
+
+        private void AddBettersToTournament(Tournament tournament)
+        {
+            WhenCreatedUsers();
+            tournament.AddBetter(UserService.GetUserByName("Stålberto"));
+            tournament.AddBetter(UserService.GetUserByName("Bönis"));
+            tournament.AddBetter(UserService.GetUserByName("Guggelito"));
+        }
+
+        private void BettersPlacesBetsOnAllMatchesInGroups(GroupBase group)
+        {
+            Tournament tournament = group.Round.Tournament;
+            Better betterStalberto = tournament.GetBetterByName("Stålberto");
+            Better betterBonis = tournament.GetBetterByName("Bönis");
+            Better betterGuggelito = tournament.GetBetterByName("Guggelito");
+
+            Random random = new Random(1337);
+            int matchCounter = 0;
+            foreach (Domain.Match match in group.Matches)
+            {
+                matchCounter++;
+
+                if (matchCounter == 2)
+                {
+                    continue;
+                }
+
+                betterStalberto.PlaceMatchBet(match, random.Next(1) == 0 ? match.Player1 : match.Player2);
+                betterBonis.PlaceMatchBet(match, random.Next(1) == 0 ? match.Player1 : match.Player2);
+
+                if (matchCounter == 3)
+                {
+                    continue;
+                }
+
+                betterGuggelito.PlaceMatchBet(match, random.Next(1) == 0 ? match.Player1 : match.Player2);
+            }
         }
     }
 }
