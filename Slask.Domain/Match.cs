@@ -1,4 +1,4 @@
-﻿using Slask.Common;
+using Slask.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -51,23 +51,34 @@ namespace Slask.Domain
             return match;
         }
 
-        public bool AssignPlayerReferenceFromGroup(string playerReferenceName)
+        //public bool AssignPlayerReferenceFromGroup(string playerReferenceName)
+        //{
+        //    PlayerReference playerReference = Group.GetPlayerReference(playerReferenceName);
+
+        //    if (ValidateNewPlayerReference(playerReference))
+        //    {
+        //        return false;
+        //    }
+
+        //    if (Player1.PlayerReference == null)
+        //    {
+        //        Player1.PlayerReference = playerReference;
+        //        return true;
+        //    }
+
+        //    Player2.PlayerReference = playerReference;
+        //    return true;
+        //}
+
+        public void AssignPlayerReferences(PlayerReference player1Reference, PlayerReference player2Reference)
         {
-            PlayerReference playerReference = Group.GetPlayerReference(playerReferenceName);
-
-            if (ValidateNewPlayerReference(playerReference))
+            if(player1Reference == null ||player2Reference == null)
             {
-                return false;
+                return;
             }
 
-            if (Player1.PlayerReference == null)
-            {
-                Player1.PlayerReference = playerReference;
-                return true;
-            }
-
-            Player2.PlayerReference = playerReference;
-            return true;
+            Player1.PlayerReference = player1Reference;
+            Player2.PlayerReference = player2Reference;
         }
 
         public Player FindPlayer(Guid id)
