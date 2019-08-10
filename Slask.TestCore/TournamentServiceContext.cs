@@ -4,7 +4,6 @@ using Slask.Persistence.Services;
 using Slask.Domain;
 using Slask.Persistence;
 using System.Linq;
-using Moq;
 using System.Collections.Generic;
 
 namespace Slask.TestCore

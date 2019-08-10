@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Slask.Domain.Bets
+﻿namespace Slask.Domain.Bets
 {
     public class MatchBet : BetBase
     {
