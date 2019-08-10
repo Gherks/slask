@@ -49,25 +49,6 @@ namespace Slask.Domain
             return match;
         }
 
-        //public bool AssignPlayerReferenceFromGroup(string playerReferenceName)
-        //{
-        //    PlayerReference playerReference = Group.GetPlayerReference(playerReferenceName);
-
-        //    if (ValidateNewPlayerReference(playerReference))
-        //    {
-        //        return false;
-        //    }
-
-        //    if (Player1.PlayerReference == null)
-        //    {
-        //        Player1.PlayerReference = playerReference;
-        //        return true;
-        //    }
-
-        //    Player2.PlayerReference = playerReference;
-        //    return true;
-        //}
-
         public void AssignPlayerReferences(PlayerReference player1Reference, PlayerReference player2Reference)
         {
             if(player1Reference == null ||player2Reference == null)
