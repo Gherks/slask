@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Slask.Domain
 {
@@ -11,18 +11,20 @@ namespace Slask.Domain
         public Guid Id { get; private set; }
         public PlayerReference PlayerReference
         {
-            get { return PlayerReference; }
+            get { return _playerReference; }
             set
             {
                 if (value != null)
                 {
-                    PlayerReference = value;
+                    _playerReference = value;
                 }
             }
         }
         public int Score { get; private set; }
         public Guid MatchId { get; private set; }
         public Match Match { get; private set; }
+
+        private PlayerReference _playerReference;
 
         // Ignored by SlaskContext
         public string Name
