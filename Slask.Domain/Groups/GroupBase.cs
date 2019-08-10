@@ -19,24 +19,6 @@ namespace Slask.Domain
         public Guid RoundId { get; protected set; }
         public Round Round { get; protected set; }
 
-        public void AddPlayerReference(string name)
-        {
-            PlayerReference playerReference = ParticipatingPlayers.FirstOrDefault(reference => reference.Name == name);
-
-            if (playerReference == null)
-            {
-                playerReference = GetPlayerReferenceFromTournamentRegistryByName(name);
-
-                if (playerReference == null)
-                {
-                    playerReference = PlayerReference.Create(name, Round.Tournament);
-                }
-
-                ParticipatingPlayers.Add(playerReference);
-                UpdateMatchLayout();
-            }
-        }
-
         public PlayerReference GetPlayerReference(Guid id)
         {
             return ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Id == id);
@@ -62,29 +44,34 @@ namespace Slask.Domain
             return ParticipatingPlayers.FirstOrDefault(reference => reference.Name == name);
         }
 
-        public virtual void MatchScoreChanged()
+        public virtual void AddPlayerReference(string name)
+        {
+            PlayerReference playerReference = ParticipatingPlayers.FirstOrDefault(reference => reference.Name == name);
+
+            if (playerReference == null)
+            {
+                playerReference = GetPlayerReferenceFromTournamentRegistryByName(name);
+
+                if (playerReference == null)
+                {
+                    playerReference = PlayerReference.Create(name, Round.Tournament);
+                }
+
+                ParticipatingPlayers.Add(playerReference);
+                UpdateMatchLayout();
+            }
+        }
+
+        public virtual void Clear()
+        {
+        }
+
+        public virtual void MatchScoreChanged(Match match)
         {
         }
 
         protected virtual void UpdateMatchLayout()
         {
-            BalanceMatchesByPlayerPairings();
-        }
-
-        protected void BalanceMatchesByPlayerPairings()
-        {
-            int playerPairingAmount = (int)Math.Ceiling(ParticipatingPlayers.Count / 2.0);
-
-            while (Matches.Count < playerPairingAmount)
-            {
-                Matches.Add(Match.Create(this));
-            }
-
-            if (Matches.Count > playerPairingAmount)
-            {
-                int removeAmount = Matches.Count - playerPairingAmount;
-                Matches.RemoveRange(Matches.Count - removeAmount, removeAmount);
-            }
         }
     }
 }

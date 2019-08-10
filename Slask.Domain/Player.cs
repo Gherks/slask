@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Slask.Domain
 {
@@ -53,25 +53,25 @@ namespace Slask.Domain
         public void IncrementScore()
         {
             Score++;
-            Match.Group.MatchScoreChanged();
+            Match.Group.MatchScoreChanged(Match);
         }
 
         public void DecrementScore()
         {
             Score--;
-            Match.Group.MatchScoreChanged();
+            Match.Group.MatchScoreChanged(Match);
         }
 
         public void IncreaseScore(int value)
         {
             Score += value;
-            Match.Group.MatchScoreChanged();
+            Match.Group.MatchScoreChanged(Match);
         }
 
         public void DecreaseScore(int value)
         {
             Score -= value;
-            Match.Group.MatchScoreChanged();
+            Match.Group.MatchScoreChanged(Match);
         }
     }
 }
