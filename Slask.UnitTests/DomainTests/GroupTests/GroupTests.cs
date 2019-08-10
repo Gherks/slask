@@ -66,6 +66,24 @@ namespace Slask.UnitTests.DomainTests
             throw new NotImplementedException();
         }
 
+        [Fact]
+        public void CanClearDualTournamentGroup()
+        {
+            TournamentServiceContext services = GivenServices();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        public void CanClearBracketGroup()
+        {
+            TournamentServiceContext services = GivenServices();
+            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+
+            throw new NotImplementedException();
+        }
+
         private TournamentServiceContext GivenServices()
         {
             return TournamentServiceContext.GivenServices(new UnitTestSlaskContextCreator());
