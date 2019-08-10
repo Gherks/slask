@@ -28,6 +28,12 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
+        public void CanCreateDualTournamentRound()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
         public void CannotCreateRoundsWithEvenBestOfs()
         {
             TournamentServiceContext services = GivenServices();
@@ -39,12 +45,6 @@ namespace Slask.UnitTests.DomainTests
                 tournament.AddDualTournamentRound("Dual Tournament Round", bestOf).Should().BeNull();
                 tournament.AddBracketRound("Round Robin Round", bestOf).Should().BeNull();
             }
-        }
-
-        [Fact]
-        public void CanCreateDualTournamentRound()
-        {
-            throw new NotImplementedException();
         }
 
         [Fact]
