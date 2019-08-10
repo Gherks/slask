@@ -93,8 +93,6 @@ namespace Slask.UnitTests.DomainTests
             Player foundPlayer = match.FindPlayer(Guid.NewGuid());
 
             foundPlayer.Should().BeNull();
-            foundPlayer.Id.Should().Be(match.Player1.Id);
-            foundPlayer.Name.Should().Be(match.Player1.Name);
         }
 
         [Fact]
