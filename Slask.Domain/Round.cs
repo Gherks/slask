@@ -66,7 +66,12 @@ namespace Slask.Domain // Change to 'Slask.Domain.Round' so the Enum makes more 
             return Groups.Last();
         }
 
-        public List<Player> GetWinningPlayersOfPreviousRound()
+        public Round GetPreviousRound()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Player> GetWinningPlayers()
         {
             throw new NotImplementedException();
         }
