@@ -9,22 +9,10 @@ namespace Slask.Domain
         }
 
         public Guid Id { get; private set; }
-        public PlayerReference PlayerReference
-        {
-            get { return _playerReference; }
-            set
-            {
-                if (value != null)
-                {
-                    _playerReference = value;
-                }
-            }
-        }
+        public PlayerReference PlayerReference { get; private set; }
         public int Score { get; private set; }
         public Guid MatchId { get; private set; }
         public Match Match { get; private set; }
-
-        private PlayerReference _playerReference;
 
         // Ignored by SlaskContext
         public string Name
@@ -50,28 +38,87 @@ namespace Slask.Domain
             };
         }
 
-        public void IncrementScore()
+        public void SetPlayerReference(PlayerReference playerReference)
         {
-            Score++;
-            Match.Group.MatchScoreChanged(Match);
+            if (PlayerReference != null)
+            {
+                bool playerReferenceIsRemoved = playerReference == null;
+                bool playerReferenceChanged = playerReference != null && PlayerReference.Id != playerReference.Id;
+
+                if(playerReferenceIsRemoved || playerReferenceChanged)
+                {
+                    Match.Group.OnParticipantRemoved(PlayerReference);
+                }
+            }
+            
+            PlayerReference = playerReference;
         }
 
-        public void DecrementScore()
-        {
-            Score--;
-            Match.Group.MatchScoreChanged(Match);
-        }
+        //public void IncrementScore()
+        //{
+        //    bool matchHasNotBegun = Match.GetPlayState() == PlayState.NotBegun;
+
+        //    if (matchHasNotBegun)
+        //    {
+        //        return;
+        //    }
+
+        //    bool isAlreadyFinished = Match.GetPlayState() == PlayState.IsFinished;
+
+        //    Score++;
+
+        //    if (!isAlreadyFinished)
+        //    {
+        //        Match.Group.MatchScoreIncreased(Match);
+        //    }
+        //}
+
+        //public void DecrementScore()
+        //{
+        //    Score = Math.Max(Score - 1, 0);
+
+        //    bool isPlaying = Match.GetPlayState() == PlayState.IsPlaying;
+        //    if (!isPlaying)
+        //    {
+        //        Match.Group.MatchScoreDecreased(Match);
+        //    }
+        //}
 
         public void IncreaseScore(int value)
         {
+            bool matchHasNotBegun = Match.GetPlayState() == PlayState.NotBegun;
+
+            if(matchHasNotBegun)
+            {
+                return;
+            }
+
+            bool matchIsAlreadyFinished = Match.GetPlayState() == PlayState.IsFinished;
+
             Score += value;
-            Match.Group.MatchScoreChanged(Match);
+
+            if (!matchIsAlreadyFinished)
+            {
+                Match.Group.MatchScoreIncreased(Match);
+            }
         }
 
         public void DecreaseScore(int value)
         {
-            Score -= value;
-            Match.Group.MatchScoreChanged(Match);
+            bool matchHasNotBegun = Match.GetPlayState() == PlayState.NotBegun;
+
+            if (matchHasNotBegun)
+            {
+                return;
+            }
+
+            Score = Math.Max(Score - value, 0);
+
+            bool isPlaying = Match.GetPlayState() == PlayState.IsPlaying;
+            if (!isPlaying)
+            {
+                Match.Group.MatchScoreDecreased(Match);
+            }
         }
     }
 }

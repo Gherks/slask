@@ -4,83 +4,261 @@ using Slask.Common;
 using Slask.Domain;
 using Slask.TestCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Slask.UnitTests.DomainTests
 {
-    public class GroupTests
+    public class GroupTests : IDisposable
     {
+        public void Dispose()
+        {
+            SystemTimeMocker.Reset();
+        }
+
         [Fact]
-        public void CanCreateRoundRobinRound()
+        public void CanCreateRoundRobinGroup()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = services.HomestoryCup_04_AddGroupToRoundRobinRound();
+            RoundRobinGroup group = HomestoryCupSetup.Part04_AddedGroupToRoundRobinRound(services);
 
             group.Should().NotBeNull();
             group.Id.Should().NotBeEmpty();
-            group.IsReady.Should().BeFalse();
             group.ParticipatingPlayers.Should().BeEmpty();
             group.Matches.Should().BeEmpty();
-            group.RoundId.Should().Be(group.Round.Id);
-            group.Round.Should().Be(group.Round);
+            group.RoundId.Should().NotBeEmpty();
+            group.Round.Should().NotBeNull();
         }
 
         [Fact]
-        public void CanCreateBracketRound()
+        public void CanCreateDualTournamentGroup()
         {
             TournamentServiceContext services = GivenServices();
-            BracketGroup group = services.HomestoryCup_12_AddGroupToBracketRound();
+            List<DualTournamentGroup> groups = BHAOpenSetup.Part04_AddGroupsToDualTournamentRound(services);
+
+            foreach (DualTournamentGroup group in groups)
+            {
+                group.Id.Should().NotBeEmpty();
+                group.ParticipatingPlayers.Should().BeEmpty();
+                group.Matches.Should().HaveCount(5);
+                group.RoundId.Should().NotBeEmpty();
+                group.Round.Should().NotBeNull();
+            }
+        }
+
+        [Fact]
+        public void CanCreateBracketGroup()
+        {
+            TournamentServiceContext services = GivenServices();
+            BracketGroup group = HomestoryCupSetup.Part11_AddGroupToBracketRound(services);
 
             group.Should().NotBeNull();
             group.Id.Should().NotBeEmpty();
-            group.IsReady.Should().BeFalse();
             group.ParticipatingPlayers.Should().BeEmpty();
             group.Matches.Should().BeEmpty();
-            group.RoundId.Should().Be(group.Round.Id);
-            group.Round.Should().Be(group.Round);
+            group.RoundId.Should().NotBeEmpty();
+            group.Round.Should().NotBeNull();
         }
 
         [Fact]
-        public void PlayerReferenceIsAddedToTournamentWhenBrandNewPlayerIsAddedToMatch()
-        {
-            var timeMock = new Mock<DateTimeProvider>();
-            timeMock.SetupGet(tp => tp.Now).Returns(new DateTime(2010, 3, 11));
-            DateTimeProvider.Current = timeMock.Object;
-        }
-
-        [Fact]
-        public void PlayerReferenceIsAddedToGroupWhenBrandNewPlayerIsAddedToMatch()
+        public void StartDateTimeInMatchesInRoundRobinGroupIsSpacedWithOneHourUponCreation()
         {
             throw new NotImplementedException();
         }
 
         [Fact]
-        public void CannotAddBrandNewPlayerToMatchAfterGroupHasStartedPlaying()
+        public void StartDateTimeInMatchesInDualTournamentGroupIsSpacedWithOneHourUponCreation()
         {
             throw new NotImplementedException();
         }
 
         [Fact]
-        public void CanAddSeveralPlayerReferencesAtOnce()
+        public void StartDateTimeInMatchesInBracketGroupIsSpacedWithOneHourUponCreation()
         {
             throw new NotImplementedException();
+        }
+
+        [Fact]
+        public void PlayerReferenceIsAddedToTournamentWhenNewPlayerIsAddedToGroup()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        public void CannotAddNewPlayerToGroupAfterFirstMatchHasStarted()
+        {
+            TournamentServiceContext services = GivenServices();
+            RoundRobinGroup group = HomestoryCupSetup.Part08_CompleteFirstMatchInRoundRobinGroup(services);
+
+            SystemTimeMocker.Set(DateTime.Now.AddSeconds(1));
+
+            group.AddPlayerReference("Flash").Should().BeFalse();
+
+            foreach (Domain.Match match in group.Matches)
+            {
+                match.FindPlayer("Flash").Should().BeNull();
+            }
+            group.ParticipatingPlayers.Should().NotContain(player => player.Name == "Flash");
+        }
+
+        [Fact]
+        public void CannotIncreaseScoreBeforeMatchHasStartedInRoundRobinGroup()
+        {
+            TournamentServiceContext services = GivenServices();
+            RoundRobinGroup group = HomestoryCupSetup.Part07_BetsPlacedOnMatchesInRoundRobinGroup(services);
+            Domain.Match match = group.Matches.First();
+
+            match.Player1.IncreaseScore(1);
+            match.Player2.IncreaseScore(1);
+
+            match.Player1.Score.Should().Be(0);
+            match.Player2.Score.Should().Be(0);
+        }
+
+        [Fact]
+        public void CannotIncreaseScoreBeforeMatchHasStartedInDualTournamentGroup()
+        {
+            TournamentServiceContext services = GivenServices();
+            DualTournamentGroup group = BHAOpenSetup.Part07_BetsPlacedOnMatchesInDualTournamentGroups(services).First();
+            Domain.Match match = group.Matches.First();
+
+            match.Player1.IncreaseScore(1);
+            match.Player2.IncreaseScore(1);
+
+            match.Player1.Score.Should().Be(0);
+            match.Player2.Score.Should().Be(0);
+        }
+
+        [Fact]
+        public void CannotIncreaseScoreBeforeMatchHasStartedInBracketGroup()
+        {
+            TournamentServiceContext services = GivenServices();
+            BracketGroup group = HomestoryCupSetup.Part14_BetsPlacedOnMatchesInBracketGroup(services);
+            Domain.Match match = group.Matches.First();
+
+            match.Player1.IncreaseScore(1);
+            match.Player2.IncreaseScore(1);
+
+            match.Player1.Score.Should().Be(0);
+            match.Player2.Score.Should().Be(0);
+        }
+
+        [Fact]
+        public void CanClearRoundRobinGroup()
+        {
+            TournamentServiceContext services = GivenServices();
+            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+
+            group.Clear();
+
+            group.ParticipatingPlayers.Should().BeEmpty();
+            group.Matches.Should().BeEmpty();
         }
 
         [Fact]
         public void CanClearDualTournamentGroup()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            DualTournamentGroup group = BHAOpenSetup.Part05_AddedPlayersToDualTournamentGroups(services).First();
 
-            throw new NotImplementedException();
+            group.Clear();
+
+            group.ParticipatingPlayers.Should().BeEmpty();
+            group.Matches.Should().HaveCount(5);
+
+            for(int index = 0; index < group.Matches.Count; ++index)
+            {
+                group.Matches[index].Player1.PlayerReference.Should().BeNull();
+                group.Matches[index].Player2.PlayerReference.Should().BeNull();
+
+                group.Matches[index].StartDateTime.Should().BeCloseTo(DateTime.Now.AddYears(1).AddHours(index));
+            }
         }
 
         [Fact]
         public void CanClearBracketGroup()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            BracketGroup group = HomestoryCupSetup.Part12_AddWinningPlayersToBracketGroup(services);
 
+            group.Clear();
+
+            group.ParticipatingPlayers.Should().BeEmpty();
+            group.Matches.Should().BeEmpty();
+        }
+
+        // ALL MATCHES MUST BE ORDERED DESCENDING BY STARTDATETIME
+
+        // Create tests for GetPlayState
+
+        // CAN CHANGE LAST EXISTING PLAYER REF TO NULL AND IT IS REMOVED FROM GROUP
+        // CAN CHANGE LAST EXISTING PLAYER REF TO ANOTHER PLAYER REF 
+
+        // CANNOT CREATE GROUPS OF TYPES THAT DOES NOT MATCH ROUND TYPE
+
+        [Fact]
+        public void FetchingAdvancingPlayersInRoundRobinGroupReturnsAtLeastNumberOfPlayersSetByParentRound()
+        {
+            TournamentServiceContext services = GivenServices();
+            RoundRobinGroup group = HomestoryCupSetup.Part09_CompleteAllMatchesInRoundRobinGroup(services);
+
+            List<PlayerReference> topPlayers = group.GetAdvancingPlayers();
+
+            topPlayers.Should().HaveCount(group.Round.AdvancingPerGroupAmount);
+            topPlayers[0].Name.Should().Be("");
+            topPlayers[1].Name.Should().Be("");
+            topPlayers[2].Name.Should().Be("");
+        }
+
+        [Fact]
+        public void FetchingAdvancingPlayersInRoundRobinGroupReturnsAllPlayersIfNumberOfAdvancingPlayersIsGreaterThanPlayersParticipating()
+        {
+            TournamentServiceContext services = GivenServices();
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        public void FetchingAdvancingPlayersInDualTournamentGroupOnlyReturnsTopTwoPlayers()
+        {
+            TournamentServiceContext services = GivenServices();
+            DualTournamentGroup group = BHAOpenSetup.Part09_CompleteAllMatchesInDualTournamentGroups(services).First();
+
+            List<PlayerReference> topPlayers = group.GetAdvancingPlayers();
+
+            topPlayers.Should().HaveCount(2);
+            topPlayers[0].Name.Should().Be("");
+            topPlayers[1].Name.Should().Be("");
+        }
+
+        [Fact]
+        public void FetchingAdvancingPlayersInBracketGroupOnlyReturnsBracketWinner()
+        {
+            TournamentServiceContext services = GivenServices();
+            BracketGroup group = HomestoryCupSetup.Part16_CompleteAllMatchesInBracketGroup(services);
+            //services.SetMockedTime();// DateTimeMockHelper.SetTime(group.Matches.Last().StartDateTime.AddSeconds(1));
+
+            List<PlayerReference> topPlayers = group.GetAdvancingPlayers();
+
+            topPlayers.Should().HaveCount(1);
+            topPlayers[0].Name.Should().Be("");
+        }
+
+        [Fact]
+        public void CannotFetchAdvancingPlayersBeforeGroupIsPlayedOut()
+        {
+            TournamentServiceContext services = GivenServices();
+            RoundRobinGroup group = HomestoryCupSetup.Part08_CompleteFirstMatchInRoundRobinGroup(services);
+
+            List<PlayerReference> topPlayers = group.GetAdvancingPlayers();
+
+            topPlayers.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void PlayerIsRemovedFromParticipantListWhenNotAssignedToASingleMatch()
+        {
+            TournamentServiceContext services = GivenServices();
             throw new NotImplementedException();
         }
 

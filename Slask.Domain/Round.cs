@@ -22,14 +22,14 @@ namespace Slask.Domain // Change to 'Slask.Domain.Round' so the Enum makes more 
         public string Name { get; private set; }
         public RoundType Type { get; private set; }
         public int BestOf { get; private set; }
-        public int AdvanceAmount { get; private set; }
+        public int AdvancingPerGroupAmount { get; private set; }
         public List<GroupBase> Groups { get; private set; }
         public Guid TournamentId { get; private set; }
         public Tournament Tournament { get; private set; }
 
-        public static Round Create(string name, RoundType type, int bestOf, int advanceAmount, Tournament tournament)
+        public static Round Create(string name, RoundType type, int bestOf, int advancingPerGroupAmount, Tournament tournament)
         {
-            if(tournament == null)
+            if (tournament == null)
             {
                 return null;
             }
@@ -40,7 +40,7 @@ namespace Slask.Domain // Change to 'Slask.Domain.Round' so the Enum makes more 
                 Name = name,
                 Type = type,
                 BestOf = bestOf,
-                AdvanceAmount = advanceAmount,
+                AdvancingPerGroupAmount = advancingPerGroupAmount,
                 TournamentId = tournament.Id,
                 Tournament = tournament
             };
@@ -68,12 +68,27 @@ namespace Slask.Domain // Change to 'Slask.Domain.Round' so the Enum makes more 
 
         public Round GetPreviousRound()
         {
-            throw new NotImplementedException();
+            for (int index = 1; index < Tournament.Rounds.Count; ++index)
+            {
+                if (Tournament.Rounds[index].Id == Id)
+                {
+                    return Tournament.Rounds[index - 1];
+                }
+            }
+
+            return null;
         }
 
-        public List<Player> GetWinningPlayers()
+        public List<PlayerReference> GetAdvancingPlayers()
         {
-            throw new NotImplementedException();
+            List<PlayerReference> winningPlayers = new List<PlayerReference>();
+
+            foreach(GroupBase group in Groups)
+            {
+                winningPlayers.AddRange(group.GetAdvancingPlayers());
+            }
+
+            return winningPlayers;
         }
     }
 }

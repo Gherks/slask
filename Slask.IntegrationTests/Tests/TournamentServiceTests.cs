@@ -22,13 +22,13 @@ namespace Slask.IntegrationTests.Tests
         public void CanGetAllPlayerReferencesInTournamentByTournamentId()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
             Tournament tournament = group.Round.Tournament;
 
             List<PlayerReference> playerReferences = services.TournamentService.GetPlayerReferencesByTournamentId(tournament.Id);
 
             playerReferences.Should().NotBeNullOrEmpty();
-            playerReferences.Count.Should().Be(8);
+            playerReferences.Should().HaveCount(8);
 
             playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Maru").Should().NotBeNull();
             playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stork").Should().NotBeNull();

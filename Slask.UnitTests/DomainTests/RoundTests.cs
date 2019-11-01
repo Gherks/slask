@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
 using Slask.TestCore;
+using System;
 using System.Linq;
 using Xunit;
 
@@ -8,18 +9,20 @@ namespace Slask.UnitTests.DomainTests
 {
     public class RoundTests
     {
+        // ADVANCING PLAYERS MUST ALWAYS BE EQUAL OR LESS THAN NUMBER OF GROUPS IN ROUND
+
         [Fact]
         public void CanCreateRoundRobinRound()
         {
             TournamentServiceContext services = GivenServices();
-            Round round = services.HomestoryCup_03_AddRoundRobinRound();
+            Round round = HomestoryCupSetup.Part03_AddRoundRobinRound(services);
 
             round.Should().NotBeNull();
             round.Id.Should().NotBeEmpty();
             round.Name.Should().Be("Round Robin Round");
             round.Type.Should().Be(RoundType.RoundRobin);
             round.BestOf.Should().Be(3);
-            round.AdvanceAmount.Should().Be(4);
+            round.AdvancingPerGroupAmount.Should().Be(4);
             round.Groups.Should().BeEmpty();
             round.TournamentId.Should().NotBeEmpty();
             round.Tournament.Should().NotBeNull();
@@ -29,14 +32,14 @@ namespace Slask.UnitTests.DomainTests
         public void CanCreateDualTournamentRound()
         {
             TournamentServiceContext services = GivenServices();
-            Round round = services.BHAOpen_03_AddDualTournamentRound();
+            Round round = BHAOpenSetup.Part03_AddDualTournamentRound(services);
 
             round.Should().NotBeNull();
             round.Id.Should().NotBeEmpty();
             round.Name.Should().Be("Dual Tournament Round");
             round.Type.Should().Be(RoundType.DualTournament);
             round.BestOf.Should().Be(3);
-            round.AdvanceAmount.Should().Be(2);
+            round.AdvancingPerGroupAmount.Should().Be(2);
             round.Groups.Should().BeEmpty();
             round.TournamentId.Should().NotBeEmpty();
             round.Tournament.Should().NotBeNull();
@@ -46,24 +49,52 @@ namespace Slask.UnitTests.DomainTests
         public void CanCreateBracketRound()
         {
             TournamentServiceContext services = GivenServices();
-            Round round = services.HomestoryCup_11_AddBracketRound();
+            Round round = HomestoryCupSetup.Part10_AddBracketRound(services);
 
             round.Should().NotBeNull();
             round.Id.Should().NotBeEmpty();
             round.Name.Should().Be("Bracket Round");
             round.Type.Should().Be(RoundType.Bracket);
             round.BestOf.Should().Be(5);
-            round.AdvanceAmount.Should().Be(1);
+            round.AdvancingPerGroupAmount.Should().Be(1);
             round.Groups.Should().BeEmpty();
             round.TournamentId.Should().NotBeEmpty();
             round.Tournament.Should().NotBeNull();
         }
 
         [Fact]
+        public void CannotCreateRoundsWithoutName()
+        {
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = HomestoryCupSetup.Part01_CreateTournament(services);
+            Round roundRobinRound = tournament.AddRoundRobinRound("", 3, 1);
+            Round dualTournamentRound = tournament.AddDualTournamentRound("", 3);
+            Round bracketRound = tournament.AddBracketRound("", 3);
+
+            roundRobinRound.Should().BeNull();
+            dualTournamentRound.Should().BeNull();
+            bracketRound.Should().BeNull();
+        }
+
+        [Fact]
+        public void CannotCreateRoundsWithZeroAdvancers()
+        {
+            TournamentServiceContext services = GivenServices();
+            Tournament tournament = HomestoryCupSetup.Part01_CreateTournament(services);
+            Round roundRobinRound = tournament.AddRoundRobinRound("Round Robin Round", 3, 0);
+            Round dualTournamentRound = tournament.AddDualTournamentRound("Dual Tournament Round", 3);
+            Round bracketRound = tournament.AddBracketRound("Bracket Round", 3);
+
+            roundRobinRound.Should().BeNull();
+            dualTournamentRound.AdvancingPerGroupAmount.Should().NotBe(0);
+            bracketRound.AdvancingPerGroupAmount.Should().NotBe(0);
+        }
+
+        [Fact]
         public void CannotCreateRoundsWithEvenBestOfs()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.HomestoryCup_01_CreateTournament();
+            Tournament tournament = HomestoryCupSetup.Part01_CreateTournament(services);
 
             for (int bestOf = 0; bestOf < 21; bestOf += 2)
             {
@@ -77,7 +108,7 @@ namespace Slask.UnitTests.DomainTests
         public void ReturnsNullWhenFetchingPreviousRoundWithFirstRound()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = services.HomestoryCup_04_AddGroupToRoundRobinRound();
+            RoundRobinGroup group = HomestoryCupSetup.Part04_AddedGroupToRoundRobinRound(services);
 
             Round round = group.Round.GetPreviousRound();
 
@@ -88,35 +119,76 @@ namespace Slask.UnitTests.DomainTests
         public void CanFetchPreviousRoundFromRoundWithRoundPredecessor()
         {
             TournamentServiceContext services = GivenServices();
-            Round currentRound = services.HomestoryCup_11_AddBracketRound();
+            Round currentRound = HomestoryCupSetup.Part10_AddBracketRound(services);
+            Tournament tournament = currentRound.Tournament;
 
             Round previousRound = currentRound.GetPreviousRound();
 
             previousRound.Should().NotBeNull();
+            previousRound.Should().Be(tournament.Rounds.First());
         }
 
         [Fact]
         public void OnlyWinningPlayersCanAdvanceToNextRound()
         {
             TournamentServiceContext services = GivenServices();
-            BracketGroup group = services.HomestoryCup_13_AddWinningPlayersToBracketGroup();
+            BracketGroup group = HomestoryCupSetup.Part12_AddWinningPlayersToBracketGroup(services);
 
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == "").Should().NotBeNull();
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == "").Should().NotBeNull();
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == "").Should().NotBeNull();
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == "").Should().NotBeNull();
+            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == "Taeja").Should().NotBeNull();
+            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == "FanTaSy").Should().NotBeNull();
+            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == "Thorzain").Should().NotBeNull();
+            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == "Rain").Should().NotBeNull();
         }
 
         [Fact]
-        public void CannotAddGroupsToRoundThatDoesNotMatchByType()
+        public void SolveRoundRobinTies()
+        {
+            throw new NotImplementedException();
+        }
+
+        [Fact]
+        public void CannotAddGroupsToRoundRobinRoundThatDoesNotMatchByType()
         {
             TournamentServiceContext services = GivenServices();
-            Round round = services.HomestoryCup_03_AddRoundRobinRound();
-
+            Round round = HomestoryCupSetup.Part03_AddRoundRobinRound(services);
             round.AddGroup();
 
-            round.Groups.Should().NotBeNull();
-            round.Groups.Count.Should().Be(0);
+            RoundRobinGroup group = round.Groups.First() as RoundRobinGroup;
+
+            round.Groups.Should().HaveCount(1);
+            group.Should().NotBeOfType<DualTournamentGroup>();
+            group.Should().NotBeOfType<BracketGroup>();
+            group.Should().BeOfType<RoundRobinGroup>();
+        }
+
+        [Fact]
+        public void CannotAddGroupsToDualTournamentRoundThatDoesNotMatchByType()
+        {
+            TournamentServiceContext services = GivenServices();
+            Round round = BHAOpenSetup.Part03_AddDualTournamentRound(services);
+            round.AddGroup();
+
+            DualTournamentGroup group = round.Groups.First() as DualTournamentGroup;
+
+            round.Groups.Should().HaveCount(1);
+            group.Should().NotBeOfType<RoundRobinGroup>();
+            group.Should().NotBeOfType<BracketGroup>();
+            group.Should().BeOfType<DualTournamentGroup>();
+        }
+
+        [Fact]
+        public void CannotAddGroupsToBracketRoundThatDoesNotMatchByType()
+        {
+            TournamentServiceContext services = GivenServices();
+            Round round = HomestoryCupSetup.Part10_AddBracketRound(services);
+            round.AddGroup();
+
+            BracketGroup group = round.Groups.First() as BracketGroup;
+
+            round.Groups.Should().HaveCount(1);
+            group.Should().NotBeOfType<RoundRobinGroup>();
+            group.Should().NotBeOfType<DualTournamentGroup>();
+            group.Should().BeOfType<BracketGroup>();
         }
 
         private TournamentServiceContext GivenServices()

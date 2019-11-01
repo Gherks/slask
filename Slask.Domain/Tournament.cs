@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Slask.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -39,18 +40,38 @@ namespace Slask.Domain
 
         public Round AddRoundRobinRound(string name, int bestOf, int advanceAmount)
         {
+            if (!BasicRoundValidation(name, bestOf, advanceAmount))
+            {
+                return null;
+            }
+
             Rounds.Add(Round.Create(name, RoundType.RoundRobin, bestOf, advanceAmount, this));
             return Rounds.Last();
         }
 
         public Round AddDualTournamentRound(string name, int bestOf)
         {
-            throw new NotImplementedException();
+            const int advanceAmount = 2;
+
+            if (!BasicRoundValidation(name, bestOf, advanceAmount))
+            {
+                return null;
+            }
+
+            Rounds.Add(Round.Create(name, RoundType.DualTournament, bestOf, advanceAmount, this));
+            return Rounds.Last();
         }
 
         public Round AddBracketRound(string name, int bestOf)
         {
-            Rounds.Add(Round.Create(name, RoundType.RoundRobin, bestOf, 1, this));
+            const int advanceAmount = 1;
+
+            if (!BasicRoundValidation(name, bestOf, advanceAmount))
+            {
+                return null;
+            }
+
+            Rounds.Add(Round.Create(name, RoundType.Bracket, bestOf, advanceAmount, this));
             return Rounds.Last();
         }
 
@@ -96,6 +117,15 @@ namespace Slask.Domain
         public Better GetBetterByName(string name)
         {
             return Betters.FirstOrDefault(better => better.User.Name.ToLower() == name.ToLower());
+        }
+
+        private bool BasicRoundValidation(string name, int bestOf, int advanceAmount)
+        {
+            bool nameIsNotEmpty = name != "";
+            bool bestOfIsNotEven = bestOf % 2 != 0;
+            bool advanceAmountIsGreaterThanZero = advanceAmount > 0;
+
+            return nameIsNotEmpty && bestOfIsNotEven && advanceAmountIsGreaterThanZero;
         }
     }
 }

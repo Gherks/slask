@@ -11,53 +11,52 @@ namespace Slask.UnitTests.DomainTests
         public void CanIncreaseAmountOfMatchesBasedOnParticipatingPlayers()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = services.HomestoryCup_04_AddGroupToRoundRobinRound();
+            RoundRobinGroup group = HomestoryCupSetup.Part04_AddedGroupToRoundRobinRound(services);
 
-            group.AddPlayerReference("Maru");
-            group.AddPlayerReference("Stork");
+            group.AddPlayerReference("Maru").Should().BeTrue();
+            group.AddPlayerReference("Stork").Should().BeTrue();
         }
 
         [Fact]
         public void CanClearRoundRobinGroup()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
 
             group.Clear();
 
             group.ParticipatingPlayers.Should().BeEmpty();
             group.Matches.Should().BeEmpty();
-            group.IsReady.Should().BeFalse();
         }
 
         [Fact]
         public void CanConstructRoundRobinMatchLayout()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = services.HomestoryCup_04_AddGroupToRoundRobinRound();
+            RoundRobinGroup group = HomestoryCupSetup.Part04_AddedGroupToRoundRobinRound(services);
 
-            group.AddPlayerReference("Maru");
+            group.AddPlayerReference("Maru").Should().BeTrue();
             RunTestsWithOnePlayer(group);
 
-            group.AddPlayerReference("Stork");
+            group.AddPlayerReference("Stork").Should().BeTrue();
             RunTestsWithTwoPlayers(group);
 
-            group.AddPlayerReference("Taeja");
+            group.AddPlayerReference("Taeja").Should().BeTrue();
             RunTestsWithThreePlayers(group);
 
-            group.AddPlayerReference("Rain");
+            group.AddPlayerReference("Rain").Should().BeTrue();
             RunTestsWithFourPlayers(group);
 
-            group.AddPlayerReference("Bomber");
+            group.AddPlayerReference("Bomber").Should().BeTrue();
             RunTestsWithFivePlayers(group);
 
-            group.AddPlayerReference("FanTaSy");
+            group.AddPlayerReference("FanTaSy").Should().BeTrue();
             RunTestsWithSixPlayers(group);
 
-            group.AddPlayerReference("Stephano");
+            group.AddPlayerReference("Stephano").Should().BeTrue();
             RunTestsWithSevenPlayers(group);
 
-            group.AddPlayerReference("Thorzain");
+            group.AddPlayerReference("Thorzain").Should().BeTrue();
             RunTestsWithEightPlayers(group);
         }
 
@@ -68,7 +67,7 @@ namespace Slask.UnitTests.DomainTests
 
         private void RunTestsWithTwoPlayers(RoundRobinGroup group)
         {
-            group.Matches.Count.Should().Be(1);
+            group.Matches.Should().HaveCount(1);
 
             group.Matches[0].Player1.Name.Should().Be("Maru");
             group.Matches[0].Player2.Name.Should().Be("Stork");
@@ -76,7 +75,7 @@ namespace Slask.UnitTests.DomainTests
 
         private void RunTestsWithThreePlayers(RoundRobinGroup group)
         {
-            group.Matches.Count.Should().Be(3);
+            group.Matches.Should().HaveCount(3);
 
             group.Matches[0].Player1.Name.Should().Be("Maru");
             group.Matches[0].Player2.Name.Should().Be("Taeja");
@@ -90,7 +89,7 @@ namespace Slask.UnitTests.DomainTests
 
         private void RunTestsWithFourPlayers(RoundRobinGroup group)
         {
-            group.Matches.Count.Should().Be(6);
+            group.Matches.Should().HaveCount(6);
 
             group.Matches[0].Player1.Name.Should().Be("Maru");
             group.Matches[0].Player2.Name.Should().Be("Taeja");
@@ -113,7 +112,7 @@ namespace Slask.UnitTests.DomainTests
 
         private void RunTestsWithFivePlayers(RoundRobinGroup group)
         {
-            group.Matches.Count.Should().Be(10);
+            group.Matches.Should().HaveCount(10);
 
             group.Matches[0].Player1.Name.Should().Be("Maru");
             group.Matches[0].Player2.Name.Should().Be("Rain");
@@ -148,7 +147,7 @@ namespace Slask.UnitTests.DomainTests
 
         private void RunTestsWithSixPlayers(RoundRobinGroup group)
         {
-            group.Matches.Count.Should().Be(15);
+            group.Matches.Should().HaveCount(15);
 
             group.Matches[0].Player1.Name.Should().Be("Maru");
             group.Matches[0].Player2.Name.Should().Be("Rain");
@@ -198,7 +197,7 @@ namespace Slask.UnitTests.DomainTests
 
         private void RunTestsWithSevenPlayers(RoundRobinGroup group)
         {
-            group.Matches.Count.Should().Be(21);
+            group.Matches.Should().HaveCount(21);
 
             group.Matches[0].Player1.Name.Should().Be("Maru");
             group.Matches[0].Player2.Name.Should().Be("Bomber");
@@ -266,7 +265,7 @@ namespace Slask.UnitTests.DomainTests
 
         private void RunTestsWithEightPlayers(RoundRobinGroup group)
         {
-            group.Matches.Count.Should().Be(28);
+            group.Matches.Should().HaveCount(28);
 
             group.Matches[0].Player1.Name.Should().Be("Maru");
             group.Matches[0].Player2.Name.Should().Be("Bomber");

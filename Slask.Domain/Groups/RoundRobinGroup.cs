@@ -25,20 +25,12 @@ namespace Slask.Domain
             return new RoundRobinGroup()
             {
                 Id = Guid.NewGuid(),
-                IsReady = false,
                 RoundId = round.Id,
                 Round = round
             };
         }
 
-        public override void Clear()
-        {
-            ParticipatingPlayers.Clear();
-            Matches.Clear();
-            IsReady = false;
-        }
-
-        protected override void UpdateMatchLayout()
+        protected override void OnParticipantAdded(PlayerReference playerReference)
         {
             int numMatches = CalculateMatchAmount();
 
@@ -81,14 +73,14 @@ namespace Slask.Domain
         /*
          * Excerpt from Wikipedia (https://en.wikipedia.org/wiki/Round-robin_tournament)
          * The circle method is the standard algorithm to create a schedule for a round-robin tournament. All competitors are assigned 
-         * to numbers, and then paired in the first round:
+         * a number, and then paired in the first round:
          * 
          * Even (first one stays, all else go around in a circle)
          * | 0 | 1 |      | 0 | 2 |      | 0 | 3 |
          * ---------  ->  ---------  ->  ---------
          * | 2 | 3 |      | 3 | 1 |      | 1 | 2 |
          * 
-         * Uneven (everyone goes around in a circle)
+         * Uneven (same as the Even-setup, except all competitors misses one round each)
          * | 0 | 1 |              | 0 | 3 |              | 0 | 4 |              | 0 | 2 |
          * --------- | 2 |   ->   --------- | 1 |   ->   --------- | 3 |   ->   --------- | 4 |
          * | 3 | 4 |              | 4 | 2 |              | 2 | 1 |              | 1 | 3 |

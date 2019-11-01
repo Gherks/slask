@@ -13,5 +13,10 @@ namespace Slask.TestCore
         {
             SlaskContext = slaskContext;
         }
+
+        public void SaveChanges()
+        {
+            SlaskContext.SaveChanges();
+        }
     }
 }

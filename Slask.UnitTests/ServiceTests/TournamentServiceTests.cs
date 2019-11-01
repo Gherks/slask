@@ -41,7 +41,7 @@ namespace Slask.UnitTests.ServiceTests
         public void CannotCreateTournamentWithNameAlreadyInUseNoMatterLetterCasing()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament firstTournament = services.HomestoryCup_01_CreateTournament();
+            Tournament firstTournament = HomestoryCupSetup.Part01_CreateTournament(services);
             Tournament secondTournament = services.TournamentService.CreateTournament(firstTournament.Name.ToUpper());
 
             secondTournament.Should().BeNull();
@@ -51,7 +51,7 @@ namespace Slask.UnitTests.ServiceTests
         public void CanRenameTournament()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.HomestoryCup_01_CreateTournament();
+            Tournament tournament = HomestoryCupSetup.Part01_CreateTournament(services);
 
             bool result = services.TournamentService.RenameTournament(tournament.Id, "BHA Open 2019");
 
@@ -63,7 +63,7 @@ namespace Slask.UnitTests.ServiceTests
         public void CannotRenameTournamentToEmptyName()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.HomestoryCup_01_CreateTournament();
+            Tournament tournament = HomestoryCupSetup.Part01_CreateTournament(services);
 
             bool result = services.TournamentService.RenameTournament(tournament.Id, "");
 
@@ -75,7 +75,7 @@ namespace Slask.UnitTests.ServiceTests
         public void CannotRenameTournamentToNameAlreadyInUseNoMatterLetterCasing()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament firstTournament = services.HomestoryCup_01_CreateTournament();
+            Tournament firstTournament = HomestoryCupSetup.Part01_CreateTournament(services);
             Tournament secondTournament = services.TournamentService.CreateTournament("BHA Open 2019");
 
             bool result = services.TournamentService.RenameTournament(secondTournament.Id, firstTournament.Name.ToUpper());
@@ -98,7 +98,7 @@ namespace Slask.UnitTests.ServiceTests
         public void CanGetTournamentById()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament createdTournament = services.HomestoryCup_01_CreateTournament();
+            Tournament createdTournament = HomestoryCupSetup.Part01_CreateTournament(services);
             Tournament fetchedTournament = services.TournamentService.GetTournamentById(createdTournament.Id);
 
             fetchedTournament.Should().NotBeNull();
@@ -109,7 +109,7 @@ namespace Slask.UnitTests.ServiceTests
         public void CanGetTournamentByName()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament createdTournament = services.HomestoryCup_01_CreateTournament();
+            Tournament createdTournament = HomestoryCupSetup.Part01_CreateTournament(services);
             Tournament fetchedTournament = services.TournamentService.GetTournamentByName(createdTournament.Name);
 
             fetchedTournament.Should().NotBeNull();
@@ -120,7 +120,7 @@ namespace Slask.UnitTests.ServiceTests
         public void CanAddBetterToTournamentWithUserService()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.HomestoryCup_02_BettersAddedToTournament();
+            Tournament tournament = HomestoryCupSetup.Part02_BettersAddedToTournament(services);
 
             tournament.Betters.First().Should().NotBeNull();
         }
@@ -129,7 +129,7 @@ namespace Slask.UnitTests.ServiceTests
         public void CanOnlyAddUserAsBetterOncePerTournament()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.HomestoryCup_02_BettersAddedToTournament();
+            Tournament tournament = HomestoryCupSetup.Part02_BettersAddedToTournament(services);
             Better better = tournament.AddBetter(services.UserService.GetUserByName(tournament.Betters.First().User.Name));
 
             better.Should().BeNull();
@@ -139,12 +139,12 @@ namespace Slask.UnitTests.ServiceTests
         public void CanGetAllBettersInTournamentByTournamentId()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.HomestoryCup_02_BettersAddedToTournament();
+            Tournament tournament = HomestoryCupSetup.Part02_BettersAddedToTournament(services);
 
             List<Better> betters = services.TournamentService.GetBettersByTournamentId(tournament.Id);
 
             betters.Should().NotBeNullOrEmpty();
-            betters.Count.Should().Be(3);
+            betters.Should().HaveCount(3);
             betters[0].User.Name.Should().Be("Stålberto");
             betters[1].User.Name.Should().Be("Bönis");
             betters[2].User.Name.Should().Be("Guggelito");
@@ -154,12 +154,12 @@ namespace Slask.UnitTests.ServiceTests
         public void CanGetAllBettersInTournamentByTournamentName()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = services.HomestoryCup_02_BettersAddedToTournament();
+            Tournament tournament = HomestoryCupSetup.Part02_BettersAddedToTournament(services);
 
             List<Better> betters = services.TournamentService.GetBettersByTournamentName(tournament.Name);
 
             betters.Should().NotBeNullOrEmpty();
-            betters.Count.Should().Be(3);
+            betters.Should().HaveCount(3);
             betters[0].User.Name.Should().Be("Stålberto");
             betters[1].User.Name.Should().Be("Bönis");
             betters[2].User.Name.Should().Be("Guggelito");
@@ -169,11 +169,11 @@ namespace Slask.UnitTests.ServiceTests
         public void PlayerReferencesAreAddedToTournamentWhenNewPlayersAreAddedTournament()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
             Tournament tournament = group.Round.Tournament;
 
             tournament.PlayerReferences.Should().NotBeNull();
-            tournament.PlayerReferences.Count.Should().Be(8);
+            tournament.PlayerReferences.Should().HaveCount(8);
 
             tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Maru").Should().NotBeNull();
             tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stork").Should().NotBeNull();
@@ -189,13 +189,13 @@ namespace Slask.UnitTests.ServiceTests
         public void CanGetAllPlayerReferencesInTournamentByTournamentId()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
             Tournament tournament = group.Round.Tournament;
 
             List<PlayerReference> playerReferences = services.TournamentService.GetPlayerReferencesByTournamentId(tournament.Id);
 
             playerReferences.Should().NotBeNullOrEmpty();
-            playerReferences.Count.Should().Be(8);
+            playerReferences.Should().HaveCount(8);
 
             playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Maru").Should().NotBeNull();
             playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stork").Should().NotBeNull();
@@ -211,13 +211,13 @@ namespace Slask.UnitTests.ServiceTests
         public void CanGetAllPlayerReferencesInTournamentByTournamentName()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = services.HomestoryCup_05_AddedPlayersToRoundRobinGroup();
+            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
             Tournament tournament = group.Round.Tournament;
 
             List<PlayerReference> playerReferences = services.TournamentService.GetPlayerReferencesByTournamentName(tournament.Name);
 
             playerReferences.Should().NotBeNullOrEmpty();
-            playerReferences.Count.Should().Be(8);
+            playerReferences.Should().HaveCount(8);
 
             playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Maru").Should().NotBeNull();
             playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stork").Should().NotBeNull();

@@ -2,8 +2,8 @@
 
 namespace Slask.Common
 {
-    public class DateTimeHelper
-    {
-        public static DateTime Now => DateTimeProvider.Current.Now;
-    }
+    //public class DateTimeHelpersasdasdasd
+    //{
+    //    public static DateTime Now => DateTimeProvider.Current.Now;
+    //}
 }

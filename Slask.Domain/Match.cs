@@ -4,13 +4,6 @@ using System.Collections.Generic;
 
 namespace Slask.Domain
 {
-    public enum MatchState
-    {
-        HasNotBegun,
-        IsBeingPlayed,
-        IsFinished
-    }
-
     public class Match
     {
         private Match()
@@ -41,23 +34,36 @@ namespace Slask.Domain
             Match match = new Match()
             {
                 Id = Guid.NewGuid(),
-                StartDateTime = DateTimeHelper.Now.AddYears(1),
                 GroupId = group.Id,
-                Group = group
+                Group = group,
+
             };
+
+            if (group.Matches.Count == 0)
+            {
+                match.StartDateTime = SystemTime.Now.AddDays(7);
+            }
+            else
+            {
+                Match previousMatch = group.Matches[group.Matches.Count - 1];
+                match.StartDateTime = previousMatch.StartDateTime.AddHours(1);
+            }
 
             return match;
         }
 
+        public bool IsReady()
+        {
+            return Player1.PlayerReference != null && Player2.PlayerReference != null;
+        }
+
         public void AssignPlayerReferences(PlayerReference player1Reference, PlayerReference player2Reference)
         {
-            if(player1Reference == null ||player2Reference == null)
+            if (player1Reference == null || player2Reference == null || player1Reference.Id != player2Reference.Id)
             {
-                return;
+                Player1.SetPlayerReference(player1Reference);
+                Player2.SetPlayerReference(player2Reference);
             }
-
-            Player1.PlayerReference = player1Reference;
-            Player2.PlayerReference = player2Reference;
         }
 
         public Player FindPlayer(Guid id)
@@ -92,7 +98,7 @@ namespace Slask.Domain
 
         public bool SetStartDateTime(DateTime dateTime)
         {
-            if (DateTimeProvider.Current.Now > dateTime)
+            if (SystemTime.Now > dateTime)
             {
                 // LOGG
                 return false;
@@ -102,14 +108,14 @@ namespace Slask.Domain
             return true;
         }
 
-        public MatchState GetState()
+        public PlayState GetPlayState()
         {
-            if (StartDateTime > DateTimeHelper.Now)
+            if (StartDateTime > SystemTime.Now)
             {
-                return MatchState.HasNotBegun;
+                return PlayState.NotBegun;
             }
 
-            return AnyPlayerHasWon() ? MatchState.IsFinished : MatchState.IsBeingPlayed;
+            return AnyPlayerHasWon() ? PlayState.IsFinished : PlayState.IsPlaying;
         }
 
         public Player GetWinningPlayer()
@@ -158,7 +164,21 @@ namespace Slask.Domain
 
         private bool AnyPlayerHasWon()
         {
-            return Player1.Score >= Group.Round.BestOf || Player2.Score >= Group.Round.BestOf;
+            int matchPointBarrier = Group.Round.BestOf - (Group.Round.BestOf / 2);
+
+            return Player1.Score >= matchPointBarrier || Player2.Score >= matchPointBarrier;
+        }
+
+        private DateTime GetInitialStartDateTime()
+        {
+            if(Group.Matches.Count == 0)
+            {
+                return SystemTime.Now.AddYears(1);
+            }
+
+            Match previousMatch = Group.Matches[Group.Matches.Count - 1];
+
+            return previousMatch.StartDateTime.AddHours(1);
         }
     }
 }

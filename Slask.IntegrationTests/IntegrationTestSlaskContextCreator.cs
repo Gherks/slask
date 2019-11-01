@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Slask.Persistence;
 using Slask.TestCore;
-using System.Data.SqlClient;
 
 namespace Slask.IntegrationTests
 {
