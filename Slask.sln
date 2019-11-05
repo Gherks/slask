@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.API", "Slask.API\Slask.API.csproj", "{7775B8D5-3876-4658-AF85-8B56F67BE02E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Web", "Slask.Web\Slask.Web.csproj", "{3E36CADB-4117-4330-ABE6-46F529462405}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Domain", "Slask.Domain\Slask.Domain.csproj", "{1539F032-4F1D-4B63-B5BA-036B488808CC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Application", "Slask.Application\Slask.Application.csproj", "{75AA3CE2-82F5-4FD3-A259-399BE230E57E}"
@@ -35,10 +33,6 @@ Global
 		{7775B8D5-3876-4658-AF85-8B56F67BE02E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7775B8D5-3876-4658-AF85-8B56F67BE02E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7775B8D5-3876-4658-AF85-8B56F67BE02E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3E36CADB-4117-4330-ABE6-46F529462405}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E36CADB-4117-4330-ABE6-46F529462405}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E36CADB-4117-4330-ABE6-46F529462405}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E36CADB-4117-4330-ABE6-46F529462405}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1539F032-4F1D-4B63-B5BA-036B488808CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1539F032-4F1D-4B63-B5BA-036B488808CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1539F032-4F1D-4B63-B5BA-036B488808CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
