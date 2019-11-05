@@ -6,7 +6,7 @@ namespace Slask.Common
 {
     public class SystemTime
     {
-        internal static ConcurrentDictionary<int, DateTime?> dateTimes;
+        internal static ConcurrentDictionary<int, DateTime?> dateTimes = new ConcurrentDictionary<int, DateTime?>();
 
         public static DateTime Now => dateTimes[Thread.CurrentThread.ManagedThreadId] ?? DateTime.Now;
 
