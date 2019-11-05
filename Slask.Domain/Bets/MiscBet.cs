@@ -1,8 +1,26 @@
-﻿namespace Slask.Domain.Bets
+﻿using System;
+
+namespace Slask.Domain.Bets
 {
-    public class MiscBet
+    public class MiscBet : BetBase
     {
-        public int Id { get; set; }
-        public Player Player { get; set; }
+        private MiscBet()
+        {
+        }
+
+        public Player Player { get; private set; }
+
+        public static MiscBet Create(Player player)
+        {
+            if(player == null)
+            {
+                return null;
+            }
+
+            return new MiscBet
+            {
+                Player = player
+            };
+        }
     }
 }

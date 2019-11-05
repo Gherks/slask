@@ -1,7 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Groups\Group.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Groups\DualTournamentGroup .cs~RF1426d531.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Slask.Common\Slask.Common.csproj" />
+  </ItemGroup>
 
 </Project>
