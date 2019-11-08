@@ -7,7 +7,7 @@ using TechTalk.SpecFlow;
 
 namespace Slask.SpecFlow.IntegrationTests.ServiceTests
 {
-    [Binding]
+    [Binding, Scope(Feature = "UserService")]
     public class UserServiceSteps : UserServiceStepDefinitions
     {
 
