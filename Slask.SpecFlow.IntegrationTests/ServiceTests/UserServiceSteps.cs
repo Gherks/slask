@@ -8,12 +8,18 @@ using TechTalk.SpecFlow;
 namespace Slask.SpecFlow.IntegrationTests.ServiceTests
 {
     [Binding]
-    public class UserServiceSteps
+    public class UserServiceSteps : UserServiceStepDefinitions
+    {
+
+    }
+
+    public class UserServiceStepDefinitions
     {
         private UserService userService;
         private User user;
         private Guid userId;
-        public UserServiceSteps()
+
+        public UserServiceStepDefinitions()
         {
             userService = null;
             user = null;
