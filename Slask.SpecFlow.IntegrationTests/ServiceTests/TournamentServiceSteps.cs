@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Slask.Domain;
 using Slask.Persistence.Services;
 using Slask.UnitTests;
@@ -7,7 +7,7 @@ using TechTalk.SpecFlow;
 namespace Slask.SpecFlow.IntegrationTests.ServiceTests
 {
     [Binding, Scope(Feature = "TournamentService")]
-    public class TournamentServiceSteps
+    public class TournamentServiceSteps : UserServiceStepDefinitions
     {
         private TournamentService tournamentService;
         private Tournament tournament;
