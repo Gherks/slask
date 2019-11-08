@@ -3,10 +3,6 @@
 
 @TournamentServiceTag
 Scenario: Can create tournament
-	#Given I have entered 50 into the calculator
-	#And I have entered 70 into the calculator
-	#When I press add
-	#Then the result should be 120 on the screen
 	Given a TournamentService has been created
 	And a tournament named "GSL 2019" has been created
 	Then tournament should be valid with name "GSL 2019"

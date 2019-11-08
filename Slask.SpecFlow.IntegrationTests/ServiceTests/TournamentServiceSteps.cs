@@ -7,7 +7,7 @@ using TechTalk.SpecFlow;
 namespace Slask.SpecFlow.IntegrationTests.ServiceTests
 {
     [Binding]
-    public class TournamentServiceSteps : UserServiceSteps
+    public class TournamentServiceSteps
     {
         private TournamentService tournamentService;
         private Tournament tournament;
