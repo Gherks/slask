@@ -49,16 +49,37 @@ Scenario: Can add user to tournament with user service
 	Given a user named "Stålberto" has been created
 		And a tournament named "GSL 2019" has been created
 	When user "Stålberto" is added to created tournament "GSL 2019"
-	Then created tournament 0 better 0 should be valid with name: "Stålberto"
+	Then created tournament 0, better 0, should be valid with name: "Stålberto"
 
-#Scenario: Can only add user to tournament once
-#
+Scenario: Can only add user to tournament once
+	Given users "Stålberto, Bönis, Guggelito" has been added to tournament with name: "GSL 2019"
+	When user "Stålberto" is added to created tournament "GSL 2019"
+	Then created tournament 0 should have 3 betters
+
 #Scenario: Can fetch all betters in tournament by tournament id
-#
+#	Given users "Stålberto, Bönis, Guggelito" has been added to tournament with name: "GSL 2019"
+#	When fetching betters from created tournament 0 by tournament id
+#	Then fetched tournament 0, better 0, should be valid with name: "Stålberto"
+#		And fetched tournament 0, better 1, should be valid with name: "Bönis"
+#		And fetched tournament 0, better 2, should be valid with name: "Guggelito"
+
 #Scenario: Can fetch all betters in tournament by tournament name
-#
+#	Given a tournament named "GSL 2019" with betters "Stålberto, Bönis, Guggelito" has been created
+#	When fetching betters from tournament by tournament name: "GSL 2019"
+#	Then fetched tournament 0, better 0, should be valid with name: "Stålberto"
+#		#And fetched tournament 0, better 1, should be valid with name: "Bönis"
+#		#And fetched tournament 0, better 2, should be valid with name: "Guggelito"
+
 #Scenario: Player references are added to tournament when new players are added to tournament
-#
+#	Given a user named "Stålberto" has been created
+#		And a user named "Bönis" has been created
+#		And a user named "Guggelito" has been created
+#		And a tournament named "GSL 2019" has been created
+#		And user "Stålberto" is added to created tournament "GSL 2019"
+#		And user "Bönis" is added to created tournament "GSL 2019"
+#		And user "Guggelito" is added to created tournament "GSL 2019"
+#	When fetching betters from tournament by tournament name: "GSL 2019"
+
 #Scenario: Can fetch all player references in tournament by tournament id
 #
 #Scenario: Can fetch all player references in tournament by tournament name
