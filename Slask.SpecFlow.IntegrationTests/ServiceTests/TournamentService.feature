@@ -56,30 +56,48 @@ Scenario: Can only add user to tournament once
 	When user "Stålberto" is added to created tournament "GSL 2019"
 	Then created tournament 0 should have 3 betters
 
-#Scenario: Can fetch all betters in tournament by tournament id
-#	Given users "Stålberto, Bönis, Guggelito" has been added to tournament with name: "GSL 2019"
-#	When fetching betters from created tournament 0 by tournament id
-#	Then fetched tournament 0, better 0, should be valid with name: "Stålberto"
-#		And fetched tournament 0, better 1, should be valid with name: "Bönis"
-#		And fetched tournament 0, better 2, should be valid with name: "Guggelito"
+Scenario: Can fetch all betters in tournament by tournament id
+	Given users "Stålberto, Bönis, Guggelito" has been added to tournament with name: "GSL 2019"
+	When fetching betters from created tournament 0 by tournament id
+	Then created tournament 0, better 0, should be valid with name: "Stålberto"
+		And created tournament 0, better 1, should be valid with name: "Bönis"
+		And created tournament 0, better 2, should be valid with name: "Guggelito"
 
-#Scenario: Can fetch all betters in tournament by tournament name
-#	Given a tournament named "GSL 2019" with betters "Stålberto, Bönis, Guggelito" has been created
-#	When fetching betters from tournament by tournament name: "GSL 2019"
-#	Then fetched tournament 0, better 0, should be valid with name: "Stålberto"
-#		#And fetched tournament 0, better 1, should be valid with name: "Bönis"
-#		#And fetched tournament 0, better 2, should be valid with name: "Guggelito"
+Scenario: Can fetch all betters in tournament by tournament name
+	Given users "Stålberto, Bönis, Guggelito" has been added to tournament with name: "GSL 2019"
+	When fetching betters from tournament by tournament name: "GSL 2019"
+	Then created tournament 0, better 0, should be valid with name: "Stålberto"
+		And created tournament 0, better 1, should be valid with name: "Bönis"
+		And created tournament 0, better 2, should be valid with name: "Guggelito"
 
+
+
+
+#WHEN a bracket round has been added to tournament: "GSL 2019"
+#WHEN a dual tournament round has been added to tournament: "GSL 2019"
+#WHEN a round robin round has been added to tournament: "GSL 2019"
+#WHEN adding 4 groups to round 0 in created tournament 0
+#WHEN adding players "Maru, Stork, Taeja, Rain" to group 0, in round 0, in created tournament 0
+#
+##Round WhenAddedBracketRoundToTournament(Tournament tournament, string name, int bestOf)
+##Round WhenAddedDualTournamentRoundToTournament(Tournament tournament, string name, int bestOf)
+##Round WhenAddedRoundRobinRoundToTournament(Tournament tournament, string name, int bestOf, int advanceAmount)
+##GroupBase WhenAddedGroupToRound(Round round)
+##void WhenAddedPlayerReferenceToGroup(GroupBase group, string name)
+#
 #Scenario: Player references are added to tournament when new players are added to tournament
-#	Given a user named "Stålberto" has been created
-#		And a user named "Bönis" has been created
-#		And a user named "Guggelito" has been created
-#		And a tournament named "GSL 2019" has been created
-#		And user "Stålberto" is added to created tournament "GSL 2019"
-#		And user "Bönis" is added to created tournament "GSL 2019"
-#		And user "Guggelito" is added to created tournament "GSL 2019"
-#	When fetching betters from tournament by tournament name: "GSL 2019"
-
+#	Given a tournament named "GSL 2019" has been created
+#	When added players "Maru, Stork, Taeja, Rain" to tournament with name "GSL 2019"
+#	Then created tournament 0 should have 4 player references with names: "Maru, Stork, Taeja, Rain"
+#
 #Scenario: Can fetch all player references in tournament by tournament id
+#	Given a tournament named "GSL 2019" has been created
+#		And added players "Maru, Stork, Taeja, Rain" to tournament with name "GSL 2019"
+#	When fetching player references from created tournament 0 by tournament id
+#	Then created tournament 0 should have 4 player references with names: "Maru, Stork, Taeja, Rain"
 #
 #Scenario: Can fetch all player references in tournament by tournament name
+#	Given a tournament named "GSL 2019" has been created
+#		And added players "Maru, Stork, Taeja, Rain" to tournament with name "GSL 2019"
+#	When fetching player references from tournament by tournament name: "GSL 2019"
+#	Then created tournament 0 should have 4 player references with names: "Maru, Stork, Taeja, Rain"

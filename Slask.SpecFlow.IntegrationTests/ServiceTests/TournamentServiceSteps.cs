@@ -42,7 +42,6 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
         public void GivenATournamentNamedWithBettersHasBeenCreated(string commaSeparatedUserNames, string tournamentName)
         {
             List<string> userNames = StringToStringListTransform(commaSeparatedUserNames, ",");
-
             foreach (string userName in userNames)
             {
                 createdUsers.Add(userService.CreateUser(userName));
@@ -158,6 +157,20 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
         {
             Tournament tournament = createdTournaments[tournamentIndex];
             tournament.Betters.Should().HaveCount(betterAmount);
+        }
+
+        [Then(@"created tournament (.*) should have (.*) player references with names: ""(.*)""")]
+        public void ThenTournamentShouldHavePlayerReferencesWithNames(int tournamentIndex, int playerAmount, string commaSeparetedPlayerNames)
+        {
+            Tournament tournament = createdTournaments[tournamentIndex];
+            tournament.PlayerReferences.Should().NotBeNull();
+            tournament.PlayerReferences.Should().HaveCount(playerAmount);
+
+            List<string> playerNames = StringToStringListTransform(commaSeparetedPlayerNames, ",");
+            foreach (string playerName in playerNames)
+            {
+                tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+            }
         }
 
         protected void CheckTournamentValidity(Tournament tournament, string correctName)
