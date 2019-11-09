@@ -1,7 +1,4 @@
-﻿using Moq;
-using Slask.Common;
-using Slask.Persistence;
-using System;
+﻿using Slask.Persistence;
 
 namespace Slask.TestCore
 {
