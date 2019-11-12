@@ -26,7 +26,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanClearRoundRobinGroup()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
 
             group.Clear();
 

@@ -14,7 +14,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanCreateBetter()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = HomestoryCupSetup.Part02_BettersAddedToTournament(services);
+            Tournament tournament = HomestoryCupSetup.Part02BettersAddedToTournament(services);
 
             Better better = tournament.Betters.First();
 
@@ -29,7 +29,7 @@ namespace Slask.UnitTests.DomainTests
         public void ReturnNullIfMissingUserWhenCreatingBetter()
         {
             TournamentServiceContext services = GivenServices();
-            Tournament tournament = HomestoryCupSetup.Part01_CreateTournament(services);
+            Tournament tournament = HomestoryCupSetup.Part01CreateTournament(services);
 
             Better better = Better.Create(null, tournament);
 
@@ -40,7 +40,7 @@ namespace Slask.UnitTests.DomainTests
         public void ReturnNullIfMissingTournamentWhenCreatingBetter()
         {
             TournamentServiceContext services = GivenServices();
-            HomestoryCupSetup.Part01_CreateTournament(services);
+            HomestoryCupSetup.Part01CreateTournament(services);
             services.WhenCreatedUsers();
 
             User user = services.UserService.GetUserByName("Stålberto");
@@ -53,7 +53,7 @@ namespace Slask.UnitTests.DomainTests
         public void BetterCanPlaceMatchBet()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part06_StartDateTimeSetToMatchesInRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part06StartDateTimeSetToMatchesInRoundRobinGroup(services);
 
             Tournament tournament = group.Round.Tournament;
             Better better = tournament.Betters.First();
@@ -73,7 +73,7 @@ namespace Slask.UnitTests.DomainTests
         public void BetterCannotPlaceAMatchBetWithoutMatch()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part06_StartDateTimeSetToMatchesInRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part06StartDateTimeSetToMatchesInRoundRobinGroup(services);
 
             Tournament tournament = group.Round.Tournament;
             Better better = tournament.Betters.First();
@@ -89,7 +89,7 @@ namespace Slask.UnitTests.DomainTests
         public void BetterCannotPlaceAMatchBetWithoutPlayer()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part06_StartDateTimeSetToMatchesInRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part06StartDateTimeSetToMatchesInRoundRobinGroup(services);
 
             Tournament tournament = group.Round.Tournament;
             Better better = tournament.Betters.First();

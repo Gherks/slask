@@ -11,7 +11,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanIncreaseAmountOfMatchesBasedOnParticipatingPlayers()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part04_AddedGroupToRoundRobinRound(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part04AddedGroupToRoundRobinRound(services);
 
             group.AddPlayerReference("Maru").Should().BeTrue();
             group.AddPlayerReference("Stork").Should().BeTrue();
@@ -21,7 +21,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanClearRoundRobinGroup()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
 
             group.Clear();
 
@@ -33,7 +33,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanConstructRoundRobinMatchLayout()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part04_AddedGroupToRoundRobinRound(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part04AddedGroupToRoundRobinRound(services);
 
             group.AddPlayerReference("Maru").Should().BeTrue();
             RunTestsWithOnePlayer(group);

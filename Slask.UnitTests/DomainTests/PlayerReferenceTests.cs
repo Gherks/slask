@@ -12,7 +12,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanCreatePlayerReference()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
             PlayerReference playerReference = group.Matches.First().Player1.PlayerReference;
 
             playerReference.Should().NotBeNull();
@@ -26,7 +26,7 @@ namespace Slask.UnitTests.DomainTests
         public void PlayerReferenceCanBeRenamed()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
             PlayerReference playerReference = group.Matches.First().Player1.PlayerReference;
 
             playerReference.RenameTo("Idra");
@@ -38,7 +38,7 @@ namespace Slask.UnitTests.DomainTests
         public void PlayerReferenceCannotBeRenamedToSameAsOtherPlayerReferenceNoMatterLetterCasing()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
             Match match = group.Matches.First();
 
             match.Player1.PlayerReference.RenameTo(match.Player2.Name.ToUpper());
@@ -50,7 +50,7 @@ namespace Slask.UnitTests.DomainTests
         public void PlayerReferenceCannotBeRenamedToEmptyName()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
             PlayerReference playerReference = group.Matches.First().Player1.PlayerReference;
 
             playerReference.RenameTo("");

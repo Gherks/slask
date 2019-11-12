@@ -21,7 +21,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanCreateRoundRobinGroup()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part04_AddedGroupToRoundRobinRound(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part04AddedGroupToRoundRobinRound(services);
 
             group.Should().NotBeNull();
             group.Id.Should().NotBeEmpty();
@@ -35,7 +35,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanCreateDualTournamentGroup()
         {
             TournamentServiceContext services = GivenServices();
-            List<DualTournamentGroup> groups = BHAOpenSetup.Part04_AddGroupsToDualTournamentRound(services);
+            List<DualTournamentGroup> groups = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services);
 
             foreach (DualTournamentGroup group in groups)
             {
@@ -51,7 +51,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanCreateBracketGroup()
         {
             TournamentServiceContext services = GivenServices();
-            BracketGroup group = HomestoryCupSetup.Part11_AddGroupToBracketRound(services);
+            BracketGroup group = HomestoryCupSetup.Part11AddGroupToBracketRound(services);
 
             group.Should().NotBeNull();
             group.Id.Should().NotBeEmpty();
@@ -89,7 +89,7 @@ namespace Slask.UnitTests.DomainTests
         public void CannotAddNewPlayerToGroupAfterFirstMatchHasStarted()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part08_CompleteFirstMatchInRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part08CompleteFirstMatchInRoundRobinGroup(services);
 
             SystemTimeMocker.Set(DateTime.Now.AddSeconds(1));
 
@@ -106,7 +106,7 @@ namespace Slask.UnitTests.DomainTests
         public void CannotIncreaseScoreBeforeMatchHasStartedInRoundRobinGroup()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part07_BetsPlacedOnMatchesInRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part07BetsPlacedOnMatchesInRoundRobinGroup(services);
             Domain.Match match = group.Matches.First();
 
             match.Player1.IncreaseScore(1);
@@ -120,7 +120,7 @@ namespace Slask.UnitTests.DomainTests
         public void CannotIncreaseScoreBeforeMatchHasStartedInDualTournamentGroup()
         {
             TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part07_BetsPlacedOnMatchesInDualTournamentGroups(services).First();
+            DualTournamentGroup group = BHAOpenSetup.Part07BetsPlacedOnMatchesInDualTournamentGroups(services).First();
             Domain.Match match = group.Matches.First();
 
             match.Player1.IncreaseScore(1);
@@ -134,7 +134,7 @@ namespace Slask.UnitTests.DomainTests
         public void CannotIncreaseScoreBeforeMatchHasStartedInBracketGroup()
         {
             TournamentServiceContext services = GivenServices();
-            BracketGroup group = HomestoryCupSetup.Part14_BetsPlacedOnMatchesInBracketGroup(services);
+            BracketGroup group = HomestoryCupSetup.Part14BetsPlacedOnMatchesInBracketGroup(services);
             Domain.Match match = group.Matches.First();
 
             match.Player1.IncreaseScore(1);
@@ -148,7 +148,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanClearRoundRobinGroup()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
 
             group.Clear();
 
@@ -160,7 +160,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanClearDualTournamentGroup()
         {
             TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part05_AddedPlayersToDualTournamentGroups(services).First();
+            DualTournamentGroup group = BHAOpenSetup.Part05AddedPlayersToDualTournamentGroups(services).First();
 
             group.Clear();
 
@@ -180,7 +180,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanClearBracketGroup()
         {
             TournamentServiceContext services = GivenServices();
-            BracketGroup group = HomestoryCupSetup.Part12_AddWinningPlayersToBracketGroup(services);
+            BracketGroup group = HomestoryCupSetup.Part12AddWinningPlayersToBracketGroup(services);
 
             group.Clear();
 
@@ -201,7 +201,7 @@ namespace Slask.UnitTests.DomainTests
         public void FetchingAdvancingPlayersInRoundRobinGroupReturnsAtLeastNumberOfPlayersSetByParentRound()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part09_CompleteAllMatchesInRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part09CompleteAllMatchesInRoundRobinGroup(services);
 
             List<PlayerReference> topPlayers = group.GetAdvancingPlayers();
 
@@ -222,7 +222,7 @@ namespace Slask.UnitTests.DomainTests
         public void FetchingAdvancingPlayersInDualTournamentGroupOnlyReturnsTopTwoPlayers()
         {
             TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part09_CompleteAllMatchesInDualTournamentGroups(services).First();
+            DualTournamentGroup group = BHAOpenSetup.Part09CompleteAllMatchesInDualTournamentGroups(services).First();
 
             List<PlayerReference> topPlayers = group.GetAdvancingPlayers();
 
@@ -235,7 +235,7 @@ namespace Slask.UnitTests.DomainTests
         public void FetchingAdvancingPlayersInBracketGroupOnlyReturnsBracketWinner()
         {
             TournamentServiceContext services = GivenServices();
-            BracketGroup group = HomestoryCupSetup.Part16_CompleteAllMatchesInBracketGroup(services);
+            BracketGroup group = HomestoryCupSetup.Part16CompleteAllMatchesInBracketGroup(services);
             //services.SetMockedTime();// DateTimeMockHelper.SetTime(group.Matches.Last().StartDateTime.AddSeconds(1));
 
             List<PlayerReference> topPlayers = group.GetAdvancingPlayers();
@@ -248,7 +248,7 @@ namespace Slask.UnitTests.DomainTests
         public void CannotFetchAdvancingPlayersBeforeGroupIsPlayedOut()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part08_CompleteFirstMatchInRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part08CompleteFirstMatchInRoundRobinGroup(services);
 
             List<PlayerReference> topPlayers = group.GetAdvancingPlayers();
 

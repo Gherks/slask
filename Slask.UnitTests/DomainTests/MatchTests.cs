@@ -17,7 +17,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanCreateMatch()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
 
             group.Matches.Should().HaveCount(28);
 
@@ -36,7 +36,7 @@ namespace Slask.UnitTests.DomainTests
         public void MatchMustContainDifferentPlayers()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
 
             foreach (Match match in group.Matches)
             {
@@ -48,7 +48,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanAssignPlayerReferenceToPlayersInMatch()
         {
             TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part04_AddGroupsToDualTournamentRound(services).First();
+            DualTournamentGroup group = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services).First();
             Match match = group.Matches.First();
 
             PlayerReference maruPlayerReference = PlayerReference.Create("Maru", group.Round.Tournament);
@@ -64,7 +64,7 @@ namespace Slask.UnitTests.DomainTests
         public void CannotAssignSamePlayerReferenceToBothPlayersInMatch()
         {
             TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part04_AddGroupsToDualTournamentRound(services).First();
+            DualTournamentGroup group = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services).First();
             Match match = group.Matches.First();
 
             PlayerReference playerReference = PlayerReference.Create("Maru", group.Round.Tournament);
@@ -79,7 +79,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanAssignNullPlayerReferenceToEitherMatchPlayerInMatch()
         {
             TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part04_AddGroupsToDualTournamentRound(services).First();
+            DualTournamentGroup group = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services).First();
             Match match = group.Matches.First();
 
             PlayerReference maruPlayerReference = PlayerReference.Create("Maru", group.Round.Tournament);
@@ -102,7 +102,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanAssignNullPlayerReferenceToBothPlayersInMatch()
         {
             TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part04_AddGroupsToDualTournamentRound(services).First();
+            DualTournamentGroup group = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services).First();
             Match match = group.Matches.First();
 
             PlayerReference maruPlayerReference = PlayerReference.Create("Maru", group.Round.Tournament);
@@ -119,7 +119,7 @@ namespace Slask.UnitTests.DomainTests
         public void MatchIsReadyWhenPlayerReferencesHasBeenAssignedToPlayers()
         {
             TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part05_AddedPlayersToDualTournamentGroups(services).First();
+            DualTournamentGroup group = BHAOpenSetup.Part05AddedPlayersToDualTournamentGroups(services).First();
 
             group.Matches[0].IsReady().Should().BeTrue();
             group.Matches[0].Player1.PlayerReference.Should().NotBeNull();
@@ -146,7 +146,7 @@ namespace Slask.UnitTests.DomainTests
         public void MatchIsNotReadyWhenNoPlayerReferenceHasBeenAssignedToAnyPlayer()
         {
             TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part04_AddGroupsToDualTournamentRound(services).First();
+            DualTournamentGroup group = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services).First();
 
             foreach (Domain.Match match in group.Matches)
             {
@@ -160,7 +160,7 @@ namespace Slask.UnitTests.DomainTests
         public void MatchIsNotReadyWhenOnlyOnePlayerHasBeenAssignedAPlayerReference()
         {
             TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part04_AddGroupsToDualTournamentRound(services).First();
+            DualTournamentGroup group = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services).First();
 
             group.AddPlayerReference("Maru").Should().BeTrue();
 
@@ -173,7 +173,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanFindPlayerInMatchByPlayerName()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
             Match match = group.Matches.First();
 
             Player foundPlayer = match.FindPlayer(match.Player1.Name);
@@ -187,7 +187,7 @@ namespace Slask.UnitTests.DomainTests
         public void ReturnsNullWhenLookingForNonExistingPlayerInMatchByPlayerName()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
             Match match = group.Matches.First();
 
             Player foundPlayer = match.FindPlayer("non-existing-player");
@@ -199,7 +199,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanFindPlayerInMatchByPlayerId()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
             Match match = group.Matches.First();
 
             Player foundPlayer = match.FindPlayer(match.Player1.Id);
@@ -213,7 +213,7 @@ namespace Slask.UnitTests.DomainTests
         public void ReturnsNullWhenLookingForNonExistingPlayerInMatchByPlayerId()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
             Match match = group.Matches.First();
 
             Player foundPlayer = match.FindPlayer(Guid.NewGuid());
@@ -225,7 +225,7 @@ namespace Slask.UnitTests.DomainTests
         public void MatchStartDateTimeCannotBeChangedToSometimeInThePast()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
             Match match = group.Matches.First();
             DateTime initialDateTime = match.StartDateTime;
 

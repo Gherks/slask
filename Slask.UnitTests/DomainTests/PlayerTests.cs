@@ -62,7 +62,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanAssignPlayerReference()
         {
             TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part04_AddGroupsToDualTournamentRound(services).First();
+            DualTournamentGroup group = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services).First();
             Player player = group.Matches.First().Player1;
 
             PlayerReference playerReference = PlayerReference.Create("Maru", group.Round.Tournament);
@@ -75,7 +75,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanChangePlayerReferenceToAnotherPlayerReference()
         {
             TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part04_AddGroupsToDualTournamentRound(services).First();
+            DualTournamentGroup group = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services).First();
             Player player = group.Matches.First().Player1;
 
             PlayerReference maruPlayerReference = PlayerReference.Create("Maru", group.Round.Tournament);
@@ -90,7 +90,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanSetExistingPlayerReferenceToNull()
         {
             TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part04_AddGroupsToDualTournamentRound(services).First();
+            DualTournamentGroup group = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services).First();
             Player player = group.Matches.First().Player1;
 
             PlayerReference playerReference = PlayerReference.Create("Maru", group.Round.Tournament);
@@ -129,7 +129,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanIncreasePlayerScoreByTwo()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
             Match match = group.Matches.First();
 
             match.Player1.IncreaseScore(2);
@@ -141,7 +141,7 @@ namespace Slask.UnitTests.DomainTests
         public void CanDecreasePlayerScoreByTwo()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
             Match match = group.Matches.First();
 
             match.Player1.IncreaseScore(2);
@@ -166,7 +166,7 @@ namespace Slask.UnitTests.DomainTests
         public void CannotDecreasePlayerScoreBelowZero()
         {
             TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05_AddedPlayersToRoundRobinGroup(services);
+            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
             Match match = group.Matches.First();
 
             match.Player1.DecreaseScore(1);
