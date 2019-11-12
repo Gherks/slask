@@ -38,40 +38,14 @@ namespace Slask.Domain
             Name = name;
         }
 
-        public Round AddRoundRobinRound(string name, int bestOf, int advanceAmount)
+        public Round AddRound(RoundType type, string name, int bestOf, int advanceAmount = 1)
         {
             if (!BasicRoundValidation(name, bestOf, advanceAmount))
             {
                 return null;
             }
 
-            Rounds.Add(Round.Create(name, RoundType.RoundRobin, bestOf, advanceAmount, this));
-            return Rounds.Last();
-        }
-
-        public Round AddDualTournamentRound(string name, int bestOf)
-        {
-            const int advanceAmount = 2;
-
-            if (!BasicRoundValidation(name, bestOf, advanceAmount))
-            {
-                return null;
-            }
-
-            Rounds.Add(Round.Create(name, RoundType.DualTournament, bestOf, advanceAmount, this));
-            return Rounds.Last();
-        }
-
-        public Round AddBracketRound(string name, int bestOf)
-        {
-            const int advanceAmount = 1;
-
-            if (!BasicRoundValidation(name, bestOf, advanceAmount))
-            {
-                return null;
-            }
-
-            Rounds.Add(Round.Create(name, RoundType.Bracket, bestOf, advanceAmount, this));
+            Rounds.Add(Round.Create(name, type, bestOf, advanceAmount, this));
             return Rounds.Last();
         }
 
