@@ -74,7 +74,7 @@ namespace Slask.Common
         }
     }
 
-    public class SystemTimeMocker
+    public static class SystemTimeMocker
     {
         public static void Set(DateTime mockedDateTime)
         {
