@@ -11,19 +11,29 @@ namespace Slask.TestCore
      * Consists of two rounds. First one is a Round Robin round where four players advances to the second round, the 
      * bracket round.
      */
-    public class HomestoryCupSetup
+    public static class HomestoryCupSetup
     {
-        public static Tournament Part01_CreateTournament(TournamentServiceContext serviceContext)
+        public static Tournament Part01CreateTournament(TournamentServiceContext serviceContext)
         {
+            if(serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
+
             Tournament tournament = serviceContext.WhenCreatedTournament("Homestory Cup");
 
             serviceContext.SaveChanges();
             return tournament;
         }
 
-        public static Tournament Part02_BettersAddedToTournament(TournamentServiceContext serviceContext)
+        public static Tournament Part02BettersAddedToTournament(TournamentServiceContext serviceContext)
         {
-            Tournament tournament = Part01_CreateTournament(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
+
+            Tournament tournament = Part01CreateTournament(serviceContext);
 
             serviceContext.WhenCreatedUsers();
             serviceContext.WhenAddedBettersToTournament(tournament);
@@ -32,79 +42,114 @@ namespace Slask.TestCore
             return tournament;
         }
 
-        public static Round Part03_AddRoundRobinRound(TournamentServiceContext serviceContext)
+        public static Round Part03AddRoundRobinRound(TournamentServiceContext serviceContext)
         {
-            Tournament tournament = Part02_BettersAddedToTournament(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
 
-            Round round = serviceContext.WhenAddedRoundRobinRoundToTournament(tournament, "Round Robin Round", 3, 4);
+            Tournament tournament = Part02BettersAddedToTournament(serviceContext);
+
+            Round round = TournamentServiceContext.WhenAddedRoundRobinRoundToTournament(tournament, "Round Robin Round", 3, 4);
 
             serviceContext.SaveChanges();
             return round;
         }
 
-        public static RoundRobinGroup Part04_AddedGroupToRoundRobinRound(TournamentServiceContext serviceContext)
+        public static RoundRobinGroup Part04AddedGroupToRoundRobinRound(TournamentServiceContext serviceContext)
         {
-            Round round = Part03_AddRoundRobinRound(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
 
-            RoundRobinGroup group = (RoundRobinGroup)serviceContext.WhenAddedGroupToRound(round);
+            Round round = Part03AddRoundRobinRound(serviceContext);
+
+            RoundRobinGroup group = (RoundRobinGroup)TournamentServiceContext.WhenAddedGroupToRound(round);
 
             serviceContext.SaveChanges();
             return group;
         }
 
-        public static RoundRobinGroup Part05_AddedPlayersToRoundRobinGroup(TournamentServiceContext serviceContext)
+        public static RoundRobinGroup Part05AddedPlayersToRoundRobinGroup(TournamentServiceContext serviceContext)
         {
-            RoundRobinGroup group = Part04_AddedGroupToRoundRobinRound(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
 
-            serviceContext.WhenAddedPlayerReferenceToGroup(group, "Maru");
-            serviceContext.WhenAddedPlayerReferenceToGroup(group, "Stork");
-            serviceContext.WhenAddedPlayerReferenceToGroup(group, "Taeja");
-            serviceContext.WhenAddedPlayerReferenceToGroup(group, "Rain");
-            serviceContext.WhenAddedPlayerReferenceToGroup(group, "Bomber");
-            serviceContext.WhenAddedPlayerReferenceToGroup(group, "FanTaSy");
-            serviceContext.WhenAddedPlayerReferenceToGroup(group, "Stephano");
-            serviceContext.WhenAddedPlayerReferenceToGroup(group, "Thorzain");
+            RoundRobinGroup group = Part04AddedGroupToRoundRobinRound(serviceContext);
+
+            TournamentServiceContext.WhenAddedPlayerReferenceToGroup(group, "Maru");
+            TournamentServiceContext.WhenAddedPlayerReferenceToGroup(group, "Stork");
+            TournamentServiceContext.WhenAddedPlayerReferenceToGroup(group, "Taeja");
+            TournamentServiceContext.WhenAddedPlayerReferenceToGroup(group, "Rain");
+            TournamentServiceContext.WhenAddedPlayerReferenceToGroup(group, "Bomber");
+            TournamentServiceContext.WhenAddedPlayerReferenceToGroup(group, "FanTaSy");
+            TournamentServiceContext.WhenAddedPlayerReferenceToGroup(group, "Stephano");
+            TournamentServiceContext.WhenAddedPlayerReferenceToGroup(group, "Thorzain");
 
             serviceContext.SaveChanges();
             return group;
         }
 
-        public static RoundRobinGroup Part06_StartDateTimeSetToMatchesInRoundRobinGroup(TournamentServiceContext serviceContext)
+        public static RoundRobinGroup Part06StartDateTimeSetToMatchesInRoundRobinGroup(TournamentServiceContext serviceContext)
         {
-            RoundRobinGroup group = Part05_AddedPlayersToRoundRobinGroup(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
+
+            RoundRobinGroup group = Part05AddedPlayersToRoundRobinGroup(serviceContext);
 
             for (int index = 0; index < group.Matches.Count; ++index)
             {
-                serviceContext.WhenSetStartDateTimeOnMatch(group.Matches[index], SystemTime.Now.AddHours(1 + index));
+                TournamentServiceContext.WhenSetStartDateTimeOnMatch(group.Matches[index], SystemTime.Now.AddHours(1 + index));
             }
 
             serviceContext.SaveChanges();
             return group;
         }
 
-        public static RoundRobinGroup Part07_BetsPlacedOnMatchesInRoundRobinGroup(TournamentServiceContext serviceContext)
+        public static RoundRobinGroup Part07BetsPlacedOnMatchesInRoundRobinGroup(TournamentServiceContext serviceContext)
         {
-            RoundRobinGroup group = Part06_StartDateTimeSetToMatchesInRoundRobinGroup(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
 
-            serviceContext.WhenBettersPlacesBetsOnAllMatchesInGroups(group);
+            RoundRobinGroup group = Part06StartDateTimeSetToMatchesInRoundRobinGroup(serviceContext);
+
+            TournamentServiceContext.WhenBettersPlacesBetsOnAllMatchesInGroups(group);
 
             serviceContext.SaveChanges();
             return group;
         }
 
-        public static RoundRobinGroup Part08_CompleteFirstMatchInRoundRobinGroup(TournamentServiceContext serviceContext)
+        public static RoundRobinGroup Part08CompleteFirstMatchInRoundRobinGroup(TournamentServiceContext serviceContext)
         {
-            RoundRobinGroup group = Part07_BetsPlacedOnMatchesInRoundRobinGroup(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
 
-            serviceContext.WhenPlayerScoreIncreased(group.Matches.First().Player1, 2);
+            RoundRobinGroup group = Part07BetsPlacedOnMatchesInRoundRobinGroup(serviceContext);
+
+            TournamentServiceContext.WhenPlayerScoreIncreased(group.Matches.First().Player1, 2);
 
             serviceContext.SaveChanges();
             return group;
         }
 
-        public static RoundRobinGroup Part09_CompleteAllMatchesInRoundRobinGroup(TournamentServiceContext serviceContext)
+        public static RoundRobinGroup Part09CompleteAllMatchesInRoundRobinGroup(TournamentServiceContext serviceContext)
         {
-            RoundRobinGroup group = Part08_CompleteFirstMatchInRoundRobinGroup(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
+
+            RoundRobinGroup group = Part08CompleteFirstMatchInRoundRobinGroup(serviceContext);
 
             Random random = new Random(133742069);
 
@@ -116,11 +161,11 @@ namespace Slask.TestCore
 
                     if (increasePlayer1Score)
                     {
-                        serviceContext.WhenPlayerScoreIncreased(match.Player1, 2);
+                        TournamentServiceContext.WhenPlayerScoreIncreased(match.Player1, 2);
                     }
                     else
                     {
-                        serviceContext.WhenPlayerScoreIncreased(match.Player2, 2);
+                        TournamentServiceContext.WhenPlayerScoreIncreased(match.Player2, 2);
                     }
                 }
             }
@@ -129,30 +174,45 @@ namespace Slask.TestCore
             return group;
         }
 
-        public static Round Part10_AddBracketRound(TournamentServiceContext serviceContext)
+        public static Round Part10AddBracketRound(TournamentServiceContext serviceContext)
         {
-            RoundRobinGroup group = Part09_CompleteAllMatchesInRoundRobinGroup(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
+
+            RoundRobinGroup group = Part09CompleteAllMatchesInRoundRobinGroup(serviceContext);
             Tournament tournament = group.Round.Tournament;
 
-            Round round = serviceContext.WhenAddedBracketRoundToTournament(tournament, "Bracket Round", 5);
+            Round round = TournamentServiceContext.WhenAddedBracketRoundToTournament(tournament, "Bracket Round", 5);
 
             serviceContext.SaveChanges();
             return round;
         }
 
-        public static BracketGroup Part11_AddGroupToBracketRound(TournamentServiceContext serviceContext)
+        public static BracketGroup Part11AddGroupToBracketRound(TournamentServiceContext serviceContext)
         {
-            Round round = Part10_AddBracketRound(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
 
-            BracketGroup group = (BracketGroup)serviceContext.WhenAddedGroupToRound(round);
+            Round round = Part10AddBracketRound(serviceContext);
+
+            BracketGroup group = (BracketGroup)TournamentServiceContext.WhenAddedGroupToRound(round);
 
             serviceContext.SaveChanges();
             return group;
         }
 
-        public static BracketGroup Part12_AddWinningPlayersToBracketGroup(TournamentServiceContext serviceContext)
+        public static BracketGroup Part12AddWinningPlayersToBracketGroup(TournamentServiceContext serviceContext)
         {
-            BracketGroup group = Part11_AddGroupToBracketRound(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
+
+            BracketGroup group = Part11AddGroupToBracketRound(serviceContext);
             Round previousRound = group.Round.GetPreviousRound();
             List<PlayerReference> winningPlayers = previousRound.GetAdvancingPlayers();
 
@@ -174,42 +234,62 @@ namespace Slask.TestCore
             return group;
         }
 
-        public static BracketGroup Part13_StartDateTimeSetToMatchesInBracketGroup(TournamentServiceContext serviceContext)
+        public static BracketGroup Part13StartDateTimeSetToMatchesInBracketGroup(TournamentServiceContext serviceContext)
         {
-            BracketGroup group = Part12_AddWinningPlayersToBracketGroup(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
+
+            BracketGroup group = Part12AddWinningPlayersToBracketGroup(serviceContext);
 
             for (int index = 0; index < group.Matches.Count; ++index)
             {
-                serviceContext.WhenSetStartDateTimeOnMatch(group.Matches[index], SystemTime.Now.AddDays(1).AddHours(1 + index));
+                TournamentServiceContext.WhenSetStartDateTimeOnMatch(group.Matches[index], SystemTime.Now.AddDays(1).AddHours(1 + index));
             }
 
             serviceContext.SaveChanges();
             return group;
         }
 
-        public static BracketGroup Part14_BetsPlacedOnMatchesInBracketGroup(TournamentServiceContext serviceContext)
+        public static BracketGroup Part14BetsPlacedOnMatchesInBracketGroup(TournamentServiceContext serviceContext)
         {
-            BracketGroup group = Part13_StartDateTimeSetToMatchesInBracketGroup(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
 
-            serviceContext.WhenBettersPlacesBetsOnAllMatchesInGroups(group);
+            BracketGroup group = Part13StartDateTimeSetToMatchesInBracketGroup(serviceContext);
+
+            TournamentServiceContext.WhenBettersPlacesBetsOnAllMatchesInGroups(group);
 
             serviceContext.SaveChanges();
             return group;
         }
 
-        public static BracketGroup Part15_CompleteFirstMatchInBracketGroup(TournamentServiceContext serviceContext)
+        public static BracketGroup Part15CompleteFirstMatchInBracketGroup(TournamentServiceContext serviceContext)
         {
-            BracketGroup group = Part14_BetsPlacedOnMatchesInBracketGroup(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
 
-            serviceContext.WhenPlayerScoreIncreased(group.Matches.First().Player1, 3);
+            BracketGroup group = Part14BetsPlacedOnMatchesInBracketGroup(serviceContext);
+
+            TournamentServiceContext.WhenPlayerScoreIncreased(group.Matches.First().Player1, 3);
 
             serviceContext.SaveChanges();
             return group;
         }
 
-        public static BracketGroup Part16_CompleteAllMatchesInBracketGroup(TournamentServiceContext serviceContext)
+        public static BracketGroup Part16CompleteAllMatchesInBracketGroup(TournamentServiceContext serviceContext)
         {
-            BracketGroup group = Part15_CompleteFirstMatchInBracketGroup(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
+
+            BracketGroup group = Part15CompleteFirstMatchInBracketGroup(serviceContext);
 
             Random random = new Random(133742069);
 
@@ -221,11 +301,11 @@ namespace Slask.TestCore
 
                     if (increasePlayer1Score)
                     {
-                        serviceContext.WhenPlayerScoreIncreased(match.Player1, 3);
+                        TournamentServiceContext.WhenPlayerScoreIncreased(match.Player1, 3);
                     }
                     else
                     {
-                        serviceContext.WhenPlayerScoreIncreased(match.Player2, 3);
+                        TournamentServiceContext.WhenPlayerScoreIncreased(match.Player2, 3);
                     }
                 }
             }

@@ -22,6 +22,11 @@ namespace Slask.TestCore
 
         public static new TournamentServiceContext GivenServices(SlaskContextCreatorInterface slaskContextCreator)
         {
+            if (slaskContextCreator == null)
+            {
+                throw new ArgumentNullException(nameof(slaskContextCreator));
+            }
+
             return new TournamentServiceContext(slaskContextCreator.CreateContext());
         }
 
@@ -32,48 +37,93 @@ namespace Slask.TestCore
 
         public void WhenAddedBettersToTournament(Tournament tournament)
         {
+            if (tournament == null)
+            {
+                throw new ArgumentNullException(nameof(tournament));
+            }
+
             tournament.AddBetter(UserService.GetUserByName("Stålberto"));
             tournament.AddBetter(UserService.GetUserByName("Bönis"));
             tournament.AddBetter(UserService.GetUserByName("Guggelito"));
         }
 
-        public Round WhenAddedBracketRoundToTournament(Tournament tournament, string name, int bestOf)
+        public static Round WhenAddedBracketRoundToTournament(Tournament tournament, string name, int bestOf)
         {
-            return tournament.AddBracketRound(name, bestOf);
+            if (tournament == null)
+            {
+                throw new ArgumentNullException(nameof(tournament));
+            }
+
+            return tournament.AddRound(RoundType.Bracket, name, bestOf);
         }
 
-        public Round WhenAddedDualTournamentRoundToTournament(Tournament tournament, string name, int bestOf)
+        public static Round WhenAddedDualTournamentRoundToTournament(Tournament tournament, string name, int bestOf)
         {
-            return tournament.AddDualTournamentRound(name, bestOf);
+            if (tournament == null)
+            {
+                throw new ArgumentNullException(nameof(tournament));
+            }
+
+            return tournament.AddRound(RoundType.DualTournament, name, bestOf);
         }
 
-        public Round WhenAddedRoundRobinRoundToTournament(Tournament tournament, string name, int bestOf, int advanceAmount)
+        public static Round WhenAddedRoundRobinRoundToTournament(Tournament tournament, string name, int bestOf, int advanceAmount)
         {
-            return tournament.AddRoundRobinRound(name, bestOf, advanceAmount);
+            if (tournament == null)
+            {
+                throw new ArgumentNullException(nameof(tournament));
+            }
+
+            return tournament.AddRound(RoundType.RoundRobin, name, bestOf, advanceAmount);
         }
 
-        public GroupBase WhenAddedGroupToRound(Round round)
+        public static GroupBase WhenAddedGroupToRound(Round round)
         {
+            if (round == null)
+            {
+                throw new ArgumentNullException(nameof(round));
+            }
+
             return round.AddGroup();
         }
 
-        public void WhenAddedPlayerReferenceToGroup(GroupBase group, string name)
+        public static void WhenAddedPlayerReferenceToGroup(GroupBase group, string name)
         {
+            if (group == null)
+            {
+                throw new ArgumentNullException(nameof(group));
+            }
+
             group.AddPlayerReference(name);
         }
 
-        public void WhenSetStartDateTimeOnMatch(Match match, DateTime dateTime)
+        public static void WhenSetStartDateTimeOnMatch(Match match, DateTime dateTime)
         {
+            if (match == null)
+            {
+                throw new ArgumentNullException(nameof(match));
+            }
+
             match.SetStartDateTime(dateTime);
         }
 
-        public void WhenBetterPlacesBet(Better better, Match match, Player player)
+        public static void WhenBetterPlacesBet(Better better, Match match, Player player)
         {
+            if (better == null)
+            {
+                throw new ArgumentNullException(nameof(better));
+            }
+
             better.PlaceMatchBet(match, player);
         }
 
-        public void WhenBettersPlacesBetsOnAllMatchesInGroups(GroupBase group)
+        public static void WhenBettersPlacesBetsOnAllMatchesInGroups(GroupBase group)
         {
+            if (group == null)
+            {
+                throw new ArgumentNullException(nameof(group));
+            }
+
             Tournament tournament = group.Round.Tournament;
             Better firstBetter = tournament.Betters[0];
             Better secondBetter = tournament.Betters[1];
@@ -102,8 +152,13 @@ namespace Slask.TestCore
             }
         }
 
-        public void WhenPlayerScoreIncreased(Player player, int score)
+        public static void WhenPlayerScoreIncreased(Player player, int score)
         {
+            if (player == null)
+            {
+                throw new ArgumentNullException(nameof(player));
+            }
+
             player.IncreaseScore(score);
         }
     }

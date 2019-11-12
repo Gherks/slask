@@ -4,7 +4,7 @@ using System;
 
 namespace Slask.UnitTests
 {
-    public class InMemoryContextCreator
+    public static class InMemoryContextCreator
     {
         public static SlaskContext Create()
         {

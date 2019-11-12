@@ -1,6 +1,7 @@
 ﻿using Slask.Persistence.Services;
 using Slask.Domain;
 using Slask.Persistence;
+using System;
 
 namespace Slask.TestCore
 {
@@ -34,6 +35,11 @@ namespace Slask.TestCore
 
         public static UserServiceContext GivenServices(SlaskContextCreatorInterface slaskContextCreator)
         {
+            if (slaskContextCreator == null)
+            {
+                throw new ArgumentNullException(nameof(slaskContextCreator));
+            }
+
             return new UserServiceContext(slaskContextCreator.CreateContext());
         }
     }

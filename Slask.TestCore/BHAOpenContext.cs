@@ -11,19 +11,29 @@ namespace Slask.TestCore
      * Consists of one Dual Tournament round, with two groups that is played simultaneously. No winner is determined 
      * in this scenario.
      */
-    public class BHAOpenSetup
+    public static class BHAOpenSetup
     {
-        public static Tournament Part01_CreateTournament(TournamentServiceContext serviceContext)
+        public static Tournament Part01CreateTournament(TournamentServiceContext serviceContext)
         {
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
+
             Tournament tournament = serviceContext.WhenCreatedTournament("BHA Open");
 
             serviceContext.SaveChanges();
             return tournament;
         }
 
-        public static Tournament Part02_BettersAddedToTournament(TournamentServiceContext serviceContext)
+        public static Tournament Part02BettersAddedToTournament(TournamentServiceContext serviceContext)
         {
-            Tournament tournament = Part01_CreateTournament(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
+
+            Tournament tournament = Part01CreateTournament(serviceContext);
 
             serviceContext.WhenCreatedUsers();
             serviceContext.WhenAddedBettersToTournament(tournament);
@@ -32,55 +42,75 @@ namespace Slask.TestCore
             return tournament;
         }
 
-        public static Round Part03_AddDualTournamentRound(TournamentServiceContext serviceContext)
+        public static Round Part03AddDualTournamentRound(TournamentServiceContext serviceContext)
         {
-            Tournament tournament = Part02_BettersAddedToTournament(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
 
-            Round round = serviceContext.WhenAddedDualTournamentRoundToTournament(tournament, "Dual Tournament Round", 3);
+            Tournament tournament = Part02BettersAddedToTournament(serviceContext);
+
+            Round round = TournamentServiceContext.WhenAddedDualTournamentRoundToTournament(tournament, "Dual Tournament Round", 3);
 
             serviceContext.SaveChanges();
             return round;
         }
 
-        public static List<DualTournamentGroup> Part04_AddGroupsToDualTournamentRound(TournamentServiceContext serviceContext)
+        public static List<DualTournamentGroup> Part04AddGroupsToDualTournamentRound(TournamentServiceContext serviceContext)
         {
-            Round round = Part03_AddDualTournamentRound(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
+
+            Round round = Part03AddDualTournamentRound(serviceContext);
 
             List<DualTournamentGroup> groups = new List<DualTournamentGroup>();
-            groups.Add((DualTournamentGroup)serviceContext.WhenAddedGroupToRound(round));
-            groups.Add((DualTournamentGroup)serviceContext.WhenAddedGroupToRound(round));
+            groups.Add((DualTournamentGroup)TournamentServiceContext.WhenAddedGroupToRound(round));
+            groups.Add((DualTournamentGroup)TournamentServiceContext.WhenAddedGroupToRound(round));
 
             serviceContext.SaveChanges();
             return groups;
         }
 
-        public static List<DualTournamentGroup> Part05_AddedPlayersToDualTournamentGroups(TournamentServiceContext serviceContext)
+        public static List<DualTournamentGroup> Part05AddedPlayersToDualTournamentGroups(TournamentServiceContext serviceContext)
         {
-            List<DualTournamentGroup> groups = Part04_AddGroupsToDualTournamentRound(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
 
-            serviceContext.WhenAddedPlayerReferenceToGroup(groups[0], "Stålberto");
-            serviceContext.WhenAddedPlayerReferenceToGroup(groups[0], "Bönis");
-            serviceContext.WhenAddedPlayerReferenceToGroup(groups[0], "Guggelito");
-            serviceContext.WhenAddedPlayerReferenceToGroup(groups[0], "Danneboi");
+            List<DualTournamentGroup> groups = Part04AddGroupsToDualTournamentRound(serviceContext);
 
-            serviceContext.WhenAddedPlayerReferenceToGroup(groups[1], "Bernard");
-            serviceContext.WhenAddedPlayerReferenceToGroup(groups[1], "Papa Puert");
-            serviceContext.WhenAddedPlayerReferenceToGroup(groups[1], "Klubbaxerino");
-            serviceContext.WhenAddedPlayerReferenceToGroup(groups[1], "Segmarken");
+            TournamentServiceContext.WhenAddedPlayerReferenceToGroup(groups[0], "Stålberto");
+            TournamentServiceContext.WhenAddedPlayerReferenceToGroup(groups[0], "Bönis");
+            TournamentServiceContext.WhenAddedPlayerReferenceToGroup(groups[0], "Guggelito");
+            TournamentServiceContext.WhenAddedPlayerReferenceToGroup(groups[0], "Danneboi");
+
+            TournamentServiceContext.WhenAddedPlayerReferenceToGroup(groups[1], "Bernard");
+            TournamentServiceContext.WhenAddedPlayerReferenceToGroup(groups[1], "Papa Puert");
+            TournamentServiceContext.WhenAddedPlayerReferenceToGroup(groups[1], "Klubbaxerino");
+            TournamentServiceContext.WhenAddedPlayerReferenceToGroup(groups[1], "Segmarken");
 
             serviceContext.SaveChanges();
             return groups;
         }
 
-        public static List<DualTournamentGroup> Part06_StartDateTimeSetToMatchesInDualTournamentGroups(TournamentServiceContext serviceContext)
+        public static List<DualTournamentGroup> Part06StartDateTimeSetToMatchesInDualTournamentGroups(TournamentServiceContext serviceContext)
         {
-            List<DualTournamentGroup> groups = Part05_AddedPlayersToDualTournamentGroups(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
+
+            List<DualTournamentGroup> groups = Part05AddedPlayersToDualTournamentGroups(serviceContext);
 
             foreach (DualTournamentGroup group in groups)
             {
                 for (int index = 0; index < group.Matches.Count; ++index)
                 {
-                    serviceContext.WhenSetStartDateTimeOnMatch(group.Matches[index], SystemTime.Now.AddDays(1).AddHours(1 + index));
+                    TournamentServiceContext.WhenSetStartDateTimeOnMatch(group.Matches[index], SystemTime.Now.AddDays(1).AddHours(1 + index));
                 }
             }
 
@@ -88,32 +118,47 @@ namespace Slask.TestCore
             return groups;
         }
 
-        public static List<DualTournamentGroup> Part07_BetsPlacedOnMatchesInDualTournamentGroups(TournamentServiceContext serviceContext)
+        public static List<DualTournamentGroup> Part07BetsPlacedOnMatchesInDualTournamentGroups(TournamentServiceContext serviceContext)
         {
-            List<DualTournamentGroup> groups = Part06_StartDateTimeSetToMatchesInDualTournamentGroups(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
+
+            List<DualTournamentGroup> groups = Part06StartDateTimeSetToMatchesInDualTournamentGroups(serviceContext);
 
             foreach (DualTournamentGroup group in groups)
             {
-                serviceContext.WhenBettersPlacesBetsOnAllMatchesInGroups(group);
+                TournamentServiceContext.WhenBettersPlacesBetsOnAllMatchesInGroups(group);
             }
 
             serviceContext.SaveChanges();
             return groups;
         }
 
-        public static List<DualTournamentGroup> Part08_CompleteFirstMatchInDualTournamentGroups(TournamentServiceContext serviceContext)
+        public static List<DualTournamentGroup> Part08CompleteFirstMatchInDualTournamentGroups(TournamentServiceContext serviceContext)
         {
-            List<DualTournamentGroup> groups = Part07_BetsPlacedOnMatchesInDualTournamentGroups(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
 
-            serviceContext.WhenPlayerScoreIncreased(groups.First().Matches.First().Player1, 2);
+            List<DualTournamentGroup> groups = Part07BetsPlacedOnMatchesInDualTournamentGroups(serviceContext);
+
+            TournamentServiceContext.WhenPlayerScoreIncreased(groups.First().Matches.First().Player1, 2);
 
             serviceContext.SaveChanges();
             return groups;
         }
 
-        public static List<DualTournamentGroup> Part09_CompleteAllMatchesInDualTournamentGroups(TournamentServiceContext serviceContext)
+        public static List<DualTournamentGroup> Part09CompleteAllMatchesInDualTournamentGroups(TournamentServiceContext serviceContext)
         {
-            List<DualTournamentGroup> groups = Part08_CompleteFirstMatchInDualTournamentGroups(serviceContext);
+            if (serviceContext == null)
+            {
+                throw new ArgumentNullException(nameof(serviceContext));
+            }
+
+            List<DualTournamentGroup> groups = Part08CompleteFirstMatchInDualTournamentGroups(serviceContext);
 
             Random random = new Random(133742069);
 
@@ -127,11 +172,11 @@ namespace Slask.TestCore
 
                         if (increasePlayer1Score)
                         {
-                            serviceContext.WhenPlayerScoreIncreased(match.Player1, 2);
+                            TournamentServiceContext.WhenPlayerScoreIncreased(match.Player1, 2);
                         }
                         else
                         {
-                            serviceContext.WhenPlayerScoreIncreased(match.Player2, 2);
+                            TournamentServiceContext.WhenPlayerScoreIncreased(match.Player2, 2);
                         }
                     }
                 }
