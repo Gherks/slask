@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Domain;
 using Slask.Persistence.Services;
 using Slask.UnitTests;
@@ -183,17 +183,6 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             tournament.Betters.Should().BeEmpty();
             tournament.Settings.Should().BeEmpty();
             tournament.MiscBetCatalogue.Should().BeEmpty();
-        }
-        private List<string> StringToStringListTransform(string commaSeparatedText, string delimiter)
-        {
-            List<string> textList = commaSeparatedText.Split(delimiter).ToList();
-
-            for(int index = 0; index < textList.Count; ++index)
-            {
-                textList[index] = textList[index].Replace(" ", "");
-            }
-
-            return textList;
         }
     }
 }
