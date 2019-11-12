@@ -1,7 +1,7 @@
-using FluentAssertions;
+﻿using FluentAssertions;
+using Slask.Common;
 using Slask.Domain;
 using Slask.Persistence.Services;
-using Slask.UnitTests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,23 +32,23 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
 
         [Given(@"a tournament named ""(.*)"" has been created")]
         [When(@"a tournament named ""(.*)"" has been created")]
-        public void GivenATournamentNamedHasBeenCreated(string name)
+        public Tournament GivenATournamentNamedHasBeenCreated(string name)
         {
             createdTournaments.Add(tournamentService.CreateTournament(name));
+            return createdTournaments.Last();
         }
 
         [Given(@"users ""(.*)"" has been added to tournament with name: ""(.*)""")]
         [When(@"users ""(.*)"" has been added to tournament with name: ""(.*)""")]
         public void GivenATournamentNamedWithBettersHasBeenCreated(string commaSeparatedUserNames, string tournamentName)
         {
-            List<string> userNames = StringToStringListTransform(commaSeparatedUserNames, ",");
+            List<string> userNames = StringUtility.ToStringList(commaSeparatedUserNames, ",");
             foreach (string userName in userNames)
             {
                 createdUsers.Add(userService.CreateUser(userName));
             }
 
-            Tournament tournament = tournamentService.CreateTournament(tournamentName);
-            createdTournaments.Add(tournament);
+            Tournament tournament = GivenATournamentNamedHasBeenCreated(tournamentName);
 
             foreach (User user in createdUsers)
             {
@@ -58,9 +58,10 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
 
         [Given(@"fetching tournament with tournament id: (.*)")]
         [When(@"fetching tournament with tournament id: (.*)")]
-        public void GivenFetchingTournamentWithTournamentId(Guid tournamentId)
+        public Tournament GivenFetchingTournamentWithTournamentId(Guid tournamentId)
         {
             fetchedTournaments.Add(tournamentService.GetTournamentById(tournamentId));
+            return fetchedTournaments.Last();
         }
 
         [Given(@"fetching created tournament (.*) by tournament id")]
@@ -68,7 +69,29 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
         public void GivenFetchingTournamentWithTournamentId(int tournamentIndex)
         {
             Guid tournamentId = createdTournaments[tournamentIndex].Id;
-            fetchedTournaments.Add(tournamentService.GetTournamentById(tournamentId));
+            fetchedTournaments.Add(GivenFetchingTournamentWithTournamentId(tournamentId));
+        }
+
+        [Given(@"user ""(.*)"" is added to created tournament ""(.*)""")]
+        [When(@"user ""(.*)"" is added to created tournament ""(.*)""")]
+        public void GivenUserIsAddedToCreatedTournament(string userName, string tournamentName)
+        {
+            Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+            tournament.AddBetter(userService.GetUserByName(userName));
+        }
+
+        [Given(@"a tournament with player references added with name ""(.*)"" has been created")]
+        public void GivenATournamentWithPlayerReferencesAddedWithNameHasBeenCreated(string name)
+        {
+            Tournament tournament = GivenATournamentNamedHasBeenCreated(name);
+
+            Round bracketRound = tournament.AddRound(RoundType.Bracket, "BracketRound", 3);
+            BracketGroup bracketGroup = (BracketGroup)bracketRound.AddGroup();
+
+            bracketGroup.AddPlayerReference("Maru");
+            bracketGroup.AddPlayerReference("Stork");
+            bracketGroup.AddPlayerReference("Taeja");
+            bracketGroup.AddPlayerReference("Rain");
         }
 
         [When(@"fetching tournament by tournament name: ""(.*)""")]
@@ -84,14 +107,6 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             tournamentService.RenameTournament(tournamentId, newName);
         }
 
-        [Given(@"user ""(.*)"" is added to created tournament ""(.*)""")]
-        [When(@"user ""(.*)"" is added to created tournament ""(.*)""")]
-        public void GivenUserIsAddedToCreatedTournament(string userName, string tournamentName)
-        {
-            Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
-            tournament.AddBetter(userService.GetUserByName(userName));
-        }
-
         [When(@"fetching betters from created tournament (.*) by tournament id")]
         public void WhenFetchingUsersFromCreatedTournament(int tournamentIndex)
         {
@@ -103,6 +118,43 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
         public void FetchingBettersFromTournamentByTournamentName(string tournamentName)
         {
             fetchedBetters = tournamentService.GetBettersByTournamentName(tournamentName);
+        }
+
+        [When(@"added players ""(.*)"" to tournament with name ""(.*)""")]
+        public void WhenAddedPlayersToTournamentWithName(string commaSeparatedPlayerNames, string tournamentName)
+        {
+            Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+
+            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            foreach (string playerName in playerNames)
+            {
+                tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+            }
+        }
+
+        [When(@"fetching player references ""(.*)"" from created tournament (.*) by tournament id")]
+        public void WhenFetchingPlayerReferencesFromCreatedTournamentByTournamentId(string commaSeparatedPlayerNames, int tournamentIndex)
+        {
+            Tournament tournament = createdTournaments[tournamentIndex];
+            List<PlayerReference> playerReferences = tournamentService.GetPlayerReferencesByTournamentId(tournament.Id);
+
+            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            foreach (string playerName in playerNames)
+            {
+                playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+            }
+        }
+
+        [When(@"fetching player references ""(.*)"" from tournament by tournament name: ""(.*)""")]
+        public void WhenFetchingPlayerReferencesFromTournamentByTournamentName(string commaSeparatedPlayerNames, string tournamentName)
+        {
+            List<PlayerReference> playerReferences = tournamentService.GetPlayerReferencesByTournamentName(tournamentName);
+
+            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            foreach (string playerName in playerNames)
+            {
+                playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+            }
         }
 
         [Then(@"created tournament (.*) should be valid with name: ""(.*)""")]
@@ -166,15 +218,20 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             tournament.PlayerReferences.Should().NotBeNull();
             tournament.PlayerReferences.Should().HaveCount(playerAmount);
 
-            List<string> playerNames = StringToStringListTransform(commaSeparetedPlayerNames, ",");
+            List<string> playerNames = StringUtility.ToStringList(commaSeparetedPlayerNames, ",");
             foreach (string playerName in playerNames)
             {
                 tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
             }
         }
 
-        protected void CheckTournamentValidity(Tournament tournament, string correctName)
+        protected static void CheckTournamentValidity(Tournament tournament, string correctName)
         {
+            if (tournament == null)
+            {
+                throw new ArgumentNullException(nameof(tournament));
+            }
+
             tournament.Should().NotBeNull();
             tournament.Id.Should().NotBeEmpty();
             tournament.Name.Should().Be(correctName);

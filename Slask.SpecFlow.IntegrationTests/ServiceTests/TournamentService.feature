@@ -70,8 +70,20 @@ Scenario: Can fetch all betters in tournament by tournament name
 		And created tournament 0, better 1, should be valid with name: "Bönis"
 		And created tournament 0, better 2, should be valid with name: "Guggelito"
 
+Scenario: Player references are added to tournament when new players are added to tournament
+	Given a tournament with player references added with name "GSL 2019" has been created
+	When added players "Maru, Stork, Taeja, Rain" to tournament with name "GSL 2019"
+	Then created tournament 0 should have 4 player references with names: "Maru, Stork, Taeja, Rain"
 
+Scenario: Can fetch all player references in tournament by tournament id
+	Given a tournament with player references added with name "GSL 2019" has been created
+	When fetching player references "Maru, Stork, Taeja, Rain" from created tournament 0 by tournament id
+	Then created tournament 0 should have 4 player references with names: "Maru, Stork, Taeja, Rain"
 
+Scenario: Can fetch all player references in tournament by tournament name
+	Given a tournament with player references added with name "GSL 2019" has been created
+	When fetching player references "Maru, Stork, Taeja, Rain" from tournament by tournament name: "GSL 2019"
+	Then created tournament 0 should have 4 player references with names: "Maru, Stork, Taeja, Rain"
 
 #WHEN a bracket round has been added to tournament: "GSL 2019"
 #WHEN a dual tournament round has been added to tournament: "GSL 2019"
@@ -85,19 +97,4 @@ Scenario: Can fetch all betters in tournament by tournament name
 ##GroupBase WhenAddedGroupToRound(Round round)
 ##void WhenAddedPlayerReferenceToGroup(GroupBase group, string name)
 #
-#Scenario: Player references are added to tournament when new players are added to tournament
-#	Given a tournament named "GSL 2019" has been created
-#	When added players "Maru, Stork, Taeja, Rain" to tournament with name "GSL 2019"
-#	Then created tournament 0 should have 4 player references with names: "Maru, Stork, Taeja, Rain"
-#
-#Scenario: Can fetch all player references in tournament by tournament id
-#	Given a tournament named "GSL 2019" has been created
-#		And added players "Maru, Stork, Taeja, Rain" to tournament with name "GSL 2019"
-#	When fetching player references from created tournament 0 by tournament id
-#	Then created tournament 0 should have 4 player references with names: "Maru, Stork, Taeja, Rain"
-#
-#Scenario: Can fetch all player references in tournament by tournament name
-#	Given a tournament named "GSL 2019" has been created
-#		And added players "Maru, Stork, Taeja, Rain" to tournament with name "GSL 2019"
-#	When fetching player references from tournament by tournament name: "GSL 2019"
-#	Then created tournament 0 should have 4 player references with names: "Maru, Stork, Taeja, Rain"
+

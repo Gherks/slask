@@ -79,8 +79,13 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             fetchedUsers[userIndex].Should().BeNull();
         }
 
-        protected void CheckUserValidity(User user, string correctName)
+        protected static void CheckUserValidity(User user, string correctName)
         {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
             user.Should().NotBeNull();
             user.Id.Should().NotBeEmpty();
             user.Name.Should().Be(correctName);
