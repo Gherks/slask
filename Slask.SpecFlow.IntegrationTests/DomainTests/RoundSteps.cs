@@ -120,7 +120,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             round.Tournament.Should().NotBeNull();
         }
 
-        private static bool ParseRoundTable(TableRow row, out RoundType type, out string name, out int bestOf, out int advancingAmount)
+        protected static bool ParseRoundTable(TableRow row, out RoundType type, out string name, out int bestOf, out int advancingAmount)
         {
             if (ParseRoundType(row["Round type"], out type) &&
                 int.TryParse(row["Best of"], out bestOf) &&
@@ -133,7 +133,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             throw new Exception("Uknown Round Specflow table row given - " + argumentString);
         }
 
-        private static bool ParseRoundType(string type, out RoundType outType)
+        protected static bool ParseRoundType(string type, out RoundType outType)
         {
             type = StringUtility.ToUpperNoSpaces(type);
 

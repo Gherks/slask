@@ -110,31 +110,31 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table2.AddRow(new string[] {
+                table5.AddRow(new string[] {
                             "Bracket",
                             "Bracket round",
                             "3",
                             "1"});
 #line 6
- testRunner.When("a tournament creates rounds", ((string)(null)), table2, "When ");
+ testRunner.When("a tournament creates rounds", ((string)(null)), table5, "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table3.AddRow(new string[] {
+                table6.AddRow(new string[] {
                             "Bracket",
                             "Bracket round",
                             "3",
                             "1"});
 #line 9
- testRunner.Then("created round 0 in tournament should be valid with values:", ((string)(null)), table3, "Then ");
+ testRunner.Then("created round 0 in tournament should be valid with values:", ((string)(null)), table6, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -167,31 +167,31 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table4.AddRow(new string[] {
+                table7.AddRow(new string[] {
                             "Dual tournament",
                             "Dual tournament round",
                             "3",
                             "1"});
 #line 14
- testRunner.When("a tournament creates rounds", ((string)(null)), table4, "When ");
+ testRunner.When("a tournament creates rounds", ((string)(null)), table7, "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table5.AddRow(new string[] {
+                table8.AddRow(new string[] {
                             "Dual tournament",
                             "Dual tournament round",
                             "3",
                             "1"});
 #line 17
- testRunner.Then("created round 0 in tournament should be valid with values:", ((string)(null)), table5, "Then ");
+ testRunner.Then("created round 0 in tournament should be valid with values:", ((string)(null)), table8, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -224,31 +224,31 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table6.AddRow(new string[] {
+                table9.AddRow(new string[] {
                             "Round robin",
                             "Round robin round",
                             "3",
                             "1"});
 #line 22
- testRunner.When("a tournament creates rounds", ((string)(null)), table6, "When ");
+ testRunner.When("a tournament creates rounds", ((string)(null)), table9, "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table7.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "Round robin",
                             "Round robin round",
                             "3",
                             "1"});
 #line 25
- testRunner.Then("created round 0 in tournament should be valid with values:", ((string)(null)), table7, "Then ");
+ testRunner.Then("created round 0 in tournament should be valid with values:", ((string)(null)), table10, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -281,18 +281,18 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table8.AddRow(new string[] {
+                table11.AddRow(new string[] {
                             "Bracket",
                             "",
                             "3",
                             "1"});
 #line 30
- testRunner.When("a tournament creates rounds", ((string)(null)), table8, "When ");
+ testRunner.When("a tournament creates rounds", ((string)(null)), table11, "When ");
 #line hidden
 #line 33
  testRunner.Then("created round 0 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -328,18 +328,18 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table9.AddRow(new string[] {
+                table12.AddRow(new string[] {
                             "Dual tournament",
                             "",
                             "3",
                             "1"});
 #line 36
- testRunner.When("a tournament creates rounds", ((string)(null)), table9, "When ");
+ testRunner.When("a tournament creates rounds", ((string)(null)), table12, "When ");
 #line hidden
 #line 39
  testRunner.Then("created round 0 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -375,18 +375,18 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table10.AddRow(new string[] {
+                table13.AddRow(new string[] {
                             "Bracket",
                             "",
                             "3",
                             "1"});
 #line 42
- testRunner.When("a tournament creates rounds", ((string)(null)), table10, "When ");
+ testRunner.When("a tournament creates rounds", ((string)(null)), table13, "When ");
 #line hidden
 #line 45
  testRunner.Then("created round 0 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -422,28 +422,28 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table11.AddRow(new string[] {
+                table14.AddRow(new string[] {
                             "Bracket",
                             "Bracket round",
                             "3",
                             "0"});
-                table11.AddRow(new string[] {
+                table14.AddRow(new string[] {
                             "Dual tournament",
                             "Dual tournament round",
                             "3",
                             "0"});
-                table11.AddRow(new string[] {
+                table14.AddRow(new string[] {
                             "Round robin",
                             "Round robin round",
                             "3",
                             "0"});
 #line 48
- testRunner.When("a tournament creates rounds", ((string)(null)), table11, "When ");
+ testRunner.When("a tournament creates rounds", ((string)(null)), table14, "When ");
 #line hidden
 #line 53
  testRunner.Then("created rounds 0 to 2 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -479,28 +479,28 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table12.AddRow(new string[] {
+                table15.AddRow(new string[] {
                             "Bracket",
                             "Bracket round",
                             "0",
                             "1"});
-                table12.AddRow(new string[] {
+                table15.AddRow(new string[] {
                             "Dual tournament",
                             "Dual tournament round",
                             "2",
                             "1"});
-                table12.AddRow(new string[] {
+                table15.AddRow(new string[] {
                             "Round robin",
                             "Round robin round",
                             "4",
                             "1"});
 #line 56
- testRunner.When("a tournament creates rounds", ((string)(null)), table12, "When ");
+ testRunner.When("a tournament creates rounds", ((string)(null)), table15, "When ");
 #line hidden
 #line 61
  testRunner.Then("created rounds 0 to 2 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -536,39 +536,39 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table13.AddRow(new string[] {
+                table16.AddRow(new string[] {
                             "Dual tournament",
                             "Dual tournament round",
                             "3",
                             "1"});
-                table13.AddRow(new string[] {
+                table16.AddRow(new string[] {
                             "Bracket",
                             "Bracket round",
                             "3",
                             "1"});
 #line 64
- testRunner.Given("a tournament creates rounds", ((string)(null)), table13, "Given ");
+ testRunner.Given("a tournament creates rounds", ((string)(null)), table16, "Given ");
 #line hidden
 #line 68
  testRunner.When("created round 1 fetches previous round", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table14.AddRow(new string[] {
+                table17.AddRow(new string[] {
                             "Dual tournament",
                             "Dual tournament round",
                             "3",
                             "1"});
 #line 69
- testRunner.Then("fetched round 0 in tournament should be valid with values:", ((string)(null)), table14, "Then ");
+ testRunner.Then("fetched round 0 in tournament should be valid with values:", ((string)(null)), table17, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -601,18 +601,18 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table18 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table15.AddRow(new string[] {
+                table18.AddRow(new string[] {
                             "Bracket",
                             "Bracket round",
                             "3",
                             "1"});
 #line 74
- testRunner.Given("a tournament creates rounds", ((string)(null)), table15, "Given ");
+ testRunner.Given("a tournament creates rounds", ((string)(null)), table18, "Given ");
 #line hidden
 #line 77
  testRunner.When("created round 0 fetches previous round", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
