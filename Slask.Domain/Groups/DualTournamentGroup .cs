@@ -62,13 +62,12 @@ namespace Slask.Domain
 
         protected override void OnParticipantAdded(PlayerReference playerReference)
         {
-            PlayerReference participant1 = ParticipatingPlayers.Count > 0 ? ParticipatingPlayers[0] : null;
-            PlayerReference participant2 = ParticipatingPlayers.Count > 1 ? ParticipatingPlayers[1] : null;
-            PlayerReference participant3 = ParticipatingPlayers.Count > 2 ? ParticipatingPlayers[2] : null;
-            PlayerReference participant4 = ParticipatingPlayers.Count > 3 ? ParticipatingPlayers[3] : null;
+            UpdatePlayerSetup();
+        }
 
-            Matches[0].AssignPlayerReferences(participant1, participant2);
-            Matches[1].AssignPlayerReferences(participant3, participant4);
+        protected override void OnParticipantRemoved(PlayerReference playerReference)
+        {
+            UpdatePlayerSetup();
         }
 
         public override void MatchScoreIncreased(Match match)
@@ -94,13 +93,15 @@ namespace Slask.Domain
             }
         }
 
-        public override List<PlayerReference> TallyUpAdvancingPlayers()
+        private void UpdatePlayerSetup()
         {
-            return new List<PlayerReference>
-            {
-                GetWinnersMatch().GetWinningPlayer().PlayerReference,
-                GetTiebreakerMatch().GetWinningPlayer().PlayerReference
-            };
+            PlayerReference participant1 = ParticipatingPlayers.Count > 0 ? ParticipatingPlayers[0] : null;
+            PlayerReference participant2 = ParticipatingPlayers.Count > 1 ? ParticipatingPlayers[1] : null;
+            PlayerReference participant3 = ParticipatingPlayers.Count > 2 ? ParticipatingPlayers[2] : null;
+            PlayerReference participant4 = ParticipatingPlayers.Count > 3 ? ParticipatingPlayers[3] : null;
+
+            Matches[0].AssignPlayerReferences(participant1, participant2);
+            Matches[1].AssignPlayerReferences(participant3, participant4);
         }
 
         private bool FirstMatchPairHasPlayed(Match match)

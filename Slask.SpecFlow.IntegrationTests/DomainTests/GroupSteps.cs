@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Slask.Common;
 using Slask.Domain;
 using System;
 using System.Collections.Generic;
@@ -33,10 +34,23 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             }
         }
 
+        [Given(@"group is added to created round (.*)")]
         [When(@"group is added to created round (.*)")]
-        public void WhenGroupIsAddedToCreatedRound(int roundIndex)
+        public void GivenGroupIsAddedToCreatedRound(int roundIndex)
         {
             createdGroups.Add(createdRounds[roundIndex].AddGroup());
+        }
+
+        [When(@"players ""(.*)"" is added to created group (.*)")]
+        public void WhenPlayersIsAddedToCreatedGroup(string commaSeparatedPlayerNames, int groupIndex)
+        {
+            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            GroupBase group = createdGroups[groupIndex];
+
+            foreach (string playerName in playerNames)
+            {
+                group.AddPlayerReference(playerName);
+            }
         }
 
         [Then(@"created rounds (.*) to (.*) should contain (.*) groups each")]
@@ -60,26 +74,46 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
                 if (type == RoundType.Bracket)
                 {
-                    CheckRoundValidity<BracketGroup>(group);
+                    CheckRoundValidity<BracketGroup>(group, 0);
                 }
                 else if (type == RoundType.DualTournament)
                 {
-                    CheckRoundValidity<DualTournamentGroup>(group);
+                    CheckRoundValidity<DualTournamentGroup>(group, 5);
                 }
                 else if (type == RoundType.RoundRobin)
                 {
-                    CheckRoundValidity<RoundRobinGroup>(group);
+                    CheckRoundValidity<RoundRobinGroup>(group, 0);
                 }
             }
         }
 
-        protected static void CheckRoundValidity<GroupType>(GroupBase group)
+        [Then(@"minutes between matches in created group (.*) should be (.*)")]
+        public void ThenMinutesBetweenMatchesInCreatedGroupShouldBe(int groupIndex, int expectedMinutes)
+        {
+            GroupBase group = createdGroups[groupIndex];
+
+            group.Matches.Should().HaveCountGreaterOrEqualTo(2);
+
+            for (int matchIndex = 1; matchIndex < group.Matches.Count; ++matchIndex)
+            {
+                Match previousMatch = group.Matches[matchIndex - 1];
+                Match currentMatch = group.Matches[matchIndex];
+
+                DateTime previousDateTime = previousMatch.StartDateTime;
+                DateTime currentDateTime = currentMatch.StartDateTime;
+
+                int minuteDifference = (int)currentDateTime.Subtract(previousDateTime).TotalMinutes;
+                minuteDifference.Should().Be(expectedMinutes);
+            }
+        }
+
+        protected static void CheckRoundValidity<GroupType>(GroupBase group, int matchesUponCreation)
         {
             group.Should().NotBeNull();
             group.Should().BeOfType<GroupType>();
             group.Id.Should().NotBeEmpty();
             group.ParticipatingPlayers.Should().BeEmpty();
-            group.Matches.Should().BeEmpty();
+            group.Matches.Should().HaveCount(matchesUponCreation);
             group.RoundId.Should().NotBeEmpty();
             group.Round.Should().NotBeNull();
         }

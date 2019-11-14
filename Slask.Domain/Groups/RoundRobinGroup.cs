@@ -34,7 +34,7 @@ namespace Slask.Domain
         {
             int numMatches = CalculateMatchAmount();
 
-            BalanceMatchAmount(numMatches);
+            ChangeMatchAmountTo(numMatches);
 
             if (numMatches > 0)
             {
@@ -57,18 +57,7 @@ namespace Slask.Domain
             }
         }
 
-        private void BalanceMatchAmount(int amount)
-        {
-            while (Matches.Count < amount)
-            {
-                Matches.Add(Match.Create(this));
-            }
-
-            while (Matches.Count > amount)
-            {
-                Matches.RemoveAt(0);
-            }
-        }
+        
 
         /*
          * Excerpt from Wikipedia (https://en.wikipedia.org/wiki/Round-robin_tournament)

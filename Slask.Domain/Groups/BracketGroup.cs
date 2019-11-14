@@ -26,31 +26,14 @@ namespace Slask.Domain
 
         protected override void OnParticipantAdded(PlayerReference playerReference)
         {
-            int numMatches = CalculateMatchAmount();
+            int matchAmount = ParticipatingPlayers.Count - 1;
+            ChangeMatchAmountTo(matchAmount);
         }
 
-        public override List<PlayerReference> TallyUpAdvancingPlayers()
+        protected override void OnParticipantRemoved(PlayerReference playerReference)
         {
-            Match lastMatch = Matches[Matches.Count - 1];
-
-            return new List<PlayerReference>
-            {
-                lastMatch.GetWinningPlayer().PlayerReference
-            };
-        }
-
-        private int CalculateMatchAmount()
-        {
-            int matchAmount = 0;
-            int tiers = ParticipatingPlayers.Count;
-
-            while(tiers > 1)
-            {
-                tiers = (int)Math.Ceiling(tiers / 2.0);
-                matchAmount += tiers;
-            }
-
-            return matchAmount;
+            int matchAmount = ParticipatingPlayers.Count - 1;
+            ChangeMatchAmountTo(matchAmount);
         }
     }
 }

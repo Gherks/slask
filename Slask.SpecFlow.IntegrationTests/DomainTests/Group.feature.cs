@@ -279,7 +279,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "Round robin",
                             "Round robin round",
                             "3",
-                            "0"});
+                            "1"});
 #line 29
  testRunner.Given("a tournament creates rounds", ((string)(null)), table4, "Given ");
 #line hidden
@@ -288,6 +288,228 @@ this.ScenarioInitialize(scenarioInfo);
 #line hidden
 #line 33
  testRunner.Then("group 0 should be valid of type \"Round robin\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Start time in matches in round robin groups is spaced with one hour upon creation" +
+            "")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group")]
+        [Xunit.TraitAttribute("Description", "Start time in matches in round robin groups is spaced with one hour upon creation" +
+            "")]
+        public virtual void StartTimeInMatchesInRoundRobinGroupsIsSpacedWithOneHourUponCreation()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Start time in matches in round robin groups is spaced with one hour upon creation" +
+                    "", null, ((string[])(null)));
+#line 35
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+                TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Round type",
+                            "Round name",
+                            "Best of",
+                            "Advancing amount"});
+                table5.AddRow(new string[] {
+                            "Bracket",
+                            "Bracket round",
+                            "3",
+                            "1"});
+#line 36
+ testRunner.Given("a tournament creates rounds", ((string)(null)), table5, "Given ");
+#line hidden
+#line 39
+  testRunner.And("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 40
+ testRunner.When("players \"Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain\" is added " +
+                        "to created group 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 41
+ testRunner.Then("minutes between matches in created group 0 should be 60", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Start time in matches in dual tournament group is spaced with one hour upon creat" +
+            "ion")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group")]
+        [Xunit.TraitAttribute("Description", "Start time in matches in dual tournament group is spaced with one hour upon creat" +
+            "ion")]
+        public virtual void StartTimeInMatchesInDualTournamentGroupIsSpacedWithOneHourUponCreation()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Start time in matches in dual tournament group is spaced with one hour upon creat" +
+                    "ion", null, ((string[])(null)));
+#line 43
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+                TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Round type",
+                            "Round name",
+                            "Best of",
+                            "Advancing amount"});
+                table6.AddRow(new string[] {
+                            "Dual tournament",
+                            "Dual tournament round",
+                            "3",
+                            "1"});
+#line 44
+ testRunner.Given("a tournament creates rounds", ((string)(null)), table6, "Given ");
+#line hidden
+#line 47
+  testRunner.And("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 48
+ testRunner.When("players \"Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain\" is added " +
+                        "to created group 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 49
+ testRunner.Then("minutes between matches in created group 0 should be 60", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Start time in matches in bracket group is spaced with one hour upon creation")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group")]
+        [Xunit.TraitAttribute("Description", "Start time in matches in bracket group is spaced with one hour upon creation")]
+        public virtual void StartTimeInMatchesInBracketGroupIsSpacedWithOneHourUponCreation()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Start time in matches in bracket group is spaced with one hour upon creation", null, ((string[])(null)));
+#line 51
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+                TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Round type",
+                            "Round name",
+                            "Best of",
+                            "Advancing amount"});
+                table7.AddRow(new string[] {
+                            "Round robin",
+                            "Round robin round",
+                            "3",
+                            "1"});
+#line 52
+ testRunner.Given("a tournament creates rounds", ((string)(null)), table7, "Given ");
+#line hidden
+#line 55
+  testRunner.And("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 56
+ testRunner.When("players \"Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain\" is added " +
+                        "to created group 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 57
+ testRunner.Then("minutes between matches in created group 0 should be 60", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Player reference is added to tournament when new player is added to group")]
+        [Xunit.TraitAttribute("FeatureTitle", "Group")]
+        [Xunit.TraitAttribute("Description", "Player reference is added to tournament when new player is added to group")]
+        public virtual void PlayerReferenceIsAddedToTournamentWhenNewPlayerIsAddedToGroup()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player reference is added to tournament when new player is added to group", null, ((string[])(null)));
+#line 59
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+                TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Round type",
+                            "Round name",
+                            "Best of",
+                            "Advancing amount"});
+                table8.AddRow(new string[] {
+                            "Bracket",
+                            "Bracket round",
+                            "3",
+                            "1"});
+#line 60
+ testRunner.Given("a tournament creates rounds", ((string)(null)), table8, "Given ");
+#line hidden
+#line 63
+  testRunner.And("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 64
+ testRunner.When("players \"Maru, Stork, Taeja, Rain\" is added to created group 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 65
+ testRunner.Then("created tournament 0 should have 4 player references with names: \"Maru, Stork, Ta" +
+                        "eja, Rain\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

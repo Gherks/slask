@@ -47,7 +47,7 @@ namespace Slask.Domain
 
                 if(playerReferenceIsRemoved || playerReferenceChanged)
                 {
-                    Match.Group.OnParticipantRemoved(PlayerReference);
+                    Match.Group.RemovePlayerReference(PlayerReference);
                 }
             }
             

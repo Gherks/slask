@@ -29,16 +29,6 @@ namespace Slask.Domain
             return ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == name);
         }
 
-        private PlayerReference GetPlayerReferenceFromTournamentRegistryByName(string name)
-        {
-            return Round.Tournament.GetPlayerReferenceByPlayerName(name);
-        }
-
-        private PlayerReference GetPlayerReferenceWithName(string name)
-        {
-            return ParticipatingPlayers.FirstOrDefault(reference => reference.Name == name);
-        }
-
         public PlayState GetPlayState()
         {
             if(Matches.Count == 0)
@@ -57,6 +47,20 @@ namespace Slask.Domain
             bool lastMatchIsFinished = Matches.Last().GetWinningPlayer() != null;
 
             return lastMatchIsFinished ? PlayState.IsFinished : PlayState.IsPlaying;
+        }
+
+        public List<PlayerReference> GetAdvancingPlayers()
+        {
+            if (GetPlayState() == PlayState.IsFinished)
+            {
+                List<PlayerStandingEntry> playerStandings = CalculatePlayerStandings();
+
+                playerStandings = playerStandings.OrderByDescending(player => player.Wins).ToList();
+
+                return FilterAdvancingPlayers(ref playerStandings);
+            }
+
+            return new List<PlayerReference>();
         }
 
         public virtual bool AddPlayerReference(string name)
@@ -89,6 +93,38 @@ namespace Slask.Domain
             }
         }
 
+        public virtual bool RemovePlayerReference(string name)
+        {
+            if (GetPlayState() != PlayState.NotBegun)
+            {
+                return false;
+            }
+
+            PlayerReference playerReference = ParticipatingPlayers.Where(participant => participant.Name.ToLower() == name.ToLower()).FirstOrDefault();
+
+            return RemovePlayerReference(playerReference);
+        }
+
+        public virtual bool RemovePlayerReference(PlayerReference playerReference)
+        {
+            if (GetPlayState() != PlayState.NotBegun)
+            {
+                return false;
+            }
+
+            if (playerReference != null)
+            {
+                ParticipatingPlayers.Remove(playerReference);
+                OnParticipantRemoved(playerReference);
+                return true;
+            }
+            else
+            {
+                // LOGG 
+                return false;
+            }
+        }
+
         public virtual void Clear()
         {
             ParticipatingPlayers.Clear();
@@ -103,47 +139,35 @@ namespace Slask.Domain
         {
         }
 
+        protected void ChangeMatchAmountTo(int amount)
+        {
+            while (Matches.Count < amount)
+            {
+                Matches.Add(Match.Create(this));
+            }
+
+            while (Matches.Count > amount)
+            {
+                Matches.RemoveAt(0);
+            }
+        }
+
         protected virtual void OnParticipantAdded(PlayerReference playerReference)
         {
             throw new NotImplementedException();
         }
 
-        public virtual void OnParticipantRemoved(PlayerReference playerReference)
+        protected virtual void OnParticipantRemoved(PlayerReference playerReference)
         {
-            foreach (Match match in Matches)
-            {
-                bool referenceIsPlayer1 = match.Player1.PlayerReference?.Id == playerReference.Id;
-                bool referenceIsPlayer2 = match.Player2.PlayerReference?.Id == playerReference.Id;
-
-                if (referenceIsPlayer1 || referenceIsPlayer2)
-                {
-                    return;
-                }
-            }
-
-            ParticipatingPlayers.Remove(playerReference);
+            throw new NotImplementedException();
         }
 
-        public List<PlayerReference> GetAdvancingPlayers()
+        private PlayerReference GetPlayerReferenceFromTournamentRegistryByName(string name)
         {
-            if (GetPlayState() == PlayState.IsFinished)
-            {
-                return TallyUpAdvancingPlayers();
-            }
-
-            return new List<PlayerReference>();
+            return Round.Tournament.GetPlayerReferenceByPlayerName(name);
         }
 
-        public virtual List<PlayerReference> TallyUpAdvancingPlayers()
-        {
-            List<PlayerStandingEntry> playerStandings = TallyUpPlayerStandings();
-
-            playerStandings = playerStandings.OrderByDescending(player => player.Wins).ToList();
-
-            return FilterAdvancingPlayers(ref playerStandings);
-        }
-
-        private List<PlayerStandingEntry> TallyUpPlayerStandings()
+        private List<PlayerStandingEntry> CalculatePlayerStandings()
         {
             List<PlayerStandingEntry> playerStandings = new List<PlayerStandingEntry>();
 
