@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
+using Slask.Domain.Rounds;
 using Slask.Persistence.Services;
 using System;
 using System.Collections.Generic;
@@ -85,7 +86,7 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
         {
             Tournament tournament = GivenATournamentNamedHasBeenCreated(name);
 
-            Round bracketRound = tournament.AddRound(RoundType.Bracket, "BracketRound", 3);
+            RoundBase bracketRound = tournament.AddBracketRound("BracketRound", 3);
             BracketGroup bracketGroup = (BracketGroup)bracketRound.AddGroup();
 
             bracketGroup.AddPlayerReference("Maru");

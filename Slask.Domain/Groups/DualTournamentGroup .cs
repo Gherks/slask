@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Slask.Domain.Rounds;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
@@ -14,7 +14,7 @@ namespace Slask.Domain
         [NotMapped]
         private const int ParticipatingPlayerCapacity = 4;
 
-        public static DualTournamentGroup Create(Round round)
+        public static DualTournamentGroup Create(DualTournamentRound round)
         {
             if (round == null)
             {

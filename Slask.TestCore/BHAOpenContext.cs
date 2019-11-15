@@ -1,5 +1,6 @@
 ﻿using Slask.Common;
 using Slask.Domain;
+using Slask.Domain.Rounds;
 using Slask.Persistence;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ namespace Slask.TestCore
             return tournament;
         }
 
-        public static Round Part03AddDualTournamentRound(TournamentServiceContext serviceContext)
+        public static RoundBase Part03AddDualTournamentRound(TournamentServiceContext serviceContext)
         {
             if (serviceContext == null)
             {
@@ -51,7 +52,7 @@ namespace Slask.TestCore
 
             Tournament tournament = Part02BettersAddedToTournament(serviceContext);
 
-            Round round = TournamentServiceContext.WhenAddedDualTournamentRoundToTournament(tournament, "Dual Tournament Round", 3);
+            RoundBase round = TournamentServiceContext.WhenAddedDualTournamentRoundToTournament(tournament, "Dual Tournament Round", 3);
 
             serviceContext.SaveChanges();
             return round;
@@ -64,7 +65,7 @@ namespace Slask.TestCore
                 throw new ArgumentNullException(nameof(serviceContext));
             }
 
-            Round round = Part03AddDualTournamentRound(serviceContext);
+            RoundBase round = Part03AddDualTournamentRound(serviceContext);
 
             List<DualTournamentGroup> groups = new List<DualTournamentGroup>();
             groups.Add((DualTournamentGroup)TournamentServiceContext.WhenAddedGroupToRound(round));

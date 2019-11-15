@@ -1,4 +1,4 @@
-﻿using Slask.Common;
+﻿using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,7 @@ namespace Slask.Domain
         public List<PlayerReference> ParticipatingPlayers { get; protected set; }
         public List<Match> Matches { get; protected set; }
         public Guid RoundId { get; protected set; }
-        public Round Round { get; protected set; }
+        public RoundBase Round { get; protected set; }
 
         public PlayerReference GetPlayerReference(Guid id)
         {

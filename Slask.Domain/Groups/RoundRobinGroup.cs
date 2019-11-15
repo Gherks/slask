@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Slask.Domain.Rounds;
+using System;
 using System.Collections.Generic;
 
 /*
@@ -15,7 +16,7 @@ namespace Slask.Domain
         {
         }
 
-        public static RoundRobinGroup Create(Round round)
+        public static RoundRobinGroup Create(RoundRobinRound round)
         {
             if (round == null)
             {

@@ -2,6 +2,7 @@
 using Slask.Persistence.Services;
 using Slask.Domain;
 using Slask.Persistence;
+using Slask.Domain.Rounds;
 
 namespace Slask.TestCore
 {
@@ -47,37 +48,37 @@ namespace Slask.TestCore
             tournament.AddBetter(UserService.GetUserByName("Guggelito"));
         }
 
-        public static Round WhenAddedBracketRoundToTournament(Tournament tournament, string name, int bestOf)
+        public static RoundBase WhenAddedBracketRoundToTournament(Tournament tournament, string name, int bestOf)
         {
             if (tournament == null)
             {
                 throw new ArgumentNullException(nameof(tournament));
             }
 
-            return tournament.AddRound(RoundType.Bracket, name, bestOf);
+            return tournament.AddBracketRound(name, bestOf);
         }
 
-        public static Round WhenAddedDualTournamentRoundToTournament(Tournament tournament, string name, int bestOf)
+        public static RoundBase WhenAddedDualTournamentRoundToTournament(Tournament tournament, string name, int bestOf)
         {
             if (tournament == null)
             {
                 throw new ArgumentNullException(nameof(tournament));
             }
 
-            return tournament.AddRound(RoundType.DualTournament, name, bestOf);
+            return tournament.AddDualTournamentRound(name, bestOf);
         }
 
-        public static Round WhenAddedRoundRobinRoundToTournament(Tournament tournament, string name, int bestOf, int advanceAmount)
+        public static RoundBase WhenAddedRoundRobinRoundToTournament(Tournament tournament, string name, int bestOf, int advanceAmount)
         {
             if (tournament == null)
             {
                 throw new ArgumentNullException(nameof(tournament));
             }
 
-            return tournament.AddRound(RoundType.RoundRobin, name, bestOf, advanceAmount);
+            return tournament.AddRoundRobinRound(name, bestOf, advanceAmount);
         }
 
-        public static GroupBase WhenAddedGroupToRound(Round round)
+        public static GroupBase WhenAddedGroupToRound(RoundBase round)
         {
             if (round == null)
             {

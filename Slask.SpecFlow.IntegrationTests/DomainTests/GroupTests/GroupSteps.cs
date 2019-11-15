@@ -66,24 +66,23 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
         }
 
         [Then(@"group (.*) should be valid of type ""(.*)""")]
-        public void ThenGroupShouldBeOfType(int groupIndex, string roundType)
+        public void ThenGroupShouldBeValidOfType(int groupIndex, string roundType)
         {
-            if(ParseRoundType(roundType, out RoundType type))
-            {
-                GroupBase group = createdGroups[groupIndex];
+            string type = GetRoundType(roundType);
 
-                if (type == RoundType.Bracket)
-                {
-                    CheckRoundValidity<BracketGroup>(group, 0);
-                }
-                else if (type == RoundType.DualTournament)
-                {
-                    CheckRoundValidity<DualTournamentGroup>(group, 5);
-                }
-                else if (type == RoundType.RoundRobin)
-                {
-                    CheckRoundValidity<RoundRobinGroup>(group, 0);
-                }
+            GroupBase group = createdGroups[groupIndex];
+
+            if (type == "BRACKET")
+            {
+                CheckGroupValidity<BracketGroup>(group, 0);
+            }
+            else if (type == "DUALTOURNAMENT")
+            {
+                CheckGroupValidity<DualTournamentGroup>(group, 5);
+            }
+            else if (type == "ROUNDROBIN")
+            {
+                CheckGroupValidity<RoundRobinGroup>(group, 0);
             }
         }
 
@@ -107,7 +106,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             }
         }
 
-        protected static void CheckRoundValidity<GroupType>(GroupBase group, int matchesUponCreation)
+        protected static void CheckGroupValidity<GroupType>(GroupBase group, int matchesUponCreation)
         {
             group.Should().NotBeNull();
             group.Should().BeOfType<GroupType>();

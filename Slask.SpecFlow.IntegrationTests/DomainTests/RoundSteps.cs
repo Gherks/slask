@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
+using Slask.Domain.Rounds;
 using Slask.SpecFlow.IntegrationTests.ServiceTests;
 using System;
 using System.Collections.Generic;
@@ -16,13 +17,13 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
     public class RoundStepDefinitions : TournamentServiceStepDefinitions
     {
-        protected readonly List<Round> createdRounds;
-        protected readonly List<Round> fetchedRounds;
+        protected readonly List<RoundBase> createdRounds;
+        protected readonly List<RoundBase> fetchedRounds;
 
         public RoundStepDefinitions()
         {
-            createdRounds = new List<Round>();
-            fetchedRounds = new List<Round>();
+            createdRounds = new List<RoundBase>();
+            fetchedRounds = new List<RoundBase>();
         }
 
         [Given(@"a tournament creates rounds")]
@@ -38,10 +39,28 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
             foreach(TableRow row in table.Rows)
             {
-                if (ParseRoundTable(row, out RoundType type, out string name, out int bestOf, out int advancingAmount))
+                ParseRoundTable(row, out string type, out string name, out int bestOf, out int advancingAmount);
+
+                RoundBase round = null;
+                if(type.Length > 0)
                 {
-                    createdRounds.Add(tournament.AddRound(type, name, bestOf, advancingAmount));
+                    type = GetRoundType(type);
+
+                    if(type == "BRACKET")
+                    {
+                        round = tournament.AddBracketRound(name, bestOf);
+                    }
+                    else if(type == "DUALTOURNAMENT")
+                    {
+                        round = tournament.AddDualTournamentRound(name, bestOf);
+                    }
+                    else if (type == "ROUNDROBIN")
+                    {
+                        round = tournament.AddRoundRobinRound(name, bestOf, advancingAmount);
+                    }
                 }
+
+                createdRounds.Add(round);
             }
         }
 
@@ -51,35 +70,28 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             fetchedRounds.Add(createdRounds[roundIndex].GetPreviousRound());
         }
 
-        [Then(@"created round (.*) in tournament should be valid with values:")]
-        public void ThenCreatedRoundInTournamentShouldBeValidWithValues(int roundIndex, Table table)
+        [Then(@"created rounds in tournament should be valid with values:")]
+        public void ThenCreatedRoundInTournamentShouldBeValidWithValues(Table table)
         {
             if (table == null)
             {
                 throw new ArgumentNullException(nameof(table));
-
             }
-            if (ParseRoundTable(table.Rows[0], out RoundType type, out string name, out int bestOf, out int advancingAmount))
+
+            for (int rowIndex = 0; rowIndex < table.Rows.Count; ++rowIndex)
             {
-                CheckRoundValidity(createdRounds[roundIndex], type, name, bestOf, advancingAmount);
+                TableRow row = table.Rows[rowIndex];
+
+                ParseRoundTable(row, out string typeName, out string name, out int bestOf, out int advancingAmount);
+                CheckRoundValidity(createdRounds[rowIndex], name, bestOf, advancingAmount);
             }
         }
 
         [Then(@"created round (.*) in tournament should be invalid")]
         public void ThenCreatedRoundInTournamentShouldBeInvalid(int roundIndex)
         {
-            Round round = createdRounds[roundIndex];
+            RoundBase round = createdRounds[roundIndex];
             round.Should().BeNull();
-        }
-
-        [Then(@"created rounds (.*) to (.*) in tournament should be invalid")]
-        public void ThenCreatedRoundsToInTournamentShouldBeInvalid(int startIndex, int endIndex)
-        {
-            for (int roundIndex = startIndex; roundIndex < endIndex; ++roundIndex)
-            {
-                Round round = createdRounds[roundIndex];
-                round.Should().BeNull();
-            }
         }
 
         [Then(@"fetched round (.*) in tournament should be valid with values:")]
@@ -90,10 +102,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                 throw new ArgumentNullException(nameof(table));
             }
 
-            if (ParseRoundTable(table.Rows[0], out RoundType type, out string name, out int bestOf, out int advancingAmount))
-            {
-                CheckRoundValidity(fetchedRounds[roundIndex], type, name, bestOf, advancingAmount);
-            }
+            ParseRoundTable(table.Rows[0], out string typeName, out string name, out int bestOf, out int advancingAmount);
+            CheckRoundValidity(fetchedRounds[roundIndex], name, bestOf, advancingAmount);
         }
 
         [Then(@"fetched round (.*) in tournament should be invalid")]
@@ -102,7 +112,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             fetchedRounds[roundIndex].Should().BeNull();
         }
 
-        protected static void CheckRoundValidity(Round round, RoundType type, string correctName, int bestOf, int advancingAmount)
+        protected static void CheckRoundValidity(RoundBase round, string correctName, int bestOf, int advancingAmount)
         {
             if (round == null)
             {
@@ -111,7 +121,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
             round.Should().NotBeNull();
             round.Id.Should().NotBeEmpty();
-            round.Type.Should().Be(type);
             round.Name.Should().Be(correctName);
             round.BestOf.Should().Be(bestOf);
             round.AdvancingPerGroupAmount.Should().Be(advancingAmount);
@@ -120,42 +129,57 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             round.Tournament.Should().NotBeNull();
         }
 
-        protected static bool ParseRoundTable(TableRow row, out RoundType type, out string name, out int bestOf, out int advancingAmount)
+        protected static void ParseRoundTable(TableRow row, out string typeName, out string name, out int bestOf, out int advancingAmount)
         {
-            if (ParseRoundType(row["Round type"], out type) &&
-                int.TryParse(row["Best of"], out bestOf) &&
-                int.TryParse(row["Advancing amount"], out advancingAmount))
+            typeName = "";
+            name = "";
+            bestOf = 1;
+            advancingAmount = 1;
+
+            if (row.ContainsKey("Round type"))
+            {
+                typeName = row["Round type"];
+            }
+
+            if (row.ContainsKey("Round name"))
             {
                 name = row["Round name"];
-                return true;
             }
-            string argumentString = string.Format("Round type: {0}, Round name: {1},  Best of {2}, Advancing amount {3}", row["Round type"], row["Round name"], row["Best of"], row["Advancing amount"]);
-            throw new Exception("Uknown Round Specflow table row given - " + argumentString);
+
+            if (row.ContainsKey("Best of"))
+            {
+                int.TryParse(row["Best of"], out bestOf);
+            }
+
+            if (row.ContainsKey("Advancing amount"))
+            {
+                int.TryParse(row["Advancing amount"], out advancingAmount);
+            }
+            
+            //return true;
+
+            //string argumentString = string.Format("Round type: {0}, Round name: {1},  Best of {2}, Advancing amount {3}", row["Round type"], row["Round name"], row["Best of"], row["Advancing amount"]);
+            //throw new Exception("Uknown Round Specflow table row given - " + argumentString);
         }
 
-        protected static bool ParseRoundType(string type, out RoundType outType)
+        protected static string GetRoundType(string type)
         {
             type = StringUtility.ToUpperNoSpaces(type);
 
             if (type.Contains("BRACKET", StringComparison.CurrentCulture))
             {
-                outType = RoundType.Bracket;
-                return true;
+                return "BRACKET";
             }
             else if (type.Contains("DUALTOURNAMENT", StringComparison.CurrentCulture))
             {
-                outType = RoundType.DualTournament;
-                return true;
+                return "DUALTOURNAMENT";
             }
             else if (type.Contains("ROUNDROBIN", StringComparison.CurrentCulture))
             {
-                outType = RoundType.Bracket;
-                return true;
+                return "ROUNDROBIN";
             }
-            else
-            {
-                throw new Exception("Uknown round type given: " + type);
-            }
+
+            return "";
         }
 
         private Tournament GivenATournament()

@@ -1,4 +1,5 @@
 ﻿using Slask.Common;
+using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Slask.Domain
     {
         private Tournament()
         {
-            Rounds = new List<Round>();
+            Rounds = new List<RoundBase>();
             PlayerReferences = new List<PlayerReference>();
             Betters = new List<Better>();
             Settings = new List<Settings>();
@@ -18,7 +19,7 @@ namespace Slask.Domain
 
         public Guid Id { get; private set; }
         public string Name { get; private set; }
-        public List<Round> Rounds { get; private set; }
+        public List<RoundBase> Rounds { get; private set; }
         public List<PlayerReference> PlayerReferences { get; private set; }
         public List<Better> Betters { get; private set; }
         public List<Settings> Settings { get; private set; }
@@ -38,14 +39,42 @@ namespace Slask.Domain
             Name = name;
         }
 
-        public Round AddRound(RoundType type, string name, int bestOf, int advanceAmount = 1)
+        public RoundBase AddBracketRound(string name, int bestOf)
         {
-            if (!BasicRoundValidation(name, bestOf, advanceAmount))
+            RoundBase round = BracketRound.Create(name, bestOf, this);
+
+            if (round == null)
             {
                 return null;
             }
 
-            Rounds.Add(Round.Create(name, type, bestOf, advanceAmount, this));
+            Rounds.Add(round);
+            return Rounds.Last();
+        }
+
+        public RoundBase AddDualTournamentRound(string name, int bestOf)
+        {
+            RoundBase round = DualTournamentRound.Create(name, bestOf, this);
+
+            if (round == null)
+            {
+                return null;
+            }
+
+            Rounds.Add(round);
+            return Rounds.Last();
+        }
+
+        public RoundBase AddRoundRobinRound(string name, int bestOf, int advanceAmount)
+        {
+            RoundBase round = RoundRobinRound.Create(name, bestOf, advanceAmount, this);
+
+            if (round == null)
+            {
+                return null;
+            }
+
+            Rounds.Add(round);
             return Rounds.Last();
         }
 
@@ -63,12 +92,12 @@ namespace Slask.Domain
             return Betters.Last();
         }
 
-        public Round GetRoundByRoundId(Guid id)
+        public RoundBase GetRoundByRoundId(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public Round GetRoundByRoundName(string name)
+        public RoundBase GetRoundByRoundName(string name)
         {
             throw new NotImplementedException();
         }
@@ -91,15 +120,6 @@ namespace Slask.Domain
         public Better GetBetterByName(string name)
         {
             return Betters.FirstOrDefault(better => better.User.Name.ToLower() == name.ToLower());
-        }
-
-        private bool BasicRoundValidation(string name, int bestOf, int advanceAmount)
-        {
-            bool nameIsNotEmpty = name != "";
-            bool bestOfIsNotEven = bestOf % 2 != 0;
-            bool advanceAmountIsGreaterThanZero = advanceAmount > 0;
-
-            return nameIsNotEmpty && bestOfIsNotEven && advanceAmountIsGreaterThanZero;
         }
     }
 }

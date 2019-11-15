@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Slask.Domain.Rounds;
+using System;
 
 namespace Slask.Domain
 {
@@ -9,7 +9,7 @@ namespace Slask.Domain
         {
         }
 
-        public static BracketGroup Create(Round round)
+        public static BracketGroup Create(BracketRound round)
         {
             if (round == null)
             {

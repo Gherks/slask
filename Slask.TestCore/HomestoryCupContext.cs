@@ -1,5 +1,6 @@
 ﻿using Slask.Common;
 using Slask.Domain;
+using Slask.Domain.Rounds;
 using Slask.Persistence;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ namespace Slask.TestCore
             return tournament;
         }
 
-        public static Round Part03AddRoundRobinRound(TournamentServiceContext serviceContext)
+        public static RoundBase Part03AddRoundRobinRound(TournamentServiceContext serviceContext)
         {
             if (serviceContext == null)
             {
@@ -51,7 +52,7 @@ namespace Slask.TestCore
 
             Tournament tournament = Part02BettersAddedToTournament(serviceContext);
 
-            Round round = TournamentServiceContext.WhenAddedRoundRobinRoundToTournament(tournament, "Round Robin Round", 3, 4);
+            RoundBase round = TournamentServiceContext.WhenAddedRoundRobinRoundToTournament(tournament, "Round Robin Round", 3, 4);
 
             serviceContext.SaveChanges();
             return round;
@@ -64,7 +65,7 @@ namespace Slask.TestCore
                 throw new ArgumentNullException(nameof(serviceContext));
             }
 
-            Round round = Part03AddRoundRobinRound(serviceContext);
+            RoundBase round = Part03AddRoundRobinRound(serviceContext);
 
             RoundRobinGroup group = (RoundRobinGroup)TournamentServiceContext.WhenAddedGroupToRound(round);
 
@@ -174,7 +175,7 @@ namespace Slask.TestCore
             return group;
         }
 
-        public static Round Part10AddBracketRound(TournamentServiceContext serviceContext)
+        public static RoundBase Part10AddBracketRound(TournamentServiceContext serviceContext)
         {
             if (serviceContext == null)
             {
@@ -184,7 +185,7 @@ namespace Slask.TestCore
             RoundRobinGroup group = Part09CompleteAllMatchesInRoundRobinGroup(serviceContext);
             Tournament tournament = group.Round.Tournament;
 
-            Round round = TournamentServiceContext.WhenAddedBracketRoundToTournament(tournament, "Bracket Round", 5);
+            RoundBase round = TournamentServiceContext.WhenAddedBracketRoundToTournament(tournament, "Bracket Round", 5);
 
             serviceContext.SaveChanges();
             return round;
@@ -197,7 +198,7 @@ namespace Slask.TestCore
                 throw new ArgumentNullException(nameof(serviceContext));
             }
 
-            Round round = Part10AddBracketRound(serviceContext);
+            RoundBase round = Part10AddBracketRound(serviceContext);
 
             BracketGroup group = (BracketGroup)TournamentServiceContext.WhenAddedGroupToRound(round);
 
@@ -213,7 +214,7 @@ namespace Slask.TestCore
             }
 
             BracketGroup group = Part11AddGroupToBracketRound(serviceContext);
-            Round previousRound = group.Round.GetPreviousRound();
+            RoundBase previousRound = group.Round.GetPreviousRound();
             List<PlayerReference> winningPlayers = previousRound.GetAdvancingPlayers();
 
             foreach (PlayerReference player in winningPlayers)

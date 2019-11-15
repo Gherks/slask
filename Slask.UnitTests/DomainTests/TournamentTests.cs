@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
+using Slask.Domain.Rounds;
 using Slask.TestCore;
 using System;
 using System.Collections.Generic;
@@ -32,10 +33,10 @@ namespace Slask.UnitTests.DomainTests
         public void CanGetRoundInTournamentByRoundId()
         {
             TournamentServiceContext services = GivenServices();
-            Round createdRound = HomestoryCupSetup.Part03AddRoundRobinRound(services);
+            RoundBase createdRound = HomestoryCupSetup.Part03AddRoundRobinRound(services);
             Tournament tournament = createdRound.Tournament;
 
-            Round fetchedRound = tournament.GetRoundByRoundId(createdRound.Id);
+            RoundBase fetchedRound = tournament.GetRoundByRoundId(createdRound.Id);
 
             fetchedRound.Should().NotBeNull();
             fetchedRound.Id.Should().Be(createdRound.Id);
@@ -46,10 +47,10 @@ namespace Slask.UnitTests.DomainTests
         public void CanGetRoundInTournamentByRoundName()
         {
             TournamentServiceContext services = GivenServices();
-            Round createdRound = HomestoryCupSetup.Part03AddRoundRobinRound(services);
+            RoundBase createdRound = HomestoryCupSetup.Part03AddRoundRobinRound(services);
             Tournament tournament = createdRound.Tournament;
 
-            Round fetchedRound = tournament.GetRoundByRoundName(createdRound.Name);
+            RoundBase fetchedRound = tournament.GetRoundByRoundName(createdRound.Name);
 
             fetchedRound.Should().NotBeNull();
             fetchedRound.Id.Should().Be(createdRound.Id);
@@ -151,7 +152,7 @@ namespace Slask.UnitTests.DomainTests
 
             for (int bestOf = 0; bestOf <= 64; bestOf += 2)
             {
-                Round round = tournament.AddRound(RoundType.RoundRobin, "Group A", bestOf, 8);
+                RoundBase round = tournament.AddRoundRobinRound("Group A", bestOf, 8);
                 round.Should().BeNull();
             }
         }
@@ -177,7 +178,7 @@ namespace Slask.UnitTests.DomainTests
 
             for (int bestOf = 0; bestOf <= 64; bestOf += 2)
             {
-                Round round = tournament.AddRound(RoundType.Bracket, "Bracket A", bestOf);
+                RoundBase round = tournament.AddBracketRound("Bracket A", bestOf);
                 round.Should().BeNull();
             }
         }
