@@ -4,8 +4,8 @@
 @RoundTag
 Scenario: Can create bracket round
 	When a tournament creates rounds
-		| Round type | Round name    | Best of | Advancing amount |
-		| Bracket    | Bracket round | 3       | 1                |
+		| Round type | Round name    | Best of |
+		| Bracket    | Bracket round | 3       |
 	Then created rounds in tournament should be valid with values:
 		| Round type | Round name    | Best of | Advancing amount |
 		| Bracket    | Bracket round | 3       | 1                |
@@ -17,6 +17,14 @@ Scenario: Can create dual tournament round
 	Then created rounds in tournament should be valid with values:
 		| Round type      | Round name            | Best of | Advancing amount |
 		| Dual tournament | Dual tournament round | 3       | 2                |
+
+Scenario: Can create round robin round
+	When a tournament creates rounds
+		| Round type  | Round name        | Best of | Advancing amount |
+		| Round robin | Round robin round | 3       | 1                |
+	Then created rounds in tournament should be valid with values:
+		| Round type  | Round name        | Best of | Advancing amount |
+		| Round robin | Round robin round | 3       | 1                |
 
 Scenario: Advancing amount in bracket rounds cannot be anything other than two
 	When a tournament creates rounds
@@ -37,35 +45,27 @@ Scenario: Advancing amount in dual tournament rounds cannot be anything other th
 		| Dual tournament | Dual tournament round 2 | 3       | 1                |
 		| Dual tournament | Dual tournament round 3 | 3       | 3                |
 	Then created rounds in tournament should be valid with values:
-		| Round type      | Round name            | Best of | Advancing amount |
+		| Round type      | Round name              | Best of | Advancing amount |
 		| Dual tournament | Dual tournament round 1 | 3       | 2                |
 		| Dual tournament | Dual tournament round 2 | 3       | 2                |
 		| Dual tournament | Dual tournament round 3 | 3       | 2                |
 
-Scenario: Can create round robin round
-	When a tournament creates rounds
-		| Round type  | Round name    | Best of | Advancing amount |
-		| Round robin | Round robin round | 3       | 1                |
-	Then created rounds in tournament should be valid with values:
-		| Round type  | Round name        | Best of | Advancing amount |
-		| Round robin | Round robin round | 3       | 1                |
-
 Scenario: Cannot create bracket round without name
 	When a tournament creates rounds
-		| Round type | Round name | Best of | Advancing amount |
-		| Bracket    |            | 3       | 1                |
+		| Round type | Round name | Best of |
+		| Bracket    |            | 3       |
 	Then created round 0 in tournament should be invalid
 
 Scenario: Cannot create dual tournament round without name
 	When a tournament creates rounds
-		| Round type      | Round name | Best of | Advancing amount |
-		| Dual tournament |            | 3       | 1                |
+		| Round type      | Round name | Best of |
+		| Dual tournament |            | 3       |
 	Then created round 0 in tournament should be invalid
 
 Scenario: Cannot create round robin round without name
 	When a tournament creates rounds
-		| Round type | Round name | Best of | Advancing amount |
-		| Bracket    |            | 3       | 1                |
+		| Round type  | Round name | Best of | Advancing amount |
+		| Round robin |            | 3       | 1                |
 	Then created round 0 in tournament should be invalid
 
 Scenario: Cannot create bracket round with zero advancers
@@ -118,20 +118,20 @@ Scenario: Cannot create round robin round with less than zero advancers
 
 Scenario: Cannot create bracket round with even best ofs
 	When a tournament creates rounds
-		| Round type      | Round name      | Best of | Advancing amount |
-		| Bracket         | Bracket round 1 | 0       | 1                |
-		| Bracket         | Bracket round 2 | 2       | 1                |
-		| Bracket         | Bracket round 3 | 4       | 1                |
+		| Round type      | Round name      | Best of |
+		| Bracket         | Bracket round 1 | 0       |
+		| Bracket         | Bracket round 2 | 2       |
+		| Bracket         | Bracket round 3 | 4       |
 	Then created round 0 in tournament should be invalid
 		And created round 1 in tournament should be invalid
 		And created round 2 in tournament should be invalid
 
 Scenario: Cannot create dual tournament round with even best ofs
 	When a tournament creates rounds
-		| Round type      | Round name              | Best of | Advancing amount |
-		| Dual tournament | Dual tournament round 1 | 0       | 1                |
-		| Dual tournament | Dual tournament round 2 | 2       | 1                |
-		| Dual tournament | Dual tournament round 3 | 4       | 1                |
+		| Round type      | Round name              | Best of |
+		| Dual tournament | Dual tournament round 1 | 0       |
+		| Dual tournament | Dual tournament round 2 | 2       |
+		| Dual tournament | Dual tournament round 3 | 4       |
 	Then created round 0 in tournament should be invalid
 		And created round 1 in tournament should be invalid
 		And created round 2 in tournament should be invalid
@@ -148,20 +148,20 @@ Scenario: Cannot create round robin round with even best ofs
 
 Scenario: Cannot create bracket round with best ofs less than zero
 	When a tournament creates rounds
-		| Round type | Round name      | Best of | Advancing amount |
-		| Bracket    | Bracket round 1 | -1      | 1                |
-		| Bracket    | Bracket round 2 | -2      | 1                |
-		| Bracket    | Bracket round 3 | -3      | 1                |
+		| Round type | Round name      | Best of |
+		| Bracket    | Bracket round 1 | -1      |
+		| Bracket    | Bracket round 2 | -2      |
+		| Bracket    | Bracket round 3 | -3      |
 	Then created round 0 in tournament should be invalid
 		And created round 1 in tournament should be invalid
 		And created round 2 in tournament should be invalid
 
 Scenario: Cannot create dual tournament round with best ofs less than zero
 	When a tournament creates rounds
-		| Round type       | Round name              | Best of | Advancing amount |
-		|  Dual tournament | Dual tournament round 1 | -1      | 1                |
-		|  Dual tournament | Dual tournament round 2 | -2      | 1                |
-		|  Dual tournament | Dual tournament round 3 | -3      | 1                |
+		| Round type       | Round name              | Best of |
+		|  Dual tournament | Dual tournament round 1 | -1      |
+		|  Dual tournament | Dual tournament round 2 | -2      |
+		|  Dual tournament | Dual tournament round 3 | -3      |
 	Then created round 0 in tournament should be invalid
 		And created round 1 in tournament should be invalid
 		And created round 2 in tournament should be invalid
@@ -178,18 +178,18 @@ Scenario: Cannot create round robin round with best ofs less than zero
 
 Scenario: Can fetch previous round from round with round predecessor
 	Given a tournament creates rounds
-		| Round type      | Round name            | Best of | Advancing amount |
-		| Dual tournament | Dual tournament round | 3       | 1                |
-		| Bracket         | Bracket round         | 3       | 1                |
+		| Round type      | Round name            | Best of |
+		| Dual tournament | Dual tournament round | 3       |
+		| Bracket         | Bracket round         | 3       |
 	When created round 1 fetches previous round
 	Then fetched round 0 in tournament should be valid with values:
-		| Round type      | Round name            | Best of | Advancing amount |
-		| Dual tournament | Dual tournament round | 3       | 1                |
+		| Round type      | Round name            | Best of |
+		| Dual tournament | Dual tournament round | 3       |
 
 Scenario: Cannot fetch previous round with first round
 	Given a tournament creates rounds
-		| Round type      | Round name            | Best of | Advancing amount |
-		| Bracket         | Bracket round         | 3       | 1                |
+		| Round type      | Round name            | Best of |
+		| Bracket         | Bracket round         | 3       |
 	When created round 0 fetches previous round
 	Then fetched round 0 in tournament should be invalid
 

@@ -166,8 +166,8 @@ this.ScenarioInitialize(scenarioInfo);
                             "Best of",
                             "Advancing amount"});
                 table2.AddRow(new string[] {
-                            "Round robin",
-                            "Round robin round",
+                            "Bracket",
+                            "Bracket round",
                             "3",
                             "1"});
 #line 13
