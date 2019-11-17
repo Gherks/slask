@@ -68,43 +68,11 @@ Scenario: Cannot create round robin round without name
 		| Round robin |            | 3       | 1                |
 	Then created round 0 in tournament should be invalid
 
-Scenario: Cannot create bracket round with zero advancers
-	When a tournament creates rounds
-		| Round type      | Round name    | Best of | Advancing amount |
-		| Bracket         | Bracket round | 3       | 0                |
-	Then created round 0 in tournament should be invalid
-
-Scenario: Cannot create dual tournament round with zero advancers
-	When a tournament creates rounds
-		| Round type      | Round name            | Best of | Advancing amount |
-		| Dual tournament | Dual tournament round | 3       | 0                |
-	Then created round 0 in tournament should be invalid
-
 Scenario: Cannot create round robin round with zero advancers
 	When a tournament creates rounds
 		| Round type      | Round name        | Best of | Advancing amount |
 		| Round robin     | Round robin round | 3       | 0                |
 	Then created round 0 in tournament should be invalid
-
-Scenario: Cannot create bracket round with less than zero advancers
-	When a tournament creates rounds
-		| Round type      | Round name      | Best of | Advancing amount |
-		| Bracket         | Bracket round 1 | 3       | -1               |
-		| Bracket         | Bracket round 2 | 3       | -2               |
-		| Bracket         | Bracket round 3 | 3       | -3               |
-	Then created round 0 in tournament should be invalid
-		And created round 1 in tournament should be invalid
-		And created round 2 in tournament should be invalid
-
-Scenario: Cannot create dual tournament round with less than zero advancers
-	When a tournament creates rounds
-		| Round type      | Round name              | Best of | Advancing amount |
-		| Dual tournament | Dual tournament round 1 | 3       | -1               |
-		| Dual tournament | Dual tournament round 2 | 3       | -2               |
-		| Dual tournament | Dual tournament round 3 | 3       | -3               |
-	Then created round 0 in tournament should be invalid
-		And created round 1 in tournament should be invalid
-		And created round 2 in tournament should be invalid
 
 Scenario: Cannot create round robin round with less than zero advancers
 	When a tournament creates rounds

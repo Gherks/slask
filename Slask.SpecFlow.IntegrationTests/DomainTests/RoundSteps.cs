@@ -81,9 +81,23 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             for (int rowIndex = 0; rowIndex < table.Rows.Count; ++rowIndex)
             {
                 TableRow row = table.Rows[rowIndex];
+                ParseRoundTable(row, out _, out string name, out int bestOf, out int advancingAmount);
 
-                ParseRoundTable(row, out string typeName, out string name, out int bestOf, out int advancingAmount);
-                CheckRoundValidity(createdRounds[rowIndex], name, bestOf, advancingAmount);
+                RoundBase createdRound = createdRounds[rowIndex];
+                CheckRoundValidity(createdRound, name, bestOf);
+
+                if (createdRound is BracketRound bracketRound)
+                {
+                    bracketRound.AdvancingPerGroupAmount.Should().Be(1);
+                }
+                else if (createdRound is DualTournamentRound dualTournamentRound)
+                {
+                    dualTournamentRound.AdvancingPerGroupAmount.Should().Be(2);
+                }
+                else if (createdRound is RoundRobinRound roundRobinRound)
+                {
+                    roundRobinRound.AdvancingPerGroupAmount.Should().Be(advancingAmount);
+                }
             }
         }
 
@@ -102,8 +116,23 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                 throw new ArgumentNullException(nameof(table));
             }
 
-            ParseRoundTable(table.Rows[0], out string typeName, out string name, out int bestOf, out int advancingAmount);
-            CheckRoundValidity(fetchedRounds[roundIndex], name, bestOf, advancingAmount);
+            ParseRoundTable(table.Rows[0], out _, out string name, out int bestOf, out int advancingAmount);
+
+            RoundBase fetchedRound = fetchedRounds[roundIndex];
+            CheckRoundValidity(fetchedRound, name, bestOf);
+
+            if (fetchedRound is BracketRound bracketRound)
+            {
+                bracketRound.AdvancingPerGroupAmount.Should().Be(1);
+            }
+            else if (fetchedRound is DualTournamentRound dualTournamentRound)
+            {
+                dualTournamentRound.AdvancingPerGroupAmount.Should().Be(2);
+            }
+            else if (fetchedRound is RoundRobinRound roundRobinRound)
+            {
+                roundRobinRound.AdvancingPerGroupAmount.Should().Be(advancingAmount);
+            }
         }
 
         [Then(@"fetched round (.*) in tournament should be invalid")]
@@ -112,7 +141,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             fetchedRounds[roundIndex].Should().BeNull();
         }
 
-        protected static void CheckRoundValidity(RoundBase round, string correctName, int bestOf, int advancingAmount)
+        protected static void CheckRoundValidity(RoundBase round, string correctName, int bestOf)
         {
             if (round == null)
             {
@@ -123,7 +152,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             round.Id.Should().NotBeEmpty();
             round.Name.Should().Be(correctName);
             round.BestOf.Should().Be(bestOf);
-            round.AdvancingPerGroupAmount.Should().Be(advancingAmount);
             round.Groups.Should().BeEmpty();
             round.TournamentId.Should().NotBeEmpty();
             round.Tournament.Should().NotBeNull();
@@ -181,6 +209,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
             return "";
         }
+
+        protected 
 
         private Tournament GivenATournament()
         {

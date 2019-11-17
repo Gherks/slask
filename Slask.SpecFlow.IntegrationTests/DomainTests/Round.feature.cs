@@ -113,13 +113,11 @@ this.ScenarioInitialize(scenarioInfo);
                 TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
-                            "Best of",
-                            "Advancing amount"});
+                            "Best of"});
                 table10.AddRow(new string[] {
                             "Bracket",
                             "Bracket round",
-                            "3",
-                            "1"});
+                            "3"});
 #line 6
  testRunner.When("a tournament creates rounds", ((string)(null)), table10, "When ");
 #line hidden
@@ -195,13 +193,13 @@ this.ScenarioInitialize(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Advancing amount in bracket rounds cannot be anything other than two")]
+        [Xunit.SkippableFactAttribute(DisplayName="Can create round robin round")]
         [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Advancing amount in bracket rounds cannot be anything other than two")]
-        public virtual void AdvancingAmountInBracketRoundsCannotBeAnythingOtherThanTwo()
+        [Xunit.TraitAttribute("Description", "Can create round robin round")]
+        public virtual void CanCreateRoundRobinRound()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Advancing amount in bracket rounds cannot be anything other than two", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can create round robin round", null, ((string[])(null)));
 #line 21
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -228,20 +226,10 @@ this.ScenarioInitialize(scenarioInfo);
                             "Best of",
                             "Advancing amount"});
                 table14.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round 1",
+                            "Round robin",
+                            "Round robin round",
                             "3",
-                            "0"});
-                table14.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round 2",
-                            "3",
-                            "2"});
-                table14.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round 3",
-                            "3",
-                            "3"});
+                            "1"});
 #line 22
  testRunner.When("a tournament creates rounds", ((string)(null)), table14, "When ");
 #line hidden
@@ -251,35 +239,25 @@ this.ScenarioInitialize(scenarioInfo);
                             "Best of",
                             "Advancing amount"});
                 table15.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round 1",
+                            "Round robin",
+                            "Round robin round",
                             "3",
                             "1"});
-                table15.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round 2",
-                            "3",
-                            "1"});
-                table15.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round 3",
-                            "3",
-                            "1"});
-#line 27
+#line 25
  testRunner.Then("created rounds in tournament should be valid with values:", ((string)(null)), table15, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Advancing amount in dual tournament rounds cannot be anything other than two")]
+        [Xunit.SkippableFactAttribute(DisplayName="Advancing amount in bracket rounds cannot be anything other than two")]
         [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Advancing amount in dual tournament rounds cannot be anything other than two")]
-        public virtual void AdvancingAmountInDualTournamentRoundsCannotBeAnythingOtherThanTwo()
+        [Xunit.TraitAttribute("Description", "Advancing amount in bracket rounds cannot be anything other than two")]
+        public virtual void AdvancingAmountInBracketRoundsCannotBeAnythingOtherThanTwo()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Advancing amount in dual tournament rounds cannot be anything other than two", null, ((string[])(null)));
-#line 33
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Advancing amount in bracket rounds cannot be anything other than two", null, ((string[])(null)));
+#line 29
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -305,21 +283,21 @@ this.ScenarioInitialize(scenarioInfo);
                             "Best of",
                             "Advancing amount"});
                 table16.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round 1",
+                            "Bracket",
+                            "Bracket round 1",
                             "3",
                             "0"});
                 table16.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round 2",
+                            "Bracket",
+                            "Bracket round 2",
                             "3",
-                            "1"});
+                            "2"});
                 table16.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round 3",
+                            "Bracket",
+                            "Bracket round 3",
                             "3",
                             "3"});
-#line 34
+#line 30
  testRunner.When("a tournament creates rounds", ((string)(null)), table16, "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
@@ -328,35 +306,35 @@ this.ScenarioInitialize(scenarioInfo);
                             "Best of",
                             "Advancing amount"});
                 table17.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round 1",
+                            "Bracket",
+                            "Bracket round 1",
                             "3",
-                            "2"});
+                            "1"});
                 table17.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round 2",
+                            "Bracket",
+                            "Bracket round 2",
                             "3",
-                            "2"});
+                            "1"});
                 table17.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round 3",
+                            "Bracket",
+                            "Bracket round 3",
                             "3",
-                            "2"});
-#line 39
+                            "1"});
+#line 35
  testRunner.Then("created rounds in tournament should be valid with values:", ((string)(null)), table17, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Can create round robin round")]
+        [Xunit.SkippableFactAttribute(DisplayName="Advancing amount in dual tournament rounds cannot be anything other than two")]
         [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Can create round robin round")]
-        public virtual void CanCreateRoundRobinRound()
+        [Xunit.TraitAttribute("Description", "Advancing amount in dual tournament rounds cannot be anything other than two")]
+        public virtual void AdvancingAmountInDualTournamentRoundsCannotBeAnythingOtherThanTwo()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can create round robin round", null, ((string[])(null)));
-#line 45
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Advancing amount in dual tournament rounds cannot be anything other than two", null, ((string[])(null)));
+#line 41
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -382,11 +360,21 @@ this.ScenarioInitialize(scenarioInfo);
                             "Best of",
                             "Advancing amount"});
                 table18.AddRow(new string[] {
-                            "Round robin",
-                            "Round robin round",
+                            "Dual tournament",
+                            "Dual tournament round 1",
+                            "3",
+                            "0"});
+                table18.AddRow(new string[] {
+                            "Dual tournament",
+                            "Dual tournament round 2",
                             "3",
                             "1"});
-#line 46
+                table18.AddRow(new string[] {
+                            "Dual tournament",
+                            "Dual tournament round 3",
+                            "3",
+                            "3"});
+#line 42
  testRunner.When("a tournament creates rounds", ((string)(null)), table18, "When ");
 #line hidden
                 TechTalk.SpecFlow.Table table19 = new TechTalk.SpecFlow.Table(new string[] {
@@ -395,11 +383,21 @@ this.ScenarioInitialize(scenarioInfo);
                             "Best of",
                             "Advancing amount"});
                 table19.AddRow(new string[] {
-                            "Round robin",
-                            "Round robin round",
+                            "Dual tournament",
+                            "Dual tournament round 1",
                             "3",
-                            "1"});
-#line 49
+                            "2"});
+                table19.AddRow(new string[] {
+                            "Dual tournament",
+                            "Dual tournament round 2",
+                            "3",
+                            "2"});
+                table19.AddRow(new string[] {
+                            "Dual tournament",
+                            "Dual tournament round 3",
+                            "3",
+                            "2"});
+#line 47
  testRunner.Then("created rounds in tournament should be valid with values:", ((string)(null)), table19, "Then ");
 #line hidden
             }
@@ -436,13 +434,11 @@ this.ScenarioInitialize(scenarioInfo);
                 TechTalk.SpecFlow.Table table20 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
-                            "Best of",
-                            "Advancing amount"});
+                            "Best of"});
                 table20.AddRow(new string[] {
                             "Bracket",
                             "",
-                            "3",
-                            "1"});
+                            "3"});
 #line 54
  testRunner.When("a tournament creates rounds", ((string)(null)), table20, "When ");
 #line hidden
@@ -483,13 +479,11 @@ this.ScenarioInitialize(scenarioInfo);
                 TechTalk.SpecFlow.Table table21 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
-                            "Best of",
-                            "Advancing amount"});
+                            "Best of"});
                 table21.AddRow(new string[] {
                             "Dual tournament",
                             "",
-                            "3",
-                            "1"});
+                            "3"});
 #line 60
  testRunner.When("a tournament creates rounds", ((string)(null)), table21, "When ");
 #line hidden
@@ -533,7 +527,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "Best of",
                             "Advancing amount"});
                 table22.AddRow(new string[] {
-                            "Bracket",
+                            "Round robin",
                             "",
                             "3",
                             "1"});
@@ -547,13 +541,13 @@ this.ScenarioInitialize(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Cannot create bracket round with zero advancers")]
+        [Xunit.SkippableFactAttribute(DisplayName="Cannot create round robin round with zero advancers")]
         [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Cannot create bracket round with zero advancers")]
-        public virtual void CannotCreateBracketRoundWithZeroAdvancers()
+        [Xunit.TraitAttribute("Description", "Cannot create round robin round with zero advancers")]
+        public virtual void CannotCreateRoundRobinRoundWithZeroAdvancers()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create bracket round with zero advancers", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create round robin round with zero advancers", null, ((string[])(null)));
 #line 71
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -580,8 +574,8 @@ this.ScenarioInitialize(scenarioInfo);
                             "Best of",
                             "Advancing amount"});
                 table23.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round",
+                            "Round robin",
+                            "Round robin round",
                             "3",
                             "0"});
 #line 72
@@ -594,13 +588,13 @@ this.ScenarioInitialize(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Cannot create dual tournament round with zero advancers")]
+        [Xunit.SkippableFactAttribute(DisplayName="Cannot create round robin round with less than zero advancers")]
         [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Cannot create dual tournament round with zero advancers")]
-        public virtual void CannotCreateDualTournamentRoundWithZeroAdvancers()
+        [Xunit.TraitAttribute("Description", "Cannot create round robin round with less than zero advancers")]
+        public virtual void CannotCreateRoundRobinRoundWithLessThanZeroAdvancers()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create dual tournament round with zero advancers", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create round robin round with less than zero advancers", null, ((string[])(null)));
 #line 77
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -627,28 +621,44 @@ this.ScenarioInitialize(scenarioInfo);
                             "Best of",
                             "Advancing amount"});
                 table24.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round",
+                            "Round robin",
+                            "Round robin round 1",
                             "3",
-                            "0"});
+                            "-1"});
+                table24.AddRow(new string[] {
+                            "Round robin",
+                            "Round robin round 2",
+                            "3",
+                            "-2"});
+                table24.AddRow(new string[] {
+                            "Round robin",
+                            "Round robin round 3",
+                            "3",
+                            "-3"});
 #line 78
  testRunner.When("a tournament creates rounds", ((string)(null)), table24, "When ");
 #line hidden
-#line 81
+#line 83
  testRunner.Then("created round 0 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 84
+  testRunner.And("created round 1 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 85
+  testRunner.And("created round 2 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Cannot create round robin round with zero advancers")]
+        [Xunit.SkippableFactAttribute(DisplayName="Cannot create bracket round with even best ofs")]
         [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Cannot create round robin round with zero advancers")]
-        public virtual void CannotCreateRoundRobinRoundWithZeroAdvancers()
+        [Xunit.TraitAttribute("Description", "Cannot create bracket round with even best ofs")]
+        public virtual void CannotCreateBracketRoundWithEvenBestOfs()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create round robin round with zero advancers", null, ((string[])(null)));
-#line 83
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create bracket round with even best ofs", null, ((string[])(null)));
+#line 87
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -671,31 +681,43 @@ this.ScenarioInitialize(scenarioInfo);
                 TechTalk.SpecFlow.Table table25 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
-                            "Best of",
-                            "Advancing amount"});
+                            "Best of"});
                 table25.AddRow(new string[] {
-                            "Round robin",
-                            "Round robin round",
-                            "3",
+                            "Bracket",
+                            "Bracket round 1",
                             "0"});
-#line 84
+                table25.AddRow(new string[] {
+                            "Bracket",
+                            "Bracket round 2",
+                            "2"});
+                table25.AddRow(new string[] {
+                            "Bracket",
+                            "Bracket round 3",
+                            "4"});
+#line 88
  testRunner.When("a tournament creates rounds", ((string)(null)), table25, "When ");
 #line hidden
-#line 87
+#line 93
  testRunner.Then("created round 0 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+#line 94
+  testRunner.And("created round 1 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 95
+  testRunner.And("created round 2 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Cannot create bracket round with less than zero advancers")]
+        [Xunit.SkippableFactAttribute(DisplayName="Cannot create dual tournament round with even best ofs")]
         [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Cannot create bracket round with less than zero advancers")]
-        public virtual void CannotCreateBracketRoundWithLessThanZeroAdvancers()
+        [Xunit.TraitAttribute("Description", "Cannot create dual tournament round with even best ofs")]
+        public virtual void CannotCreateDualTournamentRoundWithEvenBestOfs()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create bracket round with less than zero advancers", null, ((string[])(null)));
-#line 89
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create dual tournament round with even best ofs", null, ((string[])(null)));
+#line 97
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -718,47 +740,43 @@ this.ScenarioInitialize(scenarioInfo);
                 TechTalk.SpecFlow.Table table26 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
-                            "Best of",
-                            "Advancing amount"});
+                            "Best of"});
                 table26.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round 1",
-                            "3",
-                            "-1"});
+                            "Dual tournament",
+                            "Dual tournament round 1",
+                            "0"});
                 table26.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round 2",
-                            "3",
-                            "-2"});
+                            "Dual tournament",
+                            "Dual tournament round 2",
+                            "2"});
                 table26.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round 3",
-                            "3",
-                            "-3"});
-#line 90
+                            "Dual tournament",
+                            "Dual tournament round 3",
+                            "4"});
+#line 98
  testRunner.When("a tournament creates rounds", ((string)(null)), table26, "When ");
 #line hidden
-#line 95
+#line 103
  testRunner.Then("created round 0 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 96
+#line 104
   testRunner.And("created round 1 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 97
+#line 105
   testRunner.And("created round 2 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Cannot create dual tournament round with less than zero advancers")]
+        [Xunit.SkippableFactAttribute(DisplayName="Cannot create round robin round with even best ofs")]
         [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Cannot create dual tournament round with less than zero advancers")]
-        public virtual void CannotCreateDualTournamentRoundWithLessThanZeroAdvancers()
+        [Xunit.TraitAttribute("Description", "Cannot create round robin round with even best ofs")]
+        public virtual void CannotCreateRoundRobinRoundWithEvenBestOfs()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create dual tournament round with less than zero advancers", null, ((string[])(null)));
-#line 99
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create round robin round with even best ofs", null, ((string[])(null)));
+#line 107
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -784,44 +802,44 @@ this.ScenarioInitialize(scenarioInfo);
                             "Best of",
                             "Advancing amount"});
                 table27.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round 1",
-                            "3",
-                            "-1"});
+                            "Round robin",
+                            "Round robin round 1",
+                            "0",
+                            "1"});
                 table27.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round 2",
-                            "3",
-                            "-2"});
+                            "Round robin",
+                            "Round robin round 2",
+                            "2",
+                            "1"});
                 table27.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round 3",
-                            "3",
-                            "-3"});
-#line 100
+                            "Round robin",
+                            "Round robin round 3",
+                            "4",
+                            "1"});
+#line 108
  testRunner.When("a tournament creates rounds", ((string)(null)), table27, "When ");
 #line hidden
-#line 105
+#line 113
  testRunner.Then("created round 0 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 106
+#line 114
   testRunner.And("created round 1 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 107
+#line 115
   testRunner.And("created round 2 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Cannot create round robin round with less than zero advancers")]
+        [Xunit.SkippableFactAttribute(DisplayName="Cannot create bracket round with best ofs less than zero")]
         [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Cannot create round robin round with less than zero advancers")]
-        public virtual void CannotCreateRoundRobinRoundWithLessThanZeroAdvancers()
+        [Xunit.TraitAttribute("Description", "Cannot create bracket round with best ofs less than zero")]
+        public virtual void CannotCreateBracketRoundWithBestOfsLessThanZero()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create round robin round with less than zero advancers", null, ((string[])(null)));
-#line 109
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create bracket round with best ofs less than zero", null, ((string[])(null)));
+#line 117
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -844,47 +862,43 @@ this.ScenarioInitialize(scenarioInfo);
                 TechTalk.SpecFlow.Table table28 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
-                            "Best of",
-                            "Advancing amount"});
+                            "Best of"});
                 table28.AddRow(new string[] {
-                            "Round robin",
-                            "Round robin round 1",
-                            "3",
+                            "Bracket",
+                            "Bracket round 1",
                             "-1"});
                 table28.AddRow(new string[] {
-                            "Round robin",
-                            "Round robin round 2",
-                            "3",
+                            "Bracket",
+                            "Bracket round 2",
                             "-2"});
                 table28.AddRow(new string[] {
-                            "Round robin",
-                            "Round robin round 3",
-                            "3",
+                            "Bracket",
+                            "Bracket round 3",
                             "-3"});
-#line 110
+#line 118
  testRunner.When("a tournament creates rounds", ((string)(null)), table28, "When ");
 #line hidden
-#line 115
+#line 123
  testRunner.Then("created round 0 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 116
+#line 124
   testRunner.And("created round 1 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 117
+#line 125
   testRunner.And("created round 2 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Cannot create bracket round with even best ofs")]
+        [Xunit.SkippableFactAttribute(DisplayName="Cannot create dual tournament round with best ofs less than zero")]
         [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Cannot create bracket round with even best ofs")]
-        public virtual void CannotCreateBracketRoundWithEvenBestOfs()
+        [Xunit.TraitAttribute("Description", "Cannot create dual tournament round with best ofs less than zero")]
+        public virtual void CannotCreateDualTournamentRoundWithBestOfsLessThanZero()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create bracket round with even best ofs", null, ((string[])(null)));
-#line 119
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create dual tournament round with best ofs less than zero", null, ((string[])(null)));
+#line 127
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -907,47 +921,43 @@ this.ScenarioInitialize(scenarioInfo);
                 TechTalk.SpecFlow.Table table29 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
-                            "Best of",
-                            "Advancing amount"});
+                            "Best of"});
                 table29.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round 1",
-                            "0",
-                            "1"});
+                            "Dual tournament",
+                            "Dual tournament round 1",
+                            "-1"});
                 table29.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round 2",
-                            "2",
-                            "1"});
+                            "Dual tournament",
+                            "Dual tournament round 2",
+                            "-2"});
                 table29.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round 3",
-                            "4",
-                            "1"});
-#line 120
+                            "Dual tournament",
+                            "Dual tournament round 3",
+                            "-3"});
+#line 128
  testRunner.When("a tournament creates rounds", ((string)(null)), table29, "When ");
 #line hidden
-#line 125
+#line 133
  testRunner.Then("created round 0 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 126
+#line 134
   testRunner.And("created round 1 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 127
+#line 135
   testRunner.And("created round 2 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Cannot create dual tournament round with even best ofs")]
+        [Xunit.SkippableFactAttribute(DisplayName="Cannot create round robin round with best ofs less than zero")]
         [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Cannot create dual tournament round with even best ofs")]
-        public virtual void CannotCreateDualTournamentRoundWithEvenBestOfs()
+        [Xunit.TraitAttribute("Description", "Cannot create round robin round with best ofs less than zero")]
+        public virtual void CannotCreateRoundRobinRoundWithBestOfsLessThanZero()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create dual tournament round with even best ofs", null, ((string[])(null)));
-#line 129
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create round robin round with best ofs less than zero", null, ((string[])(null)));
+#line 137
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -973,44 +983,44 @@ this.ScenarioInitialize(scenarioInfo);
                             "Best of",
                             "Advancing amount"});
                 table30.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round 1",
-                            "0",
+                            "Round robin",
+                            "Round robin round 1",
+                            "-1",
                             "1"});
                 table30.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round 2",
-                            "2",
+                            "Round robin",
+                            "Round robin round 2",
+                            "-2",
                             "1"});
                 table30.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round 3",
-                            "4",
+                            "Round robin",
+                            "Round robin round 3",
+                            "-3",
                             "1"});
-#line 130
+#line 138
  testRunner.When("a tournament creates rounds", ((string)(null)), table30, "When ");
 #line hidden
-#line 135
+#line 143
  testRunner.Then("created round 0 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 136
+#line 144
   testRunner.And("created round 1 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 137
+#line 145
   testRunner.And("created round 2 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Cannot create round robin round with even best ofs")]
+        [Xunit.SkippableFactAttribute(DisplayName="Can fetch previous round from round with round predecessor")]
         [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Cannot create round robin round with even best ofs")]
-        public virtual void CannotCreateRoundRobinRoundWithEvenBestOfs()
+        [Xunit.TraitAttribute("Description", "Can fetch previous round from round with round predecessor")]
+        public virtual void CanFetchPreviousRoundFromRoundWithRoundPredecessor()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create round robin round with even best ofs", null, ((string[])(null)));
-#line 139
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can fetch previous round from round with round predecessor", null, ((string[])(null)));
+#line 147
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -1033,110 +1043,44 @@ this.ScenarioInitialize(scenarioInfo);
                 TechTalk.SpecFlow.Table table31 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
-                            "Best of",
-                            "Advancing amount"});
+                            "Best of"});
                 table31.AddRow(new string[] {
-                            "Round robin",
-                            "Round robin round 1",
-                            "0",
-                            "1"});
+                            "Dual tournament",
+                            "Dual tournament round",
+                            "3"});
                 table31.AddRow(new string[] {
-                            "Round robin",
-                            "Round robin round 2",
-                            "2",
-                            "1"});
-                table31.AddRow(new string[] {
-                            "Round robin",
-                            "Round robin round 3",
-                            "4",
-                            "1"});
-#line 140
- testRunner.When("a tournament creates rounds", ((string)(null)), table31, "When ");
+                            "Bracket",
+                            "Bracket round",
+                            "3"});
+#line 148
+ testRunner.Given("a tournament creates rounds", ((string)(null)), table31, "Given ");
 #line hidden
-#line 145
- testRunner.Then("created round 0 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 152
+ testRunner.When("created round 1 fetches previous round", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 146
-  testRunner.And("created round 1 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 147
-  testRunner.And("created round 2 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="Cannot create bracket round with best ofs less than zero")]
-        [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Cannot create bracket round with best ofs less than zero")]
-        public virtual void CannotCreateBracketRoundWithBestOfsLessThanZero()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create bracket round with best ofs less than zero", null, ((string[])(null)));
-#line 149
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
                 TechTalk.SpecFlow.Table table32 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
-                            "Best of",
-                            "Advancing amount"});
+                            "Best of"});
                 table32.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round 1",
-                            "-1",
-                            "1"});
-                table32.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round 2",
-                            "-2",
-                            "1"});
-                table32.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round 3",
-                            "-3",
-                            "1"});
-#line 150
- testRunner.When("a tournament creates rounds", ((string)(null)), table32, "When ");
-#line hidden
-#line 155
- testRunner.Then("created round 0 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 156
-  testRunner.And("created round 1 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 157
-  testRunner.And("created round 2 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                            "Dual tournament",
+                            "Dual tournament round",
+                            "3"});
+#line 153
+ testRunner.Then("fetched round 0 in tournament should be valid with values:", ((string)(null)), table32, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Cannot create dual tournament round with best ofs less than zero")]
+        [Xunit.SkippableFactAttribute(DisplayName="Cannot fetch previous round with first round")]
         [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Cannot create dual tournament round with best ofs less than zero")]
-        public virtual void CannotCreateDualTournamentRoundWithBestOfsLessThanZero()
+        [Xunit.TraitAttribute("Description", "Cannot fetch previous round with first round")]
+        public virtual void CannotFetchPreviousRoundWithFirstRound()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create dual tournament round with best ofs less than zero", null, ((string[])(null)));
-#line 159
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot fetch previous round with first round", null, ((string[])(null)));
+#line 157
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -1159,211 +1103,18 @@ this.ScenarioInitialize(scenarioInfo);
                 TechTalk.SpecFlow.Table table33 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
-                            "Best of",
-                            "Advancing amount"});
+                            "Best of"});
                 table33.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round 1",
-                            "-1",
-                            "1"});
-                table33.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round 2",
-                            "-2",
-                            "1"});
-                table33.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round 3",
-                            "-3",
-                            "1"});
-#line 160
- testRunner.When("a tournament creates rounds", ((string)(null)), table33, "When ");
-#line hidden
-#line 165
- testRunner.Then("created round 0 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 166
-  testRunner.And("created round 1 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 167
-  testRunner.And("created round 2 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="Cannot create round robin round with best ofs less than zero")]
-        [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Cannot create round robin round with best ofs less than zero")]
-        public virtual void CannotCreateRoundRobinRoundWithBestOfsLessThanZero()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot create round robin round with best ofs less than zero", null, ((string[])(null)));
-#line 169
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-                TechTalk.SpecFlow.Table table34 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Round type",
-                            "Round name",
-                            "Best of",
-                            "Advancing amount"});
-                table34.AddRow(new string[] {
-                            "Round robin",
-                            "Round robin round 1",
-                            "-1",
-                            "1"});
-                table34.AddRow(new string[] {
-                            "Round robin",
-                            "Round robin round 2",
-                            "-2",
-                            "1"});
-                table34.AddRow(new string[] {
-                            "Round robin",
-                            "Round robin round 3",
-                            "-3",
-                            "1"});
-#line 170
- testRunner.When("a tournament creates rounds", ((string)(null)), table34, "When ");
-#line hidden
-#line 175
- testRunner.Then("created round 0 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 176
-  testRunner.And("created round 1 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 177
-  testRunner.And("created round 2 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="Can fetch previous round from round with round predecessor")]
-        [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Can fetch previous round from round with round predecessor")]
-        public virtual void CanFetchPreviousRoundFromRoundWithRoundPredecessor()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can fetch previous round from round with round predecessor", null, ((string[])(null)));
-#line 179
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-                TechTalk.SpecFlow.Table table35 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Round type",
-                            "Round name",
-                            "Best of",
-                            "Advancing amount"});
-                table35.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round",
-                            "3",
-                            "1"});
-                table35.AddRow(new string[] {
                             "Bracket",
                             "Bracket round",
-                            "3",
-                            "1"});
-#line 180
- testRunner.Given("a tournament creates rounds", ((string)(null)), table35, "Given ");
+                            "3"});
+#line 158
+ testRunner.Given("a tournament creates rounds", ((string)(null)), table33, "Given ");
 #line hidden
-#line 184
- testRunner.When("created round 1 fetches previous round", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-                TechTalk.SpecFlow.Table table36 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Round type",
-                            "Round name",
-                            "Best of",
-                            "Advancing amount"});
-                table36.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round",
-                            "3",
-                            "1"});
-#line 185
- testRunner.Then("fetched round 0 in tournament should be valid with values:", ((string)(null)), table36, "Then ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="Cannot fetch previous round with first round")]
-        [Xunit.TraitAttribute("FeatureTitle", "Round")]
-        [Xunit.TraitAttribute("Description", "Cannot fetch previous round with first round")]
-        public virtual void CannotFetchPreviousRoundWithFirstRound()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot fetch previous round with first round", null, ((string[])(null)));
-#line 189
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-                TechTalk.SpecFlow.Table table37 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Round type",
-                            "Round name",
-                            "Best of",
-                            "Advancing amount"});
-                table37.AddRow(new string[] {
-                            "Bracket",
-                            "Bracket round",
-                            "3",
-                            "1"});
-#line 190
- testRunner.Given("a tournament creates rounds", ((string)(null)), table37, "Given ");
-#line hidden
-#line 193
+#line 161
  testRunner.When("created round 0 fetches previous round", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 194
+#line 162
  testRunner.Then("fetched round 0 in tournament should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
