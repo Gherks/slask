@@ -83,13 +83,13 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
         [Xunit.SkippableFactAttribute(DisplayName="Can create dual tournament round")]
         [Xunit.TraitAttribute("FeatureTitle", "DualTournamentRound")]
         [Xunit.TraitAttribute("Description", "Can create dual tournament round")]
-        [Xunit.TraitAttribute("Category", "DualTournamentTag")]
+        [Xunit.TraitAttribute("Category", "DualTournamentRoundTag")]
         public virtual void CanCreateDualTournamentRound()
         {
             string[] tagsOfScenario = new string[] {
-                    "DualTournamentTag"};
+                    "DualTournamentRoundTag"};
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can create dual tournament round", null, new string[] {
-                        "DualTournamentTag"});
+                        "DualTournamentRoundTag"});
 #line 5
 this.ScenarioInitialize(scenarioInfo);
 #line hidden

@@ -1,7 +1,7 @@
 ﻿Feature: DualTournamentRound
 	Does a bunch of tests on Dual tournament rounds
 
-@DualTournamentTag
+@DualTournamentRoundTag
 Scenario: Can create dual tournament round
 	When a tournament creates rounds
 		| Round type      | Round name            | Best of |

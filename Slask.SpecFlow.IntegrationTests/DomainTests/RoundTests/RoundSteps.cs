@@ -183,11 +183,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             {
                 int.TryParse(row["Advancing amount"], out advancingAmount);
             }
-
-            //return true;
-
-            //string argumentString = string.Format("Round type: {0}, Round name: {1},  Best of {2}, Advancing amount {3}", row["Round type"], row["Round name"], row["Best of"], row["Advancing amount"]);
-            //throw new Exception("Uknown Round Specflow table row given - " + argumentString);
         }
 
         protected static string GetRoundType(string type)
@@ -209,8 +204,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 
             return "";
         }
-
-        protected
 
         private Tournament GivenATournament()
         {
