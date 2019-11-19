@@ -1,5 +1,5 @@
 ﻿Feature: BracketGroup
-	Does a bunch of tests on bracket groups
+	Does a bunch of tests on Bracket group
 
 @BracketGroupTag
 Scenario: Adding group to bracket round creates bracket group

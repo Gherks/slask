@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
 
-namespace Slask.SpecFlow.IntegrationTests.DomainTests
+namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 {
     [Binding, Scope(Feature = "Round")]
     public class RoundSteps : RoundStepDefinitions
@@ -37,20 +37,20 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
             Tournament tournament = GivenATournament();
 
-            foreach(TableRow row in table.Rows)
+            foreach (TableRow row in table.Rows)
             {
                 ParseRoundTable(row, out string type, out string name, out int bestOf, out int advancingAmount);
 
                 RoundBase round = null;
-                if(type.Length > 0)
+                if (type.Length > 0)
                 {
                     type = GetRoundType(type);
 
-                    if(type == "BRACKET")
+                    if (type == "BRACKET")
                     {
                         round = tournament.AddBracketRound(name, bestOf);
                     }
-                    else if(type == "DUALTOURNAMENT")
+                    else if (type == "DUALTOURNAMENT")
                     {
                         round = tournament.AddDualTournamentRound(name, bestOf);
                     }
@@ -183,7 +183,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             {
                 int.TryParse(row["Advancing amount"], out advancingAmount);
             }
-            
+
             //return true;
 
             //string argumentString = string.Format("Round type: {0}, Round name: {1},  Best of {2}, Advancing amount {3}", row["Round type"], row["Round name"], row["Best of"], row["Advancing amount"]);
@@ -210,7 +210,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             return "";
         }
 
-        protected 
+        protected
 
         private Tournament GivenATournament()
         {

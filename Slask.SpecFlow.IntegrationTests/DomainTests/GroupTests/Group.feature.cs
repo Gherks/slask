@@ -110,28 +110,28 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table6.AddRow(new string[] {
+                table5.AddRow(new string[] {
                             "Bracket",
                             "Bracket round",
                             "3",
                             "1"});
-                table6.AddRow(new string[] {
+                table5.AddRow(new string[] {
                             "Dual tournament",
                             "Dual tournament round",
                             "3",
                             "1"});
-                table6.AddRow(new string[] {
+                table5.AddRow(new string[] {
                             "Round robin",
                             "Round robin round",
                             "3",
                             "1"});
 #line 6
- testRunner.Given("a tournament creates rounds", ((string)(null)), table6, "Given ");
+ testRunner.Given("a tournament creates rounds", ((string)(null)), table5, "Given ");
 #line hidden
 #line 11
  testRunner.When("created rounds 0 to 2 creates 1 groups each", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -170,18 +170,18 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-                TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table7.AddRow(new string[] {
+                table6.AddRow(new string[] {
                             "Bracket",
                             "Bracket round",
                             "3",
                             "1"});
 #line 15
- testRunner.Given("a tournament creates rounds", ((string)(null)), table7, "Given ");
+ testRunner.Given("a tournament creates rounds", ((string)(null)), table6, "Given ");
 #line hidden
 #line 18
   testRunner.And("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -193,37 +193,6 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Then("created tournament 0 should have 4 player references with names: \"Maru, Stork, Ta" +
                         "eja, Rain\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="Cannot add new player to groups not within first round")]
-        [Xunit.TraitAttribute("FeatureTitle", "Group")]
-        [Xunit.TraitAttribute("Description", "Cannot add new player to groups not within first round")]
-        public virtual void CannotAddNewPlayerToGroupsNotWithinFirstRound()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Cannot add new player to groups not within first round", null, ((string[])(null)));
-#line 22
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
             }
             this.ScenarioCleanup();
         }

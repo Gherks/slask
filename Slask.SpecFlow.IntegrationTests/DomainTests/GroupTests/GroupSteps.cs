@@ -1,11 +1,13 @@
 ﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
+using Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using TechTalk.SpecFlow;
 
-namespace Slask.SpecFlow.IntegrationTests.DomainTests
+namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 {
     [Binding, Scope(Feature = "Group")]
     public class GroupSteps : GroupStepDefinitions
@@ -95,8 +97,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
             for (int matchIndex = 1; matchIndex < group.Matches.Count; ++matchIndex)
             {
-                Match previousMatch = group.Matches[matchIndex - 1];
-                Match currentMatch = group.Matches[matchIndex];
+                Domain.Match previousMatch = group.Matches[matchIndex - 1];
+                Domain.Match currentMatch = group.Matches[matchIndex];
 
                 DateTime previousDateTime = previousMatch.StartDateTime;
                 DateTime currentDateTime = currentMatch.StartDateTime;

@@ -28,7 +28,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "DualTournament.feature"
+#line 1 "DualTournamentGroup.feature"
 #line hidden
         
         public DualTournamentGroupFeature(DualTournamentGroupFeature.FixtureData fixtureData, InternalSpecFlow.XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
@@ -40,7 +40,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "DualTournamentGroup", "\tDoes a bunch of tests on dual tournament groups", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "DualTournamentGroup", "\tDoes a bunch of tests on Dual tournament group", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -83,13 +83,13 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
         [Xunit.SkippableFactAttribute(DisplayName="Adding group to dual tournament round creates bracket group")]
         [Xunit.TraitAttribute("FeatureTitle", "DualTournamentGroup")]
         [Xunit.TraitAttribute("Description", "Adding group to dual tournament round creates bracket group")]
-        [Xunit.TraitAttribute("Category", "DualTournamentTag")]
+        [Xunit.TraitAttribute("Category", "DualTournamentGroupTag")]
         public virtual void AddingGroupToDualTournamentRoundCreatesBracketGroup()
         {
             string[] tagsOfScenario = new string[] {
-                    "DualTournamentTag"};
+                    "DualTournamentGroupTag"};
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Adding group to dual tournament round creates bracket group", null, new string[] {
-                        "DualTournamentTag"});
+                        "DualTournamentGroupTag"});
 #line 5
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -186,146 +186,6 @@ this.ScenarioInitialize(scenarioInfo);
 #line 18
  testRunner.Then("minutes between matches in created group 0 should be 60", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="Dual tournament progression goes as expected")]
-        [Xunit.TraitAttribute("FeatureTitle", "DualTournamentGroup")]
-        [Xunit.TraitAttribute("Description", "Dual tournament progression goes as expected")]
-        public virtual void DualTournamentProgressionGoesAsExpected()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Dual tournament progression goes as expected", null, ((string[])(null)));
-#line 20
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-                TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
-                            "Round type",
-                            "Round name",
-                            "Best of",
-                            "Advancing amount"});
-                table5.AddRow(new string[] {
-                            "Dual tournament",
-                            "Dual tournament round",
-                            "3",
-                            "1"});
-#line 30
- testRunner.Given("a tournament creates rounds", ((string)(null)), table5, "Given ");
-#line hidden
-#line 33
-  testRunner.And("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="Can clear dual tournament group")]
-        [Xunit.TraitAttribute("FeatureTitle", "DualTournamentGroup")]
-        [Xunit.TraitAttribute("Description", "Can clear dual tournament group")]
-        public virtual void CanClearDualTournamentGroup()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can clear dual tournament group", null, ((string[])(null)));
-#line 35
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="Can undo steps in")]
-        [Xunit.TraitAttribute("FeatureTitle", "DualTournamentGroup")]
-        [Xunit.TraitAttribute("Description", "Can undo steps in")]
-        public virtual void CanUndoStepsIn()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can undo steps in", null, ((string[])(null)));
-#line 37
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="Creates proper dual tournament layout upon group creation")]
-        [Xunit.TraitAttribute("FeatureTitle", "DualTournamentGroup")]
-        [Xunit.TraitAttribute("Description", "Creates proper dual tournament layout upon group creation")]
-        public virtual void CreatesProperDualTournamentLayoutUponGroupCreation()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Creates proper dual tournament layout upon group creation", null, ((string[])(null)));
-#line 39
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
             }
             this.ScenarioCleanup();
         }

@@ -19,7 +19,7 @@ Scenario: Player reference is added to tournament when new player is added to gr
 	When players "Maru, Stork, Taeja, Rain" is added to created group 0
 	Then created tournament 0 should have 4 player references with names: "Maru, Stork, Taeja, Rain"
 
-Scenario: Cannot add new player to groups not within first round
+#Scenario: Cannot add new player to groups not within first round
 
 	
 # Given a bracket round has been played out

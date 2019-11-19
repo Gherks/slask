@@ -1,5 +1,5 @@
 ﻿Feature: RoundRobinGroup
-	Does a bunch of tests on round robin groups
+	Does a bunch of tests on Round robin group
 
 @RoundRobinGroupTag
 Scenario: Adding group to round robin round creates bracket group

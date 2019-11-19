@@ -33,8 +33,4 @@
     <ProjectReference Include="..\Slask.TestCore\Slask.TestCore.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DomainTests\RoundTests\" />
-  </ItemGroup>
-
 </Project>
