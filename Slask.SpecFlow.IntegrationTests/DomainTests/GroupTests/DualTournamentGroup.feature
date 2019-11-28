@@ -36,10 +36,8 @@ Scenario: Dual tournament progression goes as expected
 		And group is added to created round 0
 		And players "Maru, Stork, Taeja, Rain" is added to created group 0
 		And created group 0 in created round 0 is played out and betted on
-		#And betters has placed their bets on
 			| Created tournament index | Round index | Group index |
 			| 0                        | 0           | 0           |
-	#When created group 0 in created round 0 is played out
 	Then advancing players in created group 0 is "Maru, Taeja"
 
 #
