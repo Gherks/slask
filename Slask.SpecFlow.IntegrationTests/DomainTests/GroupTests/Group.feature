@@ -3,18 +3,20 @@
 
 @GroupTag
 Scenario: Rounds can create groups
-	Given a tournament creates rounds
-		| Round type      | Round name            | Best of | Advancing amount |
-		| Bracket         | Bracket round         | 3       | 1                |
-		| Dual tournament | Dual tournament round | 3       | 1                |
-		| Round robin     | Round robin round     | 3       | 1                |
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type      | Round name            | Best of | Advancing amount |
+			| Bracket         | Bracket round         | 3       | 1                |
+			| Dual tournament | Dual tournament round | 3       | 1                |
+			| Round robin     | Round robin round     | 3       | 1                |
 	When created rounds 0 to 2 creates 1 groups each
 	Then created rounds 0 to 2 should contain 1 groups each
 
 Scenario: Player reference is added to tournament when new player is added to group
-	Given a tournament creates rounds
-		| Round type | Round name    | Best of | Advancing amount |
-		| Bracket    | Bracket round | 3       | 1                |
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type | Round name    | Best of | Advancing amount |
+			| Bracket    | Bracket round | 3       | 1                |
 		And group is added to created round 0
 	When players "Maru, Stork, Taeja, Rain" is added to created group 0
 	Then created tournament 0 should have 4 player references with names: "Maru, Stork, Taeja, Rain"

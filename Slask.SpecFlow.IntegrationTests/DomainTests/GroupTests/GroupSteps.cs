@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
+using Slask.Domain.Rounds;
 using Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests;
 using System;
 using System.Collections.Generic;
@@ -40,12 +41,23 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
         [When(@"group is added to created round (.*)")]
         public void GivenGroupIsAddedToCreatedRound(int roundIndex)
         {
+            if (createdRounds.Count <= roundIndex)
+            {
+                throw new IndexOutOfRangeException("Given created round index is out of bounds");
+            }
+
             createdGroups.Add(createdRounds[roundIndex].AddGroup());
         }
 
+        [Given(@"players ""(.*)"" is added to created group (.*)")]
         [When(@"players ""(.*)"" is added to created group (.*)")]
-        public void WhenPlayersIsAddedToCreatedGroup(string commaSeparatedPlayerNames, int groupIndex)
+        public void GivenPlayersIsAddedToCreatedGroup(string commaSeparatedPlayerNames, int groupIndex)
         {
+            if (createdGroups.Count <= groupIndex)
+            {
+                throw new IndexOutOfRangeException("Given created group index is out of bounds");
+            }
+
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
             GroupBase group = createdGroups[groupIndex];
 
@@ -54,6 +66,99 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
                 group.AddPlayerReference(playerName);
             }
         }
+
+        [Given(@"created group (.*) in created round (.*) is played out and betted on")]
+        public void GivenCreatedGroupInCreatedRoundIsPlayedOutAndBettedOn(int p0, int p1, Table table)
+        {
+            if (table == null)
+            {
+                throw new ArgumentNullException(nameof(table));
+            }
+
+            foreach (TableRow row in table.Rows)
+            {
+                ParseTargetGroupToPlaceBets(row, out int tournamentIndex, out int roundIndex, out int groupIndex);
+
+                bool tournamentIndexIsValid = createdTournaments.Count > tournamentIndex;
+                bool roundIndexIsValid = createdTournaments[tournamentIndex].Rounds.Count > roundIndex;
+                bool groupIndexIsValid = createdTournaments[tournamentIndex].Rounds[roundIndex].Groups.Count > groupIndex;
+
+                if (!tournamentIndexIsValid || !roundIndexIsValid || !groupIndexIsValid)
+                {
+                    throw new IndexOutOfRangeException("Tournament, round, or group with given index does not exist");
+                }
+
+                Tournament tournament = createdTournaments[tournamentIndex];
+                RoundBase round = tournament.Rounds[roundIndex];
+                GroupBase group = round.Groups[groupIndex];
+
+                while (group.GetPlayState() != PlayState.IsFinished)
+                {
+                    PlaceBetsOnAvailableMatchesInGroup(tournament.Betters, group);
+
+                    foreach (Domain.Match match in group.Matches)
+                    {
+                        if(match.IsReady() && match.GetPlayState() == PlayState.NotBegun)
+                        {
+                            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+                            break;
+                        }
+                    }
+
+                    PlayAvailableMatches(group);
+                }
+            }
+        }
+
+        //[Given(@"betters has placed their bets on")]
+        //public void GivenBettersHasPlacedTheirBetsOn(Table table)
+        //{
+        //    if (table == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(table));
+        //    }
+
+        //    foreach (TableRow row in table.Rows)
+        //    {
+        //        ParseTargetGroupToPlaceBets(row, out int tournamentIndex, out int roundIndex, out int groupIndex);
+
+        //        bool tournamentIndexIsValid = createdTournaments.Count > tournamentIndex;
+        //        bool roundIndexIsValid = createdTournaments[tournamentIndex].Rounds.Count > roundIndex;
+        //        bool groupIndexIsValid = createdTournaments[tournamentIndex].Rounds[roundIndex].Groups.Count > groupIndex;
+
+        //        if (!tournamentIndexIsValid || !roundIndexIsValid || !groupIndexIsValid)
+        //        {
+        //            throw new IndexOutOfRangeException("Tournament, round, or group with given index does not exist");
+        //        }
+
+        //        Tournament tournament = createdTournaments[tournamentIndex];
+        //        RoundBase round = tournament.Rounds[roundIndex];
+        //        GroupBase group = round.Groups[groupIndex];
+
+        //        Random random = new Random(133742069);
+        //        int matchCounter = 0;
+
+        //        foreach (Domain.Match match in group.Matches)
+        //        {
+        //            Better better = tournament.Betters[0];
+
+        //            if (matchCounter % 4 != 0)
+        //            {
+        //                better.PlaceMatchBet(match, match.Player1);
+        //            }
+
+        //            for (int betterIndex = 1; betterIndex < tournament.Betters.Count; ++betterIndex)
+        //            {
+        //                Player player = random.Next(2) == 0 ? match.Player1 : match.Player2;
+
+        //                better = tournament.Betters[betterIndex];
+        //                better.PlaceMatchBet(match, player);
+        //            }
+
+        //            matchCounter++;
+        //        }
+        //    }
+        //}
 
         [Then(@"created rounds (.*) to (.*) should contain (.*) groups each")]
         public void ThenCreatedRoundsToShouldContainGroupsEach(int roundStartIndex, int roundEndIndex, int groupAmount)
@@ -117,6 +222,62 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             group.Matches.Should().HaveCount(matchesUponCreation);
             group.RoundId.Should().NotBeEmpty();
             group.Round.Should().NotBeNull();
+        }
+
+        protected static void ParseTargetGroupToPlaceBets(TableRow row, out int tournamentIndex, out int roundIndex, out int groupIndex)
+        {
+            tournamentIndex = 0;
+            roundIndex = 0;
+            groupIndex = 0;
+
+            if (row.ContainsKey("Created tournament index"))
+            {
+                int.TryParse(row["Created tournament index"], out tournamentIndex);
+            }
+
+            if (row.ContainsKey("Round index"))
+            {
+                int.TryParse(row["Round index"], out roundIndex);
+            }
+
+            if (row.ContainsKey("Group index"))
+            {
+                int.TryParse(row["Group index"], out groupIndex);
+            }
+        }
+        protected virtual void PlayAvailableMatches(GroupBase group)
+        {
+            throw new NotImplementedException("Call this step within specific group type feature to test group progressions");
+        }
+        private void PlaceBetsOnAvailableMatchesInGroup(List<Better> betters, GroupBase group)
+        {
+            Random random = new Random(133742069);
+            int matchCounter = 0;
+
+            foreach (Domain.Match match in group.Matches)
+            {
+                if (match.GetPlayState() != PlayState.NotBegun)
+                {
+                    continue;
+                }
+
+                Better better = betters[0];
+
+                if (matchCounter % 4 != 0)
+                {
+                    better.PlaceMatchBet(match, match.Player1);
+                }
+
+                for (int betterIndex = 1; betterIndex < betters.Count; ++betterIndex)
+                {
+                    Player player = random.Next(2) == 0 ? match.Player1 : match.Player2;
+
+                    better = betters[betterIndex];
+                    better.PlaceMatchBet(match, player);
+                }
+
+                matchCounter++;
+            }
         }
     }
 }

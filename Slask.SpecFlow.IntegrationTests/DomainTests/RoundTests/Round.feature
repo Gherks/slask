@@ -3,19 +3,21 @@
 
 @RoundTag
 Scenario: Can fetch previous round from round with round predecessor
-	Given a tournament creates rounds
-		| Round type      | Round name            | Best of |
-		| Dual tournament | Dual tournament round | 3       |
-		| Bracket         | Bracket round         | 3       |
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type      | Round name            | Best of |
+			| Dual tournament | Dual tournament round | 3       |
+			| Bracket         | Bracket round         | 3       |
 	When created round 1 fetches previous round
 	Then fetched round 0 in tournament should be valid with values:
 		| Round type      | Round name            | Best of |
 		| Dual tournament | Dual tournament round | 3       |
 
 Scenario: Cannot fetch previous round with first round
-	Given a tournament creates rounds
-		| Round type      | Round name            | Best of |
-		| Bracket         | Bracket round         | 3       |
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type      | Round name            | Best of |
+			| Bracket         | Bracket round         | 3       |
 	When created round 0 fetches previous round
 	Then fetched round 0 in tournament should be invalid
 

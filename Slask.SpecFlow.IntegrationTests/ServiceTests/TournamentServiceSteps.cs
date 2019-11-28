@@ -35,18 +35,18 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
         [When(@"a tournament named ""(.*)"" has been created")]
         public Tournament GivenATournamentNamedHasBeenCreated(string name)
         {
-            createdTournaments.Add(tournamentService.CreateTournament(name));
+            createdTournaments.Add(tournamentService.CreateTournamentAsync(name));
             return createdTournaments.Last();
         }
 
-        [Given(@"users ""(.*)"" has been added to tournament with name: ""(.*)""")]
-        [When(@"users ""(.*)"" has been added to tournament with name: ""(.*)""")]
-        public void GivenATournamentNamedWithBettersHasBeenCreated(string commaSeparatedUserNames, string tournamentName)
+        [Given(@"users ""(.*)"" has been added to a tournament with name: ""(.*)""")]
+        [When(@"users ""(.*)"" has been added to a tournament with name: ""(.*)""")]
+        public Tournament GivenATournamentNamedWithBettersHasBeenCreated(string commaSeparatedUserNames, string tournamentName)
         {
             List<string> userNames = StringUtility.ToStringList(commaSeparatedUserNames, ",");
             foreach (string userName in userNames)
             {
-                createdUsers.Add(userService.CreateUser(userName));
+                createdUsers.Add(userService.CreateUserAsync(userName));
             }
 
             Tournament tournament = GivenATournamentNamedHasBeenCreated(tournamentName);
@@ -55,6 +55,8 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             {
                 tournament.AddBetter(user);
             }
+
+            return tournament;
         }
 
         [Given(@"fetching tournament with tournament id: (.*)")]
@@ -67,10 +69,11 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
 
         [Given(@"fetching created tournament (.*) by tournament id")]
         [When(@"fetching created tournament (.*) by tournament id")]
-        public void GivenFetchingTournamentWithTournamentId(int tournamentIndex)
+        public Tournament GivenFetchingTournamentWithTournamentId(int tournamentIndex)
         {
             Guid tournamentId = createdTournaments[tournamentIndex].Id;
             fetchedTournaments.Add(GivenFetchingTournamentWithTournamentId(tournamentId));
+            return fetchedTournaments.Last();
         }
 
         [Given(@"user ""(.*)"" is added to created tournament ""(.*)""")]
@@ -82,7 +85,7 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
         }
 
         [Given(@"a tournament with player references added with name ""(.*)"" has been created")]
-        public void GivenATournamentWithPlayerReferencesAddedWithNameHasBeenCreated(string name)
+        public Tournament GivenATournamentWithPlayerReferencesAddedWithNameHasBeenCreated(string name)
         {
             Tournament tournament = GivenATournamentNamedHasBeenCreated(name);
 
@@ -93,12 +96,15 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             bracketGroup.AddPlayerReference("Stork");
             bracketGroup.AddPlayerReference("Taeja");
             bracketGroup.AddPlayerReference("Rain");
+
+            return tournament;
         }
 
         [When(@"fetching tournament by tournament name: ""(.*)""")]
-        public void WhenFetchingTournamentByTournamentName(string name)
+        public Tournament WhenFetchingTournamentByTournamentName(string name)
         {
             fetchedTournaments.Add(tournamentService.GetTournamentByName(name));
+            return fetchedTournaments.Last();
         }
 
         [When(@"created tournament (.*) is renamed to: ""(.*)""")]

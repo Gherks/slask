@@ -26,16 +26,16 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             fetchedRounds = new List<RoundBase>();
         }
 
-        [Given(@"a tournament creates rounds")]
-        [When(@"a tournament creates rounds")]
-        public void GivenATournamentCreatesARound(Table table)
+        [Given(@"created tournament (.*) adds rounds")]
+        [When(@"created tournament (.*) adds rounds")]
+        public void GivenCreatedTournamentAddsRounds(int tournamentIndex, Table table)
         {
-            if (table == null)
+            if (createdTournaments.Count <= tournamentIndex)
             {
-                throw new ArgumentNullException(nameof(table));
+                throw new IndexOutOfRangeException("Given created tournament index is out of bounds");
             }
 
-            Tournament tournament = GivenATournament();
+            Tournament tournament = createdTournaments[tournamentIndex];
 
             foreach (TableRow row in table.Rows)
             {
@@ -69,7 +69,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
         {
             fetchedRounds.Add(createdRounds[roundIndex].GetPreviousRound());
         }
-
+                
         [Then(@"created rounds in tournament should be valid with values:")]
         public void ThenCreatedRoundInTournamentShouldBeValidWithValues(Table table)
         {
@@ -205,9 +205,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             return "";
         }
 
-        private Tournament GivenATournament()
-        {
-            return GivenATournamentNamedHasBeenCreated("GSL 2019");
-        }
+        //private Tournament GivenATournament()
+        //{
+        //    return GivenATournamentNamedHasBeenCreated("GSL 2019");
+        //}
     }
 }

@@ -52,19 +52,19 @@ Scenario: Can add user to tournament with user service
 	Then created tournament 0, better 0, should be valid with name: "Stålberto"
 
 Scenario: Can only add user to tournament once
-	Given users "Stålberto, Bönis, Guggelito" has been added to tournament with name: "GSL 2019"
+	Given users "Stålberto, Bönis, Guggelito" has been added to a tournament with name: "GSL 2019"
 	When user "Stålberto" is added to created tournament "GSL 2019"
 	Then created tournament 0 should have 3 betters
 
 Scenario: Can fetch all betters in tournament by tournament id
-	Given users "Stålberto, Bönis, Guggelito" has been added to tournament with name: "GSL 2019"
+	Given users "Stålberto, Bönis, Guggelito" has been added to a tournament with name: "GSL 2019"
 	When fetching betters from created tournament 0 by tournament id
 	Then created tournament 0, better 0, should be valid with name: "Stålberto"
 		And created tournament 0, better 1, should be valid with name: "Bönis"
 		And created tournament 0, better 2, should be valid with name: "Guggelito"
 
 Scenario: Can fetch all betters in tournament by tournament name
-	Given users "Stålberto, Bönis, Guggelito" has been added to tournament with name: "GSL 2019"
+	Given users "Stålberto, Bönis, Guggelito" has been added to a tournament with name: "GSL 2019"
 	When fetching betters from tournament by tournament name: "GSL 2019"
 	Then created tournament 0, better 0, should be valid with name: "Stålberto"
 		And created tournament 0, better 1, should be valid with name: "Bönis"

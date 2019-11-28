@@ -110,6 +110,9 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
+#line 6
+ testRunner.Given("a tournament named \"GSL 2019\" has been created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
                 TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
@@ -120,13 +123,13 @@ this.ScenarioInitialize(scenarioInfo);
                             "Dual tournament round",
                             "3",
                             "2"});
-#line 6
- testRunner.Given("a tournament creates rounds", ((string)(null)), table3, "Given ");
-#line hidden
-#line 9
- testRunner.When("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 7
+  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table3, "And ");
 #line hidden
 #line 10
+ testRunner.When("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 11
  testRunner.Then("group 0 should be valid of type \"Dual tournament\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -143,7 +146,7 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Start time in matches in dual tournament group is spaced with one hour upon creat" +
                     "ion", null, ((string[])(null)));
-#line 12
+#line 13
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -163,6 +166,9 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
+#line 14
+ testRunner.Given("a tournament named \"GSL 2019\" has been created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
                 TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
@@ -173,18 +179,86 @@ this.ScenarioInitialize(scenarioInfo);
                             "Dual tournament round",
                             "3",
                             "2"});
-#line 13
- testRunner.Given("a tournament creates rounds", ((string)(null)), table4, "Given ");
+#line 15
+  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table4, "And ");
 #line hidden
-#line 16
+#line 18
   testRunner.And("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 17
+#line 19
  testRunner.When("players \"Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain\" is added " +
                         "to created group 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 18
+#line 20
  testRunner.Then("minutes between matches in created group 0 should be 60", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Dual tournament progression goes as expected")]
+        [Xunit.TraitAttribute("FeatureTitle", "DualTournamentGroup")]
+        [Xunit.TraitAttribute("Description", "Dual tournament progression goes as expected")]
+        public virtual void DualTournamentProgressionGoesAsExpected()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Dual tournament progression goes as expected", null, ((string[])(null)));
+#line 22
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 32
+ testRunner.Given("users \"Stålberto, Bönis, Guggelito\" has been added to a tournament with name: \"GS" +
+                        "L 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+                TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Round type",
+                            "Round name",
+                            "Best of",
+                            "Advancing amount"});
+                table5.AddRow(new string[] {
+                            "Dual tournament",
+                            "Dual tournament round",
+                            "3",
+                            "1"});
+#line 33
+  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table5, "And ");
+#line hidden
+#line 36
+  testRunner.And("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 37
+  testRunner.And("players \"Maru, Stork, Taeja, Rain\" is added to created group 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+                TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Created tournament index",
+                            "Round index",
+                            "Group index"});
+                table6.AddRow(new string[] {
+                            "0",
+                            "0",
+                            "0"});
+#line 38
+  testRunner.And("created group 0 in created round 0 is played out and betted on", ((string)(null)), table6, "And ");
+#line hidden
+#line 43
+ testRunner.Then("advancing players in created group 0 is \"Maru, Taeja\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

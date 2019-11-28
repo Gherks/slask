@@ -110,6 +110,9 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
+#line 6
+ testRunner.Given("a tournament named \"GSL 2019\" has been created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
                 TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
@@ -120,13 +123,13 @@ this.ScenarioInitialize(scenarioInfo);
                             "Bracket round",
                             "3",
                             "1"});
-#line 6
- testRunner.Given("a tournament creates rounds", ((string)(null)), table1, "Given ");
-#line hidden
-#line 9
- testRunner.When("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 7
+  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table1, "And ");
 #line hidden
 #line 10
+ testRunner.When("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 11
  testRunner.Then("group 0 should be valid of type \"Bracket\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -140,7 +143,7 @@ this.ScenarioInitialize(scenarioInfo);
         {
             string[] tagsOfScenario = ((string[])(null));
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Start time in matches in bracket group is spaced with one hour upon creation", null, ((string[])(null)));
-#line 12
+#line 13
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -160,6 +163,9 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
+#line 14
+ testRunner.Given("a tournament named \"GSL 2019\" has been created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
                 TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
@@ -170,17 +176,17 @@ this.ScenarioInitialize(scenarioInfo);
                             "Bracket round",
                             "3",
                             "1"});
-#line 13
- testRunner.Given("a tournament creates rounds", ((string)(null)), table2, "Given ");
+#line 15
+  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table2, "And ");
 #line hidden
-#line 16
+#line 18
   testRunner.And("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-#line 17
+#line 19
  testRunner.When("players \"Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain\" is added " +
                         "to created group 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 18
+#line 20
  testRunner.Then("minutes between matches in created group 0 should be 60", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

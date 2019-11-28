@@ -1,4 +1,9 @@
-﻿using System;
+﻿using FluentAssertions;
+using Slask.Common;
+using Slask.Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using TechTalk.SpecFlow;
 
 namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
@@ -11,6 +16,43 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
     public class DualTournamentGroupStepDefinitions : GroupStepDefinitions
     {
+        //[When(@"created group (.*) in created round (.*) is played out")]
+        //public void WhenCreatedGroupInCreatedRoundIsPlayedOut(int p0, int p1)
+        //{
+        //    /// MAKE EM PLLAYE THE GROUP THO
+        //}
 
+        [Then(@"advancing players in created group (.*) is ""(.*)""")]
+        public void ThenWinningPlayersInGroupIs(int groupIndex, string commaSeparatedPlayerNames)
+        {
+            GroupBase group = createdGroups[groupIndex];
+            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+
+            List<PlayerReference> playerReferences = group.GetAdvancingPlayers();
+
+            playerReferences.Should().NotBeEmpty();
+            playerReferences.Should().HaveCount(playerNames.Count);
+
+            foreach(string playerName in playerNames)
+            {
+                playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+            }
+        }
+
+        protected override void PlayAvailableMatches(GroupBase group)
+        {
+            int winningScore = (int)Math.Ceiling(group.Round.BestOf / 2.0);
+
+            foreach (Domain.Match match in group.Matches)
+            {
+                bool matchShouldHaveStarted = match.StartDateTime < SystemTime.Now;
+                bool matchIsNotFinished = match.GetPlayState() != PlayState.IsFinished;
+
+                if (matchShouldHaveStarted && matchIsNotFinished)
+                {
+                    match.Player1.IncreaseScore(winningScore);
+                }
+            }
+        }
     }
 }

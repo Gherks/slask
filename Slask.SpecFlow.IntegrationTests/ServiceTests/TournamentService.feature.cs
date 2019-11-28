@@ -508,8 +508,8 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 55
- testRunner.Given("users \"Stålberto, Bönis, Guggelito\" has been added to tournament with name: \"GSL " +
-                        "2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("users \"Stålberto, Bönis, Guggelito\" has been added to a tournament with name: \"GS" +
+                        "L 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 56
  testRunner.When("user \"Stålberto\" is added to created tournament \"GSL 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -549,8 +549,8 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 60
- testRunner.Given("users \"Stålberto, Bönis, Guggelito\" has been added to tournament with name: \"GSL " +
-                        "2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("users \"Stålberto, Bönis, Guggelito\" has been added to a tournament with name: \"GS" +
+                        "L 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 61
  testRunner.When("fetching betters from created tournament 0 by tournament id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -596,8 +596,8 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 67
- testRunner.Given("users \"Stålberto, Bönis, Guggelito\" has been added to tournament with name: \"GSL " +
-                        "2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("users \"Stålberto, Bönis, Guggelito\" has been added to a tournament with name: \"GS" +
+                        "L 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 68
  testRunner.When("fetching betters from tournament by tournament name: \"GSL 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
