@@ -113,34 +113,34 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
  testRunner.Given("a tournament named \"GSL 2019\" has been created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table25 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table27 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of"});
-                table25.AddRow(new string[] {
+                table27.AddRow(new string[] {
                             "Dual tournament",
                             "Dual tournament round",
                             "3"});
-                table25.AddRow(new string[] {
+                table27.AddRow(new string[] {
                             "Bracket",
                             "Bracket round",
                             "3"});
 #line 7
-  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table25, "And ");
+  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table27, "And ");
 #line hidden
 #line 11
  testRunner.When("created round 1 fetches previous round", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-                TechTalk.SpecFlow.Table table26 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table28 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of"});
-                table26.AddRow(new string[] {
+                table28.AddRow(new string[] {
                             "Dual tournament",
                             "Dual tournament round",
                             "3"});
 #line 12
- testRunner.Then("fetched round 0 in tournament should be valid with values:", ((string)(null)), table26, "Then ");
+ testRunner.Then("fetched round 0 in tournament should be valid with values:", ((string)(null)), table28, "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -176,16 +176,16 @@ this.ScenarioInitialize(scenarioInfo);
 #line 17
  testRunner.Given("a tournament named \"GSL 2019\" has been created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table27 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table29 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of"});
-                table27.AddRow(new string[] {
+                table29.AddRow(new string[] {
                             "Bracket",
                             "Bracket round",
                             "3"});
 #line 18
-  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table27, "And ");
+  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table29, "And ");
 #line hidden
 #line 21
  testRunner.When("created round 0 fetches previous round", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
