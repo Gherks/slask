@@ -16,12 +16,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
     public class DualTournamentGroupStepDefinitions : GroupStepDefinitions
     {
-        //[When(@"created group (.*) in created round (.*) is played out")]
-        //public void WhenCreatedGroupInCreatedRoundIsPlayedOut(int p0, int p1)
-        //{
-        //    /// MAKE EM PLLAYE THE GROUP THO
-        //}
-
         [Then(@"advancing players in created group (.*) is ""(.*)""")]
         public void ThenWinningPlayersInGroupIs(int groupIndex, string commaSeparatedPlayerNames)
         {
