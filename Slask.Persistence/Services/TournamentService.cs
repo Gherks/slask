@@ -17,20 +17,15 @@ namespace Slask.Persistence.Services
 
         public Tournament CreateTournament(string name)
         {
-            bool nameIsEmpty = name == "";
-            bool tournamentAlreadyExist = GetTournamentByName(name) != null;
-
-            if (nameIsEmpty || tournamentAlreadyExist)
-            {
-                // LOGG
-                return null;
-            }
-
-            Tournament tournament = Tournament.Create(name);
-
-            _slaskContext.Add(tournament);
+            Tournament tournament = Create(name);
             _slaskContext.SaveChanges();
+            return tournament;
+        }
 
+        public Tournament CreateTournamentAsync(string name)
+        {
+            Tournament tournament = Create(name);
+            _slaskContext.SaveChangesAsync();
             return tournament;
         }
 
@@ -117,6 +112,23 @@ namespace Slask.Persistence.Services
             }
 
             return false;
+        }
+
+        private Tournament Create(string name)
+        {
+            bool nameIsEmpty = name == "";
+            bool tournamentAlreadyExist = GetTournamentByName(name) != null;
+
+            if (nameIsEmpty || tournamentAlreadyExist)
+            {
+                // LOGG
+                return null;
+            }
+
+            Tournament tournament = Tournament.Create(name);
+            _slaskContext.Add(tournament);
+
+            return tournament;
         }
     }
 }
