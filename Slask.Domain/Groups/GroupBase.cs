@@ -63,11 +63,11 @@ namespace Slask.Domain
             return new List<PlayerReference>();
         }
 
-        public virtual bool AddPlayerReference(string name)
+        public virtual PlayerReference AddPlayerReference(string name)
         {
             if (GetPlayState() != PlayState.NotBegun)
             {
-                return false;
+                return null;
             }
 
             bool isParticipatingPlayer = ParticipatingPlayers.Where(participant => participant.Name.ToLower() == name.ToLower()).Any();
@@ -84,12 +84,12 @@ namespace Slask.Domain
                 ParticipatingPlayers.Add(playerReference);
                 OnParticipantAdded(playerReference);
 
-                return true;
+                return playerReference;
             }
             else
             {
                 // LOGG 
-                return false;
+                return null;
             }
         }
 

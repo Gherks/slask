@@ -29,13 +29,13 @@ Scenario: Dual tournament progression goes as expected
 	#  Match 2		 Losers
 	# | 3 vs 4 |	| 2 vs 4 |
 	#
-	Given users "Stålberto, Bönis, Guggelito" has been added to a tournament with name: "GSL 2019"
+	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
 			| Round type      | Round name            | Best of | Advancing amount |
 			| Dual tournament | Dual tournament round | 3       | 1                |
 		And group is added to created round 0
 		And players "Maru, Stork, Taeja, Rain" is added to created group 0
-		And created group 0 in created round 0 is played out and betted on
+		And groups within created tournament is played out and betted on
 			| Created tournament index | Round index | Group index |
 			| 0                        | 0           | 0           |
 	Then advancing players in created group 0 is "Maru, Taeja"

@@ -224,8 +224,8 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 32
- testRunner.Given("users \"Stålberto, Bönis, Guggelito\" has been added to a tournament with name: \"GS" +
-                        "L 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("a tournament named \"GSL 2019\" with users \"Stålberto, Bönis, Guggelito\" added to i" +
+                        "t", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
                 TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
@@ -255,7 +255,7 @@ this.ScenarioInitialize(scenarioInfo);
                             "0",
                             "0"});
 #line 38
-  testRunner.And("created group 0 in created round 0 is played out and betted on", ((string)(null)), table8, "And ");
+  testRunner.And("groups within created tournament is played out and betted on", ((string)(null)), table8, "And ");
 #line hidden
 #line 41
  testRunner.Then("advancing players in created group 0 is \"Maru, Taeja\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");

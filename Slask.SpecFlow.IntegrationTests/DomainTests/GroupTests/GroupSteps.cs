@@ -67,8 +67,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             }
         }
 
-        [Given(@"created group (.*) in created round (.*) is played out and betted on")]
-        public void GivenCreatedGroupInCreatedRoundIsPlayedOutAndBettedOn(int p0, int p1, Table table)
+        [Given(@"groups within created tournament is played out and betted on")]
+        public void GivenCreatedGroupInCreatedRoundIsPlayedOutAndBettedOn(Table table)
         {
             if (table == null)
             {

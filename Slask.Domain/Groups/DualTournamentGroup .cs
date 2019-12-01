@@ -49,15 +49,14 @@ namespace Slask.Domain
             Matches.Add(Match.Create(this));
         }
 
-        public override bool AddPlayerReference(string name)
+        public override PlayerReference AddPlayerReference(string name)
         {
             if (ParticipatingPlayers.Count < ParticipatingPlayerCapacity)
             {
-                base.AddPlayerReference(name);
-                return true;
+                return base.AddPlayerReference(name);
             }
 
-            return false;
+            return null;
         }
 
         protected override void OnParticipantAdded(PlayerReference playerReference)

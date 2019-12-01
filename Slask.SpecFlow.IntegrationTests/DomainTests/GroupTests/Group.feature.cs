@@ -196,8 +196,8 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.When("players \"Maru, Stork, Taeja, Rain\" is added to created group 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 22
- testRunner.Then("created tournament 0 should have 4 player references with names: \"Maru, Stork, Ta" +
-                        "eja, Rain\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("created tournament 0 should contain exactly these player references with names: \"" +
+                        "Maru, Stork, Taeja, Rain\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

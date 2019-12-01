@@ -56,37 +56,25 @@ namespace Slask.Domain
 
         public void IncreaseScore(int value)
         {
-            bool matchHasNotBegun = Match.GetPlayState() == PlayState.NotBegun;
+            bool matchIsReady = Match.IsReady();
+            bool matchIsPlaying = Match.GetPlayState() == PlayState.IsPlaying;
 
-            if(matchHasNotBegun)
+            if (matchIsReady && matchIsPlaying)
             {
-                return;
-            }
-
-            bool matchIsAlreadyFinished = Match.GetPlayState() == PlayState.IsFinished;
-
-            Score += value;
-
-            if (!matchIsAlreadyFinished)
-            {
+                Score += value;
                 Match.Group.MatchScoreIncreased(Match);
             }
         }
 
         public void DecreaseScore(int value)
         {
-            bool matchHasNotBegun = Match.GetPlayState() == PlayState.NotBegun;
+            bool matchIsReady = Match.IsReady();
+            bool matchIsPlaying = Match.GetPlayState() == PlayState.IsPlaying;
 
-            if (matchHasNotBegun)
+            if (matchIsReady && matchIsPlaying)
             {
-                return;
-            }
-
-            Score = Math.Max(Score - value, 0);
-
-            bool isPlaying = Match.GetPlayState() == PlayState.IsPlaying;
-            if (!isPlaying)
-            {
+                Score -= value;
+                Score = Math.Max(Score, 0);
                 Match.Group.MatchScoreDecreased(Match);
             }
         }
