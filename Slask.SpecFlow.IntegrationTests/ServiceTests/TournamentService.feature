@@ -32,7 +32,7 @@ Scenario: Cannot rename tournament to name already in use no matter letter casin
 	Then created tournament 0 should be valid with name: "GSL 2019"
 
 Scenario: Cannot rename non-existing tournament
-	When fetching tournament with tournament id: 00000000-0000-0000-0000-000000000000
+	When fetching created tournament by tournament id: 00000000-0000-0000-0000-000000000000
 	Then fetched tournament 0 should be invalid
 
 Scenario: Can fetch tournament by id
@@ -42,48 +42,42 @@ Scenario: Can fetch tournament by id
 
 Scenario: Can fetch tournament by name no matter letter casing
 	Given a tournament named "GSL 2019" has been created
-	When fetching tournament by tournament name: "Gsl 2019"
+	When fetching created tournament by tournament name: "Gsl 2019"
 	Then fetched tournament 0 should be valid with name: "GSL 2019"
 
 Scenario: Can add user to tournament with user service
 	Given a user named "Stålberto" has been created
 		And a tournament named "GSL 2019" has been created
-	When user "Stålberto" is added to created tournament "GSL 2019"
-	Then created tournament 0, better 0, should be valid with name: "Stålberto"
+	When users "Stålberto" is added to created tournament "GSL 2019"
+	Then created tournament 0 should contain valid betters with names: "Stålberto"
 
 Scenario: Can only add user to tournament once
-	Given users "Stålberto, Bönis, Guggelito" has been added to a tournament with name: "GSL 2019"
-	When user "Stålberto" is added to created tournament "GSL 2019"
-	Then created tournament 0 should have 3 betters
+	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
+	When users "Stålberto" is added to created tournament "GSL 2019"
+	Then better amount in created tournament 0 should be 3
 
 Scenario: Can fetch all betters in tournament by tournament id
-	Given users "Stålberto, Bönis, Guggelito" has been added to a tournament with name: "GSL 2019"
+	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
 	When fetching betters from created tournament 0 by tournament id
-	Then created tournament 0, better 0, should be valid with name: "Stålberto"
-		And created tournament 0, better 1, should be valid with name: "Bönis"
-		And created tournament 0, better 2, should be valid with name: "Guggelito"
+	Then created tournament 0 should contain valid betters with names: "Stålberto, Bönis, Guggelito"
 
 Scenario: Can fetch all betters in tournament by tournament name
-	Given users "Stålberto, Bönis, Guggelito" has been added to a tournament with name: "GSL 2019"
+	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
 	When fetching betters from tournament by tournament name: "GSL 2019"
-	Then created tournament 0, better 0, should be valid with name: "Stålberto"
-		And created tournament 0, better 1, should be valid with name: "Bönis"
-		And created tournament 0, better 2, should be valid with name: "Guggelito"
+	Then created tournament 0 should contain valid betters with names: "Stålberto, Bönis, Guggelito"
 
 Scenario: Player references are added to tournament when new players are added to tournament
-	Given a tournament with player references added with name "GSL 2019" has been created
-	When added players "Maru, Stork, Taeja, Rain" to tournament with name "GSL 2019"
-	Then created tournament 0 should have 4 player references with names: "Maru, Stork, Taeja, Rain"
+	When a tournament named "GSL 2019" with player references "Maru, Stork, Taeja, Rain" added to it
+	Then created tournament 0 should contain exactly these player references with names: "Maru, Stork, Taeja, Rain"
 
 Scenario: Can fetch all player references in tournament by tournament id
-	Given a tournament with player references added with name "GSL 2019" has been created
-	When fetching player references "Maru, Stork, Taeja, Rain" from created tournament 0 by tournament id
-	Then created tournament 0 should have 4 player references with names: "Maru, Stork, Taeja, Rain"
+	When a tournament named "GSL 2019" with player references "Maru, Stork, Taeja, Rain" added to it
+	Then created tournament 0 should contain exactly these player references with names: "Maru, Stork, Taeja, Rain"
 
 Scenario: Can fetch all player references in tournament by tournament name
-	Given a tournament with player references added with name "GSL 2019" has been created
-	When fetching player references "Maru, Stork, Taeja, Rain" from tournament by tournament name: "GSL 2019"
-	Then created tournament 0 should have 4 player references with names: "Maru, Stork, Taeja, Rain"
+	Given a tournament named "GSL 2019" with player references "Maru, Stork, Taeja, Rain" added to it
+	When fetching player references from tournament by tournament name: "GSL 2019"
+	Then fetched player references should be exactly these player references with names: "Maru, Stork, Taeja, Rain"
 
 #WHEN a bracket round has been added to tournament: "GSL 2019"
 #WHEN a dual tournament round has been added to tournament: "GSL 2019"

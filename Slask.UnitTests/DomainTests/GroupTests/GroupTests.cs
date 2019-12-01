@@ -93,7 +93,7 @@ namespace Slask.UnitTests.DomainTests
 
             SystemTimeMocker.Set(DateTime.Now.AddSeconds(1));
 
-            group.AddPlayerReference("Flash").Should().BeFalse();
+            group.AddPlayerReference("Flash").Should().BeNull();
 
             foreach (Domain.Match match in group.Matches)
             {

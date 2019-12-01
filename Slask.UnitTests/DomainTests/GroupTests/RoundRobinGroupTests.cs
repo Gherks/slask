@@ -13,8 +13,8 @@ namespace Slask.UnitTests.DomainTests
             TournamentServiceContext services = GivenServices();
             RoundRobinGroup group = HomestoryCupSetup.Part04AddedGroupToRoundRobinRound(services);
 
-            group.AddPlayerReference("Maru").Should().BeTrue();
-            group.AddPlayerReference("Stork").Should().BeTrue();
+            group.AddPlayerReference("Maru").Should().NotBeNull();
+            group.AddPlayerReference("Stork").Should().NotBeNull();
         }
 
         [Fact]
@@ -35,28 +35,28 @@ namespace Slask.UnitTests.DomainTests
             TournamentServiceContext services = GivenServices();
             RoundRobinGroup group = HomestoryCupSetup.Part04AddedGroupToRoundRobinRound(services);
 
-            group.AddPlayerReference("Maru").Should().BeTrue();
+            group.AddPlayerReference("Maru").Should().NotBeNull();
             RunTestsWithOnePlayer(group);
 
-            group.AddPlayerReference("Stork").Should().BeTrue();
+            group.AddPlayerReference("Stork").Should().NotBeNull();
             RunTestsWithTwoPlayers(group);
 
-            group.AddPlayerReference("Taeja").Should().BeTrue();
+            group.AddPlayerReference("Taeja").Should().NotBeNull();
             RunTestsWithThreePlayers(group);
 
-            group.AddPlayerReference("Rain").Should().BeTrue();
+            group.AddPlayerReference("Rain").Should().NotBeNull();
             RunTestsWithFourPlayers(group);
 
-            group.AddPlayerReference("Bomber").Should().BeTrue();
+            group.AddPlayerReference("Bomber").Should().NotBeNull();
             RunTestsWithFivePlayers(group);
 
-            group.AddPlayerReference("FanTaSy").Should().BeTrue();
+            group.AddPlayerReference("FanTaSy").Should().NotBeNull();
             RunTestsWithSixPlayers(group);
 
-            group.AddPlayerReference("Stephano").Should().BeTrue();
+            group.AddPlayerReference("Stephano").Should().NotBeNull();
             RunTestsWithSevenPlayers(group);
 
-            group.AddPlayerReference("Thorzain").Should().BeTrue();
+            group.AddPlayerReference("Thorzain").Should().NotBeNull();
             RunTestsWithEightPlayers(group);
         }
 

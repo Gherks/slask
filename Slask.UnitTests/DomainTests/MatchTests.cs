@@ -162,7 +162,7 @@ namespace Slask.UnitTests.DomainTests
             TournamentServiceContext services = GivenServices();
             DualTournamentGroup group = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services).First();
 
-            group.AddPlayerReference("Maru").Should().BeTrue();
+            group.AddPlayerReference("Maru").Should().NotBeNull();
 
             group.Matches[0].IsReady().Should().BeFalse();
             group.Matches[0].Player1.PlayerReference.Should().NotBeNull();

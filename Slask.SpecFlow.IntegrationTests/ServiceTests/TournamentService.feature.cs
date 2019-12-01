@@ -348,7 +348,8 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 35
- testRunner.When("fetching tournament with tournament id: 00000000-0000-0000-0000-000000000000", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("fetching created tournament by tournament id: 00000000-0000-0000-0000-00000000000" +
+                        "0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 36
  testRunner.Then("fetched tournament 0 should be invalid", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -428,7 +429,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Given("a tournament named \"GSL 2019\" has been created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 45
- testRunner.When("fetching tournament by tournament name: \"Gsl 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("fetching created tournament by tournament name: \"Gsl 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 46
  testRunner.Then("fetched tournament 0 should be valid with name: \"GSL 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
@@ -471,10 +472,10 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.And("a tournament named \"GSL 2019\" has been created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 51
- testRunner.When("user \"Stålberto\" is added to created tournament \"GSL 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("users \"Stålberto\" is added to created tournament \"GSL 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 52
- testRunner.Then("created tournament 0, better 0, should be valid with name: \"Stålberto\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("created tournament 0 should contain valid betters with names: \"Stålberto\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -508,14 +509,14 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 55
- testRunner.Given("users \"Stålberto, Bönis, Guggelito\" has been added to a tournament with name: \"GS" +
-                        "L 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("a tournament named \"GSL 2019\" with users \"Stålberto, Bönis, Guggelito\" added to i" +
+                        "t", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 56
- testRunner.When("user \"Stålberto\" is added to created tournament \"GSL 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("users \"Stålberto\" is added to created tournament \"GSL 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 57
- testRunner.Then("created tournament 0 should have 3 betters", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("better amount in created tournament 0 should be 3", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -549,20 +550,15 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 60
- testRunner.Given("users \"Stålberto, Bönis, Guggelito\" has been added to a tournament with name: \"GS" +
-                        "L 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("a tournament named \"GSL 2019\" with users \"Stålberto, Bönis, Guggelito\" added to i" +
+                        "t", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 61
  testRunner.When("fetching betters from created tournament 0 by tournament id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 62
- testRunner.Then("created tournament 0, better 0, should be valid with name: \"Stålberto\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 63
-  testRunner.And("created tournament 0, better 1, should be valid with name: \"Bönis\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 64
-  testRunner.And("created tournament 0, better 2, should be valid with name: \"Guggelito\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.Then("created tournament 0 should contain valid betters with names: \"Stålberto, Bönis, " +
+                        "Guggelito\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -575,7 +571,7 @@ this.ScenarioInitialize(scenarioInfo);
         {
             string[] tagsOfScenario = ((string[])(null));
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can fetch all betters in tournament by tournament name", null, ((string[])(null)));
-#line 66
+#line 64
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -595,21 +591,16 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 67
- testRunner.Given("users \"Stålberto, Bönis, Guggelito\" has been added to a tournament with name: \"GS" +
-                        "L 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 65
+ testRunner.Given("a tournament named \"GSL 2019\" with users \"Stålberto, Bönis, Guggelito\" added to i" +
+                        "t", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 68
+#line 66
  testRunner.When("fetching betters from tournament by tournament name: \"GSL 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 69
- testRunner.Then("created tournament 0, better 0, should be valid with name: \"Stålberto\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-#line 70
-  testRunner.And("created tournament 0, better 1, should be valid with name: \"Bönis\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line hidden
-#line 71
-  testRunner.And("created tournament 0, better 2, should be valid with name: \"Guggelito\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 67
+ testRunner.Then("created tournament 0 should contain valid betters with names: \"Stålberto, Bönis, " +
+                        "Guggelito\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -625,6 +616,45 @@ this.ScenarioInitialize(scenarioInfo);
             string[] tagsOfScenario = ((string[])(null));
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Player references are added to tournament when new players are added to tournamen" +
                     "t", null, ((string[])(null)));
+#line 69
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 70
+ testRunner.When("a tournament named \"GSL 2019\" with player references \"Maru, Stork, Taeja, Rain\" a" +
+                        "dded to it", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+#line 71
+ testRunner.Then("created tournament 0 should contain exactly these player references with names: \"" +
+                        "Maru, Stork, Taeja, Rain\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Can fetch all player references in tournament by tournament id")]
+        [Xunit.TraitAttribute("FeatureTitle", "TournamentService")]
+        [Xunit.TraitAttribute("Description", "Can fetch all player references in tournament by tournament id")]
+        public virtual void CanFetchAllPlayerReferencesInTournamentByTournamentId()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can fetch all player references in tournament by tournament id", null, ((string[])(null)));
 #line 73
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -646,56 +676,12 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 74
- testRunner.Given("a tournament with player references added with name \"GSL 2019\" has been created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.When("a tournament named \"GSL 2019\" with player references \"Maru, Stork, Taeja, Rain\" a" +
+                        "dded to it", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
 #line 75
- testRunner.When("added players \"Maru, Stork, Taeja, Rain\" to tournament with name \"GSL 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 76
- testRunner.Then("created tournament 0 should have 4 player references with names: \"Maru, Stork, Ta" +
-                        "eja, Rain\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line hidden
-            }
-            this.ScenarioCleanup();
-        }
-        
-        [Xunit.SkippableFactAttribute(DisplayName="Can fetch all player references in tournament by tournament id")]
-        [Xunit.TraitAttribute("FeatureTitle", "TournamentService")]
-        [Xunit.TraitAttribute("Description", "Can fetch all player references in tournament by tournament id")]
-        public virtual void CanFetchAllPlayerReferencesInTournamentByTournamentId()
-        {
-            string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can fetch all player references in tournament by tournament id", null, ((string[])(null)));
-#line 78
-this.ScenarioInitialize(scenarioInfo);
-#line hidden
-            bool isScenarioIgnored = default(bool);
-            bool isFeatureIgnored = default(bool);
-            if ((tagsOfScenario != null))
-            {
-                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((this._featureTags != null))
-            {
-                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
-            }
-            if ((isScenarioIgnored || isFeatureIgnored))
-            {
-                testRunner.SkipScenario();
-            }
-            else
-            {
-                this.ScenarioStart();
-#line 79
- testRunner.Given("a tournament with player references added with name \"GSL 2019\" has been created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-#line 80
- testRunner.When("fetching player references \"Maru, Stork, Taeja, Rain\" from created tournament 0 b" +
-                        "y tournament id", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-#line 81
- testRunner.Then("created tournament 0 should have 4 player references with names: \"Maru, Stork, Ta" +
-                        "eja, Rain\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("created tournament 0 should contain exactly these player references with names: \"" +
+                        "Maru, Stork, Taeja, Rain\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -708,7 +694,7 @@ this.ScenarioInitialize(scenarioInfo);
         {
             string[] tagsOfScenario = ((string[])(null));
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Can fetch all player references in tournament by tournament name", null, ((string[])(null)));
-#line 83
+#line 77
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -728,16 +714,16 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 84
- testRunner.Given("a tournament with player references added with name \"GSL 2019\" has been created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 78
+ testRunner.Given("a tournament named \"GSL 2019\" with player references \"Maru, Stork, Taeja, Rain\" a" +
+                        "dded to it", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 85
- testRunner.When("fetching player references \"Maru, Stork, Taeja, Rain\" from tournament by tourname" +
-                        "nt name: \"GSL 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 79
+ testRunner.When("fetching player references from tournament by tournament name: \"GSL 2019\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 86
- testRunner.Then("created tournament 0 should have 4 player references with names: \"Maru, Stork, Ta" +
-                        "eja, Rain\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 80
+ testRunner.Then("fetched player references should be exactly these player references with names: \"" +
+                        "Maru, Stork, Taeja, Rain\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();
