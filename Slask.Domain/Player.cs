@@ -54,36 +54,6 @@ namespace Slask.Domain
             PlayerReference = playerReference;
         }
 
-        //public void IncrementScore()
-        //{
-        //    bool matchHasNotBegun = Match.GetPlayState() == PlayState.NotBegun;
-
-        //    if (matchHasNotBegun)
-        //    {
-        //        return;
-        //    }
-
-        //    bool isAlreadyFinished = Match.GetPlayState() == PlayState.IsFinished;
-
-        //    Score++;
-
-        //    if (!isAlreadyFinished)
-        //    {
-        //        Match.Group.MatchScoreIncreased(Match);
-        //    }
-        //}
-
-        //public void DecrementScore()
-        //{
-        //    Score = Math.Max(Score - 1, 0);
-
-        //    bool isPlaying = Match.GetPlayState() == PlayState.IsPlaying;
-        //    if (!isPlaying)
-        //    {
-        //        Match.Group.MatchScoreDecreased(Match);
-        //    }
-        //}
-
         public void IncreaseScore(int value)
         {
             bool matchHasNotBegun = Match.GetPlayState() == PlayState.NotBegun;

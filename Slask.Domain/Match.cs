@@ -168,17 +168,5 @@ namespace Slask.Domain
 
             return Player1.Score >= matchPointBarrier || Player2.Score >= matchPointBarrier;
         }
-
-        private DateTime GetInitialStartDateTime()
-        {
-            if(Group.Matches.Count == 0)
-            {
-                return SystemTime.Now.AddYears(1);
-            }
-
-            Match previousMatch = Group.Matches[Group.Matches.Count - 1];
-
-            return previousMatch.StartDateTime.AddHours(1);
-        }
     }
 }
