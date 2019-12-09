@@ -1,4 +1,4 @@
-﻿using Slask.Domain.Rounds;
+using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -188,26 +188,28 @@ namespace Slask.Domain
 
         private BracketNode GetBracketNodeByMatchIdRecursive(BracketNode bracketNode, Guid matchId)
         {
-            if (bracketNode.Match != null)
+            if (bracketNode == null || bracketNode.Match == null)
             {
-                if (bracketNode.Match.Id == matchId)
-                {
-                    return bracketNode;
-                }
+                return null;
+            }
 
-                foreach (BracketNode childNode in bracketNode.Children)
+            if (bracketNode.Match.Id == matchId)
+            {
+                return bracketNode;
+            }
+
+            foreach (BracketNode childNode in bracketNode.Children)
+            {
+                if (childNode != null)
                 {
-                    if (childNode != null)
+                    BracketNode foundNode = GetBracketNodeByMatchIdRecursive(childNode, matchId);
+
+                    if (foundNode != null)
                     {
-                        BracketNode foundNode = GetBracketNodeByMatchIdRecursive(childNode, matchId);
-
-                        if (foundNode != null)
-                        {
-                            return foundNode;
-                        }
+                        return foundNode;
                     }
                 }
-            }
+            }            
 
             return null;
         }
