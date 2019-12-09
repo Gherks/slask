@@ -21,7 +21,7 @@ Scenario: Start time in matches in bracket group is spaced with one hour upon cr
 
 Scenario: Bracket progression goes as expected
 	#
-	#  Match 1	
+	#  Match 1
 	# | 1 vs 2 |
 	#
 	#  Match 2		 Match 5		 Match 7
@@ -43,7 +43,5 @@ Scenario: Bracket progression goes as expected
 			| Created tournament index | Round index | Group index |
 			| 0                        | 0           | 0           |
 	Then advancing players in created group 0 is "Maru"
-
-
 #Scenario: Can construct bracket match layout
 #Scenario: Can clear bracket group

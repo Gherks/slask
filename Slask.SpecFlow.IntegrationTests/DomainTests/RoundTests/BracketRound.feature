@@ -34,10 +34,10 @@ Scenario: Cannot create bracket round without name
 Scenario: Cannot create bracket round with even best ofs
 	Given a tournament named "GSL 2019" has been created
 	When created tournament 0 adds rounds
-		| Round type      | Round name      | Best of |
-		| Bracket         | Bracket round 1 | 0       |
-		| Bracket         | Bracket round 2 | 2       |
-		| Bracket         | Bracket round 3 | 4       |
+		| Round type | Round name      | Best of |
+		| Bracket    | Bracket round 1 | 0       |
+		| Bracket    | Bracket round 2 | 2       |
+		| Bracket    | Bracket round 3 | 4       |
 	Then created round 0 in tournament should be invalid
 		And created round 1 in tournament should be invalid
 		And created round 2 in tournament should be invalid

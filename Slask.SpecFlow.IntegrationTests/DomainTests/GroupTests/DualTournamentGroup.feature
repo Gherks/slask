@@ -39,10 +39,9 @@ Scenario: Dual tournament progression goes as expected
 			| Created tournament index | Round index | Group index |
 			| 0                        | 0           | 0           |
 	Then advancing players in created group 0 is "Maru, Taeja"
-
 #
 #Scenario: Can clear dual tournament group
 #
-#Scenario: Can undo steps in 
-#	
+#Scenario: Can undo steps in
+#
 #Scenario: Creates proper dual tournament layout upon group creation

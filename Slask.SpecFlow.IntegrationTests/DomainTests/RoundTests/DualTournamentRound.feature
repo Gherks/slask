@@ -45,10 +45,10 @@ Scenario: Cannot create dual tournament round with even best ofs
 Scenario: Cannot create dual tournament round with best ofs less than zero
 	Given a tournament named "GSL 2019" has been created
 	When created tournament 0 adds rounds
-		| Round type       | Round name              | Best of |
-		|  Dual tournament | Dual tournament round 1 | -1      |
-		|  Dual tournament | Dual tournament round 2 | -2      |
-		|  Dual tournament | Dual tournament round 3 | -3      |
+		| Round type      | Round name              | Best of |
+		| Dual tournament | Dual tournament round 1 | -1      |
+		| Dual tournament | Dual tournament round 2 | -2      |
+		| Dual tournament | Dual tournament round 3 | -3      |
 	Then created round 0 in tournament should be invalid
 		And created round 1 in tournament should be invalid
 		And created round 2 in tournament should be invalid
