@@ -1,4 +1,4 @@
-﻿using Slask.Domain.Rounds;
+using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
 
@@ -81,9 +81,9 @@ namespace Slask.Domain
          * | 2 | 3 |      | 3 | 1 |      | 1 | 2 |
          * 
          * Uneven (same as the Even-setup, except all competitors misses one round each)
-         * | 0 | 1 |              | 0 | 3 |              | 0 | 4 |              | 0 | 2 |
-         * --------- | 2 |   ->   --------- | 1 |   ->   --------- | 3 |   ->   --------- | 4 |
-         * | 3 | 4 |              | 4 | 2 |              | 2 | 1 |              | 1 | 3 |
+         * | 0 | 1 |              | 3 | 0 |              | 4 | 3 |              | 2 | 4 |              | 1 | 2 |
+         * --------- | 2 |   ->   --------- | 1 |   ->   --------- | 0 |   ->   --------- | 3 |   ->   --------- | 4 |
+         * | 3 | 4 |              | 4 | 2 |              | 2 | 1 |              | 1 | 0 |              | 0 | 3 |
          *  
          */
         private void AssignPlayersToMatches()
