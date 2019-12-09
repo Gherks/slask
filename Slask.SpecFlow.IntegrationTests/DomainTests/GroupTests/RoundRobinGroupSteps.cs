@@ -1,5 +1,4 @@
-﻿using System;
-using TechTalk.SpecFlow;
+﻿using TechTalk.SpecFlow;
 
 namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 {
@@ -11,6 +10,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
     public class RoundRobinGroupStepDefinitions : GroupStepDefinitions
     {
-
+        
     }
 }
