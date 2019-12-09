@@ -75,7 +75,7 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             RoundBase bracketRound = tournament.AddBracketRound("BracketRound", 3);
             BracketGroup bracketGroup = (BracketGroup)bracketRound.AddGroup();
 
-            foreach(string playerName in playerNames)
+            foreach (string playerName in playerNames)
             {
                 createdPlayerReferences.Add(bracketGroup.AddPlayerReference(playerName));
             }
@@ -146,7 +146,7 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
         {
             Tournament tournament = createdTournaments[tournamentIndex];
             List<PlayerReference> playerReferences = tournamentService.GetPlayerReferencesByTournamentId(tournament.Id);
-            
+
             foreach (PlayerReference playerReference in playerReferences)
             {
                 fetchedPlayerReferences.Add(playerReference);
@@ -182,7 +182,7 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             Tournament tournament = createdTournaments[tournamentIndex];
             List<string> betterNames = StringUtility.ToStringList(commaSeparatedBetterNames, ",");
 
-            foreach(string betterName in betterNames)
+            foreach (string betterName in betterNames)
             {
                 Better better = tournament.Betters.FirstOrDefault(better => better.User.Name == betterName);
 

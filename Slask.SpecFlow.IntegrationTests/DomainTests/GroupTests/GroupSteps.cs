@@ -98,7 +98,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
                     foreach (Domain.Match match in group.Matches)
                     {
-                        if(match.IsReady() && match.GetPlayState() == PlayState.NotBegun)
+                        if (match.IsReady() && match.GetPlayState() == PlayState.NotBegun)
                         {
                             SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
                             break;

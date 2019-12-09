@@ -15,7 +15,7 @@ namespace Slask.Domain
 
         public static Settings Create(string type, Tournament tournament)
         {
-            if(tournament == null)
+            if (tournament == null)
             {
                 return null;
             }

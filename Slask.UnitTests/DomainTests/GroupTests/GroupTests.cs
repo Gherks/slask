@@ -167,7 +167,7 @@ namespace Slask.UnitTests.DomainTests
             group.ParticipatingPlayers.Should().BeEmpty();
             group.Matches.Should().HaveCount(5);
 
-            for(int index = 0; index < group.Matches.Count; ++index)
+            for (int index = 0; index < group.Matches.Count; ++index)
             {
                 group.Matches[index].Player1.PlayerReference.Should().BeNull();
                 group.Matches[index].Player2.PlayerReference.Should().BeNull();

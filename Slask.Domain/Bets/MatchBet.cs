@@ -19,7 +19,7 @@ namespace Slask.Domain.Bets
                 return null;
             }
 
-            if(match.FindPlayer(player.Id) == null)
+            if (match.FindPlayer(player.Id) == null)
             {
                 // LOGG
                 return null;
@@ -34,7 +34,7 @@ namespace Slask.Domain.Bets
 
         public void UpdatePlayer(Player player)
         {
-            if(player == null)
+            if (player == null)
             {
                 // LOGG
                 return;

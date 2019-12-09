@@ -25,7 +25,7 @@ namespace Slask.Domain
 
         public static Match Create(GroupBase group)
         {
-            if(group == null)
+            if (group == null)
             {
                 // LOGG
                 return null;

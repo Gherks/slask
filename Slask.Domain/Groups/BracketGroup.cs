@@ -225,7 +225,7 @@ namespace Slask.Domain
                         return foundNode;
                     }
                 }
-            }            
+            }
 
             return null;
         }

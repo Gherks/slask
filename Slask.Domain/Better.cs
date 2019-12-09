@@ -35,7 +35,7 @@ namespace Slask.Domain
 
         public bool PlaceMatchBet(Match match, Player player)
         {
-            if(match == null || player == null)
+            if (match == null || player == null)
             {
                 // LOGG
                 return false;

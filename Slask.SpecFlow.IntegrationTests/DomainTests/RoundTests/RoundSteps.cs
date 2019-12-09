@@ -69,7 +69,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
         {
             fetchedRounds.Add(createdRounds[roundIndex].GetPreviousRound());
         }
-                
+
         [Then(@"created rounds in tournament should be valid with values:")]
         public void ThenCreatedRoundInTournamentShouldBeValidWithValues(Table table)
         {

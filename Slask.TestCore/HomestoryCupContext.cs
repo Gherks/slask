@@ -16,7 +16,7 @@ namespace Slask.TestCore
     {
         public static Tournament Part01CreateTournament(TournamentServiceContext serviceContext)
         {
-            if(serviceContext == null)
+            if (serviceContext == null)
             {
                 throw new ArgumentNullException(nameof(serviceContext));
             }

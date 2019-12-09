@@ -31,7 +31,7 @@ namespace Slask.Domain
 
         public PlayState GetPlayState()
         {
-            if(Matches.Count == 0)
+            if (Matches.Count == 0)
             {
                 return PlayState.NotBegun;
             }

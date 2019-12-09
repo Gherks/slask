@@ -41,7 +41,7 @@ namespace Slask.Domain.Rounds
         {
             List<PlayerReference> winningPlayers = new List<PlayerReference>();
 
-            foreach(GroupBase group in Groups)
+            foreach (GroupBase group in Groups)
             {
                 winningPlayers.AddRange(group.GetAdvancingPlayers());
             }

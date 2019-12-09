@@ -27,7 +27,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             playerReferences.Should().NotBeEmpty();
             playerReferences.Should().HaveCount(playerNames.Count);
 
-            foreach(string playerName in playerNames)
+            foreach (string playerName in playerNames)
             {
                 playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
             }

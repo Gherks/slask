@@ -68,7 +68,7 @@ namespace Slask.Domain
             }
         }
 
-        
+
 
         /*
          * Excerpt from Wikipedia (https://en.wikipedia.org/wiki/Round-robin_tournament)

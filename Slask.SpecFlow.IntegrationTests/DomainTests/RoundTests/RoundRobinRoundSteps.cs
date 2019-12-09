@@ -11,6 +11,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 
     public class RoundRobinRoundStepDefinitions : RoundStepDefinitions
     {
-       
+
     }
 }

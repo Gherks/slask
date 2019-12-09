@@ -12,7 +12,7 @@ namespace Slask.Domain.Bets
 
         public static MiscBet Create(Player player)
         {
-            if(player == null)
+            if (player == null)
             {
                 return null;
             }

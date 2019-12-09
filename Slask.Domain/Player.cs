@@ -45,12 +45,12 @@ namespace Slask.Domain
                 bool playerReferenceIsRemoved = playerReference == null;
                 bool playerReferenceChanged = playerReference != null && PlayerReference.Id != playerReference.Id;
 
-                if(playerReferenceIsRemoved || playerReferenceChanged)
+                if (playerReferenceIsRemoved || playerReferenceChanged)
                 {
                     Match.Group.RemovePlayerReference(PlayerReference);
                 }
             }
-            
+
             PlayerReference = playerReference;
         }
 
