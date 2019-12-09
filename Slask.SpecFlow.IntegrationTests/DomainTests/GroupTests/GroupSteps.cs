@@ -245,10 +245,12 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
                 int.TryParse(row["Group index"], out groupIndex);
             }
         }
+
         protected virtual void PlayAvailableMatches(GroupBase group)
         {
             throw new NotImplementedException("Call this step within specific group type feature to test group progressions");
         }
+        
         private void PlaceBetsOnAvailableMatchesInGroup(List<Better> betters, GroupBase group)
         {
             Random random = new Random(133742069);
