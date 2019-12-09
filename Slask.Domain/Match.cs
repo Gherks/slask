@@ -57,13 +57,16 @@ namespace Slask.Domain
             return Player1.PlayerReference != null && Player2.PlayerReference != null;
         }
 
-        public void AssignPlayerReferences(PlayerReference player1Reference, PlayerReference player2Reference)
+        public bool AssignPlayerReferences(PlayerReference player1Reference, PlayerReference player2Reference)
         {
             if (player1Reference == null || player2Reference == null || player1Reference.Id != player2Reference.Id)
             {
                 Player1.SetPlayerReference(player1Reference);
                 Player2.SetPlayerReference(player2Reference);
+                return true;
             }
+
+            return false;
         }
 
         public Player FindPlayer(Guid id)
