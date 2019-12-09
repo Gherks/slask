@@ -87,6 +87,11 @@ namespace Slask.Domain
         }
     }
 
+    // Represents all matches in bracket with a node tree strucutre. All nodes contains a parent node and two 
+    // children nodes. The parent node represents the match the winning player will advance to. The two children
+    // nodes represents the matches where the winners of the previous bracket round came from (Example: RO32 -> RO16).
+    //
+    // All brackets should have one of these to make it easier to work with the bracket progression.
     internal class BracketNode
     {
         public BracketNode(BracketNode parent, Match match)
@@ -111,6 +116,7 @@ namespace Slask.Domain
 
         public bool IsLeaf() { return Children[0] == null && Children[1] == null; }
 
+        // Makes it easier to attain the root node from any node in the tree.
         public BracketNode GetFinalBracketNode()
         {
             BracketNode bracketNode = this;
