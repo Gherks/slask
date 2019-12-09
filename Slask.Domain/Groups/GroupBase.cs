@@ -141,14 +141,11 @@ namespace Slask.Domain
 
         protected void ChangeMatchAmountTo(int amount)
         {
+            Matches.Clear();
+
             while (Matches.Count < amount)
             {
                 Matches.Add(Match.Create(this));
-            }
-
-            while (Matches.Count > amount)
-            {
-                Matches.RemoveAt(0);
             }
         }
 
