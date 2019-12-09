@@ -42,6 +42,7 @@ Scenario: Bracket progression goes as expected
 		And groups within created tournament is played out and betted on
 			| Created tournament index | Round index | Group index |
 			| 0                        | 0           | 0           |
-	Then advancing players in created group 0 is "Maru"
+	Then advancing players in created group 0 is exactly "Maru"
+
 #Scenario: Can construct bracket match layout
 #Scenario: Can clear bracket group

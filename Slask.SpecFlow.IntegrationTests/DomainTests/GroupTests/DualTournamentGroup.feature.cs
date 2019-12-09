@@ -258,7 +258,7 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.And("groups within created tournament is played out and betted on", ((string)(null)), table8, "And ");
 #line hidden
 #line 41
- testRunner.Then("advancing players in created group 0 is \"Maru, Taeja\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("advancing players in created group 0 is exactly \"Maru, Taeja\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
             this.ScenarioCleanup();

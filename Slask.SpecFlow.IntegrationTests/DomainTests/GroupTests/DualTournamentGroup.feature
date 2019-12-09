@@ -38,7 +38,7 @@ Scenario: Dual tournament progression goes as expected
 		And groups within created tournament is played out and betted on
 			| Created tournament index | Round index | Group index |
 			| 0                        | 0           | 0           |
-	Then advancing players in created group 0 is "Maru, Taeja"
+	Then advancing players in created group 0 is exactly "Maru, Taeja"
 #
 #Scenario: Can clear dual tournament group
 #
