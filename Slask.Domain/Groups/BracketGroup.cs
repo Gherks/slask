@@ -1,4 +1,4 @@
-using Slask.Domain.Rounds;
+﻿using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -46,9 +46,19 @@ namespace Slask.Domain
 
             if (!matchExistInThisGroup)
             {
-                // Match does not exist in this group
-                // LOGG
+                // LOGG Error: Match does not exist in this group
                 return;
+            }
+
+            bool matchIsFinished = match.GetPlayState() == PlayState.IsFinished;
+            bool matchIsNotFinal = match.Id != FinalNode.Match.Id;
+
+            if (matchIsFinished && matchIsNotFinal)
+            {
+                BracketNode bracketNode = FinalNode.GetBracketNodeByMatchId(match.Id);
+                BracketNode parentNode = bracketNode.Parent;
+
+                parentNode.Match.AddPlayerReference(match.GetWinningPlayer().PlayerReference);
             }
         }
 
