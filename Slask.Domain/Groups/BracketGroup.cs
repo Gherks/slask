@@ -13,7 +13,7 @@ namespace Slask.Domain
         }
 
         [NotMapped]
-        BracketNode FinalNode;
+        BracketNodeSystem BracketNodeSystem;
 
         public static BracketGroup Create(BracketRound round)
         {
@@ -50,12 +50,14 @@ namespace Slask.Domain
                 return;
             }
 
+            BracketNode finalNode = BracketNodeSystem.FinalNode;
+
             bool matchIsFinished = match.GetPlayState() == PlayState.IsFinished;
-            bool matchIsNotFinal = match.Id != FinalNode.Match.Id;
+            bool matchIsNotFinal = match.Id != finalNode.Match.Id;
 
             if (matchIsFinished && matchIsNotFinal)
             {
-                BracketNode bracketNode = FinalNode.GetBracketNodeByMatchId(match.Id);
+                BracketNode bracketNode = finalNode.GetBracketNodeByMatchId(match.Id);
                 BracketNode parentNode = bracketNode.Parent;
 
                 parentNode.Match.AddPlayerReference(match.GetWinningPlayer().PlayerReference);
@@ -69,8 +71,8 @@ namespace Slask.Domain
 
             if (Matches.Count > 0)
             {
-                FinalNode = new BracketNode(null, Matches.Last());
-                FinalNode.Construct(Matches);
+                BracketNodeSystem = new BracketNodeSystem();
+                BracketNodeSystem.Construct(Matches);
             }
 
             for (int matchIndex = 0; matchIndex < Matches.Count; ++matchIndex)
@@ -97,11 +99,110 @@ namespace Slask.Domain
         }
     }
 
+    internal class BracketNodeSystem
+    {
+        public BracketNodeSystem()
+        {
+            bracketNodesByTier = new List<List<BracketNode>>();
+        }
+
+        public BracketNode FinalNode { get; private set; }
+
+        private readonly List<List<BracketNode>> bracketNodesByTier;
+
+        // Creates one bracket node for each match in given list, minus the final. Loops over list backwards so that 
+        // the first bracket node is the final match in bracket.
+        //
+        // Example for a bracket containing three matches in total (1 Final, 2 Semifinals):
+        // The bracket node representing the final is created by allocating a bracket node via the new-keyword. The other
+        // two (semifinals) is allocated with this method.
+        // To start the algorithm the final bracket node is added to a queue and is the one to have the second and third 
+        // match added to its list of children. Every bracket node that is added to a parent bracket node is added to the
+        // queue to be processed later. When a bracket node has reached its capacity of children, the next bracket node
+        // is dequeued and is the one to get children added to it.
+        // 
+        // Just before a bracket node is allocated and added to a parent bracket node a check is made to determine if
+        // there is any more matches in match list to draw from. When it detects that the first match has been processed
+        // the algorithm is aborted.
+        public void Construct(List<Match> matches)
+        {
+            if (matches == null)
+            {
+                throw new ArgumentException(nameof(matches));
+            }
+
+            bracketNodesByTier.Clear();
+            FinalNode = CreateBracketNode(null, matches.Last());
+
+            Queue<BracketNode> nodeQueue = new Queue<BracketNode>();
+            nodeQueue.Enqueue(FinalNode);
+
+            int matchIndex = matches.Count - 2;
+
+            while (true)
+            {
+                BracketNode currentNode = nodeQueue.Dequeue();
+
+                for (int childIndex = 0; childIndex < currentNode.Children.Length; ++childIndex)
+                {
+                    if (matchIndex >= 0)
+                    {
+                        BracketNode childNode = CreateBracketNode(currentNode, matches[matchIndex--]);
+                        currentNode.Children[childIndex] = childNode;
+
+                        nodeQueue.Enqueue(childNode);
+                    }
+                    else 
+                    { 
+                        return;
+                    }
+                }
+
+                if (nodeQueue.Count <= 0)
+                {
+                    // LOGG Error: Ran out of nodes to construct bracket system with before matches. Something whent horribly wrong.
+                    return;
+                }
+            }
+        }
+
+        public List<BracketNode> GetBracketNodesInTier(int bracketTier)
+        {
+            if(bracketTier >= bracketNodesByTier.Count)
+            {
+                return null;
+            }
+
+            return bracketNodesByTier[bracketTier];
+        }
+
+        private BracketNode CreateBracketNode(BracketNode parent, Match match)
+        {
+            BracketNode bracketNode = new BracketNode(parent, match);
+            AddBracketNodeToTierList(bracketNode);
+
+            return bracketNode;
+        }
+
+        private void AddBracketNodeToTierList(BracketNode bracketNode)
+        {
+            if (bracketNode == null)
+            {
+                throw new ArgumentException(nameof(bracketNode));
+            }
+
+            while(bracketNode.BracketTier >= bracketNodesByTier.Count)
+            {
+                bracketNodesByTier.Add(new List<BracketNode>());
+            }
+
+            bracketNodesByTier[bracketNode.BracketTier].Add(bracketNode);
+        }
+    }
+
     // Represents all matches in bracket with a node tree strucutre. All nodes contains a parent node and two 
     // children nodes. The parent node represents the match the winning player will advance to. The two children
     // nodes represents the matches where the winners of the previous bracket round came from (Example: RO32 -> RO16).
-    //
-    // All brackets should have one of these to make it easier to work with the bracket progression.
     internal class BracketNode
     {
         public BracketNode(BracketNode parent, Match match)
@@ -144,62 +245,6 @@ namespace Slask.Domain
             BracketNode bracketNode = GetFinalBracketNode();
 
             return GetBracketNodeByMatchIdRecursive(bracketNode, matchId);
-        }
-
-        // Creates one bracket node for each match in given list, minus the final. Loops over list backwards so that 
-        // the first bracket node is the final match in bracket.
-        //
-        // Example for a bracket containing three matches in total (1 Final, 2 Semifinals):
-        // The bracket node representing the final is created by allocating a bracket node via the new-keyword. The other
-        // two (semifinals) is allocated with this method.
-        // To start the algorithm the final bracket node is added to a queue and is the one to have the second and third 
-        // match added to its list of children. Every bracket node that is added to a parent bracket node is added to the
-        // queue to be processed later. When a bracket node has reached its capacity of children, the next bracket node
-        // is dequeued and is the one to get children added to it.
-        // 
-        // Just before a bracket node is allocated and added to a parent bracket node a check is made to determine if
-        // there is any more matches in match list to draw from. When it detects that the first match has been processed
-        // the algorithm is aborted.
-        public void Construct(List<Match> matches)
-        {
-            if (matches == null)
-            {
-                throw new ArgumentException(nameof(matches));
-            }
-
-            if (Parent != null)
-            {
-                // LOGG Error: Trying to construct bracket system within a bracket system. A bracket system should only be constructed upon a bracket node without a parent.
-                return;
-            }
-
-            Queue<BracketNode> nodeQueue = new Queue<BracketNode>();
-            nodeQueue.Enqueue(this);
-
-            int matchIndex = matches.Count - 2;
-
-            while (true)
-            {
-                BracketNode currentNode = nodeQueue.Dequeue();
-
-                for (int childIndex = 0; childIndex < currentNode.Children.Length; ++childIndex)
-                {
-                    if (matchIndex >= 0)
-                    {
-                        BracketNode childNode = new BracketNode(currentNode, matches[matchIndex--]);
-                        currentNode.Children[childIndex] = childNode;
-
-                        nodeQueue.Enqueue(childNode);
-                    }
-                    else { return; }
-                }
-
-                if (nodeQueue.Count <= 0)
-                {
-                    // LOGG Error: Ran out of nodes to construct bracket system with before matches. Something whent horribly wrong.
-                    return;
-                }
-            }
         }
 
         private BracketNode GetBracketNodeByMatchIdRecursive(BracketNode bracketNode, Guid matchId)
