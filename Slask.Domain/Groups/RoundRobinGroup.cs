@@ -68,23 +68,28 @@ namespace Slask.Domain
             }
         }
 
-
-
         /*
          * Excerpt from Wikipedia (https://en.wikipedia.org/wiki/Round-robin_tournament)
          * The circle method is the standard algorithm to create a schedule for a round-robin tournament. All competitors are assigned 
          * a number, and then paired in the first round:
          * 
-         * Even (first one stays, all else go around in a circle)
-         * | 0 | 1 |      | 0 | 2 |      | 0 | 3 |
-         * ---------  ->  ---------  ->  ---------
-         * | 2 | 3 |      | 3 | 1 |      | 1 | 2 |
+         * Even (first one stays, all else go around in a circle counter-clockwise)
          * 
-         * Uneven (same as the Even-setup, except all competitors misses one round each)
-         * | 0 | 1 |              | 3 | 0 |              | 4 | 3 |              | 2 | 4 |              | 1 | 2 |
-         * --------- | 2 |   ->   --------- | 1 |   ->   --------- | 0 |   ->   --------- | 3 |   ->   --------- | 4 |
-         * | 3 | 4 |              | 4 | 2 |              | 2 | 1 |              | 1 | 0 |              | 0 | 3 |
-         *  
+         *  Match 1      Match 3      Match 5
+         * | 0 vs 2 |   | 0 vs 3 |   | 0 vs 1 |
+         *
+         *  Match 2      Match 4      Match 6
+         * | 1 vs 3 |   | 2 vs 1 |   | 3 vs 2 |
+         * 
+         * 
+         * Uneven (everyone go around in a circle counter-clockwise, one stays out each match round)
+         * 
+         *  Match 1      Match 3      Match 5      Match 7      Match 9
+         * | 0 vs 3 |   | 3 vs 4 |   | 4 vs 2 |   | 2 vs 1 |   | 1 vs 0 |
+         *
+         *  Match 2      Match 4      Match 6      Match 8      Match 10
+         * | 1 vs 4 |   | 0 vs 2 |   | 3 vs 1 |   | 4 vs 0 |   | 2 vs 3 |
+         *     2            1            0            3            4
          */
         private void AssignPlayersToMatches()
         {
