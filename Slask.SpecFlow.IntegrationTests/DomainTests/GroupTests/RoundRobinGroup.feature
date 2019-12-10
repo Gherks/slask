@@ -18,3 +18,18 @@ Scenario: Start time in matches in round robin groups is spaced with one hour up
 		And group is added to created round 0
 	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is added to created group 0
 	Then minutes between matches in created group 0 should be 60
+
+Scenario: Round robin tournament progression goes as expected
+	#
+	#
+	#
+	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
+		And created tournament 0 adds rounds
+			| Round type             | Round name        | Best of | Advancing amount |
+			| Round robin tournament | Round robin round | 3       | 3                |
+		And group is added to created round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber" is added to created group 0
+		And groups within created tournament is played out and betted on
+			| Created tournament index | Round index | Group index |
+			| 0                        | 0           | 0           |
+	Then advancing players in created group 0 is exactly "Bomber, Taeja, Stork"
