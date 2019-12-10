@@ -264,20 +264,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             }
         }
 
-        protected void PlayAvailableMatches(GroupBase group)
+        protected virtual void PlayAvailableMatches(GroupBase group)
         {
-            int winningScore = (int)Math.Ceiling(group.Round.BestOf / 2.0);
-
-            foreach (Domain.Match match in group.Matches)
-            {
-                bool matchShouldHaveStarted = match.StartDateTime < SystemTime.Now;
-                bool matchIsNotFinished = match.GetPlayState() != PlayState.IsFinished;
-
-                if (matchShouldHaveStarted && matchIsNotFinished)
-                {
-                    match.Player1.IncreaseScore(winningScore);
-                }
-            }
+            throw new NotImplementedException("Call this step within specific group type feature to test group progressions");
         }
         
         private void PlaceBetsOnAvailableMatchesInGroup(List<Better> betters, GroupBase group)
