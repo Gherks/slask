@@ -225,7 +225,7 @@ namespace Slask.Domain
 
         public bool IsFinal() { return Parent == null; }
 
-        public bool IsLeaf() { return Children[0] == null && Children[1] == null; }
+        public bool IsLeaf() { return !Children.Any(bracketNode => bracketNode != null); }
 
         // Makes it easier to attain the root node from any node in the tree.
         public BracketNode GetFinalBracketNode()
