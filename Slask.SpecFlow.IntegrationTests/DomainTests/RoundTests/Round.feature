@@ -29,3 +29,5 @@ Scenario: Cannot fetch previous round with first round
 #Scenario: Solve round robin ties
 #// ADVANCING PLAYERS MUST ALWAYS BE EQUAL OR LESS THAN NUMBER OF GROUPS IN ROUND
 #// ADVANCING PLAYERS MUST ALWAYS BE EQUAL OR LESS THAN NUMBER OF GROUPS IN ROUND
+
+# Advancing players must makes sense
