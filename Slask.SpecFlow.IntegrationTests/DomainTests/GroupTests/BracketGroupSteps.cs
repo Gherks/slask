@@ -52,13 +52,26 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
         protected static void ParseBracketGroupMatchSetup(TableRow row, out int matchIndex, out string player1Name, out string player2Name)
         {
-            row["Match index"].Should().NotBeNullOrEmpty();
-            row["Player 1 name"].Should().NotBeNull();
-            row["Player 2 name"].Should().NotBeNull();
+            matchIndex = -1;
+            player1Name = "";
+            player2Name = "";
 
-            int.TryParse(row["Match index"], out matchIndex);
-            player1Name = row["Player 1 name"];
-            player2Name = row["Player 2 name"];
+            if (row.ContainsKey("Match index"))
+            {
+                int.TryParse(row["Match index"], out matchIndex);
+            }
+
+            matchIndex.Should().BeGreaterOrEqualTo(0);
+
+            if (row.ContainsKey("Player 1 name"))
+            {
+                player1Name = row["Player 1 name"];
+            }
+
+            if (row.ContainsKey("Player 2 name"))
+            {
+                player2Name = row["Player 2 name"];
+            }
         }
     }
 }
