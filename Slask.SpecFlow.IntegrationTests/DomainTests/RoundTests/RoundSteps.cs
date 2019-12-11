@@ -159,15 +159,30 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 
         protected static void ParseRoundTable(TableRow row, out string typeName, out string name, out int bestOf, out int advancingAmount)
         {
-            row["Round type"].Should().NotBeNullOrEmpty();
-            row["Round type"].Should().NotBeNullOrEmpty();
-            row["Best of"].Should().NotBeNullOrEmpty();
-            row["Advancing amount"].Should().NotBeNullOrEmpty();
+            typeName = "";
+            name = "";
+            bestOf = 1;
+            advancingAmount = 1;
 
-            typeName = row["Round type"];
-            name = row["Round name"];
-            int.TryParse(row["Best of"], out bestOf);
-            int.TryParse(row["Advancing amount"], out advancingAmount);
+            if (row.ContainsKey("Round type"))
+            {
+                typeName = row["Round type"];
+            }
+
+            if (row.ContainsKey("Round name"))
+            {
+                name = row["Round name"];
+            }
+
+            if (row.ContainsKey("Best of"))
+            {
+                int.TryParse(row["Best of"], out bestOf);
+            }
+
+            if (row.ContainsKey("Advancing amount"))
+            {
+                int.TryParse(row["Advancing amount"], out advancingAmount);
+            }
         }
 
         protected static string GetRoundType(string type)
