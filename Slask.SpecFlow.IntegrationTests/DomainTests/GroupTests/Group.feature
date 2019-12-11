@@ -22,9 +22,6 @@ Scenario: Player reference is added to tournament when new player is added to gr
 	Then created tournament 0 should contain exactly these player references with names: "Maru, Stork, Taeja, Rain"
 
 #Scenario: Cannot add new player to groups not within first round
-# Given a bracket round has been played out
-# Given a dual tournament round has been played out
-# Given a round robin round has been played out
 #Scenario: Cannot add new player to group after first match has started
 #Scenario: Cannot increase score before match has started in round robin group
 #Scenario: Cannot increase score before match has started in dual tournament group
@@ -33,7 +30,6 @@ Scenario: Player reference is added to tournament when new player is added to gr
 #Scenario: Can clear dual tournament group of matches - unit test?
 #Scenario: Can clear bracket group of matches - unit test?
 #
-#// ALL MATCHES MUST BE ORDERED DESCENDING BY STARTDATETIME
 #
 #// Create tests for GetPlayState
 #
