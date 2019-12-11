@@ -193,16 +193,16 @@ this.ScenarioInitialize(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="When bracket has uneven participants the first match should contain two players a" +
-            "nd parent should contain one")]
+        [Xunit.SkippableFactAttribute(DisplayName="When bracket has five participants the first match should contain two players and" +
+            " parent should contain one")]
         [Xunit.TraitAttribute("FeatureTitle", "BracketGroup")]
-        [Xunit.TraitAttribute("Description", "When bracket has uneven participants the first match should contain two players a" +
-            "nd parent should contain one")]
-        public virtual void WhenBracketHasUnevenParticipantsTheFirstMatchShouldContainTwoPlayersAndParentShouldContainOne()
+        [Xunit.TraitAttribute("Description", "When bracket has five participants the first match should contain two players and" +
+            " parent should contain one")]
+        public virtual void WhenBracketHasFiveParticipantsTheFirstMatchShouldContainTwoPlayersAndParentShouldContainOne()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("When bracket has uneven participants the first match should contain two players a" +
-                    "nd parent should contain one", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("When bracket has five participants the first match should contain two players and" +
+                    " parent should contain one", null, ((string[])(null)));
 #line 22
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -269,13 +269,16 @@ this.ScenarioInitialize(scenarioInfo);
             this.ScenarioCleanup();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Bracket progression goes as expected")]
+        [Xunit.SkippableFactAttribute(DisplayName="When bracket has seven participants the third match should contain two players an" +
+            "d parent should contain one")]
         [Xunit.TraitAttribute("FeatureTitle", "BracketGroup")]
-        [Xunit.TraitAttribute("Description", "Bracket progression goes as expected")]
-        public virtual void BracketProgressionGoesAsExpected()
+        [Xunit.TraitAttribute("Description", "When bracket has seven participants the third match should contain two players an" +
+            "d parent should contain one")]
+        public virtual void WhenBracketHasSevenParticipantsTheThirdMatchShouldContainTwoPlayersAndParentShouldContainOne()
         {
             string[] tagsOfScenario = ((string[])(null));
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Bracket progression goes as expected", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("When bracket has seven participants the third match should contain two players an" +
+                    "d parent should contain one", null, ((string[])(null)));
 #line 42
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -317,21 +320,184 @@ this.ScenarioInitialize(scenarioInfo);
   testRunner.And("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
 #line 61
+ testRunner.When("players \"First, Second, Third, Fourth, Fifth, Sixth, Seventh\" is added to created" +
+                        " group 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+                TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Match index",
+                            "Player 1 name",
+                            "Player 2 name"});
+                table6.AddRow(new string[] {
+                            "0",
+                            "First",
+                            "Second"});
+                table6.AddRow(new string[] {
+                            "1",
+                            "Third",
+                            "Fourth"});
+                table6.AddRow(new string[] {
+                            "2",
+                            "Fifth",
+                            "Sixth"});
+                table6.AddRow(new string[] {
+                            "3",
+                            "Seventh",
+                            ""});
+#line 62
+ testRunner.Then("pariticpating players in created group 0 should be mapped accordingly", ((string)(null)), table6, "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="When bracket has nine participants the first match should contain two players and" +
+            " parent should contain one")]
+        [Xunit.TraitAttribute("FeatureTitle", "BracketGroup")]
+        [Xunit.TraitAttribute("Description", "When bracket has nine participants the first match should contain two players and" +
+            " parent should contain one")]
+        public virtual void WhenBracketHasNineParticipantsTheFirstMatchShouldContainTwoPlayersAndParentShouldContainOne()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("When bracket has nine participants the first match should contain two players and" +
+                    " parent should contain one", null, ((string[])(null)));
+#line 69
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 86
+ testRunner.Given("a tournament named \"GSL 2019\" with users \"Stålberto, Bönis, Guggelito\" added to i" +
+                        "t", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+                TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Round type",
+                            "Round name",
+                            "Best of",
+                            "Advancing amount"});
+                table7.AddRow(new string[] {
+                            "Bracket",
+                            "Bracket round",
+                            "3",
+                            "1"});
+#line 87
+  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table7, "And ");
+#line hidden
+#line 90
+  testRunner.And("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 91
+ testRunner.When("players \"First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth\" is a" +
+                        "dded to created group 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line hidden
+                TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Match index",
+                            "Player 1 name",
+                            "Player 2 name"});
+                table8.AddRow(new string[] {
+                            "0",
+                            "First",
+                            "Second"});
+                table8.AddRow(new string[] {
+                            "1",
+                            "Third",
+                            "Fourth"});
+                table8.AddRow(new string[] {
+                            "2",
+                            "Fifth",
+                            "Sixth"});
+                table8.AddRow(new string[] {
+                            "3",
+                            "Seventh",
+                            "Eighth"});
+                table8.AddRow(new string[] {
+                            "4",
+                            "Ninth",
+                            ""});
+#line 92
+ testRunner.Then("pariticpating players in created group 0 should be mapped accordingly", ((string)(null)), table8, "Then ");
+#line hidden
+            }
+            this.ScenarioCleanup();
+        }
+        
+        [Xunit.SkippableFactAttribute(DisplayName="Bracket progression goes as expected")]
+        [Xunit.TraitAttribute("FeatureTitle", "BracketGroup")]
+        [Xunit.TraitAttribute("Description", "Bracket progression goes as expected")]
+        public virtual void BracketProgressionGoesAsExpected()
+        {
+            string[] tagsOfScenario = ((string[])(null));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Bracket progression goes as expected", null, ((string[])(null)));
+#line 100
+this.ScenarioInitialize(scenarioInfo);
+#line hidden
+            bool isScenarioIgnored = default(bool);
+            bool isFeatureIgnored = default(bool);
+            if ((tagsOfScenario != null))
+            {
+                isScenarioIgnored = tagsOfScenario.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((this._featureTags != null))
+            {
+                isFeatureIgnored = this._featureTags.Where(__entry => __entry != null).Where(__entry => String.Equals(__entry, "ignore", StringComparison.CurrentCultureIgnoreCase)).Any();
+            }
+            if ((isScenarioIgnored || isFeatureIgnored))
+            {
+                testRunner.SkipScenario();
+            }
+            else
+            {
+                this.ScenarioStart();
+#line 117
+ testRunner.Given("a tournament named \"GSL 2019\" with users \"Stålberto, Bönis, Guggelito\" added to i" +
+                        "t", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+                TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
+                            "Round type",
+                            "Round name",
+                            "Best of",
+                            "Advancing amount"});
+                table9.AddRow(new string[] {
+                            "Bracket",
+                            "Bracket round",
+                            "3",
+                            "1"});
+#line 118
+  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table9, "And ");
+#line hidden
+#line 121
+  testRunner.And("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+#line 122
   testRunner.And("players \"Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain\" is added " +
                         "to created group 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
                             "Created tournament index",
                             "Round index",
                             "Group index"});
-                table6.AddRow(new string[] {
+                table10.AddRow(new string[] {
                             "0",
                             "0",
                             "0"});
-#line 62
-  testRunner.And("groups within created tournament is played out and betted on", ((string)(null)), table6, "And ");
+#line 123
+  testRunner.And("groups within created tournament is played out and betted on", ((string)(null)), table10, "And ");
 #line hidden
-#line 65
+#line 126
  testRunner.Then("advancing players in created group 0 is exactly \"Maru\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
