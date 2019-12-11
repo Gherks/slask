@@ -65,7 +65,12 @@ namespace Slask.Domain
 
         public virtual PlayerReference AddPlayerReference(string name)
         {
-            if (GetPlayState() != PlayState.NotBegun)
+            RoundBase firstRound = Round.Tournament.Rounds.First();
+
+            bool groupDoesNotBelongToFirstRound = Round.Id != firstRound.Id;
+            bool hasNotBegun = GetPlayState() != PlayState.NotBegun;
+
+            if (groupDoesNotBelongToFirstRound || hasNotBegun)
             {
                 return null;
             }
