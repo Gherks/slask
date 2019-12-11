@@ -244,24 +244,13 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
         protected static void ParseTargetGroupToPlaceBets(TableRow row, out int tournamentIndex, out int roundIndex, out int groupIndex)
         {
-            tournamentIndex = 0;
-            roundIndex = 0;
-            groupIndex = 0;
+            row["Created tournament index"].Should().NotBeNullOrEmpty();
+            row["Round index"].Should().NotBeNullOrEmpty();
+            row["Group index"].Should().NotBeNullOrEmpty();
 
-            if (row.ContainsKey("Created tournament index"))
-            {
-                int.TryParse(row["Created tournament index"], out tournamentIndex);
-            }
-
-            if (row.ContainsKey("Round index"))
-            {
-                int.TryParse(row["Round index"], out roundIndex);
-            }
-
-            if (row.ContainsKey("Group index"))
-            {
-                int.TryParse(row["Group index"], out groupIndex);
-            }
+            int.TryParse(row["Created tournament index"], out tournamentIndex);
+            int.TryParse(row["Round index"], out roundIndex);
+            int.TryParse(row["Group index"], out groupIndex);
         }
 
         protected virtual void PlayAvailableMatches(GroupBase group)
