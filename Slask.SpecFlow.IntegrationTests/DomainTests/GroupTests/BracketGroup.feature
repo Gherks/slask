@@ -19,6 +19,36 @@ Scenario: Start time in matches in bracket group is spaced with one hour upon cr
 	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is added to created group 0
 	Then minutes between matches in created group 0 should be 60
 
+Scenario: Can create bracket layout
+	#
+	#  Match 4
+	# | 7 vs 8 |
+	#
+	#  Match 3		 Match 6
+	# | 5 vs 6 |	| - vs - |
+	#
+	#								 Match 7
+	#								| - vs - |
+	#
+	#  Match 2		 Match 5
+	# | 3 vs 4 |	| - vs - |
+	#
+	#  Match 1
+	# | 1 vs 2 |
+	#
+	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
+		And created tournament 0 adds rounds
+			| Round type | Round name    | Best of | Advancing amount |
+			| Bracket    | Bracket round | 3       | 1                |
+		And group is added to created round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is added to created group 0
+	Then pariticpating players in created group 0 should be mapped accordingly
+		| Match index | Player 1 name | Player 2 name |
+		| 0           | First         | Second        |
+		| 1           | Third         | Fourth        |
+		| 2           | Fifth         | Sixth         |
+		| 3           | Seventh       | Eighth        |
+
 Scenario: When bracket has five participants the first match should contain two players and parent should contain one
 	#
 	#  Match 1		 Match 3		 Match 4
@@ -119,11 +149,16 @@ Scenario: Bracket progression goes as expected
 			| Round type | Round name    | Best of | Advancing amount |
 			| Bracket    | Bracket round | 3       | 1                |
 		And group is added to created round 0
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is added to created group 0
+		And players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is added to created group 0
 		And groups within created tournament is played out and betted on
 			| Created tournament index | Round index | Group index |
 			| 0                        | 0           | 0           |
-	Then advancing players in created group 0 is exactly "Maru"
+	Then advancing players in created group 0 is exactly "First"
+		And pariticpating players in created group 0 should be mapped accordingly
+			| Match index | Player 1 name | Player 2 name |
+			| 4           | First         | Third         |
+			| 5           | Fifth         | Seventh       |
+			| 6           | First         | Fifth         |
 
 #Scenario: Can construct bracket match layout
 #Scenario: Can clear bracket group

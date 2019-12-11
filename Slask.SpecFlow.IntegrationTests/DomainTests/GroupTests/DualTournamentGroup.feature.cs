@@ -113,18 +113,18 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
  testRunner.Given("a tournament named \"GSL 2019\" has been created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table11.AddRow(new string[] {
+                table14.AddRow(new string[] {
                             "Dual tournament",
                             "Dual tournament round",
                             "3",
                             "2"});
 #line 7
-  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table11, "And ");
+  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table14, "And ");
 #line hidden
 #line 10
  testRunner.When("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
@@ -169,18 +169,18 @@ this.ScenarioInitialize(scenarioInfo);
 #line 14
  testRunner.Given("a tournament named \"GSL 2019\" has been created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table15 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table12.AddRow(new string[] {
+                table15.AddRow(new string[] {
                             "Dual tournament",
                             "Dual tournament round",
                             "3",
                             "2"});
 #line 15
-  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table12, "And ");
+  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table15, "And ");
 #line hidden
 #line 18
   testRunner.And("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -227,18 +227,18 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Given("a tournament named \"GSL 2019\" with users \"Stålberto, Bönis, Guggelito\" added to i" +
                         "t", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-                TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table16 = new TechTalk.SpecFlow.Table(new string[] {
                             "Round type",
                             "Round name",
                             "Best of",
                             "Advancing amount"});
-                table13.AddRow(new string[] {
+                table16.AddRow(new string[] {
                             "Dual tournament",
                             "Dual tournament round",
                             "3",
                             "1"});
 #line 33
-  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table13, "And ");
+  testRunner.And("created tournament 0 adds rounds", ((string)(null)), table16, "And ");
 #line hidden
 #line 36
   testRunner.And("group is added to created round 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -246,16 +246,16 @@ this.ScenarioInitialize(scenarioInfo);
 #line 37
   testRunner.And("players \"Maru, Stork, Taeja, Rain\" is added to created group 0", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
-                TechTalk.SpecFlow.Table table14 = new TechTalk.SpecFlow.Table(new string[] {
+                TechTalk.SpecFlow.Table table17 = new TechTalk.SpecFlow.Table(new string[] {
                             "Created tournament index",
                             "Round index",
                             "Group index"});
-                table14.AddRow(new string[] {
+                table17.AddRow(new string[] {
                             "0",
                             "0",
                             "0"});
 #line 38
-  testRunner.And("groups within created tournament is played out and betted on", ((string)(null)), table14, "And ");
+  testRunner.And("groups within created tournament is played out and betted on", ((string)(null)), table17, "And ");
 #line hidden
 #line 41
  testRunner.Then("advancing players in created group 0 is exactly \"Maru, Taeja\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
