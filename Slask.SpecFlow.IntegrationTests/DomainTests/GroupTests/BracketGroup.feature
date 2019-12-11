@@ -160,5 +160,4 @@ Scenario: Bracket progression goes as expected
 			| 5           | Fifth         | Seventh       |
 			| 6           | First         | Fifth         |
 
-#Scenario: Can construct bracket match layout
 #Scenario: Can clear bracket group
