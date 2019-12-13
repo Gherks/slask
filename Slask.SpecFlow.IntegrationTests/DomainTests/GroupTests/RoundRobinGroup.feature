@@ -34,6 +34,8 @@ Scenario: Creates proper round robin layout upon group creation
 		| 1           | Third         | Fourth        |
 
 Scenario: Round robin progression with four players goes as expected
+	# See comment right above 'AssignPlayersToMatches()' in RoundRobinGroup.cs for 
+	# explanation of Round robin progression
 	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
 			| Round type             | Round name        | Best of | Advancing amount |
@@ -54,6 +56,8 @@ Scenario: Round robin progression with four players goes as expected
 			| 5           | Fourth        | Third         |
 
 Scenario: Round robin progression with five players goes as expected
+	# See comment right above 'AssignPlayersToMatches()' in RoundRobinGroup.cs for 
+	# explanation of Round robin progression
 	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
 			| Round type             | Round name        | Best of | Advancing amount |
