@@ -38,6 +38,7 @@ Scenario: Cannot add new players to groups not within first round
 #Scenario: Cannot increase score before match has started in round robin group
 #Scenario: Cannot increase score before match has started in dual tournament group
 #Scenario: Cannot increase score before match has started in bracket group
+
 #Scenario: Can clear round robin group of matches - unit test?
 #Scenario: Can clear dual tournament group of matches - unit test?
 #Scenario: Can clear bracket group of matches - unit test?
