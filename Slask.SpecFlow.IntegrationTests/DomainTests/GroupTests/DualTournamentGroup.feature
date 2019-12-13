@@ -1,4 +1,4 @@
-﻿Feature: DualTournamentGroup
+Feature: DualTournamentGroup
 	Does a bunch of tests on Dual tournament group
 
 @DualTournamentGroupTag
@@ -34,11 +34,18 @@ Scenario: Dual tournament progression goes as expected
 			| Round type      | Round name            | Best of | Advancing amount |
 			| Dual tournament | Dual tournament round | 3       | 1                |
 		And group is added to created round 0
-		And players "Maru, Stork, Taeja, Rain" is added to created group 0
+		And players "First, Second, Third, Fourth" is added to created group 0
 		And groups within created tournament is played out and betted on
 			| Created tournament index | Round index | Group index |
 			| 0                        | 0           | 0           |
-	Then advancing players in created group 0 is exactly "Maru, Taeja"
+	Then advancing players in created group 0 is exactly "First, Third"
+		And pariticpating players in created group 0 should be mapped accordingly
+			| Match index | Player 1 name | Player 2 name |
+			| 0           | First         | Second        |
+			| 1           | Third         | Fourth        |
+			| 2           | First         | Third         |
+			| 3           | Second        | Fourth        |
+			| 4           | Third         | Second        |
 #
 #Scenario: Can clear dual tournament group
 #
