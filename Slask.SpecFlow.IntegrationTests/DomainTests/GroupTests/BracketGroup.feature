@@ -19,7 +19,7 @@ Scenario: Start time in matches in bracket group is spaced with one hour upon cr
 	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is added to created group 0
 	Then minutes between matches in created group 0 should be 60
 
-Scenario: Can create bracket layout
+Scenario: Creates proper bracket layout upon group creation
 	#
 	#  Match 4
 	# | 7 vs 8 |
