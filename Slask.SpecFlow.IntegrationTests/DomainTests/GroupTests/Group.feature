@@ -1,5 +1,5 @@
 ﻿Feature: Group
-	Does a bunch of tests on Group
+	Does a bunch of tests on Groups
 
 @GroupTag
 Scenario: Rounds can create groups
