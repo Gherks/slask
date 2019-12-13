@@ -165,30 +165,6 @@ namespace Slask.Domain
             return null;
         }
 
-        private bool ValidateNewPlayerReference(PlayerReference playerReference)
-        {
-            if (playerReference == null)
-            {
-                return false;
-            }
-
-            bool matchIsFilled = Player1.PlayerReference != null && Player2.PlayerReference != null;
-
-            if (matchIsFilled)
-            {
-                return false;
-            }
-
-            bool alreadyAddedToMatch = FindPlayer(playerReference.Name) != null;
-
-            if (alreadyAddedToMatch)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
         private bool AnyPlayerHasWon()
         {
             int matchPointBarrier = Group.Round.BestOf - (Group.Round.BestOf / 2);
