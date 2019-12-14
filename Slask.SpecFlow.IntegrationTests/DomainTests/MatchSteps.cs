@@ -49,6 +49,43 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             match.GetPlayState().Should().Be(playState);
         }
 
+        [Then(@"winning player can be fetched from match (.*) in created group (.*)")]
+        public void ThenWinningPlayerCanBeFetchedFromMatchInCreatedGroup(int matchIndex, int createdGroupIndex)
+        {
+            GroupBase group = createdGroups[createdGroupIndex];
+            Match match = group.Matches[matchIndex];
+
+            match.GetWinningPlayer().Should().NotBeNull();
+        }
+
+        [Then(@"losing player can be fetched from match (.*) in created group (.*)")]
+        public void ThenLosingPlayerCanBeFetchedFromMatchInCreatedGroup(int matchIndex, int createdGroupIndex)
+        {
+            GroupBase group = createdGroups[createdGroupIndex];
+            Match match = group.Matches[matchIndex];
+
+            match.GetLosingPlayer().Should().NotBeNull();
+        }
+
+        [Then(@"winning player cannot be fetched from match (.*) in created group (.*)")]
+        public void ThenWinningPlayerCannotBeFetchedFromMatchInCreatedGroup(int matchIndex, int createdGroupIndex)
+        {
+            GroupBase group = createdGroups[createdGroupIndex];
+            Match match = group.Matches[matchIndex];
+
+            match.GetWinningPlayer().Should().BeNull();
+        }
+
+        [Then(@"losing player cannot be fetched from match (.*) in created group (.*)")]
+        public void ThenLosingPlayerCannotBeFetchedFromMatchInCreatedGroup(int matchIndex, int createdGroupIndex)
+        {
+            GroupBase group = createdGroups[createdGroupIndex];
+            Match match = group.Matches[matchIndex];
+
+            match.GetLosingPlayer().Should().BeNull();
+        }
+
+
         private PlayState GetPlayStateFromString(string playStateString)
         {
             if (playStateString == null)

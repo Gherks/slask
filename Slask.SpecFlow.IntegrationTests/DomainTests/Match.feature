@@ -21,15 +21,18 @@ Scenario: Match returns IsFinished state when match is played out
 	Then match 0 in created group 0 should be in state "IsFinished"
 
 
-#Scenario: Can return winning player when match is finished
+Scenario: Can return winning and losing players when match is finished
+	Given a round robin tournament with users and players has been created
+		And groups within created tournament is played out and betted on
+			| Created tournament index | Round index | Group index |
+			| 0                        | 0           | 0           |
+	Then winning player can be fetched from match 0 in created group 0
+		And losing player can be fetched from match 0 in created group 0
 
-
-#Scenario: Can return losing player when match is finished
-
-
-#Scenario: Returns null when getting winning player before match is finished
-
-
-#Scenario: Returns null when getting losing player before match is finished
-
-
+Scenario: Returns null when getting winning and losing players before match is finished
+	Given a round robin tournament with users and players has been created
+	When score is added to players in given matches in created groups
+		| Created group index | Match index | Scoring player | Added score |
+		| 0                   | 0           | First          | 1           |
+	Then winning player cannot be fetched from match 0 in created group 0
+		And losing player cannot be fetched from match 0 in created group 0
