@@ -13,7 +13,7 @@ namespace Slask.Domain
         }
 
         [NotMapped]
-        BracketNodeSystem BracketNodeSystem;
+        public BracketNodeSystem BracketNodeSystem;
 
         public static BracketGroup Create(BracketRound round)
         {
@@ -28,16 +28,6 @@ namespace Slask.Domain
                 RoundId = round.Id,
                 Round = round
             };
-        }
-
-        protected override void OnParticipantAdded(PlayerReference playerReference)
-        {
-            UpdateMatchSetup();
-        }
-
-        protected override void OnParticipantRemoved(PlayerReference playerReference)
-        {
-            UpdateMatchSetup();
         }
 
         public override void MatchScoreIncreased(Match match)
@@ -64,6 +54,16 @@ namespace Slask.Domain
             }
         }
 
+        protected override void OnParticipantAdded(PlayerReference playerReference)
+        {
+            UpdateMatchSetup();
+        }
+
+        protected override void OnParticipantRemoved(PlayerReference playerReference)
+        {
+            UpdateMatchSetup();
+        }
+
         private void UpdateMatchSetup()
         {
             int matchAmount = ParticipatingPlayers.Count - 1;
@@ -75,6 +75,11 @@ namespace Slask.Domain
                 BracketNodeSystem.Construct(Matches);
             }
 
+            FillMatchesWithPlayerReferences();
+        }
+
+        private void FillMatchesWithPlayerReferences()
+        {
             for (int matchIndex = 0; matchIndex < Matches.Count; ++matchIndex)
             {
                 PlayerReference playerReference1 = null;
@@ -99,9 +104,9 @@ namespace Slask.Domain
         }
     }
 
-    internal class BracketNodeSystem
+    public class BracketNodeSystem
     {
-        public BracketNodeSystem()
+        internal BracketNodeSystem()
         {
             bracketNodesByTier = new List<List<BracketNode>>();
         }
@@ -109,6 +114,16 @@ namespace Slask.Domain
         public BracketNode FinalNode { get; private set; }
 
         private readonly List<List<BracketNode>> bracketNodesByTier;
+
+        public List<BracketNode> GetBracketNodesInTier(int bracketTier)
+        {
+            if (bracketTier >= bracketNodesByTier.Count)
+            {
+                return null;
+            }
+
+            return bracketNodesByTier[bracketTier];
+        }
 
         // Creates one bracket node for each match in given list, minus the final. Loops over list backwards so that 
         // the first bracket node is the final match in bracket.
@@ -124,7 +139,7 @@ namespace Slask.Domain
         // Just before a bracket node is allocated and added to a parent bracket node a check is made to determine if
         // there is any more matches in match list to draw from. When it detects that the first match has been processed
         // the algorithm is aborted.
-        public void Construct(List<Match> matches)
+        internal void Construct(List<Match> matches)
         {
             if (matches == null)
             {
@@ -166,16 +181,6 @@ namespace Slask.Domain
             }
         }
 
-        public List<BracketNode> GetBracketNodesInTier(int bracketTier)
-        {
-            if(bracketTier >= bracketNodesByTier.Count)
-            {
-                return null;
-            }
-
-            return bracketNodesByTier[bracketTier];
-        }
-
         private BracketNode CreateBracketNode(BracketNode parent, Match match)
         {
             BracketNode bracketNode = new BracketNode(parent, match);
@@ -203,9 +208,9 @@ namespace Slask.Domain
     // Represents all matches in bracket with a node tree strucutre. All nodes contains a parent node and two 
     // children nodes. The parent node represents the match the winning player will advance to. The two children
     // nodes represents the matches where the winners of the previous bracket round came from (Example: RO32 -> RO16).
-    internal class BracketNode
+    public class BracketNode
     {
-        public BracketNode(BracketNode parent, Match match)
+        internal BracketNode(BracketNode parent, Match match)
         {
             if (match == null)
             {
