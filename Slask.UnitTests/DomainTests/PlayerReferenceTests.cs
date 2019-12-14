@@ -1,7 +1,5 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
-using Slask.TestCore;
-using System.Linq;
 using Xunit;
 
 namespace Slask.UnitTests.DomainTests
