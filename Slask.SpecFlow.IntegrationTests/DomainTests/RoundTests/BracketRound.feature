@@ -52,3 +52,8 @@ Scenario: Cannot create bracket round with best ofs less than zero
 	Then created round 0 in tournament should be invalid
 		And created round 1 in tournament should be invalid
 		And created round 2 in tournament should be invalid
+
+
+#CanFetchPreviousRoundFromRoundWithRoundPredecessor
+#OnlyWinningPlayersCanAdvanceToNextRound
+#ADVANCING PLAYERS MUST ALWAYS BE EQUAL OR LESS THAN NUMBER OF GROUPS IN ROUND
