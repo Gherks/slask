@@ -68,7 +68,40 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             }
         }
 
+        [Given(@"score is added to players in given matches in created groups")]
+        [When(@"score is added to players in given matches in created groups")]
+        public void WhenScoreIsAddedToPlayersInGivenMatchesInCreatedGroups(Table table)
+        {
+            if (table == null)
+            {
+                throw new ArgumentNullException(nameof(table));
+            }
+
+            foreach (TableRow row in table.Rows)
+            {
+                ParseSoreAddedToMatchPlayer(row, out int createdGroupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
+
+                GroupBase group = createdGroups[createdGroupIndex];
+                Domain.Match match = group.Matches[matchIndex];
+
+                SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+
+                Player player = match.FindPlayer(scoringPlayer);
+
+                if(player != null)
+                {
+                    player.IncreaseScore(scoreAdded);
+                }
+                else
+                {
+                    throw new Exception("Invalid player name in given match within given created group");
+                }
+            }
+        }
+
+
         [Given(@"groups within created tournament is played out and betted on")]
+        [When(@"groups within created tournament is played out and betted on")]
         public void GivenCreatedGroupInCreatedRoundIsPlayedOutAndBettedOn(Table table)
         {
             if (table == null)
@@ -259,6 +292,34 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             group.Matches.Should().HaveCount(matchesUponCreation);
             group.RoundId.Should().NotBeEmpty();
             group.Round.Should().NotBeNull();
+        }
+
+        protected static void ParseSoreAddedToMatchPlayer(TableRow row, out int createdGroupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded)
+        {
+            createdGroupIndex = 0;
+            matchIndex = 0;
+            scoringPlayer = "";
+            scoreAdded = 0;
+
+            if (row.ContainsKey("Created group index"))
+            {
+                int.TryParse(row["Created group index"], out createdGroupIndex);
+            }
+
+            if (row.ContainsKey("Match index"))
+            {
+                int.TryParse(row["Match index"], out matchIndex);
+            }
+
+            if (row.ContainsKey("Scoring player"))
+            {
+                scoringPlayer = row["Scoring player"];
+            }
+
+            if (row.ContainsKey("Added score"))
+            {
+                int.TryParse(row["Added score"], out scoreAdded);
+            }
         }
 
         protected static void ParseTargetGroupToPlaceBets(TableRow row, out int tournamentIndex, out int roundIndex, out int groupIndex)
