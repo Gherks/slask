@@ -8,15 +8,23 @@ namespace Slask.UnitTests.DomainTests
 {
     public class PlayerReferenceTests
     {
+        private readonly Tournament tournament;
+
+        public PlayerReferenceTests()
+        {
+            tournament = Tournament.Create("GSL 2019");
+        }
+
         [Fact]
         public void CanCreatePlayerReference()
         {
-            Tournament tournament = Tournament.Create("GSL 2019");
-            PlayerReference playerReference = PlayerReference.Create("Maru", tournament);
+            string name = "Maru";
+
+            PlayerReference playerReference = PlayerReference.Create(name, tournament);
 
             playerReference.Should().NotBeNull();
             playerReference.Id.Should().NotBeEmpty();
-            playerReference.Name.Should().Be("Maru");
+            playerReference.Name.Should().Be(name);
             playerReference.TournamentId.Should().Be(tournament.Id);
             playerReference.Tournament.Should().Be(tournament);
         }
@@ -24,7 +32,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CannotCreatePlayerReferenceWithEmptyname()
         {
-            Tournament tournament = Tournament.Create("GSL 2019");
             PlayerReference playerReference = PlayerReference.Create("", tournament);
 
             playerReference.Should().BeNull();
@@ -41,7 +48,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void PlayerReferenceCanBeRenamed()
         {
-            Tournament tournament = Tournament.Create("GSL 2019");
             PlayerReference playerReference = PlayerReference.Create("Maru", tournament);
 
             playerReference.RenameTo("Idra");
@@ -67,7 +73,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void PlayerReferenceCannotBeRenamedToEmptyName()
         {
-            Tournament tournament = Tournament.Create("GSL 2019");
             PlayerReference playerReference = PlayerReference.Create("Maru", tournament);
 
             playerReference.RenameTo("");
