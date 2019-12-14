@@ -6,7 +6,6 @@ using Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using TechTalk.SpecFlow;
 
 namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
@@ -14,7 +13,11 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
     [Binding, Scope(Feature = "Group")]
     public class GroupSteps : GroupStepDefinitions
     {
-
+        [AfterScenario]
+        public static void AfterScenario()
+        {
+            SystemTimeMocker.Reset();
+        }
     }
 
     public class GroupStepDefinitions : RoundStepDefinitions
