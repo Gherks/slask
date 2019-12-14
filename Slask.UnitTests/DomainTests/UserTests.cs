@@ -1,6 +1,5 @@
 using FluentAssertions;
 using Slask.Domain;
-using Slask.TestCore;
 using Xunit;
 
 namespace Slask.UnitTests.DomainTests
@@ -10,8 +9,7 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void EnsureUserIsValidWhenCreated()
         {
-            UserServiceContext services = GivenServices();
-            User user = services.WhenCreatedUser();
+            User user = User.Create("Stålberto");
 
             user.Should().NotBeNull();
             user.Id.Should().NotBeEmpty();
@@ -19,27 +17,35 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
-        public void CannotCreateUserWithNameAlreadyInUseNoMatterLetterCasing()
-        {
-            UserServiceContext services = GivenServices();
-            User createdUser = services.WhenCreatedUser();
-            User duplicateUser = services.UserService.CreateUser(createdUser.Name.ToUpper());
-
-            duplicateUser.Should().BeNull();
-        }
-
-        [Fact]
         public void CannotCreateUserWithEmptyName()
         {
-            UserServiceContext services = GivenServices();
-            User user = services.UserService.CreateUser("");
+            User user = User.Create("");
 
             user.Should().BeNull();
         }
 
-        private UserServiceContext GivenServices()
-        {
-            return UserServiceContext.GivenServices(new UnitTestSlaskContextCreator());
-        }
+        //[Fact]
+        //public void CannotCreateUserWithNameAlreadyInUseNoMatterLetterCasing()
+        //{
+        //    UserServiceContext services = GivenServices();
+        //    User createdUser = services.WhenCreatedUser();
+        //    User duplicateUser = services.UserService.CreateUser(createdUser.Name.ToUpper());
+
+        //    duplicateUser.Should().BeNull();
+        //}
+
+        //[Fact]
+        //public void CannotCreateUserWithEmptyName()
+        //{
+        //    UserServiceContext services = GivenServices();
+        //    User user = services.UserService.CreateUser("");
+
+        //    user.Should().BeNull();
+        //}
+
+        //private UserServiceContext GivenServices()
+        //{
+        //    return UserServiceContext.GivenServices(new UnitTestSlaskContextCreator());
+        //}
     }
 }
