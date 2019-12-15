@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
+using Slask.Domain.Rounds;
 using Slask.TestCore;
 using System;
 using System.Linq;
@@ -10,80 +11,82 @@ namespace Slask.UnitTests.DomainTests
 {
     public class MatchTests
     {
-        // public void CannotAddPointsToPlayersInMatchThatHasNotStarted
-        // públic void MatchCanStartWithoutAnyBets
+        private readonly Tournament tournament;
+        private readonly BracketRound bracketRound;
+        private readonly BracketGroup bracketGroup;
+
+        public MatchTests()
+        {
+            tournament = Tournament.Create("GSL 2019");
+            bracketRound = tournament.AddBracketRound("Bracket round", 3) as BracketRound;
+            bracketGroup = bracketRound.AddGroup() as BracketGroup;
+        }
 
         [Fact]
         public void CanCreateMatch()
         {
-            TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
+            string firstPlayerName = "Maru";
+            string secondPlayerName = "Stork";
 
-            group.Matches.Should().HaveCount(28);
+            Match match = InitializeFirstMatch(firstPlayerName, secondPlayerName);
 
-            foreach (Match match in group.Matches)
-            {
-                match.Should().NotBeNull();
-                match.Player1.Should().NotBeNull();
-                match.Player2.Should().NotBeNull();
-                match.StartDateTime.Should().NotBeBefore(DateTime.Now);
-                match.GroupId.Should().Be(group.Id);
-                match.Group.Should().Be(group);
-            }
+            match.Should().NotBeNull();
+            match.Player1.Should().NotBeNull();
+            match.Player1.Name.Should().Be(firstPlayerName);
+            match.Player2.Should().NotBeNull();
+            match.Player2.Name.Should().Be(secondPlayerName);
+            match.StartDateTime.Should().NotBeBefore(DateTime.Now);
+            match.GroupId.Should().Be(bracketGroup.Id);
+            match.Group.Should().Be(bracketGroup);
         }
 
         [Fact]
         public void MatchMustContainDifferentPlayers()
         {
-            TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
+            string playerName = "Maru";
 
-            foreach (Match match in group.Matches)
-            {
-                match.Player1.Should().NotBe(match.Player2);
-            }
+            InitializeFirstMatch(playerName, playerName);
+
+            bracketGroup.Matches.Should().BeEmpty();
         }
 
         [Fact]
-        public void CanAssignPlayerReferenceToPlayersInMatch()
+        public void CanAssignNewPlayerReferencesToMatch()
         {
-            TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services).First();
-            Match match = group.Matches.First();
+            Match match = InitializeFirstMatch();
 
-            PlayerReference maruPlayerReference = PlayerReference.Create("Maru", group.Round.Tournament);
-            PlayerReference storkPlayerReference = PlayerReference.Create("Stork", group.Round.Tournament);
+            PlayerReference taejaPlayerReference = PlayerReference.Create("Taeja", tournament);
+            PlayerReference rainPlayerReference = PlayerReference.Create("Rain", tournament);
 
-            match.AssignPlayerReferences(maruPlayerReference, storkPlayerReference);
+            match.AssignPlayerReferences(taejaPlayerReference, rainPlayerReference);
 
-            match.Player1.PlayerReference.Should().Be(maruPlayerReference);
-            match.Player2.PlayerReference.Should().Be(storkPlayerReference);
+            match.Player1.PlayerReference.Should().Be(taejaPlayerReference);
+            match.Player2.PlayerReference.Should().Be(rainPlayerReference);
         }
 
         [Fact]
-        public void CannotAssignSamePlayerReferenceToBothPlayersInMatch()
+        public void CannotAssignSamePlayerReferenceAsBothPlayersInMatch()
         {
-            TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services).First();
-            Match match = group.Matches.First();
+            Match match = InitializeFirstMatch();
 
-            PlayerReference playerReference = PlayerReference.Create("Maru", group.Round.Tournament);
+            PlayerReference firstPlayerReference = match.Player1.PlayerReference;
+            PlayerReference secondPlayerReference = match.Player2.PlayerReference;
+
+            PlayerReference playerReference = PlayerReference.Create("Taeja", tournament);
 
             match.AssignPlayerReferences(playerReference, playerReference);
 
-            match.Player1.PlayerReference.Should().BeNull();
-            match.Player2.PlayerReference.Should().BeNull();
+            match.Player1.PlayerReference.Should().Be(firstPlayerReference);
+            match.Player2.PlayerReference.Should().Be(secondPlayerReference);
         }
 
         [Fact]
-        public void CanAssignNullPlayerReferenceToEitherMatchPlayerInMatch()
+        public void CanAssignNullPlayerReferenceToEitherPlayerInMatch()
         {
-            TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services).First();
-            Match match = group.Matches.First();
+            Match match = InitializeFirstMatch();
 
-            PlayerReference maruPlayerReference = PlayerReference.Create("Maru", group.Round.Tournament);
-            PlayerReference storkPlayerReference = PlayerReference.Create("Stork", group.Round.Tournament);
+            PlayerReference maruPlayerReference = PlayerReference.Create("Maru", tournament);
+            PlayerReference storkPlayerReference = PlayerReference.Create("Stork", tournament);
 
             match.AssignPlayerReferences(maruPlayerReference, storkPlayerReference);
             match.AssignPlayerReferences(null, storkPlayerReference);
@@ -101,14 +104,8 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CanAssignNullPlayerReferenceToBothPlayersInMatch()
         {
-            TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services).First();
-            Match match = group.Matches.First();
+            Match match = InitializeFirstMatch();
 
-            PlayerReference maruPlayerReference = PlayerReference.Create("Maru", group.Round.Tournament);
-            PlayerReference storkPlayerReference = PlayerReference.Create("Stork", group.Round.Tournament);
-
-            match.AssignPlayerReferences(maruPlayerReference, storkPlayerReference);
             match.AssignPlayerReferences(null, null);
 
             match.Player1.PlayerReference.Should().Be(null);
@@ -118,77 +115,87 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void MatchIsReadyWhenPlayerReferencesHasBeenAssignedToPlayers()
         {
-            TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part05AddedPlayersToDualTournamentGroups(services).First();
+            Match match = InitializeFirstMatch();
 
-            group.Matches[0].IsReady().Should().BeTrue();
-            group.Matches[0].Player1.PlayerReference.Should().NotBeNull();
-            group.Matches[0].Player2.PlayerReference.Should().NotBeNull();
-
-            group.Matches[1].IsReady().Should().BeTrue();
-            group.Matches[1].Player1.PlayerReference.Should().NotBeNull();
-            group.Matches[1].Player2.PlayerReference.Should().NotBeNull();
-
-            group.Matches[2].IsReady().Should().BeFalse();
-            group.Matches[2].Player1.PlayerReference.Should().BeNull();
-            group.Matches[2].Player2.PlayerReference.Should().BeNull();
-
-            group.Matches[3].IsReady().Should().BeFalse();
-            group.Matches[3].Player1.PlayerReference.Should().BeNull();
-            group.Matches[3].Player2.PlayerReference.Should().BeNull();
-
-            group.Matches[4].IsReady().Should().BeFalse();
-            group.Matches[4].Player1.PlayerReference.Should().BeNull();
-            group.Matches[4].Player2.PlayerReference.Should().BeNull();
+            match.IsReady().Should().BeTrue();
+            match.Player1.PlayerReference.Should().NotBeNull();
+            match.Player2.PlayerReference.Should().NotBeNull();
         }
 
         [Fact]
-        public void MatchIsNotReadyWhenNoPlayerReferenceHasBeenAssignedToAnyPlayer()
+        public void MatchIsNotReadyWhenNoPlayerReferenceHasBeenAssignedToMatch()
         {
-            TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services).First();
+            Match match = InitializeFirstMatch();
 
-            foreach (Domain.Match match in group.Matches)
-            {
-                match.IsReady().Should().BeFalse();
-                match.Player1.PlayerReference.Should().BeNull();
-                match.Player2.PlayerReference.Should().BeNull();
-            }
+            match.AssignPlayerReferences(null, null);
+
+            match.IsReady().Should().BeFalse();
+            match.Player1.PlayerReference.Should().BeNull();
+            match.Player2.PlayerReference.Should().BeNull();
         }
 
         [Fact]
-        public void MatchIsNotReadyWhenOnlyOnePlayerHasBeenAssignedAPlayerReference()
+        public void MatchIsNotReadyWhenEitherPlayerReferenceHasBeenAssignedNull()
         {
-            TournamentServiceContext services = GivenServices();
-            DualTournamentGroup group = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services).First();
+            Match match = InitializeFirstMatch();
 
-            group.AddPlayerReference("Maru").Should().NotBeNull();
+            PlayerReference firstPlayerReference = match.Player1.PlayerReference;
+            PlayerReference secondPlayerReference = match.Player2.PlayerReference;
 
-            group.Matches[0].IsReady().Should().BeFalse();
-            group.Matches[0].Player1.PlayerReference.Should().NotBeNull();
-            group.Matches[0].Player2.PlayerReference.Should().BeNull();
+            match.AssignPlayerReferences(firstPlayerReference, null);
+
+            match.IsReady().Should().BeFalse();
+            match.Player1.PlayerReference.Should().Be(firstPlayerReference);
+            match.Player2.PlayerReference.Should().BeNull();
+
+            match.AssignPlayerReferences(null, secondPlayerReference);
+
+            match.IsReady().Should().BeFalse();
+            match.Player1.PlayerReference.Should().BeNull();
+            match.Player2.PlayerReference.Should().Be(secondPlayerReference);
         }
 
         [Fact]
         public void CanFindPlayerInMatchByPlayerName()
         {
-            TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
-            Match match = group.Matches.First();
+            string firstPlayerName = "Maru";
+            string secondPlayerName = "Stork";
 
-            Player foundPlayer = match.FindPlayer(match.Player1.Name);
+            Match match = InitializeFirstMatch(firstPlayerName, secondPlayerName);
 
-            foundPlayer.Should().NotBeNull();
-            foundPlayer.Id.Should().Be(match.Player1.Id);
-            foundPlayer.Name.Should().Be(match.Player1.Name);
+            Player firstFoundPlayer = match.FindPlayer(firstPlayerName);
+            Player secondFoundPlayer = match.FindPlayer(secondPlayerName);
+
+            firstFoundPlayer.Should().NotBeNull();
+            firstFoundPlayer.Id.Should().Be(match.Player1.Id);
+            firstFoundPlayer.Name.Should().Be(firstPlayerName);
+
+            secondFoundPlayer.Should().NotBeNull();
+            secondFoundPlayer.Id.Should().Be(match.Player2.Id);
+            secondFoundPlayer.Name.Should().Be(secondPlayerName);
+        }
+
+        [Fact]
+        public void CanFindPlayerInMatchByPlayerId()
+        {
+            Match match = InitializeFirstMatch();
+
+            Player firstFoundPlayer = match.FindPlayer(match.Player1.Id);
+            Player secondFoundPlayer = match.FindPlayer(match.Player2.Id);
+
+            firstFoundPlayer.Should().NotBeNull();
+            firstFoundPlayer.Id.Should().Be(match.Player1.Id);
+            firstFoundPlayer.Name.Should().Be(match.Player1.Name);
+
+            secondFoundPlayer.Should().NotBeNull();
+            secondFoundPlayer.Id.Should().Be(match.Player2.Id);
+            secondFoundPlayer.Name.Should().Be(match.Player2.Name);
         }
 
         [Fact]
         public void ReturnsNullWhenLookingForNonExistingPlayerInMatchByPlayerName()
         {
-            TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
-            Match match = group.Matches.First();
+            Match match = InitializeFirstMatch();
 
             Player foundPlayer = match.FindPlayer("non-existing-player");
 
@@ -196,25 +203,9 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
-        public void CanFindPlayerInMatchByPlayerId()
-        {
-            TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
-            Match match = group.Matches.First();
-
-            Player foundPlayer = match.FindPlayer(match.Player1.Id);
-
-            foundPlayer.Should().NotBeNull();
-            foundPlayer.Id.Should().Be(match.Player1.Id);
-            foundPlayer.Name.Should().Be(match.Player1.Name);
-        }
-
-        [Fact]
         public void ReturnsNullWhenLookingForNonExistingPlayerInMatchByPlayerId()
         {
-            TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
-            Match match = group.Matches.First();
+            Match match = InitializeFirstMatch();
 
             Player foundPlayer = match.FindPlayer(Guid.NewGuid());
 
@@ -224,9 +215,7 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void MatchStartDateTimeCannotBeChangedToSometimeInThePast()
         {
-            TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
-            Match match = group.Matches.First();
+            Match match = InitializeFirstMatch();
             DateTime initialDateTime = match.StartDateTime;
 
             match.SetStartDateTime(DateTime.Now.AddSeconds(-1));
@@ -234,23 +223,154 @@ namespace Slask.UnitTests.DomainTests
             match.StartDateTime.Should().Be(initialDateTime);
         }
 
-        //[Fact]
-        //public void CannotIncreaseScoreBeforeMatchHasStartedInGroup()
-        //{
-        //    TournamentServiceContext services = GivenServices();
-        //    BracketGroup group = HomestoryCupSetup.Part14BetsPlacedOnMatchesInBracketGroup(services);
-        //    Domain.Match match = group.Matches.First();
-
-        //    match.Player1.IncreaseScore(1);
-        //    match.Player2.IncreaseScore(1);
-
-        //    match.Player1.Score.Should().Be(0);
-        //    match.Player2.Score.Should().Be(0);
-        //}
-
-        private TournamentServiceContext GivenServices()
+        [Fact]
+        public void PlayStateIsEqualToNotBegunBeforeMactchHasStarted()
         {
-            return TournamentServiceContext.GivenServices(new UnitTestSlaskContextCreator());
+            Match match = InitializeFirstMatch();
+
+            PlayState playState = match.GetPlayState();
+
+            playState.Should().Be(PlayState.NotBegun);
+        }
+
+        [Fact]
+        public void PlayStateIsEqualToIsPlayingWhenMatchHasStartedButNotFinished()
+        {
+            Match match = InitializeFirstMatch();
+
+            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+            match.Player1.IncreaseScore(GetWinningScore() - 1);
+
+            PlayState playState = match.GetPlayState();
+
+            playState.Should().Be(PlayState.IsPlaying);
+        }
+
+        [Fact]
+        public void PlayStateIsEqualToIsFinishedWhenMatchHasAWinner()
+        {
+            Match match = InitializeFirstMatch();
+
+            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+            match.Player1.IncreaseScore(GetWinningScore());
+
+            PlayState playState = match.GetPlayState();
+
+            playState.Should().Be(PlayState.IsFinished);
+        }
+
+        [Fact]
+        public void CanGetWinningPlayerWhenMatchIsFinished()
+        {
+            Match match = InitializeFirstMatch();
+
+            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+            match.Player1.IncreaseScore(GetWinningScore());
+
+            Player player = match.GetWinningPlayer();
+
+            player.Should().Be(match.Player1);
+        }
+
+        [Fact]
+        public void CanGetLosingPlayerWhenMatchIsFinished()
+        {
+            Match match = InitializeFirstMatch();
+
+            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+            match.Player1.IncreaseScore(GetWinningScore());
+
+            Player player = match.GetLosingPlayer();
+
+            player.Should().Be(match.Player2);
+        }
+
+        [Fact]
+        public void CannotGetWinningPlayerBeforeMatchHasStarted()
+        {
+            Match match = InitializeFirstMatch();
+
+            Player player = match.GetWinningPlayer();
+
+            player.Should().BeNull();
+        }
+
+        [Fact]
+        public void CannotGetLosingPlayerBeforeMatchHasStarted()
+        {
+            Match match = InitializeFirstMatch();
+
+            Player player = match.GetLosingPlayer();
+
+            player.Should().BeNull();
+        }
+
+        [Fact]
+        public void CannotGetWinningPlayerWhileMatchIsPlaying()
+        {
+            Match match = InitializeFirstMatch();
+
+            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+            match.Player1.IncreaseScore(GetWinningScore() - 1);
+
+            Player player = match.GetWinningPlayer();
+
+            player.Should().BeNull();
+        }
+
+        [Fact] 
+        public void CannotGetLosingPlayerWhileMatchIsPlaying()
+        {
+            Match match = InitializeFirstMatch();
+
+            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+            match.Player1.IncreaseScore(GetWinningScore() - 1);
+
+            Player player = match.GetLosingPlayer();
+
+            player.Should().BeNull();
+        }
+
+        [Fact]
+        public void CannotIncreaseScoreBeforeMatchHasStarted()
+        {
+            Match match = InitializeFirstMatch();
+
+            match.Player1.IncreaseScore(1);
+            match.Player2.IncreaseScore(1);
+
+            match.Player1.Score.Should().Be(0);
+            match.Player2.Score.Should().Be(0);
+        }
+
+        [Fact]
+        public void CannotIncreaseScoreWhenMatchIsFinished()
+        {
+            Match match = InitializeFirstMatch();
+
+            match.Player1.IncreaseScore(1);
+            match.Player2.IncreaseScore(1);
+
+            match.Player1.Score.Should().Be(0);
+            match.Player2.Score.Should().Be(0);
+        }
+
+        private Match InitializeFirstMatch(string firstPlayerName = "Maru", string secondPlayerName = "Stork")
+        {
+            bracketGroup.AddPlayerReference(firstPlayerName);
+            bracketGroup.AddPlayerReference(secondPlayerName);
+
+            if(bracketGroup.Matches.Count > 0)
+            {
+                return bracketGroup.Matches.First();
+            }
+
+            return null;
+        }
+
+        private int GetWinningScore()
+        {
+            return (int)Math.Ceiling(bracketRound.BestOf / 2.0);
         }
     }
 }
