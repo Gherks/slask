@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
-using Slask.Domain.Rounds;
 using Slask.TestCore;
 using System;
 using System.Collections.Generic;
@@ -10,18 +9,9 @@ using Xunit;
 
 namespace Slask.UnitTests.DomainTests.GroupTests
 {
-    public class BracketGroupTests
+    public class DualTournamentGroupTests
     {
-        private readonly Tournament tournament;
-        private readonly BracketRound bracketRound;
 
-        public BracketGroupTests()
-        {
-            tournament = Tournament.Create("GSL 2019");
-            bracketRound = BracketRound.Create("Bracket round", 3, tournament);
-        }
-
-        // CREATE UNIT TESTS FOR BRACKET NODE SYSTEM
 
         // ALL MATCHES MUST BE ORDERED DESCENDING BY STARTDATETIME
 
@@ -31,27 +21,32 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         // CAN CHANGE LAST EXISTING PLAYER REF TO ANOTHER PLAYER REF 
 
         // CANNOT CREATE GROUPS OF TYPES THAT DOES NOT MATCH ROUND TYPE
-
         [Fact]
         public void CanCreateGroup()
         {
-            BracketGroup group = BracketGroup.Create(bracketRound);
+            TournamentServiceContext services = GivenServices();
+            List<DualTournamentGroup> groups = BHAOpenSetup.Part04AddGroupsToDualTournamentRound(services);
 
-            group.Should().NotBeNull();
-            group.Id.Should().NotBeEmpty();
-            group.ParticipatingPlayers.Should().BeEmpty();
-            group.Matches.Should().BeEmpty();
-            group.RoundId.Should().NotBeEmpty();
-            group.Round.Should().NotBeNull();
+            foreach (DualTournamentGroup group in groups)
+            {
+                group.Id.Should().NotBeEmpty();
+                group.ParticipatingPlayers.Should().BeEmpty();
+                group.Matches.Should().HaveCount(5);
+                group.RoundId.Should().NotBeEmpty();
+                group.Round.Should().NotBeNull();
+            }
         }
 
         [Fact]
-        public void CanConstructBracketMatchLayout()
+        public void CanConstructDualTournamentMatchLayout()
         {
             TournamentServiceContext services = GivenServices();
-            BracketGroup group = HomestoryCupSetup.Part12AddWinningPlayersToBracketGroup(services);
+            //DualTournamentGroup group = HomestoryCupSetup.Part04_AddGroupToRoundRobinRound();
 
-            // Must dig up the test results...
+            //group.AddPlayerReference("Maru");
+            //group.AddPlayerReference("Stork");
+            //group.AddPlayerReference("Taeja");
+            //group.AddPlayerReference("Rain");
 
             throw new NotImplementedException();
         }
