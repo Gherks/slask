@@ -130,12 +130,6 @@ namespace Slask.Domain
             }
         }
 
-        public virtual void Clear()
-        {
-            ParticipatingPlayers.Clear();
-            Matches.Clear();
-        }
-
         public virtual void MatchScoreIncreased(Match match)
         {
         }

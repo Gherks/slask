@@ -37,18 +37,6 @@ namespace Slask.Domain
             return group;
         }
 
-        public override void Clear()
-        {
-            ParticipatingPlayers.Clear();
-            Matches.Clear();
-
-            Matches.Add(Match.Create(this));
-            Matches.Add(Match.Create(this));
-            Matches.Add(Match.Create(this));
-            Matches.Add(Match.Create(this));
-            Matches.Add(Match.Create(this));
-        }
-
         public override PlayerReference AddPlayerReference(string name)
         {
             if (ParticipatingPlayers.Count < ParticipatingPlayerCapacity)
