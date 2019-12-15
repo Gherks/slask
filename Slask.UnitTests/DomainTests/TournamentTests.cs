@@ -11,6 +11,8 @@ namespace Slask.UnitTests.DomainTests
 {
     // IF PLAYER REF WAS REMOVED FROM GROUP ENTIERLY, AND GROUP IS IN FIRST ROUND, CHECK WHETHER PLAYER REF SHOULD BE REMOVED FROM TOURNAMENT REF LIST AS WELL
 
+    // Add test that makes sure RemoveDanglingPlayerReference works properly
+
     public class TournamentTests
     {
         [Fact]

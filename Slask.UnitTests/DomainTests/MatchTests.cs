@@ -234,6 +234,20 @@ namespace Slask.UnitTests.DomainTests
             match.StartDateTime.Should().Be(initialDateTime);
         }
 
+        //[Fact]
+        //public void CannotIncreaseScoreBeforeMatchHasStartedInGroup()
+        //{
+        //    TournamentServiceContext services = GivenServices();
+        //    BracketGroup group = HomestoryCupSetup.Part14BetsPlacedOnMatchesInBracketGroup(services);
+        //    Domain.Match match = group.Matches.First();
+
+        //    match.Player1.IncreaseScore(1);
+        //    match.Player2.IncreaseScore(1);
+
+        //    match.Player1.Score.Should().Be(0);
+        //    match.Player2.Score.Should().Be(0);
+        //}
+
         private TournamentServiceContext GivenServices()
         {
             return TournamentServiceContext.GivenServices(new UnitTestSlaskContextCreator());

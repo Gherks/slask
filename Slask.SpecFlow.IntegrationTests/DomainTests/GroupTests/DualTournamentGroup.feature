@@ -69,3 +69,4 @@ Scenario: Dual tournament progression goes as expected
 #Scenario: Can undo steps in
 #
 #Scenario: Creates proper dual tournament layout upon group creation
+# Create tests for GetPlayState

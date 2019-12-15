@@ -161,3 +161,4 @@ Scenario: Bracket progression goes as expected
 			| 6           | First         | Fifth         |
 
 #Scenario: Can clear bracket group
+# Create tests for GetPlayState
