@@ -56,3 +56,6 @@ Scenario: Cannot add new players to groups not within first round
 #Scenario: Fetching advancing players in bracket group only returns bracket winner
 #Scenario: Cannot fetch advancing players before group is played out
 #Scenario: Player is removed from participant list when not assigned to a single match
+
+# PlayerIsRemovedFromParticipantListWhenNotAssignedToASingleMatch
+# PlayerReferenceIsAddedToTournamentWhenNewPlayerIsAddedToGroup
