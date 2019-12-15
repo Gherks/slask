@@ -94,12 +94,12 @@ namespace Slask.Domain
 
         public RoundBase GetRoundByRoundId(Guid id)
         {
-            throw new NotImplementedException();
+            return Rounds.FirstOrDefault(round => round.Id == id);
         }
 
         public RoundBase GetRoundByRoundName(string name)
         {
-            throw new NotImplementedException();
+            return Rounds.FirstOrDefault(round => round.Name.ToLower() == name.ToLower());
         }
 
         public PlayerReference GetPlayerReferenceByPlayerId(Guid id)
