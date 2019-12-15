@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
+using Slask.Domain.Rounds;
 using Slask.TestCore;
 using System;
 using System.Collections.Generic;
@@ -156,8 +157,8 @@ namespace Slask.UnitTests.ServiceTests
         [Fact]
         public void PlayerReferencesAreAddedToTournamentWhenNewPlayersAreAddedTournament()
         {
-            RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
-            Tournament tournament = group.Round.Tournament;
+            InitializeUsersAndBetters();
+            InitializeRoundGroupAndPlayers();
 
             tournament.PlayerReferences.Should().NotBeNull();
             tournament.PlayerReferences.Should().HaveCount(8);
@@ -172,47 +173,47 @@ namespace Slask.UnitTests.ServiceTests
             tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Thorzain").Should().NotBeNull();
         }
 
-        //[Fact]
-        //public void CanGetAllPlayerReferencesInTournamentByTournamentId()
-        //{
-        //    RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
-        //    Tournament tournament = group.Round.Tournament;
+        [Fact]
+        public void CanGetAllPlayerReferencesInTournamentByTournamentId()
+        {
+            InitializeUsersAndBetters();
+            InitializeRoundGroupAndPlayers();
 
-        //    List<PlayerReference> playerReferences = services.TournamentService.GetPlayerReferencesByTournamentId(tournament.Id);
+            List<PlayerReference> playerReferences = services.TournamentService.GetPlayerReferencesByTournamentId(tournament.Id);
 
-        //    playerReferences.Should().NotBeNullOrEmpty();
-        //    playerReferences.Should().HaveCount(8);
+            playerReferences.Should().NotBeNullOrEmpty();
+            playerReferences.Should().HaveCount(8);
 
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Maru").Should().NotBeNull();
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stork").Should().NotBeNull();
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Taeja").Should().NotBeNull();
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Rain").Should().NotBeNull();
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Bomber").Should().NotBeNull();
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "FanTaSy").Should().NotBeNull();
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stephano").Should().NotBeNull();
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Thorzain").Should().NotBeNull();
-        //}
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Maru").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stork").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Taeja").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Rain").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Bomber").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "FanTaSy").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stephano").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Thorzain").Should().NotBeNull();
+        }
 
-        //[Fact]
-        //public void CanGetAllPlayerReferencesInTournamentByTournamentName()
-        //{
-        //    RoundRobinGroup group = HomestoryCupSetup.Part05AddedPlayersToRoundRobinGroup(services);
-        //    Tournament tournament = group.Round.Tournament;
+        [Fact]
+        public void CanGetAllPlayerReferencesInTournamentByTournamentName()
+        {
+            InitializeUsersAndBetters();
+            InitializeRoundGroupAndPlayers();
 
-        //    List<PlayerReference> playerReferences = services.TournamentService.GetPlayerReferencesByTournamentName(tournament.Name);
+            List<PlayerReference> playerReferences = services.TournamentService.GetPlayerReferencesByTournamentName(tournament.Name);
 
-        //    playerReferences.Should().NotBeNullOrEmpty();
-        //    playerReferences.Should().HaveCount(8);
+            playerReferences.Should().NotBeNullOrEmpty();
+            playerReferences.Should().HaveCount(8);
 
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Maru").Should().NotBeNull();
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stork").Should().NotBeNull();
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Taeja").Should().NotBeNull();
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Rain").Should().NotBeNull();
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Bomber").Should().NotBeNull();
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "FanTaSy").Should().NotBeNull();
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stephano").Should().NotBeNull();
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Thorzain").Should().NotBeNull();
-        //}
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Maru").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stork").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Taeja").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Rain").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Bomber").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "FanTaSy").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stephano").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Thorzain").Should().NotBeNull();
+        }
 
         private void InitializeUsersAndBetters()
         {
@@ -223,6 +224,21 @@ namespace Slask.UnitTests.ServiceTests
             tournament.AddBetter(services.UserService.GetUserByName("Stålberto"));
             tournament.AddBetter(services.UserService.GetUserByName("Bönis"));
             tournament.AddBetter(services.UserService.GetUserByName("Guggelito"));
+        }
+
+        private void InitializeRoundGroupAndPlayers()
+        {
+            RoundBase round = tournament.AddRoundRobinRound("Round robin round", 3, 2);
+            GroupBase group = round.AddGroup();
+
+            group.AddPlayerReference("Maru");
+            group.AddPlayerReference("Stork");
+            group.AddPlayerReference("Taeja");
+            group.AddPlayerReference("Rain");
+            group.AddPlayerReference("Bomber");
+            group.AddPlayerReference("FanTaSy");
+            group.AddPlayerReference("Stephano");
+            group.AddPlayerReference("Thorzain");
         }
     }
 }
