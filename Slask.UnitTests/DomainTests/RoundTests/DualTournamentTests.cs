@@ -1,8 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
 using Slask.Domain.Rounds;
-using Slask.TestCore;
-using System;
 using System.Linq;
 using Xunit;
 
@@ -18,7 +16,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         }
 
         [Fact]
-        public void CanCreateDualTournamentRound()
+        public void CanCreateRound()
         {
             string name = "Dual tournament round";
             int bestOf = 3;

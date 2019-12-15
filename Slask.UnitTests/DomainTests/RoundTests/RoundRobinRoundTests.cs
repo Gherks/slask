@@ -1,8 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
 using Slask.Domain.Rounds;
-using Slask.TestCore;
-using System;
 using System.Linq;
 using Xunit;
 
@@ -20,7 +18,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         // Tests covering advancing amount 
 
         [Fact]
-        public void CanCreateRoundRobinRound()
+        public void CanCreateRound()
         {
             string name = "Round robin round";
             int bestOf = 3;

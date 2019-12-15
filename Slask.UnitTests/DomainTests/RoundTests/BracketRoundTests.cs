@@ -1,9 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
 using Slask.Domain.Rounds;
-using Slask.TestCore;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -18,10 +15,8 @@ namespace Slask.UnitTests.DomainTests.RoundTests
             tournament = Tournament.Create("GSL 2019");
         }
 
-        // CREATE UNIT TESTS FOR BRACKET NODE SYSTEM
-
         [Fact]
-        public void CanCreateBracketRound()
+        public void CanCreateRound()
         {
             string name = "Bracket round";
             int bestOf = 3;
