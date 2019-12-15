@@ -107,7 +107,14 @@ namespace Slask.Domain
 
             PlayerReference playerReference = ParticipatingPlayers.Where(participant => participant.Name.ToLower() == name.ToLower()).FirstOrDefault();
 
-            return RemovePlayerReference(playerReference);
+            bool removalSuccessful = RemovePlayerReference(playerReference);
+
+            if(removalSuccessful)
+            {
+                Round.Tournament.RemoveDanglingPlayerReference(playerReference);
+            }
+
+            return removalSuccessful;
         }
 
         public virtual bool RemovePlayerReference(PlayerReference playerReference)
