@@ -121,5 +121,51 @@ namespace Slask.Domain
         {
             return Betters.FirstOrDefault(better => better.User.Name.ToLower() == name.ToLower());
         }
+
+        public bool RemoveDanglingPlayerReference(PlayerReference targetedPlayerReference)
+        {
+            if (targetedPlayerReference == null)
+            {
+                throw new ArgumentNullException(nameof(targetedPlayerReference));
+            }
+
+            bool playerReferenceNotInPlayerReferencePool = PlayerReferences.Any(playerReference => playerReference.Id == targetedPlayerReference.Id);
+
+            if (playerReferenceNotInPlayerReferencePool)
+            {
+                bool shouldBeRemovedFromPlayerReferencePool = !PlayerReferenceInUseByAnyGroup(targetedPlayerReference);
+
+                if (shouldBeRemovedFromPlayerReferencePool)
+                {
+                    PlayerReferences.Remove(targetedPlayerReference);
+                }
+
+                return shouldBeRemovedFromPlayerReferencePool;
+            }
+            else
+            {
+                // LOG Error: Player reference has already been removed. Tournament player reference pool was out of sync with the players residing in groups.
+            }
+
+            return false;
+        }
+
+        private bool PlayerReferenceInUseByAnyGroup(PlayerReference targetedPlayerReference)
+        {
+            foreach (RoundBase round in Rounds)
+            {
+                foreach (GroupBase group in round.Groups)
+                {
+                    bool groupHasPlayerReference = group.ParticipatingPlayers.Any(playerReference => playerReference.Id == targetedPlayerReference.Id);
+
+                    if (groupHasPlayerReference)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
     }
 }
