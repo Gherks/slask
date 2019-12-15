@@ -59,3 +59,4 @@ Scenario: Cannot add new players to groups not within first round
 
 # PlayerIsRemovedFromParticipantListWhenNotAssignedToASingleMatch
 # PlayerReferenceIsAddedToTournamentWhenNewPlayerIsAddedToGroup
+# CanOnlyRemovePlayerReferencesFromGroupsWithinFirstRound
