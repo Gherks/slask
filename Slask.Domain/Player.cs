@@ -40,18 +40,22 @@ namespace Slask.Domain
 
         public void SetPlayerReference(PlayerReference playerReference)
         {
-            if (PlayerReference != null)
+            if (PlayerReference == null)
+            {
+                PlayerReference = playerReference;
+            }
+            else
             {
                 bool playerReferenceIsRemoved = playerReference == null;
                 bool playerReferenceChanged = playerReference != null && PlayerReference.Id != playerReference.Id;
+
+                PlayerReference = playerReference;
 
                 if (playerReferenceIsRemoved || playerReferenceChanged)
                 {
                     Match.Group.RemovePlayerReference(PlayerReference);
                 }
             }
-
-            PlayerReference = playerReference;
         }
 
         public void IncreaseScore(int value)
