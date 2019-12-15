@@ -1,55 +1,252 @@
 ﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
-using Slask.TestCore;
+using Slask.Domain.Rounds;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
 namespace Slask.UnitTests.DomainTests.GroupTests
 {
-    public class RoundRobinGroupTests
+    public class RoundRobinGroupTests : IDisposable
     {
+        private readonly Tournament tournament;
+        private readonly RoundRobinRound roundRobinRound;
 
+        public RoundRobinGroupTests()
+        {
+            tournament = Tournament.Create("GSL 2019");
+            roundRobinRound = tournament.AddRoundRobinRound("Round robin round", 3, 2) as RoundRobinRound;
+        }
 
-        // ALL MATCHES MUST BE ORDERED DESCENDING BY STARTDATETIME
+        public void Dispose()
+        {
+            SystemTimeMocker.Reset();
+        }
 
-        // Create tests for GetPlayState
-
-        // CAN CHANGE LAST EXISTING PLAYER REF TO NULL AND IT IS REMOVED FROM GROUP
-        // CAN CHANGE LAST EXISTING PLAYER REF TO ANOTHER PLAYER REF 
-
-        // CANNOT CREATE GROUPS OF TYPES THAT DOES NOT MATCH ROUND TYPE
         [Fact]
         public void CanCreateGroup()
         {
-            TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part04AddedGroupToRoundRobinRound(services);
+            RoundRobinGroup group = RoundRobinGroup.Create(roundRobinRound);
 
             group.Should().NotBeNull();
             group.Id.Should().NotBeEmpty();
             group.ParticipatingPlayers.Should().BeEmpty();
             group.Matches.Should().BeEmpty();
-            group.RoundId.Should().NotBeEmpty();
-            group.Round.Should().NotBeNull();
+            group.RoundId.Should().Be(roundRobinRound.Id);
+            group.Round.Should().Be(roundRobinRound);
         }
 
         [Fact]
-        public void CanIncreaseAmountOfMatchesBasedOnParticipatingPlayers()
+        public void CanAddPlayerReferenceToGroup()
         {
-            TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part04AddedGroupToRoundRobinRound(services);
+            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
+            string playerName = "Maru";
 
-            group.AddPlayerReference("Maru").Should().NotBeNull();
-            group.AddPlayerReference("Stork").Should().NotBeNull();
+            group.AddPlayerReference(playerName);
+
+            group.ParticipatingPlayers.Should().HaveCount(1);
+            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+        }
+
+        [Fact]
+        public void PlayerReferenceIsReturnedWhenSuccessfullyAddedPlayerReference()
+        {
+            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
+            string playerName = "Maru";
+
+            PlayerReference returnedPlayerReference = group.AddPlayerReference(playerName);
+
+            returnedPlayerReference.Should().NotBeNull();
+            returnedPlayerReference.Name.Should().Be(playerName);
+        }
+
+        [Fact]
+        public void CompletelyNewPlayerReferencesAreAlsoAddedToTournamentPool()
+        {
+            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
+            string playerName = "Maru";
+
+            group.AddPlayerReference(playerName);
+
+            tournament.PlayerReferences.Should().HaveCount(1);
+            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+        }
+
+        [Fact]
+        public void CannotAddPlayerReferenceToGroupTwice()
+        {
+            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
+            string playerName = "Maru";
+
+            group.AddPlayerReference(playerName);
+            group.AddPlayerReference(playerName);
+
+            group.ParticipatingPlayers.Should().HaveCount(1);
+            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+        }
+
+        [Fact]
+        public void NullIsReturnedWhenNotSuccessfullyAddedPlayerReference()
+        {
+            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
+            string playerName = "Maru";
+
+            PlayerReference firstReturnedPlayerReference = group.AddPlayerReference(playerName);
+            PlayerReference secondReturnedPlayerReference = group.AddPlayerReference(playerName);
+
+            firstReturnedPlayerReference.Should().NotBeNull();
+            firstReturnedPlayerReference.Name.Should().Be(playerName);
+
+            secondReturnedPlayerReference.Should().BeNull();
+        }
+
+        [Fact]
+        public void CannotAddPlayerReferenceToTournamentPoolTwice()
+        {
+            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
+            string playerName = "Maru";
+
+            group.AddPlayerReference(playerName);
+            group.AddPlayerReference(playerName);
+
+            tournament.PlayerReferences.Should().HaveCount(1);
+            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+        }
+
+        [Fact]
+        public void CanRemovePlayerReferenceFromGroup()
+        {
+            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
+            string playerName = "Maru";
+
+            group.AddPlayerReference(playerName);
+            group.RemovePlayerReference(playerName);
+
+            group.ParticipatingPlayers.Should().BeEmpty();
+            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().BeNull();
+        }
+
+        [Fact]
+        public void ReturnsTrueFlagWhenSuccessfullyRemovingPlayerReference()
+        {
+            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
+            string playerName = "Maru";
+
+            group.AddPlayerReference(playerName);
+            bool result = group.RemovePlayerReference(playerName);
+
+            result.Should().BeTrue();
+        }
+
+        [Fact]
+        public void TournamentRemovesPlayerReferenceFromTournamentPoolWhenLastReferenceIsRemoved()
+        {
+            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
+            string playerName = "Maru";
+
+            group.AddPlayerReference(playerName);
+            group.RemovePlayerReference(playerName);
+
+            tournament.PlayerReferences.Should().BeEmpty();
+            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().BeNull();
+        }
+
+        [Fact]
+        public void MatchIsCreatedWhenTwoPlayerReferencesAreAddedToGroup()
+        {
+            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
+            string firstPlayerName = "Maru";
+            string secondPlayerName = "Stork";
+
+            group.AddPlayerReference(firstPlayerName);
+            group.AddPlayerReference(secondPlayerName);
+
+            group.Matches.Should().HaveCount(1);
+            group.Matches.FirstOrDefault(match => match.Player1.Name == firstPlayerName).Should().NotBeNull();
+            group.Matches.FirstOrDefault(match => match.Player2.Name == secondPlayerName).Should().NotBeNull();
+        }
+
+        [Fact]
+        public void CannotAddPlayerReferenceAfterFirstMatchStartDateTimeHasPassed()
+        {
+            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
+            string firstPlayerName = "Maru";
+            string secondPlayerName = "Stork";
+            string thirdPlayerName = "Rain";
+
+            group.AddPlayerReference(firstPlayerName);
+            group.AddPlayerReference(secondPlayerName);
+
+            SystemTimeMocker.Set(group.Matches.First().StartDateTime.AddMinutes(1));
+
+            group.AddPlayerReference(thirdPlayerName);
+
+            group.ParticipatingPlayers.Should().HaveCount(2);
+            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
+            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
+            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == thirdPlayerName).Should().BeNull();
+        }
+
+        [Fact]
+        public void CannotRemovePlayerReferenceAfterFirstMatchStartDateTimeHasPassed()
+        {
+            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
+            string firstPlayerName = "Maru";
+            string secondPlayerName = "Stork";
+
+            group.AddPlayerReference(firstPlayerName);
+            group.AddPlayerReference(secondPlayerName);
+
+            SystemTimeMocker.Set(group.Matches.First().StartDateTime.AddMinutes(1));
+
+            group.RemovePlayerReference(firstPlayerName);
+
+            group.ParticipatingPlayers.Should().HaveCount(2);
+            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
+            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
+        }
+
+        [Fact]
+        public void DoesNotRemovePlayerReferenceFromTournamentPoolWhenNotSuccessfullyRemovingPlayerReference()
+        {
+            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
+            string firstPlayerName = "Maru";
+            string secondPlayerName = "Stork";
+
+            group.AddPlayerReference(firstPlayerName);
+            group.AddPlayerReference(secondPlayerName);
+
+            SystemTimeMocker.Set(group.Matches.First().StartDateTime.AddMinutes(1));
+
+            group.RemovePlayerReference(firstPlayerName);
+
+            tournament.PlayerReferences.Should().HaveCount(2);
+            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
+            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
+        }
+
+        [Fact]
+        public void ReturnsFalseFlagWhenNotSuccessfullyRemovingPlayerReference()
+        {
+            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
+            string firstPlayerName = "Maru";
+            string secondPlayerName = "Stork";
+
+            group.AddPlayerReference(firstPlayerName);
+            group.AddPlayerReference(secondPlayerName);
+
+            SystemTimeMocker.Set(group.Matches.First().StartDateTime.AddMinutes(1));
+
+            bool result = group.RemovePlayerReference(firstPlayerName);
+
+            result.Should().BeFalse();
         }
 
         [Fact]
         public void CanConstructRoundRobinMatchLayout()
         {
-            TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part04AddedGroupToRoundRobinRound(services);
+            RoundRobinGroup group = RoundRobinGroup.Create(roundRobinRound);
 
             group.AddPlayerReference("Maru").Should().NotBeNull();
             RunTestsWithOnePlayer(group);
@@ -366,66 +563,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             group.Matches[27].Player1.Name.Should().Be("Thorzain");
             group.Matches[27].Player2.Name.Should().Be("Stephano");
-        }
-
-        [Fact]
-        public void CannotIncreaseScoreBeforeMatchHasStartedInGroup()
-        {
-            TournamentServiceContext services = GivenServices();
-            BracketGroup group = HomestoryCupSetup.Part14BetsPlacedOnMatchesInBracketGroup(services);
-            Domain.Match match = group.Matches.First();
-
-            match.Player1.IncreaseScore(1);
-            match.Player2.IncreaseScore(1);
-
-            match.Player1.Score.Should().Be(0);
-            match.Player2.Score.Should().Be(0);
-        }
-
-        [Fact]
-        public void CannotAddNewPlayerToGroupAfterFirstMatchHasStarted()
-        {
-            TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part08CompleteFirstMatchInRoundRobinGroup(services);
-
-            SystemTimeMocker.Set(DateTime.Now.AddSeconds(1));
-
-            group.AddPlayerReference("Flash").Should().BeNull();
-
-            foreach (Domain.Match match in group.Matches)
-            {
-                match.FindPlayer("Flash").Should().BeNull();
-            }
-            group.ParticipatingPlayers.Should().NotContain(player => player.Name == "Flash");
-        }
-
-        [Fact]
-        public void FetchingAdvancingPlayersInGroupOnlyReturnsWinners()
-        {
-            TournamentServiceContext services = GivenServices();
-            BracketGroup group = HomestoryCupSetup.Part16CompleteAllMatchesInBracketGroup(services);
-            //services.SetMockedTime();// DateTimeMockHelper.SetTime(group.Matches.Last().StartDateTime.AddSeconds(1));
-
-            List<PlayerReference> topPlayers = group.GetAdvancingPlayers();
-
-            topPlayers.Should().HaveCount(1);
-            topPlayers[0].Name.Should().Be("");
-        }
-
-        [Fact]
-        public void CannotFetchAdvancingPlayersBeforeGroupIsPlayedOut()
-        {
-            TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part08CompleteFirstMatchInRoundRobinGroup(services);
-
-            List<PlayerReference> topPlayers = group.GetAdvancingPlayers();
-
-            topPlayers.Should().BeEmpty();
-        }
-
-        private TournamentServiceContext GivenServices()
-        {
-            return null;
         }
     }
 }
