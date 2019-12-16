@@ -9,8 +9,6 @@ namespace Slask.Domain
         private Match()
         {
             Players = new List<Player>();
-            Players.Add(Player.Create(this));
-            Players.Add(Player.Create(this));
         }
 
         public Guid Id { get; private set; }
@@ -35,9 +33,11 @@ namespace Slask.Domain
             {
                 Id = Guid.NewGuid(),
                 GroupId = group.Id,
-                Group = group,
-
+                Group = group
             };
+
+            match.Players.Add(Player.Create(match));
+            match.Players.Add(Player.Create(match));
 
             if (group.Matches.Count == 0)
             {
