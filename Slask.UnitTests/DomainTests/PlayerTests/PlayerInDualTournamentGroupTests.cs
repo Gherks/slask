@@ -37,35 +37,6 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
-        public void CanAssignPlayerReference()
-        {
-            PlayerReference playerReference = PlayerReference.Create("Taeja", tournament);
-            match.Player1.SetPlayerReference(playerReference);
-
-            match.Player1.PlayerReference.Should().Be(playerReference);
-        }
-
-        [Fact]
-        public void CanChangePlayerReferenceToAnotherPlayerReference()
-        {
-            PlayerReference playerReference = PlayerReference.Create("Taeja", tournament);
-            match.Player1.SetPlayerReference(playerReference);
-
-            match.Player1.PlayerReference.Should().Be(playerReference);
-        }
-
-        [Fact]
-        public void CanSetExistingPlayerReferenceToNull()
-        {
-            PlayerReference playerReference = PlayerReference.Create("Taeja", tournament);
-
-            match.Player1.SetPlayerReference(playerReference);
-            match.Player1.SetPlayerReference(null);
-
-            match.Player1.PlayerReference.Should().BeNull();
-        }
-
-        [Fact]
         public void CanIncreaseScore()
         {
             SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));

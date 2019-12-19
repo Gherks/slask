@@ -1,4 +1,4 @@
-using Slask.Domain.Rounds;
+﻿using Slask.Domain.Rounds;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -77,8 +77,8 @@ namespace Slask.Domain
             PlayerReference participant3 = ParticipatingPlayers.Count > 2 ? ParticipatingPlayers[2] : null;
             PlayerReference participant4 = ParticipatingPlayers.Count > 3 ? ParticipatingPlayers[3] : null;
 
-            Matches[0].AssignPlayerReferences(participant1, participant2);
-            Matches[1].AssignPlayerReferences(participant3, participant4);
+            Matches[0].SetPlayers(participant1, participant2);
+            Matches[1].SetPlayers(participant3, participant4);
         }
 
         private bool FirstMatchPairHasPlayed(Match match)
@@ -110,7 +110,7 @@ namespace Slask.Domain
             PlayerReference Match1Winner = GetMatch1().GetWinningPlayer().PlayerReference;
             PlayerReference Match2Winner = GetMatch2().GetWinningPlayer().PlayerReference;
 
-            GetWinnersMatch().AssignPlayerReferences(Match1Winner, Match2Winner);
+            GetWinnersMatch().SetPlayers(Match1Winner, Match2Winner);
         }
 
         private void AssignPlayersToLosersMatch()
@@ -118,7 +118,7 @@ namespace Slask.Domain
             PlayerReference Match1Loser = GetMatch1().GetLosingPlayer().PlayerReference;
             PlayerReference Match2Loser = GetMatch2().GetLosingPlayer().PlayerReference;
 
-            GetLosersMatch().AssignPlayerReferences(Match1Loser, Match2Loser);
+            GetLosersMatch().SetPlayers(Match1Loser, Match2Loser);
         }
 
         private void AssignPlayersToTiebreakerMatch()
@@ -126,7 +126,7 @@ namespace Slask.Domain
             PlayerReference WinnersMatchLoser = GetWinnersMatch().GetLosingPlayer().PlayerReference;
             PlayerReference LosersMatchWinner = GetLosersMatch().GetWinningPlayer().PlayerReference;
 
-            GetTiebreakerMatch().AssignPlayerReferences(WinnersMatchLoser, LosersMatchWinner);
+            GetTiebreakerMatch().SetPlayers(WinnersMatchLoser, LosersMatchWinner);
         }
 
         private Match GetMatch1()

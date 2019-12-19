@@ -281,8 +281,23 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
                 ParseBracketGroupMatchSetup(row, out int matchIndex, out string player1Name, out string player2Name);
 
-                group.Matches[matchIndex].Player1.Name.Should().Be(player1Name);
-                group.Matches[matchIndex].Player2.Name.Should().Be(player2Name);
+                if(player1Name.Length > 0)
+                {
+                    group.Matches[matchIndex].Player1.Name.Should().Be(player1Name);
+                }
+                else
+                {
+                    group.Matches[matchIndex].Player1.Should().BeNull();
+                }
+
+                if(player2Name.Length > 0)
+                {
+                    group.Matches[matchIndex].Player2.Name.Should().Be(player2Name);
+                }
+                else
+                {
+                    group.Matches[matchIndex].Player2.Should().BeNull();
+                }
             }
         }
 

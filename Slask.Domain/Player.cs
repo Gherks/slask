@@ -21,9 +21,9 @@ namespace Slask.Domain
             private set { }
         }
 
-        public static Player Create(Match match)
+        public static Player Create(Match match, PlayerReference playerReference)
         {
-            if (match == null)
+            if (match == null || playerReference == null)
             {
                 return null;
             }
@@ -31,31 +31,11 @@ namespace Slask.Domain
             return new Player
             {
                 Id = Guid.NewGuid(),
-                PlayerReference = null,
+                PlayerReference = playerReference,
                 Score = 0,
                 MatchId = match.Id,
                 Match = match
             };
-        }
-
-        public void SetPlayerReference(PlayerReference playerReference)
-        {
-            if (PlayerReference == null)
-            {
-                PlayerReference = playerReference;
-            }
-            else
-            {
-                bool playerReferenceIsRemoved = playerReference == null;
-                bool playerReferenceChanged = playerReference != null && PlayerReference.Id != playerReference.Id;
-
-                PlayerReference = playerReference;
-
-                if (playerReferenceIsRemoved || playerReferenceChanged)
-                {
-                    Match.Group.RemovePlayerReference(PlayerReference);
-                }
-            }
         }
 
         public void IncreaseScore(int value)

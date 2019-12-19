@@ -107,7 +107,7 @@ namespace Slask.Domain
             {
                 for (int index = 0; index < numMatchesPerRound; ++index)
                 {
-                    Matches[matchCounter++].AssignPlayerReferences(players[index], players[index + numMatchesPerRound]);
+                    Matches[matchCounter++].SetPlayers(players[index], players[index + numMatchesPerRound]);
                 }
 
                 if (matchCounter >= Matches.Count)
@@ -136,7 +136,7 @@ namespace Slask.Domain
             {
                 for (int index = 0; index < numMatchesPerRound; ++index)
                 {
-                    Matches[matchCounter++].AssignPlayerReferences(players[index], players[index + numMatchesPerRound + 1]);
+                    Matches[matchCounter++].SetPlayers(players[index], players[index + numMatchesPerRound + 1]);
                 }
 
                 if (matchCounter >= Matches.Count)

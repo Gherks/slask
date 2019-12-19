@@ -1,4 +1,4 @@
-using Slask.Domain.Rounds;
+﻿using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -50,7 +50,7 @@ namespace Slask.Domain
                 BracketNode bracketNode = finalNode.GetBracketNodeByMatchId(match.Id);
                 BracketNode parentNode = bracketNode.Parent;
 
-                parentNode.Match.AddPlayerReference(match.GetWinningPlayer().PlayerReference);
+                parentNode.Match.AddPlayer(match.GetWinningPlayer().PlayerReference);
             }
         }
 
@@ -80,13 +80,13 @@ namespace Slask.Domain
                     playerReference1 = ParticipatingPlayers[matchIndex * 2];
                     playerReference2 = ParticipatingPlayers[(matchIndex * 2) + 1];
 
-                    Matches[matchIndex].AssignPlayerReferences(playerReference1, playerReference2);
+                    Matches[matchIndex].SetPlayers(playerReference1, playerReference2);
                 }
                 catch
                 {
                     if (playerReference1 != null || playerReference2 != null)
                     {
-                        Matches[matchIndex].AssignPlayerReferences(playerReference1, playerReference2);
+                        Matches[matchIndex].SetPlayers(playerReference1, playerReference2);
                     }
                     break;
                 }

@@ -58,7 +58,7 @@ namespace Slask.UnitTests.DomainTests
             PlayerReference taejaPlayerReference = PlayerReference.Create("Taeja", tournament);
             PlayerReference rainPlayerReference = PlayerReference.Create("Rain", tournament);
 
-            match.AssignPlayerReferences(taejaPlayerReference, rainPlayerReference);
+            match.SetPlayers(taejaPlayerReference, rainPlayerReference);
 
             match.Player1.PlayerReference.Should().Be(taejaPlayerReference);
             match.Player2.PlayerReference.Should().Be(rainPlayerReference);
@@ -74,7 +74,7 @@ namespace Slask.UnitTests.DomainTests
 
             PlayerReference playerReference = PlayerReference.Create("Taeja", tournament);
 
-            match.AssignPlayerReferences(playerReference, playerReference);
+            match.SetPlayers(playerReference, playerReference);
 
             match.Player1.PlayerReference.Should().Be(firstPlayerReference);
             match.Player2.PlayerReference.Should().Be(secondPlayerReference);
@@ -88,17 +88,17 @@ namespace Slask.UnitTests.DomainTests
             PlayerReference maruPlayerReference = PlayerReference.Create("Maru", tournament);
             PlayerReference storkPlayerReference = PlayerReference.Create("Stork", tournament);
 
-            match.AssignPlayerReferences(maruPlayerReference, storkPlayerReference);
-            match.AssignPlayerReferences(null, storkPlayerReference);
+            match.SetPlayers(maruPlayerReference, storkPlayerReference);
+            match.SetPlayers(null, storkPlayerReference);
 
-            match.Player1.PlayerReference.Should().Be(null);
+            match.Player1.Should().BeNull();
             match.Player2.PlayerReference.Should().Be(storkPlayerReference);
 
-            match.AssignPlayerReferences(maruPlayerReference, storkPlayerReference);
-            match.AssignPlayerReferences(maruPlayerReference, null);
+            match.SetPlayers(maruPlayerReference, storkPlayerReference);
+            match.SetPlayers(maruPlayerReference, null);
 
             match.Player1.PlayerReference.Should().Be(maruPlayerReference);
-            match.Player2.PlayerReference.Should().Be(null);
+            match.Player2.Should().BeNull();
         }
 
         [Fact]
@@ -106,10 +106,10 @@ namespace Slask.UnitTests.DomainTests
         {
             Match match = InitializeFirstMatch();
 
-            match.AssignPlayerReferences(null, null);
+            match.SetPlayers(null, null);
 
-            match.Player1.PlayerReference.Should().Be(null);
-            match.Player2.PlayerReference.Should().Be(null);
+            match.Player1.Should().Be(null);
+            match.Player2.Should().Be(null);
         }
 
         [Fact]
@@ -127,11 +127,11 @@ namespace Slask.UnitTests.DomainTests
         {
             Match match = InitializeFirstMatch();
 
-            match.AssignPlayerReferences(null, null);
+            match.SetPlayers(null, null);
 
             match.IsReady().Should().BeFalse();
-            match.Player1.PlayerReference.Should().BeNull();
-            match.Player2.PlayerReference.Should().BeNull();
+            match.Player1.Should().BeNull();
+            match.Player2.Should().BeNull();
         }
 
         [Fact]
@@ -142,16 +142,16 @@ namespace Slask.UnitTests.DomainTests
             PlayerReference firstPlayerReference = match.Player1.PlayerReference;
             PlayerReference secondPlayerReference = match.Player2.PlayerReference;
 
-            match.AssignPlayerReferences(firstPlayerReference, null);
+            match.SetPlayers(firstPlayerReference, null);
 
             match.IsReady().Should().BeFalse();
             match.Player1.PlayerReference.Should().Be(firstPlayerReference);
-            match.Player2.PlayerReference.Should().BeNull();
+            match.Player2.Should().BeNull();
 
-            match.AssignPlayerReferences(null, secondPlayerReference);
+            match.SetPlayers(null, secondPlayerReference);
 
             match.IsReady().Should().BeFalse();
-            match.Player1.PlayerReference.Should().BeNull();
+            match.Player1.Should().BeNull();
             match.Player2.PlayerReference.Should().Be(secondPlayerReference);
         }
 
@@ -353,6 +353,23 @@ namespace Slask.UnitTests.DomainTests
 
             match.Player1.Score.Should().Be(0);
             match.Player2.Score.Should().Be(0);
+        }
+
+        [Fact]
+        public void MatchRemainsUnchangedWhenAddingPlayerReferenceToMatchWithTwoPlayersAlready()
+        {
+            string firstPlayerName = "Maru";
+            string secondPlayerName = "Stork";
+
+            Match match = InitializeFirstMatch(firstPlayerName, secondPlayerName);
+            PlayerReference playerReference = PlayerReference.Create("Taeja", tournament);
+
+            match.AddPlayer(playerReference);
+
+            match.Player1.Should().NotBeNull();
+            match.Player1.Name.Should().Be(firstPlayerName);
+            match.Player2.Should().NotBeNull();
+            match.Player2.Name.Should().Be(secondPlayerName);
         }
 
         private Match InitializeFirstMatch(string firstPlayerName = "Maru", string secondPlayerName = "Stork")

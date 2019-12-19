@@ -9,6 +9,8 @@ namespace Slask.Domain
         private Match()
         {
             Players = new List<Player>();
+            Players.Add(null);
+            Players.Add(null);
         }
 
         public Guid Id { get; private set; }
@@ -36,9 +38,6 @@ namespace Slask.Domain
                 Group = group
             };
 
-            match.Players.Add(Player.Create(match));
-            match.Players.Add(Player.Create(match));
-
             if (group.Matches.Count == 0)
             {
                 match.StartDateTime = SystemTime.Now.AddDays(7);
@@ -54,39 +53,39 @@ namespace Slask.Domain
 
         public bool IsReady()
         {
-            return Player1.PlayerReference != null && Player2.PlayerReference != null;
+            return Player1 != null && Player2 != null;
         }
 
         // Needs to restricted to GroupBase?
-        public bool AddPlayerReference(PlayerReference playerReference)
+        public bool AddPlayer(PlayerReference playerReference)
         {
             if (playerReference == null)
             {
                 throw new ArgumentNullException(nameof(playerReference));
             }
 
-            if (Player1.PlayerReference == null)
+            if (Player1 == null)
             {
-                Player1.SetPlayerReference(playerReference);
+                CreatePlayerWithReference(0, playerReference);
                 return true;
             }
 
-            if (Player2.PlayerReference == null)
+            if (Player2 == null)
             {
-                Player2.SetPlayerReference(playerReference);
+                CreatePlayerWithReference(1, playerReference);
                 return true;
             }
 
             return false;
         }
 
-        // Needs to restricted to GroupBase?
-        public bool AssignPlayerReferences(PlayerReference player1Reference, PlayerReference player2Reference)
+        //Needs to restricted to GroupBase?
+        public bool SetPlayers(PlayerReference player1Reference, PlayerReference player2Reference)
         {
             if (player1Reference == null || player2Reference == null || player1Reference.Id != player2Reference.Id)
             {
-                Player1.SetPlayerReference(player1Reference);
-                Player2.SetPlayerReference(player2Reference);
+                CreatePlayerWithReference(0, player1Reference);
+                CreatePlayerWithReference(1, player2Reference);
                 return true;
             }
 
@@ -165,11 +164,27 @@ namespace Slask.Domain
             return null;
         }
 
+        private bool CreatePlayerWithReference(int playerIndex, PlayerReference playerReference)
+        {
+            if (GetPlayState() == PlayState.NotBegun)
+            {
+                Players[playerIndex] = Player.Create(this, playerReference);
+                return true;
+            }
+
+            return false;
+        }
+
         private bool AnyPlayerHasWon()
         {
-            int matchPointBarrier = Group.Round.BestOf - (Group.Round.BestOf / 2);
+            if (Player1 != null && Player2 != null)
+            {
+                int matchPointBarrier = Group.Round.BestOf - (Group.Round.BestOf / 2);
 
-            return Player1.Score >= matchPointBarrier || Player2.Score >= matchPointBarrier;
+                return Player1.Score >= matchPointBarrier || Player2.Score >= matchPointBarrier;
+            }
+
+            return false;
         }
     }
 }

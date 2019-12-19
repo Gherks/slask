@@ -252,14 +252,14 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             group.Matches[1].Player1.Name.Should().Be(thirdPlayerName);
             group.Matches[1].Player2.Name.Should().Be(fourthPlayerName);
 
-            group.Matches[2].Player1.Name.Should().BeNullOrEmpty();
-            group.Matches[2].Player2.Name.Should().BeNullOrEmpty();
+            group.Matches[2].Player1.Should().BeNull();
+            group.Matches[2].Player2.Should().BeNull();
 
-            group.Matches[3].Player1.Name.Should().BeNullOrEmpty();
-            group.Matches[3].Player2.Name.Should().BeNullOrEmpty();
+            group.Matches[3].Player1.Should().BeNull();
+            group.Matches[3].Player2.Should().BeNull();
 
-            group.Matches[4].Player1.Name.Should().BeNullOrEmpty();
-            group.Matches[4].Player2.Name.Should().BeNullOrEmpty();
+            group.Matches[4].Player1.Should().BeNull();
+            group.Matches[4].Player2.Should().BeNull();
         }
     }
 }
