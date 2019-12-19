@@ -1,4 +1,4 @@
-﻿using Slask.Domain.Rounds;
+using Slask.Domain.Rounds;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -47,16 +47,6 @@ namespace Slask.Domain
             return null;
         }
 
-        protected override void OnParticipantAdded(PlayerReference playerReference)
-        {
-            UpdatePlayerSetup();
-        }
-
-        protected override void OnParticipantRemoved(PlayerReference playerReference)
-        {
-            UpdatePlayerSetup();
-        }
-
         public override void MatchScoreIncreased(Match match)
         {
             bool matchExistInThisGroup = Matches.Where(currentMatch => currentMatch.Id == match.Id).Any();
@@ -80,7 +70,7 @@ namespace Slask.Domain
             }
         }
 
-        private void UpdatePlayerSetup()
+        protected override void ConstructGroupLayout()
         {
             PlayerReference participant1 = ParticipatingPlayers.Count > 0 ? ParticipatingPlayers[0] : null;
             PlayerReference participant2 = ParticipatingPlayers.Count > 1 ? ParticipatingPlayers[1] : null;

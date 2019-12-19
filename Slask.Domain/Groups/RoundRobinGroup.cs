@@ -31,17 +31,7 @@ namespace Slask.Domain
             };
         }
 
-        protected override void OnParticipantAdded(PlayerReference playerReference)
-        {
-            UpdateMatchLayout();
-        }
-
-        protected override void OnParticipantRemoved(PlayerReference playerReference)
-        {
-            UpdateMatchLayout();
-        }
-
-        private void UpdateMatchLayout()
+        protected override void ConstructGroupLayout()
         {
             int numMatches = CalculateMatchAmount();
 

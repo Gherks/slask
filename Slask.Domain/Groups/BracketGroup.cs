@@ -1,4 +1,4 @@
-﻿using Slask.Domain.Rounds;
+using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -54,17 +54,7 @@ namespace Slask.Domain
             }
         }
 
-        protected override void OnParticipantAdded(PlayerReference playerReference)
-        {
-            UpdateMatchSetup();
-        }
-
-        protected override void OnParticipantRemoved(PlayerReference playerReference)
-        {
-            UpdateMatchSetup();
-        }
-
-        private void UpdateMatchSetup()
+        protected override void ConstructGroupLayout()
         {
             int matchAmount = ParticipatingPlayers.Count - 1;
             ChangeMatchAmountTo(matchAmount);

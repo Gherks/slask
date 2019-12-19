@@ -87,7 +87,7 @@ namespace Slask.Domain
                 }
 
                 ParticipatingPlayers.Add(playerReference);
-                OnParticipantAdded(playerReference);
+                ConstructGroupLayout();
 
                 return playerReference;
             }
@@ -105,16 +105,18 @@ namespace Slask.Domain
                 return false;
             }
 
-            PlayerReference playerReference = ParticipatingPlayers.Where(participant => participant.Name.ToLower() == name.ToLower()).FirstOrDefault();
+            PlayerReference foundPlayerReference = ParticipatingPlayers.FirstOrDefault(participant => participant.Name.ToLower() == name.ToLower());
 
-            bool removalSuccessful = RemovePlayerReference(playerReference);
-
-            if(removalSuccessful)
+            if (foundPlayerReference != null)
             {
-                Round.Tournament.RemoveDanglingPlayerReference(playerReference);
+                ParticipatingPlayers.Remove(foundPlayerReference);
+                ConstructGroupLayout();
+                Round.Tournament.RemoveDanglingPlayerReference(foundPlayerReference);
+                return true;
             }
 
-            return removalSuccessful;
+            // LOGG 
+            return false;
         }
 
         public virtual bool RemovePlayerReference(PlayerReference playerReference)
@@ -124,17 +126,18 @@ namespace Slask.Domain
                 return false;
             }
 
-            if (playerReference != null)
+            PlayerReference foundPlayerReference = ParticipatingPlayers.FirstOrDefault(participant => participant.Id == playerReference.Id);
+
+            if (foundPlayerReference != null)
             {
-                ParticipatingPlayers.Remove(playerReference);
-                OnParticipantRemoved(playerReference);
+                ParticipatingPlayers.Remove(foundPlayerReference);
+                ConstructGroupLayout();
+                Round.Tournament.RemoveDanglingPlayerReference(foundPlayerReference);
                 return true;
             }
-            else
-            {
-                // LOGG 
-                return false;
-            }
+
+            // LOGG 
+            return false;
         }
 
         public virtual void MatchScoreIncreased(Match match)
@@ -155,12 +158,7 @@ namespace Slask.Domain
             }
         }
 
-        protected virtual void OnParticipantAdded(PlayerReference playerReference)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected virtual void OnParticipantRemoved(PlayerReference playerReference)
+        protected virtual void ConstructGroupLayout()
         {
             throw new NotImplementedException();
         }
