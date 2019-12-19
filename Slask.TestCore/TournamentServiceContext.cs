@@ -16,11 +16,6 @@ namespace Slask.TestCore
             TournamentService = new TournamentService(SlaskContext);
         }
 
-        //public void SetMockedTime(DateTime dateTime)
-        //{
-        //    mockedDateTime = DateTimeMocker.CreateDateTime(dateTime);
-        //}
-
         public static new TournamentServiceContext GivenServices(SlaskContextCreatorInterface slaskContextCreator)
         {
             if (slaskContextCreator == null)
