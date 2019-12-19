@@ -204,10 +204,5 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 
             return "";
         }
-
-        //private Tournament GivenATournament()
-        //{
-        //    return GivenATournamentNamedHasBeenCreated("GSL 2019");
-        //}
     }
 }
