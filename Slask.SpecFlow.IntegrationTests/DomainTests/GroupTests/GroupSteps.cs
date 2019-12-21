@@ -22,13 +22,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
     public class GroupStepDefinitions : RoundStepDefinitions
     {
-        protected readonly List<GroupBase> createdGroups;
-
-        public GroupStepDefinitions()
-        {
-            createdGroups = new List<GroupBase>();
-        }
-
         [When(@"created rounds (.*) to (.*) creates (.*) groups each")]
         public void WhenCreatedRoundsToCreatesGroupsEach(int roundStartIndex, int roundEndIndex, int groupAmount)
         {

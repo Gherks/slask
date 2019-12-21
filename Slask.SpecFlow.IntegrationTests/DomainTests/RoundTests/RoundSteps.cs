@@ -17,15 +17,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 
     public class RoundStepDefinitions : TournamentServiceStepDefinitions
     {
-        protected readonly List<RoundBase> createdRounds;
-        protected readonly List<RoundBase> fetchedRounds;
-
-        public RoundStepDefinitions()
-        {
-            createdRounds = new List<RoundBase>();
-            fetchedRounds = new List<RoundBase>();
-        }
-
         [Given(@"created tournament (.*) adds rounds")]
         [When(@"created tournament (.*) adds rounds")]
         public void GivenCreatedTournamentAddsRounds(int tournamentIndex, Table table)

@@ -23,6 +23,9 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
         protected readonly List<Tournament> fetchedTournaments;
         protected List<Better> createdBetters;
         protected List<Better> fetchedBetters;
+        protected readonly List<RoundBase> createdRounds;
+        protected readonly List<RoundBase> fetchedRounds;
+        protected readonly List<GroupBase> createdGroups;
         protected readonly List<PlayerReference> createdPlayerReferences;
         protected readonly List<PlayerReference> fetchedPlayerReferences;
 
@@ -33,6 +36,9 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             fetchedTournaments = new List<Tournament>();
             createdBetters = new List<Better>();
             fetchedBetters = new List<Better>();
+            createdRounds = new List<RoundBase>();
+            fetchedRounds = new List<RoundBase>();
+            createdGroups = new List<GroupBase>();
             createdPlayerReferences = new List<PlayerReference>();
             fetchedPlayerReferences = new List<PlayerReference>();
         }
@@ -74,6 +80,9 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
 
             RoundBase bracketRound = tournament.AddBracketRound("BracketRound", 3);
             BracketGroup bracketGroup = (BracketGroup)bracketRound.AddGroup();
+
+            createdRounds.Add(bracketRound);
+            createdGroups.Add(bracketGroup);
 
             foreach (string playerName in playerNames)
             {
@@ -238,11 +247,12 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             Tournament tournament = createdTournaments[tournamentIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparetedPlayerNames, ",");
 
-            tournament.PlayerReferences.Should().NotBeNull();
-            tournament.PlayerReferences.Should().HaveCount(playerNames.Count);
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+            playerReferences.Should().NotBeNull();
+            playerReferences.Should().HaveCount(playerNames.Count);
             foreach (string playerName in playerNames)
             {
-                tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+                playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
             }
         }
 
@@ -268,7 +278,6 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             tournament.Id.Should().NotBeEmpty();
             tournament.Name.Should().Be(correctName);
             tournament.Rounds.Should().BeEmpty();
-            tournament.PlayerReferences.Should().BeEmpty();
             tournament.Betters.Should().BeEmpty();
             tournament.Settings.Should().BeEmpty();
             tournament.MiscBetCatalogue.Should().BeEmpty();
