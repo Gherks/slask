@@ -111,7 +111,6 @@ namespace Slask.Domain
             {
                 ParticipatingPlayers.Remove(foundPlayerReference);
                 ConstructGroupLayout();
-                Round.Tournament.RemoveDanglingPlayerReference(foundPlayerReference);
                 return true;
             }
 
@@ -132,7 +131,6 @@ namespace Slask.Domain
             {
                 ParticipatingPlayers.Remove(foundPlayerReference);
                 ConstructGroupLayout();
-                Round.Tournament.RemoveDanglingPlayerReference(foundPlayerReference);
                 return true;
             }
 

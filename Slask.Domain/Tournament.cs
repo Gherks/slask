@@ -11,7 +11,6 @@ namespace Slask.Domain
         private Tournament()
         {
             Rounds = new List<RoundBase>();
-            PlayerReferences = new List<PlayerReference>();
             Betters = new List<Better>();
             Settings = new List<Settings>();
             MiscBetCatalogue = new List<MiscBetCatalogue>();
@@ -20,7 +19,6 @@ namespace Slask.Domain
         public Guid Id { get; private set; }
         public string Name { get; private set; }
         public List<RoundBase> Rounds { get; private set; }
-        public List<PlayerReference> PlayerReferences { get; private set; }
         public List<Better> Betters { get; private set; }
         public List<Settings> Settings { get; private set; }
         public List<MiscBetCatalogue> MiscBetCatalogue { get; private set; }
@@ -104,12 +102,12 @@ namespace Slask.Domain
 
         public PlayerReference GetPlayerReferenceByPlayerId(Guid id)
         {
-            return PlayerReferences.FirstOrDefault(playerReference => playerReference.Id == id);
+            return GetPlayerReferencesInTournament().FirstOrDefault(playerReference => playerReference.Id == id);
         }
 
         public PlayerReference GetPlayerReferenceByPlayerName(string name)
         {
-            return PlayerReferences.FirstOrDefault(playerReference => playerReference.Name.ToLower() == name.ToLower());
+            return GetPlayerReferencesInTournament().FirstOrDefault(playerReference => playerReference.Name.ToLower() == name.ToLower());
         }
 
         public Better GetBetterById(Guid id)
@@ -122,50 +120,25 @@ namespace Slask.Domain
             return Betters.FirstOrDefault(better => better.User.Name.ToLower() == name.ToLower());
         }
 
-        public bool RemoveDanglingPlayerReference(PlayerReference targetedPlayerReference)
+        public List<PlayerReference> GetPlayerReferencesInTournament()
         {
-            if (targetedPlayerReference == null)
-            {
-                throw new ArgumentNullException(nameof(targetedPlayerReference));
-            }
+            Dictionary<string, PlayerReference> playerReferenceDictionary = new Dictionary<string, PlayerReference>();
 
-            bool playerReferenceNotInPlayerReferencePool = PlayerReferences.Any(playerReference => playerReference.Id == targetedPlayerReference.Id);
-
-            if (playerReferenceNotInPlayerReferencePool)
-            {
-                bool shouldBeRemovedFromPlayerReferencePool = !PlayerReferenceInUseByAnyGroup(targetedPlayerReference);
-
-                if (shouldBeRemovedFromPlayerReferencePool)
-                {
-                    PlayerReferences.Remove(targetedPlayerReference);
-                }
-
-                return shouldBeRemovedFromPlayerReferencePool;
-            }
-            else
-            {
-                // LOG Error: Player reference has already been removed. Tournament player reference pool was out of sync with the players residing in groups.
-            }
-
-            return false;
-        }
-
-        private bool PlayerReferenceInUseByAnyGroup(PlayerReference targetedPlayerReference)
-        {
             foreach (RoundBase round in Rounds)
             {
                 foreach (GroupBase group in round.Groups)
                 {
-                    bool groupHasPlayerReference = group.ParticipatingPlayers.Any(playerReference => playerReference.Id == targetedPlayerReference.Id);
-
-                    if (groupHasPlayerReference)
+                    foreach(PlayerReference playerReference in group.ParticipatingPlayers)
                     {
-                        return true;
+                        try
+                        {
+                            playerReferenceDictionary.Add(playerReference.Name, playerReference);
+                        } catch (Exception) { }
                     }
                 }
             }
 
-            return false;
+            return playerReferenceDictionary.Values.ToList();
         }
     }
 }

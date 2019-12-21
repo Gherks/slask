@@ -35,7 +35,6 @@ namespace Slask.Domain
                     Tournament = tournament
                 };
 
-                tournament.PlayerReferences.Add(playerReference);
                 return playerReference;
             }
 
