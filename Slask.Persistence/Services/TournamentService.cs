@@ -49,7 +49,7 @@ namespace Slask.Persistence.Services
                 return null;
             }
 
-            return tournament.PlayerReferences;
+            return tournament.GetPlayerReferencesInTournament();
         }
 
         public List<PlayerReference> GetPlayerReferencesByTournamentName(string name)
@@ -62,7 +62,7 @@ namespace Slask.Persistence.Services
                 return null;
             }
 
-            return tournament.PlayerReferences;
+            return tournament.GetPlayerReferencesInTournament();
         }
 
         public List<Better> GetBettersByTournamentId(Guid id)
