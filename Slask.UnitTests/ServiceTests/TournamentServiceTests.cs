@@ -31,7 +31,6 @@ namespace Slask.UnitTests.ServiceTests
             tournament.Id.Should().NotBeEmpty();
             tournament.Name.Should().Be(tournamentName);
             tournament.Rounds.Should().BeEmpty();
-            tournament.PlayerReferences.Should().BeEmpty();
             tournament.Betters.Should().BeEmpty();
             tournament.Settings.Should().BeEmpty();
             tournament.MiscBetCatalogue.Should().BeEmpty();
@@ -160,17 +159,19 @@ namespace Slask.UnitTests.ServiceTests
             InitializeUsersAndBetters();
             InitializeRoundGroupAndPlayers();
 
-            tournament.PlayerReferences.Should().NotBeNull();
-            tournament.PlayerReferences.Should().HaveCount(8);
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
 
-            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Maru").Should().NotBeNull();
-            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stork").Should().NotBeNull();
-            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Taeja").Should().NotBeNull();
-            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Rain").Should().NotBeNull();
-            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Bomber").Should().NotBeNull();
-            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "FanTaSy").Should().NotBeNull();
-            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stephano").Should().NotBeNull();
-            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == "Thorzain").Should().NotBeNull();
+            playerReferences.Should().NotBeNull();
+            playerReferences.Should().HaveCount(8);
+
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Maru").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stork").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Taeja").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Rain").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Bomber").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "FanTaSy").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stephano").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Thorzain").Should().NotBeNull();
         }
 
         [Fact]

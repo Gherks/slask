@@ -44,7 +44,6 @@ namespace Slask.UnitTests.DomainTests
             tournament.Id.Should().NotBeEmpty();
             tournament.Name.Should().Be(tournamentName);
             tournament.Rounds.Should().BeEmpty();
-            tournament.PlayerReferences.Should().BeEmpty();
             tournament.Betters.Should().BeEmpty();
             tournament.Settings.Should().BeEmpty();
             tournament.MiscBetCatalogue.Should().BeEmpty();
@@ -148,8 +147,9 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void TournamentKeepsPlayerReferencesThatWasSuccessfullyCreated()
         {
-            tournament.PlayerReferences.Should().HaveCount(1);
-            tournament.PlayerReferences.First().Should().Be(playerReference);
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+            playerReferences.Should().HaveCount(1);
+            playerReferences.First().Should().Be(playerReference);
         }
 
         [Fact]
@@ -188,8 +188,9 @@ namespace Slask.UnitTests.DomainTests
         {
             bracketGroup.AddPlayerReference(playerReference.Name);
 
-            tournament.PlayerReferences.Should().HaveCount(1);
-            tournament.PlayerReferences.First().Name.Should().Be(playerReference.Name);
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+            playerReferences.Should().HaveCount(1);
+            playerReferences.First().Name.Should().Be(playerReference.Name);
         }
 
         [Fact]
@@ -197,7 +198,8 @@ namespace Slask.UnitTests.DomainTests
         {
             bracketGroup.RemovePlayerReference(playerReference.Name);
 
-            tournament.PlayerReferences.Should().HaveCount(0);
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+            playerReferences.Should().HaveCount(0);
         }
     }
 }

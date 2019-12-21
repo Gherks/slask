@@ -3,6 +3,7 @@ using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Rounds;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -69,8 +70,9 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             group.AddPlayerReference(playerName);
 
-            tournament.PlayerReferences.Should().HaveCount(1);
-            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+            playerReferences.Should().HaveCount(1);
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
         }
 
         [Fact]
@@ -110,8 +112,9 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             group.AddPlayerReference(playerName);
             group.AddPlayerReference(playerName);
 
-            tournament.PlayerReferences.Should().HaveCount(1);
-            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+            playerReferences.Should().HaveCount(1);
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
         }
 
         [Fact]
@@ -148,8 +151,9 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             group.AddPlayerReference(playerName);
             group.RemovePlayerReference(playerName);
 
-            tournament.PlayerReferences.Should().BeEmpty();
-            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().BeNull();
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+            playerReferences.Should().BeEmpty();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().BeNull();
         }
 
         [Fact]
@@ -221,9 +225,10 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             group.RemovePlayerReference(firstPlayerName);
 
-            tournament.PlayerReferences.Should().HaveCount(2);
-            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
-            tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+            playerReferences.Should().HaveCount(2);
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
         }
 
         [Fact]
