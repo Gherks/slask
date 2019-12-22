@@ -17,13 +17,12 @@ namespace Slask.UnitTests.DomainTests.BetTests
     {
         // IF ANY PLAYER CHANGES IN MATCH, RESET ALL ASSOCIATED BETS
 
-        private User user;
-        private Tournament tournament;
-        private Better better;
-        private BracketRound round;
-        private BracketGroup group;
-        private PlayerReference playerReference;
-        private Match firstMatch;
+        private readonly User user;
+        private readonly Tournament tournament;
+        private readonly Better better;
+        private readonly BracketRound round;
+        private readonly BracketGroup group;
+        private readonly Match firstMatch;
 
         public MatchBetTests()
         {
@@ -32,7 +31,7 @@ namespace Slask.UnitTests.DomainTests.BetTests
             better = tournament.AddBetter(user);
             round = tournament.AddBracketRound("Bracket round", 7) as BracketRound;
             group = round.AddGroup() as BracketGroup;
-            playerReference = group.AddPlayerReference("Maru");
+            group.AddPlayerReference("Maru");
             group.AddPlayerReference("Stork");
             firstMatch = group.Matches.First();
         }
