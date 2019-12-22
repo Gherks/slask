@@ -6,7 +6,7 @@ using Slask.Domain.Rounds;
 using System.Linq;
 using Xunit;
 
-namespace Slask.UnitTests.DomainTests
+namespace Slask.UnitTests.DomainTests.PlayerTests
 {
     public class PlayerInRoundRobinGroupTests
     {
