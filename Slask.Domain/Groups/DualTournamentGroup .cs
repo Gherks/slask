@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace Slask.Domain
+namespace Slask.Domain.Groups
 {
     public class DualTournamentGroup : GroupBase
     {

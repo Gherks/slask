@@ -3,6 +3,7 @@ using Slask.Persistence.Services;
 using Slask.Domain;
 using Slask.Persistence;
 using Slask.Domain.Rounds;
+using Slask.Domain.Groups;
 
 namespace Slask.TestCore
 {

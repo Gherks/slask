@@ -1,7 +1,7 @@
 ﻿using Slask.Common;
 using Slask.Domain;
+using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
-using Slask.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Linq;

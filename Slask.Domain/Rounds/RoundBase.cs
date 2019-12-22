@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Slask.Domain.Groups;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Slask.Domain.Rounds
 {

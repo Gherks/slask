@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Slask.Domain
+namespace Slask.Domain.Groups
 {
     public partial class GroupBase
     {

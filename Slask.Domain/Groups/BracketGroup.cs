@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace Slask.Domain
+namespace Slask.Domain.Groups
 {
     public class BracketGroup : GroupBase
     {

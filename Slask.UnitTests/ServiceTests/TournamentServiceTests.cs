@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
+using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.TestCore;
 using System;

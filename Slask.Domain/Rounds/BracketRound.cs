@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Slask.Domain.Groups;
+using System;
 using System.Linq;
 
 namespace Slask.Domain.Rounds
