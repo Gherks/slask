@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Slask.Domain.Bets
 {
@@ -41,23 +41,6 @@ namespace Slask.Domain.Bets
                 PlayerId = player.Id,
                 Player = player
             };
-        }
-
-        public void UpdatePlayer(Player player)
-        {
-            if (player == null)
-            {
-                // LOGG
-                return;
-            }
-
-            if (Match.FindPlayer(player.Id) == null)
-            {
-                // LOGG
-                return;
-            }
-
-            PlayerId = player.Id;
         }
     }
 }

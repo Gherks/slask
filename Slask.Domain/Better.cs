@@ -1,4 +1,4 @@
-using Slask.Domain.Bets;
+﻿using Slask.Domain.Bets;
 using System;
 using System.Collections.Generic;
 
@@ -41,26 +41,24 @@ namespace Slask.Domain
                 return false;
             }
 
-            if (!match.IsReady())
+            MatchBet newMatchBet = MatchBet.Create(this, match, player);
+            MatchBet existingMatchBet = FindMatchBet(match);
+
+            bool matchBetForThisMatchAlreadyExists = existingMatchBet != null;
+            bool createdNewMatchBetSuccessfully = newMatchBet != null;
+
+            if (createdNewMatchBetSuccessfully)
             {
-                // LOGG MATCH IS NOT READY
-                return false;
+                if (matchBetForThisMatchAlreadyExists)
+                {
+                    Bets.Remove(existingMatchBet);
+                }
+
+                Bets.Add(newMatchBet);
+                return true;
             }
 
-            MatchBet matchBet = FindMatchBet(match);
-
-            if (matchBet == null)
-            {
-                // LOGG THAT BET WAS CREATED
-                Bets.Add(MatchBet.Create(this, match, player));
-            }
-            else
-            {
-                // LOGG THAT BET WAS UPDATED
-                matchBet.UpdatePlayer(player);
-            }
-
-            return true;
+            return false;
         }
 
         private MatchBet FindMatchBet(Match match)
