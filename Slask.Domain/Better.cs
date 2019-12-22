@@ -1,4 +1,4 @@
-﻿using Slask.Domain.Bets;
+using Slask.Domain.Bets;
 using System;
 using System.Collections.Generic;
 
@@ -52,7 +52,7 @@ namespace Slask.Domain
             if (matchBet == null)
             {
                 // LOGG THAT BET WAS CREATED
-                Bets.Add(MatchBet.Create(match, player));
+                Bets.Add(MatchBet.Create(this, match, player));
             }
             else
             {
