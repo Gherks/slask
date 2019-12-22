@@ -41,6 +41,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             group.Matches.Should().BeEmpty();
             group.RoundId.Should().Be(bracketRound.Id);
             group.Round.Should().Be(bracketRound);
+            group.BracketNodeSystem.Should().BeNull();
         }
 
         [Fact]
