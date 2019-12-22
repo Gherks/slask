@@ -82,6 +82,11 @@ namespace Slask.Common
             SystemTime.dateTimes[ThreadId] = mockedDateTime;
         }
 
+        public static void SetOneSecondAfter(DateTime mockedDateTime)
+        {
+            Set(mockedDateTime.AddSeconds(1));
+        }
+
         public static void Reset()
         {
             int ThreadId = Thread.CurrentThread.ManagedThreadId;
