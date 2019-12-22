@@ -40,7 +40,7 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CanIncreaseScore()
         {
-            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             int score = 1;
 
             match.Player1.IncreaseScore(score);
@@ -51,7 +51,7 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CanDecrementPlayerScore()
         {
-            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
             match.Player1.IncreaseScore(2);
             match.Player1.DecreaseScore(1);
@@ -62,7 +62,7 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CannotDecreasePlayerScoreBelowZero()
         {
-            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
             match.Player1.DecreaseScore(1);
 

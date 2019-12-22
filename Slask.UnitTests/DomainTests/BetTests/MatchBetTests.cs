@@ -89,7 +89,7 @@ namespace Slask.UnitTests.DomainTests.BetTests
         [Fact]
         public void CannotCreateMatchBetForMatchThatIsPlaying()
         {
-            SystemTimeMocker.Set(firstMatch.StartDateTime.AddMinutes(1));
+            SystemTimeMocker.SetOneSecondAfter(firstMatch.StartDateTime);
 
             MatchBet matchBet = MatchBet.Create(better, firstMatch, firstMatch.Player1);
 
@@ -99,7 +99,7 @@ namespace Slask.UnitTests.DomainTests.BetTests
         [Fact]
         public void CannotCreateMatchBetForMatchThatIsFinished()
         {
-            SystemTimeMocker.Set(firstMatch.StartDateTime.AddMinutes(1));
+            SystemTimeMocker.SetOneSecondAfter(firstMatch.StartDateTime);
 
             int winningScore = (int)Math.Ceiling(round.BestOf / 2.0);
             firstMatch.Player1.IncreaseScore(winningScore);

@@ -81,7 +81,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
                 GroupBase group = createdGroups[createdGroupIndex];
                 Domain.Match match = group.Matches[matchIndex];
 
-                SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+                SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
                 Player player = match.FindPlayer(scoringPlayer);
 
@@ -131,7 +131,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
                     {
                         if (match.IsReady() && match.GetPlayState() == PlayState.NotBegun)
                         {
-                            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+                            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
                             break;
                         }
                     }

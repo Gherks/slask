@@ -238,7 +238,7 @@ namespace Slask.UnitTests.DomainTests
         {
             Match match = InitializeFirstMatch();
 
-            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore() - 1);
 
             PlayState playState = match.GetPlayState();
@@ -251,7 +251,7 @@ namespace Slask.UnitTests.DomainTests
         {
             Match match = InitializeFirstMatch();
 
-            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore());
 
             PlayState playState = match.GetPlayState();
@@ -264,7 +264,7 @@ namespace Slask.UnitTests.DomainTests
         {
             Match match = InitializeFirstMatch();
 
-            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore());
 
             Player player = match.GetWinningPlayer();
@@ -277,7 +277,7 @@ namespace Slask.UnitTests.DomainTests
         {
             Match match = InitializeFirstMatch();
 
-            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore());
 
             Player player = match.GetLosingPlayer();
@@ -310,7 +310,7 @@ namespace Slask.UnitTests.DomainTests
         {
             Match match = InitializeFirstMatch();
 
-            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore() - 1);
 
             Player player = match.GetWinningPlayer();
@@ -323,7 +323,7 @@ namespace Slask.UnitTests.DomainTests
         {
             Match match = InitializeFirstMatch();
 
-            SystemTimeMocker.Set(match.StartDateTime.AddMinutes(1));
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore() - 1);
 
             Player player = match.GetLosingPlayer();

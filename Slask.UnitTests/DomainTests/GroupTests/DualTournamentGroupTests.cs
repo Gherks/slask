@@ -168,7 +168,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             group.AddPlayerReference(firstPlayerName);
             group.AddPlayerReference(secondPlayerName);
 
-            SystemTimeMocker.Set(group.Matches.First().StartDateTime.AddMinutes(1));
+            SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
 
             group.AddPlayerReference(thirdPlayerName);
 
@@ -188,7 +188,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             group.AddPlayerReference(firstPlayerName);
             group.AddPlayerReference(secondPlayerName);
 
-            SystemTimeMocker.Set(group.Matches.First().StartDateTime.AddMinutes(1));
+            SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
 
             group.RemovePlayerReference(firstPlayerName);
 
@@ -207,7 +207,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             group.AddPlayerReference(firstPlayerName);
             group.AddPlayerReference(secondPlayerName);
 
-            SystemTimeMocker.Set(group.Matches.First().StartDateTime.AddMinutes(1));
+            SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
 
             group.RemovePlayerReference(firstPlayerName);
 
@@ -227,7 +227,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             group.AddPlayerReference(firstPlayerName);
             group.AddPlayerReference(secondPlayerName);
 
-            SystemTimeMocker.Set(group.Matches.First().StartDateTime.AddMinutes(1));
+            SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
 
             bool result = group.RemovePlayerReference(firstPlayerName);
 
