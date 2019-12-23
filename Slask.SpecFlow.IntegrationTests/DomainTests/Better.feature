@@ -10,3 +10,4 @@
 # ReturnsNullWhenTryingToFindNonexistingMatchBet
 # CanCreateMatchBetWhenPlacingBetOnNewMatch
 # CanUpdateMatchBetWhenPlacingBetOnExistingMatchBet
+# AllMatchBetsForParticularMatchIsRemovedIfMatchParticipantsChanges()
