@@ -8,16 +8,11 @@ using Xunit;
 
 namespace Slask.UnitTests.DomainTests
 {
-    // IF PLAYER REF WAS REMOVED FROM GROUP ENTIERLY, AND GROUP IS IN FIRST ROUND, CHECK WHETHER PLAYER REF SHOULD BE REMOVED FROM TOURNAMENT REF LIST AS WELL
-
-    // Add test that makes sure RemoveDanglingPlayerReference works properly
-
     public class TournamentTests
     {
         private readonly Tournament tournament;
         private readonly BracketRound bracketRound;
         private readonly BracketGroup bracketGroup;
-        private readonly PlayerReference playerReference;
         private readonly User user;
         private readonly Better better;
 
@@ -26,7 +21,6 @@ namespace Slask.UnitTests.DomainTests
             tournament = Tournament.Create("GSL 2019");
             bracketRound = tournament.AddBracketRound("Bracket round", 3) as BracketRound;
             bracketGroup = bracketRound.AddGroup() as BracketGroup;
-            playerReference = bracketGroup.AddPlayerReference("Maru");
 
             user = User.Create("Stålberto");
             better = tournament.AddBetter(user);
@@ -71,6 +65,8 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CanGetPlayerReferenceInTournamentByPlayerId()
         {
+            PlayerReference playerReference = bracketGroup.AddPlayerReference("Maru");
+
             PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByPlayerId(playerReference.Id);
 
             fetchedPlayerReference.Should().NotBeNull();
@@ -81,6 +77,8 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CanGetPlayerInTournamentByPlayerNameNoMatterLetterCasing()
         {
+            PlayerReference playerReference = bracketGroup.AddPlayerReference("Maru");
+
             PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByPlayerName(playerReference.Name.ToLower());
 
             fetchedPlayerReference.Should().NotBeNull();
@@ -144,14 +142,6 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
-        public void TournamentKeepsPlayerReferencesThatWasSuccessfullyCreated()
-        {
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-            playerReferences.Should().HaveCount(1);
-            playerReferences.First().Should().Be(playerReference);
-        }
-
-        [Fact]
         public void TournamentDoesNotKeepRoundsThatFailedToBeCreated()
         {
             Tournament tournament = Tournament.Create("ASUS ROG 2012");
@@ -183,69 +173,50 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
-        public void AddingSamePlayerNameToGroupTwiceShouldResultInOnlyOneInstanceOfThatPlayerNameInPlayerReferences()
+        public void TournamentCanFetchPlayerReferences()
         {
-            bracketGroup.AddPlayerReference(playerReference.Name);
+            List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain" };
+
+            foreach(string playerName in playerNames)
+            {
+                bracketGroup.AddPlayerReference(playerName);
+            }
 
             List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+
+            playerReferences.Should().HaveCount(playerNames.Count);
+            foreach (string playerName in playerNames)
+            {
+                playerReferences.Single(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+            }
+        }
+
+        public void FetchingAllPlayerReferencesShouldNotYieldTwoPlayerReferencesWithSameName()
+        {
+            string playerName = "Maru";
+            bracketGroup.AddPlayerReference(playerName);
+            bracketGroup.AddPlayerReference(playerName);
+
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+
             playerReferences.Should().HaveCount(1);
-            playerReferences.First().Name.Should().Be(playerReference.Name);
+            playerReferences.First().Name.Should().Be(playerName);
         }
 
         [Fact]
-        public void WhenPlayerReferenceIsRemovedFromFirstRoundItIsAlsoRemovedFromTournamentPlayerReferencePool()
+        public void FetchingAllPlayerRefencesShouldNotYieldRemovedPlayerReferences()
         {
-            bracketGroup.RemovePlayerReference(playerReference.Name);
+            string playerName = "Maru";
+            bracketGroup.AddPlayerReference(playerName);
 
             List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+            playerReferences.Should().HaveCount(1);
+            playerReferences.First().Name.Should().Be(playerName);
+
+            bracketGroup.RemovePlayerReference(playerName);
+
+            playerReferences = tournament.GetPlayerReferencesInTournament();
             playerReferences.Should().HaveCount(0);
         }
-
-        //[Fact]
-        //public void TournamentRemovesPlayerReferenceFromTournamentPoolWhenLastReferenceIsRemoved()
-        //{
-        //    BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-        //    string playerName = "Maru";
-
-        //    group.AddPlayerReference(playerName);
-        //    group.RemovePlayerReference(playerName);
-
-        //    List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-        //    playerReferences.Should().BeEmpty();
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().BeNull();
-        //}
-
-        //[Fact]
-        //public void DoesNotRemovePlayerReferenceFromTournamentPoolWhenNotSuccessfullyRemovingPlayerReference()
-        //{
-        //    BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-        //    string firstPlayerName = "Maru";
-        //    string secondPlayerName = "Stork";
-
-        //    group.AddPlayerReference(firstPlayerName);
-        //    group.AddPlayerReference(secondPlayerName);
-
-        //    SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
-
-        //    group.RemovePlayerReference(firstPlayerName);
-
-        //    List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-        //    playerReferences.Should().HaveCount(2);
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
-        //}
-
-        //[Fact]
-        //public void CompletelyNewPlayerReferencesAreAlsoAddedToTournamentPool()
-        //{
-        //    BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-        //    string playerName = "Maru";
-
-        //    group.AddPlayerReference(playerName);
-
-        //    List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-        //    playerReferences.Should().HaveCount(1);
-        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
-        //}
     }
 }
