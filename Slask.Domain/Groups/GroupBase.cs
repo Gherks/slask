@@ -164,15 +164,7 @@ namespace Slask.Domain.Groups
 
                 if (bothPlayersResidesInSameMatch)
                 {
-                    Match match = player1.Match;
-
-                    PlayerReference firstPlayerReference = match.Player1.PlayerReference;
-                    PlayerReference secondPlayerReference = match.Player2.PlayerReference;
-
-                    player1.Match.SetPlayers(secondPlayerReference, firstPlayerReference);
-
-                    RemoveBettersMatchBetsOnMatches(new List<Match> { match });
-
+                    MakeSwitchOnPlayerReferencesInSameMatch(player1.Match);
                     return true;
                 }
 
@@ -180,32 +172,7 @@ namespace Slask.Domain.Groups
 
                 if (bothPlayersResidesInSameGroup)
                 {
-                    PlayerReference firstPlayerReference = player1.PlayerReference;
-                    PlayerReference secondPlayerReference = player2.PlayerReference;
-
-                    Match player1Match = player1.Match;
-                    Match player2Match = player2.Match;
-
-                    if (player1Match.Player1.Id == player1.Id)
-                    {
-                        player1Match.SetPlayers(secondPlayerReference, player1Match.Player2.PlayerReference);
-                    }
-                    else
-                    {
-                        player1Match.SetPlayers(player1Match.Player1.PlayerReference, secondPlayerReference);
-                    }
-
-                    if (player2Match.Player1.Id == player2.Id)
-                    {
-                        player2Match.SetPlayers(firstPlayerReference, player2Match.Player2.PlayerReference);
-                    }
-                    else
-                    {
-                        player2Match.SetPlayers(player2Match.Player1.PlayerReference, firstPlayerReference);
-                    }
-
-                    RemoveBettersMatchBetsOnMatches(new List<Match> { player1Match, player2Match });
-
+                    MakeSwitchOnPlayerReferencesInDifferentMatch(player1, player2);
                     return true;
                 }
             }
@@ -265,6 +232,45 @@ namespace Slask.Domain.Groups
             }
 
             return advancingPlayers;
+        }
+
+        private void MakeSwitchOnPlayerReferencesInSameMatch(Match match)
+        {
+            PlayerReference firstPlayerReference = match.Player1.PlayerReference;
+            PlayerReference secondPlayerReference = match.Player2.PlayerReference;
+
+            match.SetPlayers(secondPlayerReference, firstPlayerReference);
+
+            RemoveBettersMatchBetsOnMatches(new List<Match> { match });
+        }
+
+        private void MakeSwitchOnPlayerReferencesInDifferentMatch(Player player1, Player player2)
+        {
+            PlayerReference firstPlayerReference = player1.PlayerReference;
+            PlayerReference secondPlayerReference = player2.PlayerReference;
+
+            Match player1Match = player1.Match;
+            Match player2Match = player2.Match;
+
+            if (player1Match.Player1.Id == player1.Id)
+            {
+                player1Match.SetPlayers(secondPlayerReference, player1Match.Player2.PlayerReference);
+            }
+            else
+            {
+                player1Match.SetPlayers(player1Match.Player1.PlayerReference, secondPlayerReference);
+            }
+
+            if (player2Match.Player1.Id == player2.Id)
+            {
+                player2Match.SetPlayers(firstPlayerReference, player2Match.Player2.PlayerReference);
+            }
+            else
+            {
+                player2Match.SetPlayers(player2Match.Player1.PlayerReference, firstPlayerReference);
+            }
+
+            RemoveBettersMatchBetsOnMatches(new List<Match> { player1Match, player2Match });
         }
 
         private void RemoveBettersMatchBetsOnMatches(List<Match> matches)
