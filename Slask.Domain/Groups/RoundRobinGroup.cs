@@ -31,6 +31,11 @@ namespace Slask.Domain.Groups
             };
         }
 
+        public override bool SwitchPlayerRefences(Player player1, Player player2)
+        {
+            return true;
+        }
+
         protected override void ConstructGroupLayout()
         {
             int numMatches = CalculateMatchAmount();
