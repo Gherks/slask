@@ -57,7 +57,6 @@ namespace Slask.Domain
             return Player1 != null && Player2 != null;
         }
 
-        // Needs to restricted to GroupBase?
         public bool AddPlayer(PlayerReference playerReference)
         {
             if (playerReference == null)
@@ -80,7 +79,6 @@ namespace Slask.Domain
             return false;
         }
 
-        //Needs to restricted to GroupBase?
         public bool SetPlayers(PlayerReference player1Reference, PlayerReference player2Reference)
         {
             if (player1Reference == null || player2Reference == null || player1Reference.Id != player2Reference.Id)
