@@ -15,8 +15,6 @@ namespace Slask.UnitTests.DomainTests.BetTests
 {
     public class MatchBetTests
     {
-        // IF ANY PLAYER CHANGES IN MATCH, RESET ALL ASSOCIATED BETS
-
         private readonly User user;
         private readonly Tournament tournament;
         private readonly Better better;
