@@ -120,11 +120,5 @@ namespace Slask.UnitTests.DomainTests.BetTests
 
             matchBet.Should().BeNull();
         }
-
-        //[Fact] IS INTEGRATION TEST
-        //public void AllMatchBetsForParticularMatchIsRemovedIfMatchParticipantsChanges()
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }
