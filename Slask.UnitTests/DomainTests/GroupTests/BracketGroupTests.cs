@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
@@ -69,19 +69,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         }
 
         [Fact]
-        public void CompletelyNewPlayerReferencesAreAlsoAddedToTournamentPool()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-            string playerName = "Maru";
-
-            group.AddPlayerReference(playerName);
-
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-            playerReferences.Should().HaveCount(1);
-            playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
-        }
-
-        [Fact]
         public void CannotAddPlayerReferenceToGroupTwice()
         {
             BracketGroup group = bracketRound.AddGroup() as BracketGroup;
@@ -110,20 +97,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         }
 
         [Fact]
-        public void CannotAddPlayerReferenceToTournamentPoolTwice()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-            string playerName = "Maru";
-
-            group.AddPlayerReference(playerName);
-            group.AddPlayerReference(playerName);
-
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-            playerReferences.Should().HaveCount(1);
-            playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
-        }
-
-        [Fact]
         public void CanRemovePlayerReferenceFromGroup()
         {
             BracketGroup group = bracketRound.AddGroup() as BracketGroup;
@@ -146,20 +119,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             bool result = group.RemovePlayerReference(playerName);
 
             result.Should().BeTrue();
-        }
-
-        [Fact]
-        public void TournamentRemovesPlayerReferenceFromTournamentPoolWhenLastReferenceIsRemoved()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-            string playerName = "Maru";
-
-            group.AddPlayerReference(playerName);
-            group.RemovePlayerReference(playerName);
-
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-            playerReferences.Should().BeEmpty();
-            playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().BeNull();
         }
 
         [Fact]

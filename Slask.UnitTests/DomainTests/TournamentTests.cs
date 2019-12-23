@@ -200,5 +200,52 @@ namespace Slask.UnitTests.DomainTests
             List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
             playerReferences.Should().HaveCount(0);
         }
+
+        //[Fact]
+        //public void TournamentRemovesPlayerReferenceFromTournamentPoolWhenLastReferenceIsRemoved()
+        //{
+        //    BracketGroup group = bracketRound.AddGroup() as BracketGroup;
+        //    string playerName = "Maru";
+
+        //    group.AddPlayerReference(playerName);
+        //    group.RemovePlayerReference(playerName);
+
+        //    List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+        //    playerReferences.Should().BeEmpty();
+        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().BeNull();
+        //}
+
+        //[Fact]
+        //public void DoesNotRemovePlayerReferenceFromTournamentPoolWhenNotSuccessfullyRemovingPlayerReference()
+        //{
+        //    BracketGroup group = bracketRound.AddGroup() as BracketGroup;
+        //    string firstPlayerName = "Maru";
+        //    string secondPlayerName = "Stork";
+
+        //    group.AddPlayerReference(firstPlayerName);
+        //    group.AddPlayerReference(secondPlayerName);
+
+        //    SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
+
+        //    group.RemovePlayerReference(firstPlayerName);
+
+        //    List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+        //    playerReferences.Should().HaveCount(2);
+        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
+        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
+        //}
+
+        //[Fact]
+        //public void CompletelyNewPlayerReferencesAreAlsoAddedToTournamentPool()
+        //{
+        //    BracketGroup group = bracketRound.AddGroup() as BracketGroup;
+        //    string playerName = "Maru";
+
+        //    group.AddPlayerReference(playerName);
+
+        //    List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+        //    playerReferences.Should().HaveCount(1);
+        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+        //}
     }
 }

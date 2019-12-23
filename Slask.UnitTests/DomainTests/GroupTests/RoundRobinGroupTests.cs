@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
@@ -64,19 +64,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         }
 
         [Fact]
-        public void CompletelyNewPlayerReferencesAreAlsoAddedToTournamentPool()
-        {
-            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
-            string playerName = "Maru";
-
-            group.AddPlayerReference(playerName);
-
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-            playerReferences.Should().HaveCount(1);
-            playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
-        }
-
-        [Fact]
         public void CannotAddPlayerReferenceToGroupTwice()
         {
             RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
@@ -105,20 +92,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         }
 
         [Fact]
-        public void CannotAddPlayerReferenceToTournamentPoolTwice()
-        {
-            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
-            string playerName = "Maru";
-
-            group.AddPlayerReference(playerName);
-            group.AddPlayerReference(playerName);
-
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-            playerReferences.Should().HaveCount(1);
-            playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
-        }
-
-        [Fact]
         public void CanRemovePlayerReferenceFromGroup()
         {
             RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
@@ -141,20 +114,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             bool result = group.RemovePlayerReference(playerName);
 
             result.Should().BeTrue();
-        }
-
-        [Fact]
-        public void TournamentRemovesPlayerReferenceFromTournamentPoolWhenLastReferenceIsRemoved()
-        {
-            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
-            string playerName = "Maru";
-
-            group.AddPlayerReference(playerName);
-            group.RemovePlayerReference(playerName);
-
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-            playerReferences.Should().BeEmpty();
-            playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().BeNull();
         }
 
         [Fact]

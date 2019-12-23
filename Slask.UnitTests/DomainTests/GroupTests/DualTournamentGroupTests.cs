@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
@@ -64,19 +64,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         }
 
         [Fact]
-        public void CompletelyNewPlayerReferencesAreAlsoAddedToTournamentPool()
-        {
-            DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-            string playerName = "Maru";
-
-            group.AddPlayerReference(playerName);
-
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-            playerReferences.Should().HaveCount(1);
-            playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
-        }
-
-        [Fact]
         public void CannotAddPlayerReferenceToGroupTwice()
         {
             DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
@@ -105,20 +92,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         }
 
         [Fact]
-        public void CannotAddPlayerReferenceToTournamentPoolTwice()
-        {
-            DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-            string playerName = "Maru";
-
-            group.AddPlayerReference(playerName);
-            group.AddPlayerReference(playerName);
-
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-            playerReferences.Should().HaveCount(1);
-            playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
-        }
-
-        [Fact]
         public void CanRemovePlayerReferenceFromGroup()
         {
             DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
@@ -141,20 +114,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             bool result = group.RemovePlayerReference(playerName);
 
             result.Should().BeTrue();
-        }
-
-        [Fact]
-        public void TournamentRemovesPlayerReferenceFromTournamentPoolWhenLastReferenceIsRemoved()
-        {
-            DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-            string playerName = "Maru";
-
-            group.AddPlayerReference(playerName);
-            group.RemovePlayerReference(playerName);
-
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-            playerReferences.Should().BeEmpty();
-            playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().BeNull();
         }
 
         [Fact]
@@ -195,26 +154,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             group.ParticipatingPlayers.Should().HaveCount(2);
             group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
             group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
-        }
-
-        [Fact]
-        public void DoesNotRemovePlayerReferenceFromTournamentPoolWhenNotSuccessfullyRemovingPlayerReference()
-        {
-            DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-            string firstPlayerName = "Maru";
-            string secondPlayerName = "Stork";
-
-            group.AddPlayerReference(firstPlayerName);
-            group.AddPlayerReference(secondPlayerName);
-
-            SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
-
-            group.RemovePlayerReference(firstPlayerName);
-
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-            playerReferences.Should().HaveCount(2);
-            playerReferences.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
-            playerReferences.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
         }
 
         [Fact]
