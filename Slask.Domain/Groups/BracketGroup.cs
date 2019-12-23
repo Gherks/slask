@@ -157,8 +157,8 @@ namespace Slask.Domain.Groups
 
                         nodeQueue.Enqueue(childNode);
                     }
-                    else 
-                    { 
+                    else
+                    {
                         return;
                     }
                 }
@@ -186,7 +186,7 @@ namespace Slask.Domain.Groups
                 throw new ArgumentException(nameof(bracketNode));
             }
 
-            while(bracketNode.BracketTier >= bracketNodesByTier.Count)
+            while (bracketNode.BracketTier >= bracketNodesByTier.Count)
             {
                 bracketNodesByTier.Add(new List<BracketNode>());
             }
