@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
@@ -194,6 +194,42 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             group.Matches[1].Player1.Name.Should().Be(thirdPlayerName);
             group.Matches[1].Player2.Name.Should().Be(fourthPlayerName);
+
+            group.Matches[2].Player1.Should().BeNull();
+            group.Matches[2].Player2.Should().BeNull();
+
+            group.Matches[3].Player1.Should().BeNull();
+            group.Matches[3].Player2.Should().BeNull();
+
+            group.Matches[4].Player1.Should().BeNull();
+            group.Matches[4].Player2.Should().BeNull();
+        }
+
+        [Fact]
+        public void CannotAddMoreThanFourPlayerReferencesToGroup()
+        {
+            DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
+
+            List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber" };
+
+            foreach (string playerName in playerNames)
+            {
+                group.AddPlayerReference(playerName);
+            }
+
+            group.ParticipatingPlayers.Single(playerReference => playerReference.Name == playerNames[0]).Should().NotBeNull();
+            group.ParticipatingPlayers.Single(playerReference => playerReference.Name == playerNames[1]).Should().NotBeNull();
+            group.ParticipatingPlayers.Single(playerReference => playerReference.Name == playerNames[2]).Should().NotBeNull();
+            group.ParticipatingPlayers.Single(playerReference => playerReference.Name == playerNames[3]).Should().NotBeNull();
+            group.ParticipatingPlayers.SingleOrDefault(playerReference => playerReference.Name == playerNames[4]).Should().BeNull();
+
+            group.Matches.Should().HaveCount(5);
+
+            group.Matches[0].Player1.Name.Should().NotBeNull();
+            group.Matches[0].Player2.Name.Should().NotBeNull();
+
+            group.Matches[1].Player1.Name.Should().NotBeNull();
+            group.Matches[1].Player2.Name.Should().NotBeNull();
 
             group.Matches[2].Player1.Should().BeNull();
             group.Matches[2].Player2.Should().BeNull();
