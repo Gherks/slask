@@ -138,6 +138,28 @@ namespace Slask.UnitTests.DomainTests
             ValidateMatchBet(matchBet, better, match, match.Player1);
         }
 
+        [Fact]
+        public void MatchBetIsRemovedWhenMatchLayoutIsChanged()
+        {
+            Better better = GivenABetterIsCreated();
+
+            group.AddPlayerReference("Taeja");
+            group.AddPlayerReference("Rain");
+
+            Match firstMatch = group.Matches[0];
+            Match secondMatch = group.Matches[1];
+
+            better.PlaceMatchBet(firstMatch, firstMatch.Player1);
+            better.PlaceMatchBet(secondMatch, secondMatch.Player1);
+
+            group.SwitchPlayerRefences(firstMatch.Player1, secondMatch.Player1);
+
+            better.Bets.Should().BeEmpty();
+            better.Bets.First().Should().NotBeNull();
+            MatchBet matchBet = better.Bets.First() as MatchBet;
+            ValidateMatchBet(matchBet, better, match, match.Player1);
+        }
+
         private Better GivenABetterIsCreated()
         {
             return Better.Create(user, tournament);
