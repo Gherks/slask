@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
@@ -172,26 +172,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         }
 
         [Fact]
-        public void DoesNotRemovePlayerReferenceFromTournamentPoolWhenNotSuccessfullyRemovingPlayerReference()
-        {
-            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
-            string firstPlayerName = "Maru";
-            string secondPlayerName = "Stork";
-
-            group.AddPlayerReference(firstPlayerName);
-            group.AddPlayerReference(secondPlayerName);
-
-            SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
-
-            group.RemovePlayerReference(firstPlayerName);
-
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-            playerReferences.Should().HaveCount(2);
-            playerReferences.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
-            playerReferences.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
-        }
-
-        [Fact]
         public void ReturnsFalseFlagWhenNotSuccessfullyRemovingPlayerReference()
         {
             RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
@@ -206,6 +186,32 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             bool result = group.RemovePlayerReference(firstPlayerName);
 
             result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void CannotSwitchPlacesOnPlayerReferences()
+        {
+            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
+
+            group.AddPlayerReference("Maru");
+            group.AddPlayerReference("Stork");
+            group.AddPlayerReference("Taeja");
+            group.AddPlayerReference("Rain");
+
+            Match firstMatch = group.Matches[0];
+            Match secondMatch = group.Matches[1];
+
+            PlayerReference firstPlayerReference = group.Matches[0].Player1.PlayerReference;
+            PlayerReference secondPlayerReference = group.Matches[0].Player2.PlayerReference;
+            PlayerReference thirdPlayerReference = group.Matches[1].Player1.PlayerReference;
+            PlayerReference fourthPlayerReference = group.Matches[1].Player2.PlayerReference;
+
+            group.SwitchPlayerRefences(firstMatch.Player1, secondMatch.Player2);
+
+            firstMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
+            firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
+            secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
+            secondMatch.Player2.PlayerReference.Should().Be(fourthPlayerReference);
         }
 
         [Fact]

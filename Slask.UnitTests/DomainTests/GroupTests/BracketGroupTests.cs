@@ -177,26 +177,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         }
 
         [Fact]
-        public void DoesNotRemovePlayerReferenceFromTournamentPoolWhenNotSuccessfullyRemovingPlayerReference()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-            string firstPlayerName = "Maru";
-            string secondPlayerName = "Stork";
-
-            group.AddPlayerReference(firstPlayerName);
-            group.AddPlayerReference(secondPlayerName);
-
-            SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
-
-            group.RemovePlayerReference(firstPlayerName);
-
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-            playerReferences.Should().HaveCount(2);
-            playerReferences.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
-            playerReferences.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
-        }
-
-        [Fact]
         public void ReturnsFalseFlagWhenNotSuccessfullyRemovingPlayerReference()
         {
             BracketGroup group = bracketRound.AddGroup() as BracketGroup;
@@ -211,6 +191,110 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             bool result = group.RemovePlayerReference(firstPlayerName);
 
             result.Should().BeFalse();
+        }
+
+        [Fact]
+        public void CanSwitchPlacesOnPlayerReferencesThatAreInSameMatch()
+        {
+            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
+
+            PlayerReference firstPlayerReference = group.AddPlayerReference("Maru");
+            PlayerReference secondPlayerReference = group.AddPlayerReference("Stork");
+
+            group.SwitchPlayerRefences(group.Matches.First().Player1, group.Matches.First().Player2);
+
+            group.Matches.First().Player1.PlayerReference.Should().Be(secondPlayerReference);
+            group.Matches.First().Player2.PlayerReference.Should().Be(firstPlayerReference);
+        }
+
+        [Fact]
+        public void CanSwitchPlacesOnPlayerReferencesThatAreInSameGroup()
+        {
+            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
+
+            PlayerReference firstPlayerReference = group.AddPlayerReference("Maru");
+            PlayerReference secondPlayerReference = group.AddPlayerReference("Stork");
+            PlayerReference thirdPlayerReference = group.AddPlayerReference("Taeja");
+            PlayerReference fourthPlayerReference = group.AddPlayerReference("Rain");
+
+            Match firstMatch = group.Matches[0];
+            Match secondMatch = group.Matches[1];
+
+            group.SwitchPlayerRefences(firstMatch.Player1, secondMatch.Player2);
+
+            firstMatch.Player1.PlayerReference.Should().Be(fourthPlayerReference);
+            firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
+            secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
+            secondMatch.Player2.PlayerReference.Should().Be(firstPlayerReference);
+        }
+
+        [Fact]
+        public void CannotSwitchPlacesOnPlayerReferenceWhenAnyPlayerIsNull()
+        {
+            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
+
+            PlayerReference firstPlayerReference = group.AddPlayerReference("Maru");
+            PlayerReference secondPlayerReference = group.AddPlayerReference("Stork");
+            PlayerReference thirdPlayerReference = group.AddPlayerReference("Taeja");
+            PlayerReference fourthPlayerReference = group.AddPlayerReference("Rain");
+
+            Match firstMatch = group.Matches[0];
+            Match secondMatch = group.Matches[1];
+            Match thirdMatch = group.Matches[2];
+
+            group.SwitchPlayerRefences(thirdMatch.Player1, secondMatch.Player2);
+            group.SwitchPlayerRefences(firstMatch.Player1, thirdMatch.Player2);
+
+            firstMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
+            firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
+            secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
+            secondMatch.Player2.PlayerReference.Should().Be(fourthPlayerReference);
+        }
+
+        [Fact]
+        public void CannotSwitchPlacesOnAnyPlayerReferencesWhenAMatchInGroupHasBegun()
+        {
+            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
+
+            PlayerReference firstPlayerReference = group.AddPlayerReference("Maru");
+            PlayerReference secondPlayerReference = group.AddPlayerReference("Stork");
+            PlayerReference thirdPlayerReference = group.AddPlayerReference("Taeja");
+            PlayerReference fourthPlayerReference = group.AddPlayerReference("Rain");
+
+            Match firstMatch = group.Matches[0];
+            Match secondMatch = group.Matches[1];
+
+            SystemTimeMocker.SetOneSecondAfter(firstMatch.StartDateTime);
+
+            group.SwitchPlayerRefences(firstMatch.Player1, secondMatch.Player2);
+
+            firstMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
+            firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
+            secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
+            secondMatch.Player2.PlayerReference.Should().Be(fourthPlayerReference);
+        }
+
+        [Fact]
+        public void CannotSwitchPlacesOnPlayerReferencesThatResidesInDifferentGroups()
+        {
+            BracketGroup firstGroup = bracketRound.AddGroup() as BracketGroup;
+            BracketGroup secondGroup = bracketRound.AddGroup() as BracketGroup;
+
+            PlayerReference firstPlayerReference = firstGroup.AddPlayerReference("Maru");
+            PlayerReference secondPlayerReference = firstGroup.AddPlayerReference("Stork");
+
+            PlayerReference thirdPlayerReference = secondGroup.AddPlayerReference("Taeja");
+            PlayerReference fourthPlayerReference = secondGroup.AddPlayerReference("Rain");
+
+            Match firstGroupMatch = firstGroup.Matches.First();
+            Match secondGroupMatch = secondGroup.Matches.First();
+
+            firstGroup.SwitchPlayerRefences(firstGroupMatch.Player1, secondGroupMatch.Player2);
+
+            firstGroupMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
+            firstGroupMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
+            secondGroupMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
+            secondGroupMatch.Player2.PlayerReference.Should().Be(fourthPlayerReference);
         }
     }
 }
