@@ -11,7 +11,7 @@ Scenario: Can create bracket round
 		| Round type | Round name    | Best of | Advancing amount |
 		| Bracket    | Bracket round | 3       | 1                |
 
-Scenario: Advancing amount in bracket rounds cannot be anything other than two
+Scenario: Advancing amount in bracket rounds cannot be anything other than one
 	Given a tournament named "GSL 2019" has been created
 	When created tournament 0 adds rounds
 		| Round type | Round name      | Best of | Advancing amount |
