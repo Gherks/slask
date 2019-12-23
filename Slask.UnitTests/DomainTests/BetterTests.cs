@@ -139,7 +139,19 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
-        public void MatchBetIsRemovedWhenMatchLayoutIsChanged()
+        public void MatchBetIsRemovedWhenMatchLayoutIsChangedInOneMatch()
+        {
+            Better better = GivenABetterIsCreated();
+
+            better.PlaceMatchBet(match, match.Player1);
+
+            group.SwitchPlayerRefences(match.Player1, match.Player2);
+
+            better.Bets.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void MatchBetIsRemovedWhenMatchLayoutIsChangedInTwoMatches()
         {
             Better better = GivenABetterIsCreated();
 
@@ -155,14 +167,11 @@ namespace Slask.UnitTests.DomainTests
             group.SwitchPlayerRefences(firstMatch.Player1, secondMatch.Player1);
 
             better.Bets.Should().BeEmpty();
-            better.Bets.First().Should().NotBeNull();
-            MatchBet matchBet = better.Bets.First() as MatchBet;
-            ValidateMatchBet(matchBet, better, match, match.Player1);
         }
 
         private Better GivenABetterIsCreated()
         {
-            return Better.Create(user, tournament);
+            return tournament.AddBetter(user);
         }
 
         private void ValidateMatchBet(MatchBet matchBet, Better correctBetter, Match correctMatch, Player correctPlayer)
