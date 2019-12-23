@@ -146,6 +146,68 @@ namespace Slask.Domain.Groups
         {
         }
 
+        public virtual bool SwitchPlayerRefences(Player player1, Player player2)
+        {
+            if (player1 == null || player2 == null)
+            {
+                // LOG Error: One of given players was null when trying to switch places
+                return false;
+            }
+
+            bool bothPlayersHasPlayerReferences = player1.PlayerReference != null && player2.PlayerReference != null;
+            bool noMatchHasStartedInGroup = player1.Match.Group.GetPlayState() == PlayState.NotBegun;
+
+            if (bothPlayersHasPlayerReferences && noMatchHasStartedInGroup)
+            {
+                bool bothPlayersResidesInSameMatch = player1.Match.Id == player2.Match.Id;
+
+                if (bothPlayersResidesInSameMatch)
+                {
+                    Match match = player1.Match;
+
+                    PlayerReference firstPlayerReference = match.Player1.PlayerReference;
+                    PlayerReference secondPlayerReference = match.Player2.PlayerReference;
+
+                    player1.Match.SetPlayers(secondPlayerReference, firstPlayerReference);
+
+                    return true;
+                }
+
+                bool bothPlayersResidesInSameGroup = player1.Match.Group.Id == player2.Match.Group.Id;
+
+                if (bothPlayersResidesInSameGroup)
+                {
+                    PlayerReference firstPlayerReference = player1.PlayerReference;
+                    PlayerReference secondPlayerReference = player2.PlayerReference;
+
+                    Match player1Match = player1.Match;
+                    Match player2Match = player2.Match;
+
+                    if (player1Match.Player1.Id == player1.Id)
+                    {
+                        player1Match.SetPlayers(secondPlayerReference, player1Match.Player2.PlayerReference);
+                    }
+                    else
+                    {
+                        player1Match.SetPlayers(player1Match.Player1.PlayerReference, secondPlayerReference);
+                    }
+
+                    if (player2Match.Player1.Id == player2.Id)
+                    {
+                        player2Match.SetPlayers(firstPlayerReference, player2Match.Player2.PlayerReference);
+                    }
+                    else
+                    {
+                        player2Match.SetPlayers(player2Match.Player1.PlayerReference, firstPlayerReference);
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         protected void ChangeMatchAmountTo(int amount)
         {
             Matches.Clear();
