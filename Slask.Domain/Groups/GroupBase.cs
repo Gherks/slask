@@ -1,4 +1,5 @@
-﻿using Slask.Domain.Rounds;
+﻿using Slask.Domain.Bets;
+using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -170,6 +171,8 @@ namespace Slask.Domain.Groups
 
                     player1.Match.SetPlayers(secondPlayerReference, firstPlayerReference);
 
+                    RemoveBettersMatchBetsOnMatches(new List<Match> { match });
+
                     return true;
                 }
 
@@ -200,6 +203,8 @@ namespace Slask.Domain.Groups
                     {
                         player2Match.SetPlayers(player2Match.Player1.PlayerReference, firstPlayerReference);
                     }
+
+                    RemoveBettersMatchBetsOnMatches(new List<Match> { player1Match, player2Match });
 
                     return true;
                 }
@@ -260,6 +265,26 @@ namespace Slask.Domain.Groups
             }
 
             return advancingPlayers;
+        }
+
+        private void RemoveBettersMatchBetsOnMatches(List<Match> matches)
+        {
+            foreach (Better better in Round.Tournament.Betters)
+            {
+                for (int betIndex = 0; betIndex < better.Bets.Count; ++betIndex)
+                {
+                    if (better.Bets[betIndex] is MatchBet matchBet)
+                    {
+                        foreach (Match match in matches)
+                        {
+                            if (matchBet.Match.Id == match.Id)
+                            {
+                                better.Bets.Remove(better.Bets[betIndex--]);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
