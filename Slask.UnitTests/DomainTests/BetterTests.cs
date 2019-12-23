@@ -145,7 +145,7 @@ namespace Slask.UnitTests.DomainTests
 
             better.PlaceMatchBet(match, match.Player1);
 
-            group.SwitchPlayerRefences(match.Player1, match.Player2);
+            group.SwitchPlayerReferences(match.Player1, match.Player2);
 
             better.Bets.Should().BeEmpty();
         }
@@ -164,7 +164,7 @@ namespace Slask.UnitTests.DomainTests
             better.PlaceMatchBet(firstMatch, firstMatch.Player1);
             better.PlaceMatchBet(secondMatch, secondMatch.Player1);
 
-            group.SwitchPlayerRefences(firstMatch.Player1, secondMatch.Player1);
+            group.SwitchPlayerReferences(firstMatch.Player1, secondMatch.Player1);
 
             better.Bets.Should().BeEmpty();
         }

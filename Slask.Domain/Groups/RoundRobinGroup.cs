@@ -31,7 +31,7 @@ namespace Slask.Domain.Groups
             };
         }
 
-        public override bool SwitchPlayerRefences(Player player1, Player player2)
+        public override bool SwitchPlayerReferences(Player player1, Player player2)
         {
             return true;
         }

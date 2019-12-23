@@ -147,7 +147,7 @@ namespace Slask.Domain.Groups
         {
         }
 
-        public virtual bool SwitchPlayerRefences(Player player1, Player player2)
+        public virtual bool SwitchPlayerReferences(Player player1, Player player2)
         {
             if (player1 == null || player2 == null)
             {

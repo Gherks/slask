@@ -201,7 +201,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             PlayerReference firstPlayerReference = group.AddPlayerReference("Maru");
             PlayerReference secondPlayerReference = group.AddPlayerReference("Stork");
 
-            group.SwitchPlayerRefences(group.Matches.First().Player1, group.Matches.First().Player2);
+            group.SwitchPlayerReferences(group.Matches.First().Player1, group.Matches.First().Player2);
 
             group.Matches.First().Player1.PlayerReference.Should().Be(secondPlayerReference);
             group.Matches.First().Player2.PlayerReference.Should().Be(firstPlayerReference);
@@ -220,7 +220,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             Match firstMatch = group.Matches[0];
             Match secondMatch = group.Matches[1];
 
-            group.SwitchPlayerRefences(firstMatch.Player1, secondMatch.Player2);
+            group.SwitchPlayerReferences(firstMatch.Player1, secondMatch.Player2);
 
             firstMatch.Player1.PlayerReference.Should().Be(fourthPlayerReference);
             firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
@@ -242,8 +242,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             Match secondMatch = group.Matches[1];
             Match thirdMatch = group.Matches[2];
 
-            group.SwitchPlayerRefences(thirdMatch.Player1, secondMatch.Player2);
-            group.SwitchPlayerRefences(firstMatch.Player1, thirdMatch.Player2);
+            group.SwitchPlayerReferences(thirdMatch.Player1, secondMatch.Player2);
+            group.SwitchPlayerReferences(firstMatch.Player1, thirdMatch.Player2);
 
             firstMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
             firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
@@ -266,7 +266,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             SystemTimeMocker.SetOneSecondAfter(firstMatch.StartDateTime);
 
-            group.SwitchPlayerRefences(firstMatch.Player1, secondMatch.Player2);
+            group.SwitchPlayerReferences(firstMatch.Player1, secondMatch.Player2);
 
             firstMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
             firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
@@ -289,7 +289,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             Match firstGroupMatch = firstGroup.Matches.First();
             Match secondGroupMatch = secondGroup.Matches.First();
 
-            firstGroup.SwitchPlayerRefences(firstGroupMatch.Player1, secondGroupMatch.Player2);
+            firstGroup.SwitchPlayerReferences(firstGroupMatch.Player1, secondGroupMatch.Player2);
 
             firstGroupMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
             firstGroupMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
