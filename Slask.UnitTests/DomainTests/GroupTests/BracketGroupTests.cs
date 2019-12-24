@@ -14,7 +14,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         private readonly Tournament tournament;
         private readonly BracketRound bracketRound;
 
-        // Create layout tests - CanConstructRoundRobinMatchLayout
+        // Create layout tests - CanConstructBracketMatchLayout
         // Proper BracketNodeSystem is created
         // StartDateTime for matches is properly set up according to layout (child nodes needs to be resolved before current node can start)
 

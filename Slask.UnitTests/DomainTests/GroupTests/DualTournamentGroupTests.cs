@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
@@ -10,6 +10,8 @@ using Xunit;
 
 namespace Slask.UnitTests.DomainTests.GroupTests
 {
+    // StartDateTime for matches is properly set up according to layout (first one after another)
+
     public class DualTournamentGroupTests : IDisposable
     {
         private readonly Tournament tournament;
