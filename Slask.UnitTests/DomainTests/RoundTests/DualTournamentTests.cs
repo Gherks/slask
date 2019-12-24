@@ -62,13 +62,24 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         }
 
         [Fact]
-        public void GetsBackNullWhenFetchingPreviousRoundWithFirstRound()
+        public void FetchingPreviousRoundFromFirstRoundYieldsNull()
         {
             DualTournamentRound dualTournamentRound = CreateDualTournamentRound();
 
             RoundBase round = dualTournamentRound.GetPreviousRound();
 
             round.Should().BeNull();
+        }
+
+        [Fact]
+        public void FetchingPreviousRoundFromSecondRoundYieldsFirstRound()
+        {
+            DualTournamentRound firstRound = CreateDualTournamentRound("First round");
+            DualTournamentRound secondRound = CreateDualTournamentRound("Second round");
+
+            RoundBase previousRound = secondRound.GetPreviousRound();
+
+            previousRound.Should().Be(firstRound);
         }
 
         [Fact]
@@ -86,7 +97,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests
 
         private DualTournamentRound CreateDualTournamentRound(string name = "Dual tournament round", int bestOf = 3)
         {
-            return DualTournamentRound.Create(name, bestOf, tournament);
+            return tournament.AddDualTournamentRound(name, bestOf) as DualTournamentRound;
         }
     }
 }

@@ -75,13 +75,24 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         }
 
         [Fact]
-        public void GetsBackNullWhenFetchingPreviousRoundWithFirstRound()
+        public void FetchingPreviousRoundFromFirstRoundYieldsNull()
         {
             RoundRobinRound roundRobinRound = CreateRoundRobinRound();
 
             RoundBase round = roundRobinRound.GetPreviousRound();
 
             round.Should().BeNull();
+        }
+
+        [Fact]
+        public void FetchingPreviousRoundFromSecondRoundYieldsFirstRound()
+        {
+            RoundRobinRound firstRound = CreateRoundRobinRound("First round");
+            RoundRobinRound secondRound = CreateRoundRobinRound("Second round");
+
+            RoundBase previousRound = secondRound.GetPreviousRound();
+
+            previousRound.Should().Be(firstRound);
         }
 
         [Fact]
@@ -99,7 +110,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests
 
         private RoundRobinRound CreateRoundRobinRound(string name = "Round robin round", int bestOf = 3, int advancingPerGroupAmount = 2)
         {
-            return RoundRobinRound.Create(name, bestOf, advancingPerGroupAmount, tournament);
+            return tournament.AddRoundRobinRound(name, bestOf, advancingPerGroupAmount) as RoundRobinRound;
         }
     }
 }
