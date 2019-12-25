@@ -489,20 +489,20 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             List<BracketNode> quarterfinalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(2);
 
-            DateTime twoHoursLater = SystemTime.Now.AddHours(2);
-            DateTime oneHourLater = SystemTime.Now.AddHours(1);
-            DateTime fourHoursLater = SystemTime.Now.AddHours(4);
-            DateTime threeHoursLater = SystemTime.Now.AddHours(3);
+            DateTime twoHoursEarlier = quarterfinalTier[0].Match.StartDateTime.AddHours(-2);
+            DateTime threeHoursEarlier = quarterfinalTier[1].Match.StartDateTime.AddHours(-3);
+            DateTime oneHourEarlier = quarterfinalTier[2].Match.StartDateTime.AddHours(-1);
+            DateTime twoHoursLater = quarterfinalTier[3].Match.StartDateTime.AddHours(2);
 
-            quarterfinalTier[0].Match.SetStartDateTime(twoHoursLater);
-            quarterfinalTier[1].Match.SetStartDateTime(oneHourLater);
-            quarterfinalTier[2].Match.SetStartDateTime(fourHoursLater);
-            quarterfinalTier[3].Match.SetStartDateTime(threeHoursLater);
+            quarterfinalTier[0].Match.SetStartDateTime(twoHoursEarlier);
+            quarterfinalTier[1].Match.SetStartDateTime(threeHoursEarlier);
+            quarterfinalTier[2].Match.SetStartDateTime(oneHourEarlier);
+            quarterfinalTier[3].Match.SetStartDateTime(twoHoursLater);
 
-            quarterfinalTier[0].Match.StartDateTime.Should().Be(twoHoursLater);
-            quarterfinalTier[1].Match.StartDateTime.Should().Be(oneHourLater);
-            quarterfinalTier[2].Match.StartDateTime.Should().Be(fourHoursLater);
-            quarterfinalTier[3].Match.StartDateTime.Should().Be(threeHoursLater);
+            quarterfinalTier[0].Match.StartDateTime.Should().Be(twoHoursEarlier);
+            quarterfinalTier[1].Match.StartDateTime.Should().Be(threeHoursEarlier);
+            quarterfinalTier[2].Match.StartDateTime.Should().Be(oneHourEarlier);
+            quarterfinalTier[3].Match.StartDateTime.Should().Be(twoHoursLater);
         }
 
         [Fact]
@@ -519,12 +519,16 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             List<BracketNode> finalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(0);
             List<BracketNode> semifinalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(1);
+            List<BracketNode> quarterfinalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(2);
 
-            DateTime startDateTimeBeforeChange = finalTier[0].Match.StartDateTime;
+            DateTime finalStartDateTimeBeforeChange = finalTier[0].Match.StartDateTime;
+            DateTime quarterfinalStartDateTimeBeforeChange = quarterfinalTier[0].Match.StartDateTime;
 
-            finalTier[0].Match.SetStartDateTime(semifinalTier[0].Match.StartDateTime.AddMinutes(-1));
+            finalTier[0].Match.SetStartDateTime(semifinalTier[0].Match.StartDateTime.AddHours(-4));
+            quarterfinalTier[0].Match.SetStartDateTime(semifinalTier[0].Match.StartDateTime.AddHours(4));
 
-            finalTier[0].Match.StartDateTime.Should().Be(startDateTimeBeforeChange);
+            finalTier[0].Match.StartDateTime.Should().Be(finalStartDateTimeBeforeChange);
+            quarterfinalTier[0].Match.StartDateTime.Should().Be(quarterfinalStartDateTimeBeforeChange);
         }
 
         private void ValidateBracketNodeConnections(BracketNode bracketNode, Match correctParentMatch, Match correctChildMatch1, Match correctChildMatch2)
