@@ -103,6 +103,12 @@ namespace Slask.Domain.Groups
 
         public BracketNode FinalNode { get; private set; }
 
+        public int TierCount
+        {
+            get { return bracketNodesByTier.Count; }
+            private set { }
+        }
+
         private readonly List<List<BracketNode>> bracketNodesByTier;
 
         public List<BracketNode> GetBracketNodesInTier(int bracketTier)
