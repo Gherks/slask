@@ -15,6 +15,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         private readonly Tournament tournament;
         private readonly BracketRound bracketRound;
 
+        // StartDateTime for matches is properly set up according to layout (child nodes needs to be resolved before current node can start)
+
         public BracketGroupTests()
         {
             tournament = Tournament.Create("GSL 2019");
@@ -471,6 +473,58 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             quarterfinalTier[0].Match.Should().Be(bracketGroup.Matches[2]);
             quarterfinalTier[1].Match.Should().Be(bracketGroup.Matches[1]);
             quarterfinalTier[2].Match.Should().Be(bracketGroup.Matches[0]);
+        }
+
+        [Fact]
+        public void StartDateTimeOnMatchesWithinATierDoesNotHaveToBeInOrder()
+        {
+            BracketGroup bracketGroup = bracketRound.AddGroup() as BracketGroup;
+
+            List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
+
+            foreach (string playerName in playerNames)
+            {
+                bracketGroup.AddPlayerReference(playerName);
+            }
+
+            List<BracketNode> quarterfinalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(2);
+
+            DateTime twoHoursLater = SystemTime.Now.AddHours(2);
+            DateTime oneHourLater = SystemTime.Now.AddHours(1);
+            DateTime fourHoursLater = SystemTime.Now.AddHours(4);
+            DateTime threeHoursLater = SystemTime.Now.AddHours(3);
+
+            quarterfinalTier[0].Match.SetStartDateTime(twoHoursLater);
+            quarterfinalTier[1].Match.SetStartDateTime(oneHourLater);
+            quarterfinalTier[2].Match.SetStartDateTime(fourHoursLater);
+            quarterfinalTier[3].Match.SetStartDateTime(threeHoursLater);
+
+            quarterfinalTier[0].Match.StartDateTime.Should().Be(twoHoursLater);
+            quarterfinalTier[1].Match.StartDateTime.Should().Be(oneHourLater);
+            quarterfinalTier[2].Match.StartDateTime.Should().Be(fourHoursLater);
+            quarterfinalTier[3].Match.StartDateTime.Should().Be(threeHoursLater);
+        }
+
+        [Fact]
+        public void StartDateTimeForMatchesInACertainMatchTierMustAlwaysBeLaterThanLatestStartDateTimeOfPreviousTier()
+        {
+            BracketGroup bracketGroup = bracketRound.AddGroup() as BracketGroup;
+
+            List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
+
+            foreach (string playerName in playerNames)
+            {
+                bracketGroup.AddPlayerReference(playerName);
+            }
+
+            List<BracketNode> finalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(0);
+            List<BracketNode> semifinalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(1);
+
+            DateTime startDateTimeBeforeChange = finalTier[0].Match.StartDateTime;
+
+            finalTier[0].Match.SetStartDateTime(semifinalTier[0].Match.StartDateTime.AddMinutes(-1));
+
+            finalTier[0].Match.StartDateTime.Should().Be(startDateTimeBeforeChange);
         }
 
         private void ValidateBracketNodeConnections(BracketNode bracketNode, Match correctParentMatch, Match correctChildMatch1, Match correctChildMatch2)

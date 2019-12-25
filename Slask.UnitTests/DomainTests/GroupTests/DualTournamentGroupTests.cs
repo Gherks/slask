@@ -10,8 +10,6 @@ using Xunit;
 
 namespace Slask.UnitTests.DomainTests.GroupTests
 {
-    // StartDateTime for matches is properly set up according to layout (first one after another)
-
     public class DualTournamentGroupTests : IDisposable
     {
         private readonly Tournament tournament;
@@ -345,6 +343,44 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             firstGroupMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
             secondGroupMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
             secondGroupMatch.Player2.PlayerReference.Should().Be(fourthPlayerReference);
+        }
+
+        [Fact]
+        public void StartDateTimeForMatchesMustBeInMatchOrder()
+        {
+            DualTournamentGroup dualTournamentGroup = dualTournamentRound.AddGroup() as DualTournamentGroup;
+
+            List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain" };
+
+            foreach (string playerName in playerNames)
+            {
+                dualTournamentGroup.AddPlayerReference(playerName);
+            }
+
+            List<DateTime> dateTimesBeforeChange = new List<DateTime>();
+
+            foreach (Match match in dualTournamentGroup.Matches)
+            {
+                dateTimesBeforeChange.Add(match.StartDateTime);
+            }
+
+            DateTime twoHoursLater = SystemTime.Now.AddHours(2);
+            DateTime oneHourLater = SystemTime.Now.AddHours(1);
+            DateTime fourHoursLater = SystemTime.Now.AddHours(4);
+            DateTime threeHoursLater = SystemTime.Now.AddHours(3);
+            DateTime twelveHoursLater = SystemTime.Now.AddHours(12);
+
+            dualTournamentGroup.Matches[0].SetStartDateTime(twoHoursLater);
+            dualTournamentGroup.Matches[1].SetStartDateTime(oneHourLater);
+            dualTournamentGroup.Matches[2].SetStartDateTime(fourHoursLater);
+            dualTournamentGroup.Matches[3].SetStartDateTime(threeHoursLater);
+            dualTournamentGroup.Matches[4].SetStartDateTime(twelveHoursLater);
+
+            dualTournamentGroup.Matches[0].StartDateTime.Should().Be(dateTimesBeforeChange[0]);
+            dualTournamentGroup.Matches[1].StartDateTime.Should().Be(dateTimesBeforeChange[1]);
+            dualTournamentGroup.Matches[2].StartDateTime.Should().Be(dateTimesBeforeChange[2]);
+            dualTournamentGroup.Matches[3].StartDateTime.Should().Be(dateTimesBeforeChange[3]);
+            dualTournamentGroup.Matches[4].StartDateTime.Should().Be(dateTimesBeforeChange[4]);
         }
     }
 }
