@@ -4,6 +4,7 @@ using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -13,10 +14,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
     {
         private readonly Tournament tournament;
         private readonly BracketRound bracketRound;
-
-        // Create layout tests - CanConstructBracketMatchLayout
-        // Proper BracketNodeSystem is created
-        // StartDateTime for matches is properly set up according to layout (child nodes needs to be resolved before current node can start)
 
         public BracketGroupTests()
         {
@@ -294,6 +291,205 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             firstGroupMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
             secondGroupMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
             secondGroupMatch.Player2.PlayerReference.Should().Be(fourthPlayerReference);
+        }
+
+        [Fact]
+        public void CanConstructBracketLayoutWithEvenPlayers()
+        {
+            BracketGroup bracketGroup = bracketRound.AddGroup() as BracketGroup;
+
+            List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
+
+            foreach (string playerName in playerNames)
+            {
+                bracketGroup.AddPlayerReference(playerName);
+            }
+
+            bracketGroup.Matches.Should().HaveCount(playerNames.Count - 1);
+
+            foreach (Match match in bracketGroup.Matches)
+            {
+                match.Should().NotBeNull();
+            }
+
+            bracketGroup.Matches[0].Player1.Name.Should().Be("Maru");
+            bracketGroup.Matches[0].Player2.Name.Should().Be("Stork");
+
+            bracketGroup.Matches[1].Player1.Name.Should().Be("Taeja");
+            bracketGroup.Matches[1].Player2.Name.Should().Be("Rain");
+
+            bracketGroup.Matches[2].Player1.Name.Should().Be("Bomber");
+            bracketGroup.Matches[2].Player2.Name.Should().Be("FanTaSy");
+
+            bracketGroup.Matches[3].Player1.Name.Should().Be("Stephano");
+            bracketGroup.Matches[3].Player2.Name.Should().Be("Thorzain");
+
+            bracketGroup.Matches[4].Player1.Should().BeNull();
+            bracketGroup.Matches[4].Player2.Should().BeNull();
+
+            bracketGroup.Matches[5].Player1.Should().BeNull();
+            bracketGroup.Matches[5].Player2.Should().BeNull();
+
+            bracketGroup.Matches[6].Player1.Should().BeNull();
+            bracketGroup.Matches[6].Player2.Should().BeNull();
+        }
+
+        [Fact]
+        public void CanConstructBracketLayoutWithUnevenPlayers()
+        {
+            BracketGroup bracketGroup = bracketRound.AddGroup() as BracketGroup;
+
+            List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano" };
+
+            foreach (string playerName in playerNames)
+            {
+                bracketGroup.AddPlayerReference(playerName);
+            }
+
+            bracketGroup.Matches.Should().HaveCount(playerNames.Count - 1);
+
+            foreach (Match match in bracketGroup.Matches)
+            {
+                match.Should().NotBeNull();
+            }
+
+            bracketGroup.Matches[0].Player1.Name.Should().Be("Maru");
+            bracketGroup.Matches[0].Player2.Name.Should().Be("Stork");
+
+            bracketGroup.Matches[1].Player1.Name.Should().Be("Taeja");
+            bracketGroup.Matches[1].Player2.Name.Should().Be("Rain");
+
+            bracketGroup.Matches[2].Player1.Name.Should().Be("Bomber");
+            bracketGroup.Matches[2].Player2.Name.Should().Be("FanTaSy");
+
+            bracketGroup.Matches[3].Player1.Name.Should().Be("Stephano");
+            bracketGroup.Matches[3].Player2.Should().BeNull();
+
+            bracketGroup.Matches[4].Player1.Should().BeNull();
+            bracketGroup.Matches[4].Player2.Should().BeNull();
+
+            bracketGroup.Matches[5].Player1.Should().BeNull();
+            bracketGroup.Matches[5].Player2.Should().BeNull();
+        }
+
+        [Fact]
+        public void CanConstructBracketNodeSystemWithEvenPlayers()
+        {
+            BracketGroup bracketGroup = bracketRound.AddGroup() as BracketGroup;
+
+            List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
+
+            foreach (string playerName in playerNames)
+            {
+                bracketGroup.AddPlayerReference(playerName);
+            }
+
+            BracketNode finalNode = bracketGroup.BracketNodeSystem.FinalNode;
+
+            ValidateBracketNodeConnections(finalNode, null, bracketGroup.Matches[5], bracketGroup.Matches[4]);
+
+            BracketNode semifinalNode1 = finalNode.Children[0];
+            BracketNode semifinalNode2 = finalNode.Children[1];
+
+            ValidateBracketNodeConnections(semifinalNode1, bracketGroup.Matches[6], bracketGroup.Matches[3], bracketGroup.Matches[2]);
+            ValidateBracketNodeConnections(semifinalNode2, bracketGroup.Matches[6], bracketGroup.Matches[1], bracketGroup.Matches[0]);
+
+            BracketNode quarterfinalNode1 = semifinalNode1.Children[0];
+            BracketNode quarterfinalNode2 = semifinalNode1.Children[1];
+
+            BracketNode quarterfinalNode3 = semifinalNode2.Children[0];
+            BracketNode quarterfinalNode4 = semifinalNode2.Children[1];
+
+            ValidateBracketNodeConnections(quarterfinalNode1, bracketGroup.Matches[5], null, null);
+            ValidateBracketNodeConnections(quarterfinalNode2, bracketGroup.Matches[5], null, null);
+
+            ValidateBracketNodeConnections(quarterfinalNode3, bracketGroup.Matches[4], null, null);
+            ValidateBracketNodeConnections(quarterfinalNode4, bracketGroup.Matches[4], null, null);
+        }
+
+        [Fact]
+        public void CanConstructBracketNodeSystemWithUnevenPlayers()
+        {
+            BracketGroup bracketGroup = bracketRound.AddGroup() as BracketGroup;
+
+            List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano" };
+
+            foreach (string playerName in playerNames)
+            {
+                bracketGroup.AddPlayerReference(playerName);
+            }
+
+            BracketNode finalNode = bracketGroup.BracketNodeSystem.FinalNode;
+
+            ValidateBracketNodeConnections(finalNode, null, bracketGroup.Matches[4], bracketGroup.Matches[3]);
+
+            BracketNode semifinalNode1 = finalNode.Children[0];
+            BracketNode semifinalNode2 = finalNode.Children[1];
+
+            ValidateBracketNodeConnections(semifinalNode1, bracketGroup.Matches[5], bracketGroup.Matches[2], bracketGroup.Matches[1]);
+            ValidateBracketNodeConnections(semifinalNode2, bracketGroup.Matches[5], bracketGroup.Matches[0], null);
+
+            BracketNode quarterfinalNode1 = semifinalNode1.Children[0];
+            BracketNode quarterfinalNode2 = semifinalNode1.Children[1];
+
+            BracketNode quarterfinalNode3 = semifinalNode2.Children[0];
+            BracketNode quarterfinalNode4 = semifinalNode2.Children[1];
+
+            ValidateBracketNodeConnections(quarterfinalNode1, bracketGroup.Matches[4], null, null);
+            ValidateBracketNodeConnections(quarterfinalNode2, bracketGroup.Matches[4], null, null);
+
+            ValidateBracketNodeConnections(quarterfinalNode3, bracketGroup.Matches[3], null, null);
+            quarterfinalNode4.Should().BeNull();
+        }
+
+        [Fact]
+        public void CreatesMatchTierListWhenBracketMatchesAreAdded()
+        {
+            BracketGroup bracketGroup = bracketRound.AddGroup() as BracketGroup;
+
+            List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano" };
+
+            foreach (string playerName in playerNames)
+            {
+                bracketGroup.AddPlayerReference(playerName);
+            }
+
+            bracketGroup.BracketNodeSystem.TierCount.Should().Be(3);
+
+            List<BracketNode> finalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(0);
+            List<BracketNode> semifinalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(1);
+            List<BracketNode> quarterfinalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(2);
+
+            finalTier.Count.Should().Be(1);
+            finalTier[0].Match.Should().Be(bracketGroup.Matches[5]);
+
+            semifinalTier.Count.Should().Be(2);
+            semifinalTier[0].Match.Should().Be(bracketGroup.Matches[4]);
+            semifinalTier[1].Match.Should().Be(bracketGroup.Matches[3]);
+
+            quarterfinalTier.Count.Should().Be(3);
+            quarterfinalTier[0].Match.Should().Be(bracketGroup.Matches[2]);
+            quarterfinalTier[1].Match.Should().Be(bracketGroup.Matches[1]);
+            quarterfinalTier[2].Match.Should().Be(bracketGroup.Matches[0]);
+        }
+
+        private void ValidateBracketNodeConnections(BracketNode bracketNode, Match correctParentMatch, Match correctChildMatch1, Match correctChildMatch2)
+        {
+            ValidateBracketNodeMatch(bracketNode.Parent, correctParentMatch);
+            ValidateBracketNodeMatch(bracketNode.Children[0], correctChildMatch1);
+            ValidateBracketNodeMatch(bracketNode.Children[1], correctChildMatch2);
+        }
+
+        private void ValidateBracketNodeMatch(BracketNode bracketNode, Match correctMatch)
+        {
+            if (correctMatch == null)
+            {
+                bracketNode.Should().BeNull();
+            }
+            else
+            {
+                bracketNode.Match.Should().Be(correctMatch);
+            }
         }
     }
 }
