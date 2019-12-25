@@ -47,6 +47,35 @@ namespace Slask.Domain.Groups
             return null;
         }
 
+        public override bool NewDateTimeIsValidWithGroupRules(Match match, DateTime dateTime)
+        {
+            for (int matchIndex = 0; matchIndex < Matches.Count; ++matchIndex)
+            {
+                if (Matches[matchIndex].Id == match.Id)
+                {
+                    if (matchIndex > 0)
+                    {
+                        if (Matches[matchIndex - 1].StartDateTime > dateTime)
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (matchIndex < Matches.Count - 1)
+                    {
+                        if (Matches[matchIndex + 1].StartDateTime < dateTime)
+                        {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public override void MatchScoreIncreased(Match match)
         {
             bool matchExistInThisGroup = Matches.Where(currentMatch => currentMatch.Id == match.Id).Any();

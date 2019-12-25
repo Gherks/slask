@@ -30,6 +30,58 @@ namespace Slask.Domain.Groups
             };
         }
 
+        public override bool NewDateTimeIsValidWithGroupRules(Match match, DateTime dateTime)
+        {
+            int matchTier = -1;
+
+            for (int tierIndex = 0; tierIndex < BracketNodeSystem.TierCount; ++tierIndex)
+            {
+                List<BracketNode> bracketNodeTier = BracketNodeSystem.GetBracketNodesInTier(tierIndex);
+
+                foreach (BracketNode bracketNode in bracketNodeTier)
+                {
+                    if (bracketNode.Match.Id == match.Id)
+                    {
+                        matchTier = tierIndex;
+                        break;
+                    }
+                }
+
+                if (matchTier != -1)
+                {
+                    break;
+                }
+            }
+
+            if (matchTier > 0)
+            {
+                List<BracketNode> bracketNodeTier = BracketNodeSystem.GetBracketNodesInTier(matchTier - 1);
+
+                foreach (BracketNode bracketNode in bracketNodeTier)
+                {
+                    if (bracketNode.Match.StartDateTime < dateTime)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            if (matchTier < BracketNodeSystem.TierCount - 1)
+            {
+                List<BracketNode> bracketNodeTier = BracketNodeSystem.GetBracketNodesInTier(matchTier + 1);
+
+                foreach (BracketNode bracketNode in bracketNodeTier)
+                {
+                    if (bracketNode.Match.StartDateTime > dateTime)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         public override void MatchScoreIncreased(Match match)
         {
             bool matchExistInThisGroup = Matches.Where(currentMatch => currentMatch.Id == match.Id).Any();

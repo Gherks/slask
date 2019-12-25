@@ -125,7 +125,13 @@ namespace Slask.Domain
         {
             if (SystemTime.Now > dateTime)
             {
-                // LOGG
+                // LOG Error: New start date time must be a future date time
+                return false;
+            }
+
+            if (!Group.NewDateTimeIsValidWithGroupRules(this, dateTime))
+            {
+                // LOG Error: New start date time does not work with group rules
                 return false;
             }
 

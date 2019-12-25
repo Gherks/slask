@@ -139,6 +139,11 @@ namespace Slask.Domain.Groups
             return false;
         }
 
+        public virtual bool NewDateTimeIsValidWithGroupRules(Match match, DateTime dateTime)
+        {
+            return true;
+        }
+
         public virtual void MatchScoreIncreased(Match match)
         {
         }
