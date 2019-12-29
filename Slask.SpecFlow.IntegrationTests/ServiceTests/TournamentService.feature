@@ -1,4 +1,4 @@
-﻿Feature: TournamentService
+Feature: TournamentService
 	Does a bunch of tests on TournamentService
 
 @TournamentServiceTag
@@ -65,10 +65,6 @@ Scenario: Can fetch all betters in tournament by tournament name
 	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
 	When fetching betters from tournament by tournament name: "GSL 2019"
 	Then created tournament 0 should contain valid betters with names: "Stålberto, Bönis, Guggelito"
-
-Scenario: Player references are added to tournament when new players are added to tournament
-	When a tournament named "GSL 2019" with player references "Maru, Stork, Taeja, Rain" added to it
-	Then created tournament 0 should contain exactly these player references with names: "Maru, Stork, Taeja, Rain"
 
 Scenario: Can fetch all player references in tournament by tournament id
 	When a tournament named "GSL 2019" with player references "Maru, Stork, Taeja, Rain" added to it
