@@ -2,7 +2,7 @@
 using Slask.Persistence;
 using System;
 
-namespace Slask.UnitTests
+namespace Slask.TestCore
 {
     public static class InMemoryContextCreator
     {

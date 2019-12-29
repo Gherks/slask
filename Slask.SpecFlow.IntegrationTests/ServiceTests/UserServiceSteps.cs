@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
 using Slask.Persistence.Services;
-using Slask.TestCore.SlaskContexts;
+using Slask.TestCore;
 using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
@@ -14,7 +14,7 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
 
     }
 
-    public class UserServiceStepDefinitions : InMemoryTestContext
+    public class UserServiceStepDefinitions
     {
         protected readonly UserService userService;
         protected readonly List<User> createdUsers;
@@ -22,7 +22,7 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
 
         public UserServiceStepDefinitions()
         {
-            userService = new UserService(SlaskContext);
+            userService = new UserService(InMemoryContextCreator.Create());
             createdUsers = new List<User>();
             fetchedUsers = new List<User>();
         }

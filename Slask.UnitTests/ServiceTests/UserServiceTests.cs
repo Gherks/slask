@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
+using Slask.Persistence.Services;
 using Slask.TestCore;
 using System;
 using Xunit;
@@ -8,11 +9,11 @@ namespace Slask.UnitTests.ServiceTests
 {
     public class UserServiceTests
     {
-        private readonly UserServiceContext services;
+        private readonly UserService userService;
 
         public UserServiceTests()
         {
-            services = UserServiceContext.GivenServices(new UnitTestSlaskContextCreator());
+            userService = new UserService(InMemoryContextCreator.Create());
         }
 
         [Fact]
@@ -20,7 +21,7 @@ namespace Slask.UnitTests.ServiceTests
         {
             string userName = "Guggelito";
 
-            User user = services.UserService.CreateUser(userName);
+            User user = userService.CreateUser(userName);
 
             user.Should().NotBeNull();
             user.Id.Should().NotBeEmpty();
@@ -30,7 +31,7 @@ namespace Slask.UnitTests.ServiceTests
         [Fact]
         public void CannotCreateUserWithEmptyName()
         {
-            User user = services.UserService.CreateUser("");
+            User user = userService.CreateUser("");
 
             user.Should().BeNull();
         }
@@ -38,8 +39,8 @@ namespace Slask.UnitTests.ServiceTests
         [Fact]
         public void CannotCreateUserWithNameAlreadyInUseNoMatterLetterCasing()
         {
-            User createdUser = services.UserService.CreateUser("Stålberto");
-            User duplicateUser = services.UserService.CreateUser(createdUser.Name.ToUpper());
+            User createdUser = userService.CreateUser("Stålberto");
+            User duplicateUser = userService.CreateUser(createdUser.Name.ToUpper());
 
             duplicateUser.Should().BeNull();
         }
@@ -47,8 +48,8 @@ namespace Slask.UnitTests.ServiceTests
         [Fact]
         public void CanGetUserById()
         {
-            User createdUser = services.UserService.CreateUser("Stålberto");
-            User fetchedUser = services.UserService.GetUserById(createdUser.Id);
+            User createdUser = userService.CreateUser("Stålberto");
+            User fetchedUser = userService.GetUserById(createdUser.Id);
 
             fetchedUser.Should().NotBeNull();
             fetchedUser.Id.Should().Be(createdUser.Id);
@@ -58,7 +59,7 @@ namespace Slask.UnitTests.ServiceTests
         [Fact]
         public void ReturnsNullWhenFetchingNonexistentUserById()
         {
-            User fetchedUser = services.UserService.GetUserById(Guid.NewGuid());
+            User fetchedUser = userService.GetUserById(Guid.NewGuid());
 
             fetchedUser.Should().BeNull();
         }
@@ -66,8 +67,8 @@ namespace Slask.UnitTests.ServiceTests
         [Fact]
         public void CanGetUserByNameNoMatterLetterCasing()
         {
-            User createdUser = services.UserService.CreateUser("Stålberto");
-            User fetchedUser = services.UserService.GetUserByName(createdUser.Name.ToUpper());
+            User createdUser = userService.CreateUser("Stålberto");
+            User fetchedUser = userService.GetUserByName(createdUser.Name.ToUpper());
 
             fetchedUser.Should().NotBeNull();
             fetchedUser.Id.Should().Be(createdUser.Id);
@@ -77,7 +78,7 @@ namespace Slask.UnitTests.ServiceTests
         [Fact]
         public void ReturnsNullWhenFetchingNonexistentUserByName()
         {
-            User fetchedUser = services.UserService.GetUserByName("my-god-thats-jason-bourne");
+            User fetchedUser = userService.GetUserByName("my-god-thats-jason-bourne");
 
             fetchedUser.Should().BeNull();
         }

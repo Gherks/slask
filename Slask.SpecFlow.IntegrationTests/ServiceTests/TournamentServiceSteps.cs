@@ -4,6 +4,7 @@ using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Persistence.Services;
+using Slask.TestCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
 
         public TournamentServiceStepDefinitions()
         {
-            tournamentService = new TournamentService(SlaskContext);
+            tournamentService = new TournamentService(InMemoryContextCreator.Create());
             createdTournaments = new List<Tournament>();
             fetchedTournaments = new List<Tournament>();
             createdBetters = new List<Better>();
