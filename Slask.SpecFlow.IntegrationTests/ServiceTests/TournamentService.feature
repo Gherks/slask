@@ -1,4 +1,4 @@
-Feature: TournamentService
+﻿Feature: TournamentService
 	Does a bunch of tests on TournamentService
 
 @TournamentServiceTag
@@ -74,17 +74,3 @@ Scenario: Can fetch all player references in tournament by tournament name
 	Given a tournament named "GSL 2019" with player references "Maru, Stork, Taeja, Rain" added to it
 	When fetching player references from tournament by tournament name: "GSL 2019"
 	Then fetched player references should be exactly these player references with names: "Maru, Stork, Taeja, Rain"
-
-#WHEN a bracket round has been added to tournament: "GSL 2019"
-#WHEN a dual tournament round has been added to tournament: "GSL 2019"
-#WHEN a round robin round has been added to tournament: "GSL 2019"
-#WHEN adding 4 groups to round 0 in created tournament 0
-#WHEN adding players "Maru, Stork, Taeja, Rain" to group 0, in round 0, in created tournament 0
-#
-##Round WhenAddedBracketRoundToTournament(Tournament tournament, string name, int bestOf)
-##Round WhenAddedDualTournamentRoundToTournament(Tournament tournament, string name, int bestOf)
-##Round WhenAddedRoundRobinRoundToTournament(Tournament tournament, string name, int bestOf, int advanceAmount)
-##GroupBase WhenAddedGroupToRound(Round round)
-##void WhenAddedPlayerReferenceToGroup(GroupBase group, string name)
-#
-
