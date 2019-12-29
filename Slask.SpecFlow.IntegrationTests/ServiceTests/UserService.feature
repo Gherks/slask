@@ -1,11 +1,5 @@
 ﻿Feature: UserService
 	Does a bunch of tests on UserService
-	
-	Given, And = To prepare a test
-	When = The actual task to test
-	Then = What the expected result should be
-
-	Never pair When with And's, and never more than one When
 
 @UserServiceTag
 Scenario: Can create user
