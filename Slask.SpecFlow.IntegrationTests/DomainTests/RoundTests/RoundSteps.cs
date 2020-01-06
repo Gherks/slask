@@ -1,20 +1,13 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Rounds;
 using Slask.SpecFlow.IntegrationTests.ServiceTests;
 using System;
-using System.Collections.Generic;
 using TechTalk.SpecFlow;
 
 namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 {
-    [Binding, Scope(Feature = "Round")]
-    public class RoundSteps : RoundStepDefinitions
-    {
-
-    }
-
     public class RoundStepDefinitions : TournamentServiceStepDefinitions
     {
         [Given(@"created tournament (.*) adds rounds")]
