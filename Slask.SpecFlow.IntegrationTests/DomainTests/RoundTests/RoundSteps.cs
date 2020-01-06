@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Rounds;
@@ -25,26 +25,23 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             {
                 ParseRoundTable(row, out string type, out string name, out int bestOf, out int advancingAmount);
 
-                RoundBase round = null;
                 if (type.Length > 0)
                 {
                     type = GetRoundType(type);
 
                     if (type == "BRACKET")
                     {
-                        round = tournament.AddBracketRound(name, bestOf);
+                        createdRounds.Add(tournament.AddBracketRound(name, bestOf));
                     }
                     else if (type == "DUALTOURNAMENT")
                     {
-                        round = tournament.AddDualTournamentRound(name, bestOf);
+                        createdRounds.Add(tournament.AddDualTournamentRound(name, bestOf));
                     }
                     else if (type == "ROUNDROBIN")
                     {
-                        round = tournament.AddRoundRobinRound(name, bestOf, advancingAmount);
+                        createdRounds.Add(tournament.AddRoundRobinRound(name, bestOf, advancingAmount));
                     }
                 }
-
-                createdRounds.Add(round);
             }
         }
 
