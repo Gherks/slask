@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Rounds;
@@ -65,21 +65,24 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             for (int rowIndex = 0; rowIndex < table.Rows.Count; ++rowIndex)
             {
                 TableRow row = table.Rows[rowIndex];
-                ParseRoundTable(row, out _, out string name, out int bestOf, out int advancingAmount);
+                ParseRoundTable(row, out string roundType, out string name, out int bestOf, out int advancingAmount);
 
                 RoundBase createdRound = createdRounds[rowIndex];
                 CheckRoundValidity(createdRound, name, bestOf);
 
                 if (createdRound is BracketRound bracketRound)
                 {
+                    roundType.Should().Be("Bracket");
                     bracketRound.AdvancingPerGroupAmount.Should().Be(1);
                 }
                 else if (createdRound is DualTournamentRound dualTournamentRound)
                 {
+                    roundType.Should().Be("Dual tournament");
                     dualTournamentRound.AdvancingPerGroupAmount.Should().Be(2);
                 }
                 else if (createdRound is RoundRobinRound roundRobinRound)
                 {
+                    roundType.Should().Be("Round robin");
                     roundRobinRound.AdvancingPerGroupAmount.Should().Be(advancingAmount);
                 }
             }
@@ -100,21 +103,24 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
                 throw new ArgumentNullException(nameof(table));
             }
 
-            ParseRoundTable(table.Rows[0], out _, out string name, out int bestOf, out int advancingAmount);
+            ParseRoundTable(table.Rows[0], out string roundType, out string name, out int bestOf, out int advancingAmount);
 
             RoundBase fetchedRound = fetchedRounds[roundIndex];
             CheckRoundValidity(fetchedRound, name, bestOf);
 
             if (fetchedRound is BracketRound bracketRound)
             {
+                roundType.Should().Be("Bracket");
                 bracketRound.AdvancingPerGroupAmount.Should().Be(1);
             }
             else if (fetchedRound is DualTournamentRound dualTournamentRound)
             {
+                roundType.Should().Be("Dual tournament");
                 dualTournamentRound.AdvancingPerGroupAmount.Should().Be(2);
             }
             else if (fetchedRound is RoundRobinRound roundRobinRound)
             {
+                roundType.Should().Be("Round robin");
                 roundRobinRound.AdvancingPerGroupAmount.Should().Be(advancingAmount);
             }
         }

@@ -1,4 +1,4 @@
-﻿Feature: RoundRobinRound
+Feature: RoundRobinRound
 	Does a bunch of tests on Round robin rounds
 
 @RoundRobinRoundTag
@@ -58,7 +58,47 @@ Scenario: Cannot create round robin round with best ofs less than zero
 		And created round 1 in tournament should be invalid
 		And created round 2 in tournament should be invalid
 
-#CanFetchPreviousRoundFromRoundWithRoundPredecessor
+Scenario: Can fetch bracket round as predecessor of a round robin round
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type  | Round name        | Best of |
+			| Bracket     | Bracket round     | 3       |
+			| Round robin | Round robin round | 3       |
+	When created round 1 fetches previous round
+	Then fetched round 0 in tournament should be valid with values:
+		| Round type | Round name    | Best of |
+		| Bracket    | Bracket round | 3       |
+
+Scenario: Can fetch dual tournament round as predecessor of a round robin round
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type      | Round name            | Best of |
+			| Dual tournament | Dual tournament round | 3       |
+			| Round robin     | Round robin round     | 3       |
+	When created round 1 fetches previous round
+	Then fetched round 0 in tournament should be valid with values:
+		| Round type      | Round name            | Best of |
+		| Dual tournament | Dual tournament round | 3       |
+
+Scenario: Can fetch round robin round as predecessor of a round robin round
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type  | Round name          | Best of |
+			| Round robin | Round robin round 1 | 3       |
+			| Round robin | Round robin round 2 | 3       |
+	When created round 1 fetches previous round
+	Then fetched round 0 in tournament should be valid with values:
+		| Round type  | Round name          | Best of |
+		| Round robin | Round robin round 1 | 3       |
+
+Scenario: Cannot fetch previous round with first round
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type  | Round name        | Best of |
+			| Round robin | Round robin round | 3       |
+	When created round 0 fetches previous round
+	Then fetched round 0 in tournament should be invalid
+
 #OnlyWinningPlayersCanAdvanceToNextRound
 #SolveRoundRobinTies
 #ADVANCING PLAYERS MUST ALWAYS BE EQUAL OR LESS THAN NUMBER OF GROUPS IN ROUND
