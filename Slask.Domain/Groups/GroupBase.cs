@@ -127,7 +127,7 @@ namespace Slask.Domain.Groups
             return true;
         }
 
-        public virtual bool RemovePlayerReference(string name)
+        public bool RemovePlayerReference(string name)
         {
             if (GetPlayState() != PlayState.NotBegun)
             {
