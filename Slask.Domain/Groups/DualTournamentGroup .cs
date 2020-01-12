@@ -1,4 +1,4 @@
-using Slask.Domain.Rounds;
+﻿using Slask.Domain.Rounds;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -73,7 +73,7 @@ namespace Slask.Domain.Groups
             return false;
         }
 
-        public override void MatchScoreIncreased(Match match)
+        public override void OnMatchScoreIncreased(Match match)
         {
             bool matchExistInThisGroup = Matches.Where(currentMatch => currentMatch.Id == match.Id).Any();
 

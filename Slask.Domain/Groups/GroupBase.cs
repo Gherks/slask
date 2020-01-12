@@ -172,11 +172,11 @@ namespace Slask.Domain.Groups
             return true;
         }
 
-        public virtual void MatchScoreIncreased(Match match)
+        public virtual void OnMatchScoreIncreased(Match match)
         {
         }
 
-        public virtual void MatchScoreDecreased(Match match)
+        public virtual void OnMatchScoreDecreased(Match match)
         {
         }
 

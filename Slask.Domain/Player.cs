@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Slask.Domain
 {
@@ -46,7 +46,7 @@ namespace Slask.Domain
             if (matchIsReady && matchIsPlaying)
             {
                 Score += value;
-                Match.Group.MatchScoreIncreased(Match);
+                Match.Group.OnMatchScoreIncreased(Match);
             }
         }
 
@@ -59,7 +59,7 @@ namespace Slask.Domain
             {
                 Score -= value;
                 Score = Math.Max(Score, 0);
-                Match.Group.MatchScoreDecreased(Match);
+                Match.Group.OnMatchScoreDecreased(Match);
             }
         }
     }
