@@ -34,7 +34,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             group.Should().NotBeNull();
             group.Id.Should().NotBeEmpty();
             group.ParticipatingPlayers.Should().BeEmpty();
-            group.Matches.Should().HaveCount(5);
+            group.Matches.Should().BeEmpty();
             group.RoundId.Should().Be(dualTournamentRound.Id);
             group.Round.Should().Be(dualTournamentRound);
         }
