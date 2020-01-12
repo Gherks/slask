@@ -61,7 +61,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
             foreach (string playerName in playerNames)
             {
-                group.AddPlayerReference(playerName);
+                group.AddNewPlayerReference(playerName);
             }
         }
 
