@@ -22,7 +22,7 @@ namespace Slask.Domain.Rounds
                 Id = Guid.NewGuid(),
                 Name = name,
                 BestOf = bestOf,
-                AdvancingPerGroupAmount = 2,
+                AdvancingPerGroupCount = 2,
                 TournamentId = tournament.Id,
                 Tournament = tournament
             };

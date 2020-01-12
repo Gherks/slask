@@ -1,4 +1,4 @@
-﻿using Slask.Domain.Groups;
+using Slask.Domain.Groups;
 using System;
 using System.Collections.Generic;
 
@@ -14,7 +14,7 @@ namespace Slask.Domain.Rounds
         public Guid Id { get; protected set; }
         public string Name { get; protected set; }
         public int BestOf { get; protected set; }
-        public int AdvancingPerGroupAmount { get; protected set; }
+        public int AdvancingPerGroupCount { get; protected set; }
         public List<GroupBase> Groups { get; protected set; }
         public Guid TournamentId { get; protected set; }
         public Tournament Tournament { get; protected set; }

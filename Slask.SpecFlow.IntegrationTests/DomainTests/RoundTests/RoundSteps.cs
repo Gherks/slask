@@ -70,17 +70,17 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
                 if (createdRound is BracketRound bracketRound)
                 {
                     roundType.Should().Be("Bracket");
-                    bracketRound.AdvancingPerGroupAmount.Should().Be(1);
+                    bracketRound.AdvancingPerGroupCount.Should().Be(1);
                 }
                 else if (createdRound is DualTournamentRound dualTournamentRound)
                 {
                     roundType.Should().Be("Dual tournament");
-                    dualTournamentRound.AdvancingPerGroupAmount.Should().Be(2);
+                    dualTournamentRound.AdvancingPerGroupCount.Should().Be(2);
                 }
                 else if (createdRound is RoundRobinRound roundRobinRound)
                 {
                     roundType.Should().Be("Round robin");
-                    roundRobinRound.AdvancingPerGroupAmount.Should().Be(advancingAmount);
+                    roundRobinRound.AdvancingPerGroupCount.Should().Be(advancingAmount);
                 }
             }
         }
@@ -108,17 +108,17 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             if (fetchedRound is BracketRound bracketRound)
             {
                 roundType.Should().Be("Bracket");
-                bracketRound.AdvancingPerGroupAmount.Should().Be(1);
+                bracketRound.AdvancingPerGroupCount.Should().Be(1);
             }
             else if (fetchedRound is DualTournamentRound dualTournamentRound)
             {
                 roundType.Should().Be("Dual tournament");
-                dualTournamentRound.AdvancingPerGroupAmount.Should().Be(2);
+                dualTournamentRound.AdvancingPerGroupCount.Should().Be(2);
             }
             else if (fetchedRound is RoundRobinRound roundRobinRound)
             {
                 roundType.Should().Be("Round robin");
-                roundRobinRound.AdvancingPerGroupAmount.Should().Be(advancingAmount);
+                roundRobinRound.AdvancingPerGroupCount.Should().Be(advancingAmount);
             }
         }
 

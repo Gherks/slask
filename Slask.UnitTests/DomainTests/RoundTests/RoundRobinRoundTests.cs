@@ -31,7 +31,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests
             roundRobinRound.Id.Should().NotBeEmpty();
             roundRobinRound.Name.Should().Be(name);
             roundRobinRound.BestOf.Should().Be(bestOf);
-            roundRobinRound.AdvancingPerGroupAmount.Should().Be(advancingPerGroupAmount);
+            roundRobinRound.AdvancingPerGroupCount.Should().Be(advancingPerGroupAmount);
             roundRobinRound.Groups.Should().BeEmpty();
             roundRobinRound.TournamentId.Should().NotBeEmpty();
             roundRobinRound.Tournament.Should().NotBeNull();

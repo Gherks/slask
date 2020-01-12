@@ -259,7 +259,7 @@ namespace Slask.Domain.Groups
         {
             List<PlayerReference> advancingPlayers = new List<PlayerReference>();
 
-            for (int index = 0; index < Round.AdvancingPerGroupAmount; ++index)
+            for (int index = 0; index < Round.AdvancingPerGroupCount; ++index)
             {
                 advancingPlayers.Add(playerStandings[index].PlayerReference);
             }

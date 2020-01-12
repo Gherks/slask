@@ -28,7 +28,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests
             dualTournamentRound.Id.Should().NotBeEmpty();
             dualTournamentRound.Name.Should().Be(name);
             dualTournamentRound.BestOf.Should().Be(bestOf);
-            dualTournamentRound.AdvancingPerGroupAmount.Should().Be(2);
+            dualTournamentRound.AdvancingPerGroupCount.Should().Be(2);
             dualTournamentRound.Groups.Should().BeEmpty();
             dualTournamentRound.TournamentId.Should().NotBeEmpty();
             dualTournamentRound.Tournament.Should().NotBeNull();
