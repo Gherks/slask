@@ -14,6 +14,9 @@ namespace Slask.Domain.Groups
         [NotMapped]
         private const int ParticipatingPlayerCapacity = 4;
 
+        [NotMapped]
+        private const int MatchCapacity = 5;
+
         public static DualTournamentGroup Create(DualTournamentRound round)
         {
             if (round == null)
@@ -27,12 +30,6 @@ namespace Slask.Domain.Groups
                 RoundId = round.Id,
                 Round = round
             };
-
-            group.Matches.Add(Match.Create(group));
-            group.Matches.Add(Match.Create(group));
-            group.Matches.Add(Match.Create(group));
-            group.Matches.Add(Match.Create(group));
-            group.Matches.Add(Match.Create(group));
 
             return group;
         }
@@ -101,6 +98,8 @@ namespace Slask.Domain.Groups
 
         protected override void ConstructGroupLayout()
         {
+            ChangeMatchAmountTo(MatchCapacity);
+
             PlayerReference participant1 = ParticipatingPlayers.Count > 0 ? ParticipatingPlayers[0] : null;
             PlayerReference participant2 = ParticipatingPlayers.Count > 1 ? ParticipatingPlayers[1] : null;
             PlayerReference participant3 = ParticipatingPlayers.Count > 2 ? ParticipatingPlayers[2] : null;

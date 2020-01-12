@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
@@ -212,15 +212,15 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
             if (type == "BRACKET")
             {
-                CheckGroupValidity<BracketGroup>(group, 0);
+                CheckGroupValidity<BracketGroup>(group);
             }
             else if (type == "DUALTOURNAMENT")
             {
-                CheckGroupValidity<DualTournamentGroup>(group, 5);
+                CheckGroupValidity<DualTournamentGroup>(group);
             }
             else if (type == "ROUNDROBIN")
             {
-                CheckGroupValidity<RoundRobinGroup>(group, 0);
+                CheckGroupValidity<RoundRobinGroup>(group);
             }
         }
 
@@ -295,13 +295,13 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             }
         }
 
-        protected static void CheckGroupValidity<GroupType>(GroupBase group, int matchesUponCreation)
+        protected static void CheckGroupValidity<GroupType>(GroupBase group)
         {
             group.Should().NotBeNull();
             group.Should().BeOfType<GroupType>();
             group.Id.Should().NotBeEmpty();
             group.ParticipatingPlayers.Should().BeEmpty();
-            group.Matches.Should().HaveCount(matchesUponCreation);
+            group.Matches.Should().BeEmpty();
             group.RoundId.Should().NotBeEmpty();
             group.Round.Should().NotBeNull();
         }
