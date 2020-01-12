@@ -67,36 +67,64 @@ namespace Slask.Domain.Groups
         public virtual PlayerReference AddNewPlayerReference(string name)
         {
             RoundBase firstRound = Round.Tournament.Rounds.First();
-
             bool groupDoesNotBelongToFirstRound = Round.Id != firstRound.Id;
-            bool hasNotBegun = GetPlayState() != PlayState.NotBegun;
 
-            if (groupDoesNotBelongToFirstRound || hasNotBegun)
+            if (groupDoesNotBelongToFirstRound)
             {
                 return null;
             }
 
-            bool isParticipatingPlayer = ParticipatingPlayers.Where(participant => participant.Name.ToLower() == name.ToLower()).Any();
+            PlayerReference playerReference = GetPlayerReferenceFromTournamentRegistryByName(name);
 
-            if (!isParticipatingPlayer)
+            if (playerReference == null)
             {
-                PlayerReference playerReference = GetPlayerReferenceFromTournamentRegistryByName(name);
-
-                if (playerReference == null)
-                {
-                    playerReference = PlayerReference.Create(name, Round.Tournament);
-                }
-
-                ParticipatingPlayers.Add(playerReference);
-                ConstructGroupLayout();
+                playerReference = PlayerReference.Create(name, Round.Tournament);
+                AddPlayerReference(playerReference);
 
                 return playerReference;
             }
-            else
+
+            // LOG Error: Player with given name already exists in tournament
+            return null;
+        }
+
+        public void AddAdvancingPlayerReferenceFromPreviousRound(RoundBase previousRound, PlayerReference playerReference)
+        {
+            bool givenRoundIsPreviousRound = previousRound == Round.GetPreviousRound();
+
+            if (givenRoundIsPreviousRound)
             {
-                // LOGG 
-                return null;
+                bool previousRoundHasFinished = previousRound.GetPlayState() == PlayState.IsFinished;
+                bool givenPlayerReferenceAdvancedFromPreviousRound = previousRound.PlayerReferenceIsAdvancingPlayer(playerReference);
+
+                if (previousRoundHasFinished && givenPlayerReferenceAdvancedFromPreviousRound)
+                {
+                    AddPlayerReference(playerReference);
+                }
             }
+        }
+
+        public bool AddPlayerReference(PlayerReference playerReference)
+        {
+            bool hasBegun = GetPlayState() != PlayState.NotBegun;
+
+            if (hasBegun)
+            {
+                // LOG Error: Cannot add new player references to group that has already begun
+                return false;
+            }
+
+            bool isParticipatingPlayer = ParticipatingPlayers.Where(participant => participant.Name.ToLower() == playerReference.Name.ToLower()).Any();
+
+            if (isParticipatingPlayer)
+            {
+                // LOGG Error: Cannot add player reference to group twice
+                return false;
+            }
+
+            ParticipatingPlayers.Add(playerReference);
+            ConstructGroupLayout();
+            return true;
         }
 
         public virtual bool RemovePlayerReference(string name)
