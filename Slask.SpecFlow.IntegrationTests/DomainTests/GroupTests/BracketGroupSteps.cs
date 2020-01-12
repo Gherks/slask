@@ -14,20 +14,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
     public class BracketGroupStepDefinitions : GroupStepDefinitions
     {
-        protected override void PlayAvailableMatches(GroupBase group)
-        {
-            int winningScore = (int)Math.Ceiling(group.Round.BestOf / 2.0);
 
-            foreach (Domain.Match match in group.Matches)
-            {
-                bool matchShouldHaveStarted = match.StartDateTime < SystemTime.Now;
-                bool matchIsNotFinished = match.GetPlayState() != PlayState.IsFinished;
-
-                if (matchShouldHaveStarted && matchIsNotFinished)
-                {
-                    match.Player1.IncreaseScore(winningScore);
-                }
-            }
-        }
     }
 }

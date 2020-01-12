@@ -379,12 +379,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
                 player2Name = row["Player 2 name"];
             }
         }
-
-        protected virtual void PlayAvailableMatches(GroupBase group)
-        {
-            throw new NotImplementedException("Call this step within specific group type feature to test group progressions");
-        }
-        
+     
         private void PlaceBetsOnAvailableMatchesInGroup(List<Better> betters, GroupBase group)
         {
             Random random = new Random(133742069);
@@ -413,6 +408,31 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
                 }
 
                 matchCounter++;
+            }
+        }
+
+        protected void PlayAvailableMatches(GroupBase group)
+        {
+            int winningScore = (int)Math.Ceiling(group.Round.BestOf / 2.0);
+
+            foreach (Match match in group.Matches)
+            {
+                bool matchShouldHaveStarted = match.StartDateTime < SystemTime.Now;
+                bool matchIsNotFinished = match.GetPlayState() != PlayState.IsFinished;
+
+                if (matchShouldHaveStarted && matchIsNotFinished)
+                {
+                    bool increasePlayer1Score = randomizer.Next(2) == 0;
+
+                    if (increasePlayer1Score)
+                    {
+                        match.Player1.IncreaseScore(winningScore);
+                    }
+                    else
+                    {
+                        match.Player2.IncreaseScore(winningScore);
+                    }
+                }
             }
         }
     }
