@@ -1,4 +1,4 @@
-using Slask.Domain.Bets;
+﻿using Slask.Domain.Bets;
 using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
@@ -237,6 +237,11 @@ namespace Slask.Domain.Groups
         {
             List<PlayerStandingEntry> playerStandings = new List<PlayerStandingEntry>();
 
+            foreach (PlayerReference participant in ParticipatingPlayers)
+            {
+                playerStandings.Add(PlayerStandingEntry.Create(participant));
+            }
+
             foreach (Match match in Matches)
             {
                 PlayerReference winner = match.GetWinningPlayer().PlayerReference;
@@ -244,12 +249,11 @@ namespace Slask.Domain.Groups
 
                 if (playerStandingEntry == null)
                 {
-                    playerStandings.Add(PlayerStandingEntry.Create(winner));
+                    // LOG Error: Failed to find player reference when calculating player standings for some reason
+                    throw new Exception("Failed to find player reference when calculating player standings for some reason");
                 }
-                else
-                {
-                    playerStandingEntry.AddWin();
-                }
+
+                playerStandingEntry.AddWin();
             }
 
             return playerStandings;

@@ -12,7 +12,7 @@
                 return new PlayerStandingEntry
                 {
                     PlayerReference = playerReference,
-                    Wins = 1
+                    Wins = 0
                 };
             }
 
