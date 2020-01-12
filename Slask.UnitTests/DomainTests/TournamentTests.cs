@@ -65,7 +65,7 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CanGetPlayerReferenceInTournamentByPlayerId()
         {
-            PlayerReference playerReference = bracketGroup.AddPlayerReference("Maru");
+            PlayerReference playerReference = bracketGroup.AddNewPlayerReference("Maru");
 
             PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByPlayerId(playerReference.Id);
 
@@ -77,7 +77,7 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CanGetPlayerInTournamentByPlayerNameNoMatterLetterCasing()
         {
-            PlayerReference playerReference = bracketGroup.AddPlayerReference("Maru");
+            PlayerReference playerReference = bracketGroup.AddNewPlayerReference("Maru");
 
             PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByPlayerName(playerReference.Name.ToLower());
 
@@ -179,7 +179,7 @@ namespace Slask.UnitTests.DomainTests
 
             foreach(string playerName in playerNames)
             {
-                bracketGroup.AddPlayerReference(playerName);
+                bracketGroup.AddNewPlayerReference(playerName);
             }
 
             List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
@@ -194,8 +194,8 @@ namespace Slask.UnitTests.DomainTests
         public void FetchingAllPlayerReferencesShouldNotYieldTwoPlayerReferencesWithSameName()
         {
             string playerName = "Maru";
-            bracketGroup.AddPlayerReference(playerName);
-            bracketGroup.AddPlayerReference(playerName);
+            bracketGroup.AddNewPlayerReference(playerName);
+            bracketGroup.AddNewPlayerReference(playerName);
 
             List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
 
@@ -207,7 +207,7 @@ namespace Slask.UnitTests.DomainTests
         public void FetchingAllPlayerRefencesShouldNotYieldRemovedPlayerReferences()
         {
             string playerName = "Maru";
-            bracketGroup.AddPlayerReference(playerName);
+            bracketGroup.AddNewPlayerReference(playerName);
 
             List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
             playerReferences.Should().HaveCount(1);

@@ -88,7 +88,7 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
 
             foreach (string playerName in playerNames)
             {
-                createdPlayerReferences.Add(bracketGroup.AddPlayerReference(playerName));
+                createdPlayerReferences.Add(bracketGroup.AddNewPlayerReference(playerName));
             }
 
             return tournament;

@@ -29,8 +29,8 @@ namespace Slask.UnitTests.DomainTests.BetTests
             better = tournament.AddBetter(user);
             round = tournament.AddBracketRound("Bracket round", 7) as BracketRound;
             group = round.AddGroup() as BracketGroup;
-            group.AddPlayerReference("Maru");
-            group.AddPlayerReference("Stork");
+            group.AddNewPlayerReference("Maru");
+            group.AddNewPlayerReference("Stork");
             firstMatch = group.Matches.First();
         }
 
@@ -76,7 +76,7 @@ namespace Slask.UnitTests.DomainTests.BetTests
         [Fact]
         public void CannotCreateMatchBetForMatchThatIsNotReady()
         {
-            group.AddPlayerReference("Taeja");
+            group.AddNewPlayerReference("Taeja");
             Match incompleteMatch = group.Matches.Last();
 
             MatchBet matchBet = MatchBet.Create(better, incompleteMatch, incompleteMatch.Player1);
@@ -110,8 +110,8 @@ namespace Slask.UnitTests.DomainTests.BetTests
         [Fact]
         public void CannotCreateMatchBetWithPlayerThatIsNotPresentInGivenMatch()
         {
-            group.AddPlayerReference("Taeja");
-            group.AddPlayerReference("Rain");
+            group.AddNewPlayerReference("Taeja");
+            group.AddNewPlayerReference("Rain");
             Match secondMatch = group.Matches[1];
 
             MatchBet matchBet = MatchBet.Create(better, firstMatch, secondMatch.Player1);

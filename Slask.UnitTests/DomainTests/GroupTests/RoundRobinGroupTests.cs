@@ -45,7 +45,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
             string playerName = "Maru";
 
-            group.AddPlayerReference(playerName);
+            group.AddNewPlayerReference(playerName);
 
             group.ParticipatingPlayers.Should().HaveCount(1);
             group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
@@ -57,7 +57,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
             string playerName = "Maru";
 
-            PlayerReference returnedPlayerReference = group.AddPlayerReference(playerName);
+            PlayerReference returnedPlayerReference = group.AddNewPlayerReference(playerName);
 
             returnedPlayerReference.Should().NotBeNull();
             returnedPlayerReference.Name.Should().Be(playerName);
@@ -69,8 +69,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
             string playerName = "Maru";
 
-            group.AddPlayerReference(playerName);
-            group.AddPlayerReference(playerName);
+            group.AddNewPlayerReference(playerName);
+            group.AddNewPlayerReference(playerName);
 
             group.ParticipatingPlayers.Should().HaveCount(1);
             group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
@@ -82,8 +82,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
             string playerName = "Maru";
 
-            PlayerReference firstReturnedPlayerReference = group.AddPlayerReference(playerName);
-            PlayerReference secondReturnedPlayerReference = group.AddPlayerReference(playerName);
+            PlayerReference firstReturnedPlayerReference = group.AddNewPlayerReference(playerName);
+            PlayerReference secondReturnedPlayerReference = group.AddNewPlayerReference(playerName);
 
             firstReturnedPlayerReference.Should().NotBeNull();
             firstReturnedPlayerReference.Name.Should().Be(playerName);
@@ -97,7 +97,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
             string playerName = "Maru";
 
-            group.AddPlayerReference(playerName);
+            group.AddNewPlayerReference(playerName);
             group.RemovePlayerReference(playerName);
 
             group.ParticipatingPlayers.Should().BeEmpty();
@@ -110,7 +110,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
             string playerName = "Maru";
 
-            group.AddPlayerReference(playerName);
+            group.AddNewPlayerReference(playerName);
             bool result = group.RemovePlayerReference(playerName);
 
             result.Should().BeTrue();
@@ -123,8 +123,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             string firstPlayerName = "Maru";
             string secondPlayerName = "Stork";
 
-            group.AddPlayerReference(firstPlayerName);
-            group.AddPlayerReference(secondPlayerName);
+            group.AddNewPlayerReference(firstPlayerName);
+            group.AddNewPlayerReference(secondPlayerName);
 
             group.Matches.Should().HaveCount(1);
             group.Matches.FirstOrDefault(match => match.Player1.Name == firstPlayerName).Should().NotBeNull();
@@ -139,12 +139,12 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             string secondPlayerName = "Stork";
             string thirdPlayerName = "Rain";
 
-            group.AddPlayerReference(firstPlayerName);
-            group.AddPlayerReference(secondPlayerName);
+            group.AddNewPlayerReference(firstPlayerName);
+            group.AddNewPlayerReference(secondPlayerName);
 
             SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
 
-            group.AddPlayerReference(thirdPlayerName);
+            group.AddNewPlayerReference(thirdPlayerName);
 
             group.ParticipatingPlayers.Should().HaveCount(2);
             group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
@@ -159,8 +159,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             string firstPlayerName = "Maru";
             string secondPlayerName = "Stork";
 
-            group.AddPlayerReference(firstPlayerName);
-            group.AddPlayerReference(secondPlayerName);
+            group.AddNewPlayerReference(firstPlayerName);
+            group.AddNewPlayerReference(secondPlayerName);
 
             SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
 
@@ -178,8 +178,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             string firstPlayerName = "Maru";
             string secondPlayerName = "Stork";
 
-            group.AddPlayerReference(firstPlayerName);
-            group.AddPlayerReference(secondPlayerName);
+            group.AddNewPlayerReference(firstPlayerName);
+            group.AddNewPlayerReference(secondPlayerName);
 
             SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
 
@@ -193,10 +193,10 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         {
             RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
 
-            group.AddPlayerReference("Maru");
-            group.AddPlayerReference("Stork");
-            group.AddPlayerReference("Taeja");
-            group.AddPlayerReference("Rain");
+            group.AddNewPlayerReference("Maru");
+            group.AddNewPlayerReference("Stork");
+            group.AddNewPlayerReference("Taeja");
+            group.AddNewPlayerReference("Rain");
 
             Match firstMatch = group.Matches[0];
             Match secondMatch = group.Matches[1];
@@ -223,7 +223,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             foreach (string playerName in playerNames)
             {
-                roundRobinGroup.AddPlayerReference(playerName);
+                roundRobinGroup.AddNewPlayerReference(playerName);
             }
 
             DateTime twoHoursLater = SystemTime.Now.AddHours(2);
@@ -253,28 +253,28 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         {
             RoundRobinGroup group = RoundRobinGroup.Create(roundRobinRound);
 
-            group.AddPlayerReference("Maru").Should().NotBeNull();
+            group.AddNewPlayerReference("Maru").Should().NotBeNull();
             RunTestsWithOnePlayer(group);
 
-            group.AddPlayerReference("Stork").Should().NotBeNull();
+            group.AddNewPlayerReference("Stork").Should().NotBeNull();
             RunTestsWithTwoPlayers(group);
 
-            group.AddPlayerReference("Taeja").Should().NotBeNull();
+            group.AddNewPlayerReference("Taeja").Should().NotBeNull();
             RunTestsWithThreePlayers(group);
 
-            group.AddPlayerReference("Rain").Should().NotBeNull();
+            group.AddNewPlayerReference("Rain").Should().NotBeNull();
             RunTestsWithFourPlayers(group);
 
-            group.AddPlayerReference("Bomber").Should().NotBeNull();
+            group.AddNewPlayerReference("Bomber").Should().NotBeNull();
             RunTestsWithFivePlayers(group);
 
-            group.AddPlayerReference("FanTaSy").Should().NotBeNull();
+            group.AddNewPlayerReference("FanTaSy").Should().NotBeNull();
             RunTestsWithSixPlayers(group);
 
-            group.AddPlayerReference("Stephano").Should().NotBeNull();
+            group.AddNewPlayerReference("Stephano").Should().NotBeNull();
             RunTestsWithSevenPlayers(group);
 
-            group.AddPlayerReference("Thorzain").Should().NotBeNull();
+            group.AddNewPlayerReference("Thorzain").Should().NotBeNull();
             RunTestsWithEightPlayers(group);
         }
 

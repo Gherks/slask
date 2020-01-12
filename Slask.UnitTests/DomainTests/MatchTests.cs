@@ -374,8 +374,8 @@ namespace Slask.UnitTests.DomainTests
 
         private Match InitializeFirstMatch(string firstPlayerName = "Maru", string secondPlayerName = "Stork")
         {
-            bracketGroup.AddPlayerReference(firstPlayerName);
-            bracketGroup.AddPlayerReference(secondPlayerName);
+            bracketGroup.AddNewPlayerReference(firstPlayerName);
+            bracketGroup.AddNewPlayerReference(secondPlayerName);
 
             if(bracketGroup.Matches.Count > 0)
             {

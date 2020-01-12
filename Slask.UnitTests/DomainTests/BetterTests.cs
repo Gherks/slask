@@ -24,8 +24,8 @@ namespace Slask.UnitTests.DomainTests
             tournament = Tournament.Create("GSL 2019");
             round = tournament.AddBracketRound("Bracket round", 7) as BracketRound;
             group = round.AddGroup() as BracketGroup;
-            group.AddPlayerReference("Maru");
-            group.AddPlayerReference("Stork");
+            group.AddNewPlayerReference("Maru");
+            group.AddNewPlayerReference("Stork");
             match = group.Matches.First();
         }
 
@@ -74,7 +74,7 @@ namespace Slask.UnitTests.DomainTests
         public void CannotPlaceMatchBetOnMatchThatIsNotReady()
         {
             Better better = GivenABetterIsCreated();
-            group.AddPlayerReference("Taeja");
+            group.AddNewPlayerReference("Taeja");
             Match incompleteMatch = group.Matches.Last();
 
             better.PlaceMatchBet(incompleteMatch, incompleteMatch.Player1);
@@ -155,8 +155,8 @@ namespace Slask.UnitTests.DomainTests
         {
             Better better = GivenABetterIsCreated();
 
-            group.AddPlayerReference("Taeja");
-            group.AddPlayerReference("Rain");
+            group.AddNewPlayerReference("Taeja");
+            group.AddNewPlayerReference("Rain");
 
             Match firstMatch = group.Matches[0];
             Match secondMatch = group.Matches[1];

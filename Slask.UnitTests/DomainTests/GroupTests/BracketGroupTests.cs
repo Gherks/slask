@@ -48,7 +48,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             BracketGroup group = bracketRound.AddGroup() as BracketGroup;
             string playerName = "Maru";
 
-            group.AddPlayerReference(playerName);
+            group.AddNewPlayerReference(playerName);
 
             group.ParticipatingPlayers.Should().HaveCount(1);
             group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
@@ -60,7 +60,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             BracketGroup group = bracketRound.AddGroup() as BracketGroup;
             string playerName = "Maru";
 
-            PlayerReference returnedPlayerReference = group.AddPlayerReference(playerName);
+            PlayerReference returnedPlayerReference = group.AddNewPlayerReference(playerName);
 
             returnedPlayerReference.Should().NotBeNull();
             returnedPlayerReference.Name.Should().Be(playerName);
@@ -72,8 +72,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             BracketGroup group = bracketRound.AddGroup() as BracketGroup;
             string playerName = "Maru";
 
-            group.AddPlayerReference(playerName);
-            group.AddPlayerReference(playerName);
+            group.AddNewPlayerReference(playerName);
+            group.AddNewPlayerReference(playerName);
 
             group.ParticipatingPlayers.Should().HaveCount(1);
             group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
@@ -85,8 +85,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             BracketGroup group = bracketRound.AddGroup() as BracketGroup;
             string playerName = "Maru";
 
-            PlayerReference firstReturnedPlayerReference = group.AddPlayerReference(playerName);
-            PlayerReference secondReturnedPlayerReference = group.AddPlayerReference(playerName);
+            PlayerReference firstReturnedPlayerReference = group.AddNewPlayerReference(playerName);
+            PlayerReference secondReturnedPlayerReference = group.AddNewPlayerReference(playerName);
 
             firstReturnedPlayerReference.Should().NotBeNull();
             firstReturnedPlayerReference.Name.Should().Be(playerName);
@@ -100,7 +100,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             BracketGroup group = bracketRound.AddGroup() as BracketGroup;
             string playerName = "Maru";
 
-            group.AddPlayerReference(playerName);
+            group.AddNewPlayerReference(playerName);
             group.RemovePlayerReference(playerName);
 
             group.ParticipatingPlayers.Should().BeEmpty();
@@ -113,7 +113,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             BracketGroup group = bracketRound.AddGroup() as BracketGroup;
             string playerName = "Maru";
 
-            group.AddPlayerReference(playerName);
+            group.AddNewPlayerReference(playerName);
             bool result = group.RemovePlayerReference(playerName);
 
             result.Should().BeTrue();
@@ -126,8 +126,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             string firstPlayerName = "Maru";
             string secondPlayerName = "Stork";
 
-            group.AddPlayerReference(firstPlayerName);
-            group.AddPlayerReference(secondPlayerName);
+            group.AddNewPlayerReference(firstPlayerName);
+            group.AddNewPlayerReference(secondPlayerName);
 
             group.Matches.Should().HaveCount(1);
             group.Matches.FirstOrDefault(match => match.Player1.Name == firstPlayerName).Should().NotBeNull();
@@ -142,12 +142,12 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             string secondPlayerName = "Stork";
             string thirdPlayerName = "Rain";
 
-            group.AddPlayerReference(firstPlayerName);
-            group.AddPlayerReference(secondPlayerName);
+            group.AddNewPlayerReference(firstPlayerName);
+            group.AddNewPlayerReference(secondPlayerName);
 
             SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
 
-            group.AddPlayerReference(thirdPlayerName);
+            group.AddNewPlayerReference(thirdPlayerName);
 
             group.ParticipatingPlayers.Should().HaveCount(2);
             group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
@@ -162,8 +162,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             string firstPlayerName = "Maru";
             string secondPlayerName = "Stork";
 
-            group.AddPlayerReference(firstPlayerName);
-            group.AddPlayerReference(secondPlayerName);
+            group.AddNewPlayerReference(firstPlayerName);
+            group.AddNewPlayerReference(secondPlayerName);
 
             SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
 
@@ -181,8 +181,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             string firstPlayerName = "Maru";
             string secondPlayerName = "Stork";
 
-            group.AddPlayerReference(firstPlayerName);
-            group.AddPlayerReference(secondPlayerName);
+            group.AddNewPlayerReference(firstPlayerName);
+            group.AddNewPlayerReference(secondPlayerName);
 
             SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
 
@@ -196,8 +196,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         {
             BracketGroup group = bracketRound.AddGroup() as BracketGroup;
 
-            PlayerReference firstPlayerReference = group.AddPlayerReference("Maru");
-            PlayerReference secondPlayerReference = group.AddPlayerReference("Stork");
+            PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
+            PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
 
             group.SwitchPlayerReferences(group.Matches.First().Player1, group.Matches.First().Player2);
 
@@ -210,10 +210,10 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         {
             BracketGroup group = bracketRound.AddGroup() as BracketGroup;
 
-            PlayerReference firstPlayerReference = group.AddPlayerReference("Maru");
-            PlayerReference secondPlayerReference = group.AddPlayerReference("Stork");
-            PlayerReference thirdPlayerReference = group.AddPlayerReference("Taeja");
-            PlayerReference fourthPlayerReference = group.AddPlayerReference("Rain");
+            PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
+            PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
+            PlayerReference thirdPlayerReference = group.AddNewPlayerReference("Taeja");
+            PlayerReference fourthPlayerReference = group.AddNewPlayerReference("Rain");
 
             Match firstMatch = group.Matches[0];
             Match secondMatch = group.Matches[1];
@@ -231,10 +231,10 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         {
             BracketGroup group = bracketRound.AddGroup() as BracketGroup;
 
-            PlayerReference firstPlayerReference = group.AddPlayerReference("Maru");
-            PlayerReference secondPlayerReference = group.AddPlayerReference("Stork");
-            PlayerReference thirdPlayerReference = group.AddPlayerReference("Taeja");
-            PlayerReference fourthPlayerReference = group.AddPlayerReference("Rain");
+            PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
+            PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
+            PlayerReference thirdPlayerReference = group.AddNewPlayerReference("Taeja");
+            PlayerReference fourthPlayerReference = group.AddNewPlayerReference("Rain");
 
             Match firstMatch = group.Matches[0];
             Match secondMatch = group.Matches[1];
@@ -254,10 +254,10 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         {
             BracketGroup group = bracketRound.AddGroup() as BracketGroup;
 
-            PlayerReference firstPlayerReference = group.AddPlayerReference("Maru");
-            PlayerReference secondPlayerReference = group.AddPlayerReference("Stork");
-            PlayerReference thirdPlayerReference = group.AddPlayerReference("Taeja");
-            PlayerReference fourthPlayerReference = group.AddPlayerReference("Rain");
+            PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
+            PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
+            PlayerReference thirdPlayerReference = group.AddNewPlayerReference("Taeja");
+            PlayerReference fourthPlayerReference = group.AddNewPlayerReference("Rain");
 
             Match firstMatch = group.Matches[0];
             Match secondMatch = group.Matches[1];
@@ -278,11 +278,11 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             BracketGroup firstGroup = bracketRound.AddGroup() as BracketGroup;
             BracketGroup secondGroup = bracketRound.AddGroup() as BracketGroup;
 
-            PlayerReference firstPlayerReference = firstGroup.AddPlayerReference("Maru");
-            PlayerReference secondPlayerReference = firstGroup.AddPlayerReference("Stork");
+            PlayerReference firstPlayerReference = firstGroup.AddNewPlayerReference("Maru");
+            PlayerReference secondPlayerReference = firstGroup.AddNewPlayerReference("Stork");
 
-            PlayerReference thirdPlayerReference = secondGroup.AddPlayerReference("Taeja");
-            PlayerReference fourthPlayerReference = secondGroup.AddPlayerReference("Rain");
+            PlayerReference thirdPlayerReference = secondGroup.AddNewPlayerReference("Taeja");
+            PlayerReference fourthPlayerReference = secondGroup.AddNewPlayerReference("Rain");
 
             Match firstGroupMatch = firstGroup.Matches.First();
             Match secondGroupMatch = secondGroup.Matches.First();
@@ -304,7 +304,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             foreach (string playerName in playerNames)
             {
-                bracketGroup.AddPlayerReference(playerName);
+                bracketGroup.AddNewPlayerReference(playerName);
             }
 
             bracketGroup.Matches.Should().HaveCount(playerNames.Count - 1);
@@ -345,7 +345,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             foreach (string playerName in playerNames)
             {
-                bracketGroup.AddPlayerReference(playerName);
+                bracketGroup.AddNewPlayerReference(playerName);
             }
 
             bracketGroup.Matches.Should().HaveCount(playerNames.Count - 1);
@@ -383,7 +383,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             foreach (string playerName in playerNames)
             {
-                bracketGroup.AddPlayerReference(playerName);
+                bracketGroup.AddNewPlayerReference(playerName);
             }
 
             BracketNode finalNode = bracketGroup.BracketNodeSystem.FinalNode;
@@ -418,7 +418,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             foreach (string playerName in playerNames)
             {
-                bracketGroup.AddPlayerReference(playerName);
+                bracketGroup.AddNewPlayerReference(playerName);
             }
 
             BracketNode finalNode = bracketGroup.BracketNodeSystem.FinalNode;
@@ -453,7 +453,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             foreach (string playerName in playerNames)
             {
-                bracketGroup.AddPlayerReference(playerName);
+                bracketGroup.AddNewPlayerReference(playerName);
             }
 
             bracketGroup.BracketNodeSystem.TierCount.Should().Be(3);
@@ -484,7 +484,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             foreach (string playerName in playerNames)
             {
-                bracketGroup.AddPlayerReference(playerName);
+                bracketGroup.AddNewPlayerReference(playerName);
             }
 
             List<BracketNode> quarterfinalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(2);
@@ -514,7 +514,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             foreach (string playerName in playerNames)
             {
-                bracketGroup.AddPlayerReference(playerName);
+                bracketGroup.AddNewPlayerReference(playerName);
             }
 
             List<BracketNode> finalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(0);

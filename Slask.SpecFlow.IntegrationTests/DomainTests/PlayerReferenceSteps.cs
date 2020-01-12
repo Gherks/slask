@@ -23,7 +23,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
         {
             GroupBase group = createdGroups[groupIndex];
 
-            group.AddPlayerReference(playerName);
+            group.AddNewPlayerReference(playerName);
         }
 
         [When(@"renaming created player reference (.*) to ""(.*)""")]

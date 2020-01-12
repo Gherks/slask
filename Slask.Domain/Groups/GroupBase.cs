@@ -1,4 +1,4 @@
-﻿using Slask.Domain.Bets;
+using Slask.Domain.Bets;
 using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
@@ -64,7 +64,7 @@ namespace Slask.Domain.Groups
             return new List<PlayerReference>();
         }
 
-        public virtual PlayerReference AddPlayerReference(string name)
+        public virtual PlayerReference AddNewPlayerReference(string name)
         {
             RoundBase firstRound = Round.Tournament.Rounds.First();
 

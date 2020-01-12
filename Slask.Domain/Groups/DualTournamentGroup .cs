@@ -1,4 +1,4 @@
-﻿using Slask.Domain.Rounds;
+using Slask.Domain.Rounds;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -37,11 +37,11 @@ namespace Slask.Domain.Groups
             return group;
         }
 
-        public override PlayerReference AddPlayerReference(string name)
+        public override PlayerReference AddNewPlayerReference(string name)
         {
             if (ParticipatingPlayers.Count < ParticipatingPlayerCapacity)
             {
-                return base.AddPlayerReference(name);
+                return base.AddNewPlayerReference(name);
             }
 
             return null;

@@ -239,14 +239,14 @@ namespace Slask.UnitTests.ServiceTests
             RoundBase round = tournament.AddRoundRobinRound("Round robin round", 3, 2);
             GroupBase group = round.AddGroup();
 
-            group.AddPlayerReference("Maru");
-            group.AddPlayerReference("Stork");
-            group.AddPlayerReference("Taeja");
-            group.AddPlayerReference("Rain");
-            group.AddPlayerReference("Bomber");
-            group.AddPlayerReference("FanTaSy");
-            group.AddPlayerReference("Stephano");
-            group.AddPlayerReference("Thorzain");
+            group.AddNewPlayerReference("Maru");
+            group.AddNewPlayerReference("Stork");
+            group.AddNewPlayerReference("Taeja");
+            group.AddNewPlayerReference("Rain");
+            group.AddNewPlayerReference("Bomber");
+            group.AddNewPlayerReference("FanTaSy");
+            group.AddNewPlayerReference("Stephano");
+            group.AddNewPlayerReference("Thorzain");
         }
     }
 }
