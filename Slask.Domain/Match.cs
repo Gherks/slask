@@ -1,7 +1,9 @@
 using Slask.Common;
 using Slask.Domain.Groups;
+using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Slask.Domain
 {
@@ -41,11 +43,20 @@ namespace Slask.Domain
 
             if (group.Matches.Count == 0)
             {
-                match.StartDateTime = SystemTime.Now.AddDays(7);
+                if (group.Round.IsFirstRound())
+                {
+                    match.StartDateTime = SystemTime.Now.AddDays(7);
+                }
+                else
+                {
+                    RoundBase previousRound = group.Round.GetPreviousRound();
+                    Match lastMatchInPreviousRound = previousRound.Groups.Last().Matches.Last();
+                    match.StartDateTime = lastMatchInPreviousRound.StartDateTime.AddHours(1);
+                }
             }
             else
             {
-                Match previousMatch = group.Matches[group.Matches.Count - 1];
+                Match previousMatch = group.Matches.Last();
                 match.StartDateTime = previousMatch.StartDateTime.AddHours(1);
             }
 

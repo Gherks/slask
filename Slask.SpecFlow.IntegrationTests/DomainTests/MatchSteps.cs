@@ -34,7 +34,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                             "3"});
 
             GivenCreatedTournamentAddsRounds(0, roundTable);
-            GivenGroupIsAddedToCreatedRound(0);
+            GivenCreatedRoundAddsGroups(0, 1);
             GivenPlayersIsAddedToCreatedGroup("First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth", 0);
         }
 

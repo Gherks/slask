@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
@@ -23,28 +23,21 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
     public class GroupStepDefinitions : RoundStepDefinitions
     {
-        [When(@"created rounds (.*) to (.*) creates (.*) groups each")]
-        public void WhenCreatedRoundsToCreatesGroupsEach(int roundStartIndex, int roundEndIndex, int groupAmount)
-        {
-            for (int roundIndex = roundStartIndex; roundIndex < roundEndIndex; ++roundIndex)
-            {
-                for (int groupCounter = 0; groupCounter < groupAmount; ++groupCounter)
-                {
-                    createdRounds[roundIndex].AddGroup();
-                }
-            }
-        }
+        private Random randomizer;
 
-        [Given(@"group is added to created round (.*)")]
-        [When(@"group is added to created round (.*)")]
-        public void GivenGroupIsAddedToCreatedRound(int roundIndex)
+        [Given(@"created round (.*) adds (.*) groups")]
+        [When(@"created round (.*) adds (.*) groups")]
+        public void GivenCreatedRoundAddsGroups(int roundIndex, int groupCount)
         {
             if (createdRounds.Count <= roundIndex)
             {
                 throw new IndexOutOfRangeException("Given created round index is out of bounds");
             }
 
-            createdGroups.Add(createdRounds[roundIndex].AddGroup());
+            for(int counter = 0; counter < groupCount; ++counter)
+            {
+                createdGroups.Add(createdRounds[roundIndex].AddGroup());
+            }
         }
 
         [Given(@"players ""(.*)"" is added to created group (.*)")]
@@ -97,9 +90,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
         }
 
 
-        [Given(@"groups within created tournament is played out and betted on")]
-        [When(@"groups within created tournament is played out and betted on")]
-        public void GivenCreatedGroupInCreatedRoundIsPlayedOutAndBettedOn(Table table)
+        [Given(@"created groups within created tournament is played out and betted on")]
+        [When(@"created groups within created tournament is played out and betted on")]
+        public void GivenCreatedGroupsWithinCreatedTournamentIsPlayedOutAndBettedOn(Table table)
         {
             if (table == null)
             {
@@ -119,6 +112,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
                     throw new IndexOutOfRangeException("Tournament, round, or group with given index does not exist");
                 }
 
+                SystemTimeMocker.Reset();
+                randomizer = new Random(133742069);
+
                 Tournament tournament = createdTournaments[tournamentIndex];
                 RoundBase round = tournament.Rounds[roundIndex];
                 GroupBase group = round.Groups[groupIndex];
@@ -127,7 +123,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
                 {
                     PlaceBetsOnAvailableMatchesInGroup(tournament.Betters, group);
 
-                    foreach (Domain.Match match in group.Matches)
+                    foreach (Match match in group.Matches)
                     {
                         if (match.IsReady() && match.GetPlayState() == PlayState.NotBegun)
                         {
@@ -190,6 +186,18 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
         //        }
         //    }
         //}
+
+        [When(@"created rounds (.*) to (.*) creates (.*) groups each")]
+        public void WhenCreatedRoundsToCreatesGroupsEach(int roundStartIndex, int roundEndIndex, int groupAmount)
+        {
+            for (int roundIndex = roundStartIndex; roundIndex < roundEndIndex; ++roundIndex)
+            {
+                for (int groupCounter = 0; groupCounter < groupAmount; ++groupCounter)
+                {
+                    createdGroups.Add(createdRounds[roundIndex].AddGroup());
+                }
+            }
+        }
 
         [Then(@"created rounds (.*) to (.*) should contain (.*) groups each")]
         public void ThenCreatedRoundsToShouldContainGroupsEach(int roundStartIndex, int roundEndIndex, int groupAmount)

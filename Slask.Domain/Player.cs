@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace Slask.Domain
 {
@@ -47,6 +47,13 @@ namespace Slask.Domain
             {
                 Score += value;
                 Match.Group.OnMatchScoreIncreased(Match);
+
+                bool groupJustFinished = Match.Group.GetPlayState() == PlayState.IsFinished;
+
+                if (groupJustFinished)
+                {
+                    Match.Group.Round.OnGroupJustFinished();
+                }
             }
         }
 

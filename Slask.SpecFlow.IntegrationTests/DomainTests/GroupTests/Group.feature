@@ -17,7 +17,7 @@ Scenario: Player reference is added to tournament when new player is added to gr
 		And created tournament 0 adds rounds
 			| Round type | Round name    | Best of | Advancing amount |
 			| Bracket    | Bracket round | 3       | 1                |
-		And group is added to created round 0
+		And created round 0 adds 1 groups
 	When players "Maru, Stork, Taeja, Rain" is added to created group 0
 	Then created tournament 0 should contain exactly these player references with names: "Maru, Stork, Taeja, Rain"
 
@@ -27,8 +27,8 @@ Scenario: Cannot add new players to groups not within first round
 			| Round type      | Round name   | Best of | Advancing amount |
 			| Round robin     | First round  | 3       | 4                |
 			| Round robin     | Second round | 3       | 4                |
-		And group is added to created round 0
-		And group is added to created round 1
+		And created round 0 adds 1 groups
+		And created round 1 adds 1 groups
 		And players "Maru, Stork, Taeja, Rain" is added to created group 0
 	When players "Bomber, FanTaSy, Stephano, Thorzain" is added to created group 1
 	Then created tournament 0 should contain exactly these player references with names: "Maru, Stork, Taeja, Rain"

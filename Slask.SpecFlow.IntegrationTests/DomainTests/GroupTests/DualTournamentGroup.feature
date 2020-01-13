@@ -5,17 +5,17 @@
 Scenario: Adding group to dual tournament round creates bracket group
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds
-			| Round type      | Round name            | Best of | Advancing amount |
-			| Dual tournament | Dual tournament round | 3       | 2                |
-	When group is added to created round 0
+			| Round type      | Round name            | Best of |
+			| Dual tournament | Dual tournament round | 3       |
+	When created round 0 adds 1 groups
 	Then group 0 should be valid of type "Dual tournament"
 
 Scenario: Start time in matches in dual tournament group is spaced with one hour upon creation
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds
-			| Round type      | Round name            | Best of | Advancing amount |
-			| Dual tournament | Dual tournament round | 3       | 2                |
-		And group is added to created round 0
+			| Round type      | Round name            | Best of |
+			| Dual tournament | Dual tournament round | 3       |
+		And created round 0 adds 1 groups
 	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is added to created group 0
 	Then minutes between matches in created group 0 should be 60
 
@@ -31,9 +31,9 @@ Scenario: Creates proper dual tournament layout upon group creation
 		And created tournament 0 adds rounds
 			| Round type      | Round name            | Best of |
 			| Dual tournament | Dual tournament round | 3       |
-		And group is added to created round 0
+		And created round 0 adds 1 groups
 	When players "First, Second, Third, Fourth" is added to created group 0
-	Then pariticpating players in created group 0 should be mapped accordingly
+	Then participating players in created group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |
 		| 1           | Third         | Fourth        |
@@ -41,28 +41,28 @@ Scenario: Creates proper dual tournament layout upon group creation
 Scenario: Dual tournament progression goes as expected
 	#
 	#  Match 1		 Winners
-	# | 1 vs 2 |	| 1 vs 3 |   Decider
-	#							| 3 vs 2 |
+	# | 1 vs 2 |	| 1 vs 4 |   Decider
+	#							| 1 vs 3 |
 	#  Match 2		 Losers
-	# | 3 vs 4 |	| 2 vs 4 |
+	# | 3 vs 4 |	| 2 vs 3 |
 	#
 	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
-			| Round type      | Round name            | Best of | Advancing amount |
-			| Dual tournament | Dual tournament round | 3       | 1                |
-		And group is added to created round 0
+			| Round type      | Round name            | Best of |
+			| Dual tournament | Dual tournament round | 3       |
+		And created round 0 adds 1 groups
 		And players "First, Second, Third, Fourth" is added to created group 0
-		And groups within created tournament is played out and betted on
+		And created groups within created tournament is played out and betted on
 			| Created tournament index | Round index | Group index |
 			| 0                        | 0           | 0           |
-	Then advancing players in created group 0 is exactly "First, Third"
-		And pariticpating players in created group 0 should be mapped accordingly
+	Then advancing players in created group 0 is exactly "Fourth, First"
+		And participating players in created group 0 should be mapped accordingly
 			| Match index | Player 1 name | Player 2 name |
 			| 0           | First         | Second        |
 			| 1           | Third         | Fourth        |
-			| 2           | First         | Third         |
-			| 3           | Second        | Fourth        |
-			| 4           | Third         | Second        |
+			| 2           | First         | Fourth        |
+			| 3           | Second        | Third         |
+			| 4           | First         | Third         |
 #
 #Scenario: Can clear dual tournament group
 #
