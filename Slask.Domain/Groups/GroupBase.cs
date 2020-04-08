@@ -51,20 +51,6 @@ namespace Slask.Domain.Groups
             return lastMatchIsFinished ? PlayState.IsFinished : PlayState.IsPlaying;
         }
 
-        public List<PlayerReference> GetAdvancingPlayers()
-        {
-            if (GetPlayState() == PlayState.IsFinished)
-            {
-                List<PlayerStandingEntry> playerStandings = CalculatePlayerStandings();
-
-                playerStandings = playerStandings.OrderByDescending(player => player.Wins).ToList();
-
-                return FilterAdvancingPlayers(ref playerStandings);
-            }
-
-            return new List<PlayerReference>();
-        }
-
         public virtual PlayerReference AddNewPlayerReference(string name)
         {
             RoundBase firstRound = Round.Tournament.Rounds.First();
@@ -186,44 +172,6 @@ namespace Slask.Domain.Groups
         private PlayerReference GetPlayerReferenceFromTournamentRegistryByName(string name)
         {
             return Round.Tournament.GetPlayerReferenceByPlayerName(name);
-        }
-
-        private List<PlayerStandingEntry> CalculatePlayerStandings()
-        {
-            List<PlayerStandingEntry> playerStandings = new List<PlayerStandingEntry>();
-
-            foreach (PlayerReference participant in ParticipatingPlayers)
-            {
-                playerStandings.Add(PlayerStandingEntry.Create(participant));
-            }
-
-            foreach (Match match in Matches)
-            {
-                PlayerReference winner = match.GetWinningPlayer().PlayerReference;
-                PlayerStandingEntry playerStandingEntry = playerStandings.Find(player => player.PlayerReference.Name == winner.Name);
-
-                if (playerStandingEntry == null)
-                {
-                    // LOG Error: Failed to find player reference when calculating player standings for some reason
-                    throw new Exception("Failed to find player reference when calculating player standings for some reason");
-                }
-
-                playerStandingEntry.AddWin();
-            }
-
-            return playerStandings;
-        }
-
-        private List<PlayerReference> FilterAdvancingPlayers(ref List<PlayerStandingEntry> playerStandings)
-        {
-            List<PlayerReference> advancingPlayers = new List<PlayerReference>();
-
-            for (int index = 0; index < Round.AdvancingPerGroupCount; ++index)
-            {
-                advancingPlayers.Add(playerStandings[index].PlayerReference);
-            }
-
-            return advancingPlayers;
         }
 
         internal void RemoveAllMatchBetsOnMatch(Match match)

@@ -119,7 +119,7 @@ namespace Slask.Domain.Rounds
 
             foreach (GroupBase group in Groups)
             {
-                winningPlayers.AddRange(group.GetAdvancingPlayers());
+                winningPlayers.AddRange(PlayerStandingsCalculator.GetAdvancingPlayers(group));
             }
 
             return winningPlayers;
@@ -134,7 +134,7 @@ namespace Slask.Domain.Rounds
 
             foreach (GroupBase group in Groups)
             {
-                foreach (PlayerReference advancingPlayerReference in group.GetAdvancingPlayers())
+                foreach (PlayerReference advancingPlayerReference in PlayerStandingsCalculator.GetAdvancingPlayers(group))
                 {
                     if (playerReference.Id == advancingPlayerReference.Id)
                     {

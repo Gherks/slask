@@ -259,7 +259,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             GroupBase group = createdGroups[groupIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
-            List<PlayerReference> playerReferences = group.GetAdvancingPlayers();
+            List<PlayerReference> playerReferences = PlayerStandingsCalculator.GetAdvancingPlayers(group);
 
             playerReferences.Should().NotBeEmpty();
             playerReferences.Should().HaveCount(playerNames.Count);
