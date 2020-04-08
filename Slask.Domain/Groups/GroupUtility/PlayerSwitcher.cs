@@ -22,6 +22,9 @@ namespace Slask.Domain.Groups
                     MakeSwitchOnPlayerReferencesInDifferentMatch(player1, player2);
                 }
 
+                player1.Match.Group.RemoveAllMatchBetsOnMatch(player1.Match);
+                player2.Match.Group.RemoveAllMatchBetsOnMatch(player2.Match);
+
                 return true;
             }
 
