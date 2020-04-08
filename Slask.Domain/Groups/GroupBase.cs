@@ -226,7 +226,7 @@ namespace Slask.Domain.Groups
             return advancingPlayers;
         }
 
-        private void RemoveBettersMatchBetsOnMatches(List<Match> matches)
+        internal void RemoveAllMatchBetsOnMatch(Match match)
         {
             foreach (Better better in Round.Tournament.Betters)
             {
@@ -234,13 +234,9 @@ namespace Slask.Domain.Groups
                 {
                     if (better.Bets[betIndex] is MatchBet matchBet)
                     {
-                        foreach (Match match in matches)
+                        if (matchBet.Match.Id == match.Id)
                         {
-                            if (matchBet.Match.Id == match.Id)
-                            {
-                                better.Bets.Remove(better.Bets[betIndex--]);
-                                break;
-                            }
+                            better.Bets.Remove(better.Bets[betIndex--]);
                         }
                     }
                 }
