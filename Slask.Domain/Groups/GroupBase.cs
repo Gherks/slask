@@ -168,28 +168,6 @@ namespace Slask.Domain.Groups
         {
         }
 
-        public virtual bool SwitchPlayerReferences(Player player1, Player player2)
-        {
-            if (player1 == null || player2 == null)
-            {
-                // LOG Error: One of given players was null when trying to switch places
-                return false;
-            }
-
-            List<Match> playerMatches = new List<Match> { player1.Match, player2.Match };
-
-            bool switchWasMade = PlayerSwitcher.SwitchMatchesOn(player1, player2);
-
-            if (switchWasMade)
-            {
-                RemoveBettersMatchBetsOnMatches(playerMatches);
-                return true;
-            }
-
-            // LOGG Warning: Something prevented the players from switching matches
-            return false;
-        }
-
         protected void ChangeMatchAmountTo(int amount)
         {
             Matches.Clear();

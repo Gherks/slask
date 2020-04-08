@@ -31,11 +31,6 @@ namespace Slask.Domain.Groups
             };
         }
 
-        public override bool SwitchPlayerReferences(Player player1, Player player2)
-        {
-            return true;
-        }
-
         protected override void ConstructGroupLayout()
         {
             Matches = RoundRobinGroupLayoutGenerator.Generate(ParticipatingPlayers, this);
