@@ -67,6 +67,7 @@ namespace Slask.Domain.Rounds
 
         public virtual GroupBase AddGroup()
         {
+            // LOGG Error: Adding group using base, something when horribly wrong.
             throw new NotImplementedException();
         }
 

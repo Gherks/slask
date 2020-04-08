@@ -72,6 +72,7 @@ namespace Slask.Domain.Groups
 
             if (groupDoesNotBelongToFirstRound)
             {
+                // LOG Error: Trying to add brand new player reference to group not within first round.
                 return null;
             }
 
@@ -132,6 +133,7 @@ namespace Slask.Domain.Groups
         {
             if (GetPlayState() != PlayState.NotBegun)
             {
+                // LOGG Error: Cannot remove player reference from group that has already begun.
                 return false;
             }
 
@@ -144,7 +146,7 @@ namespace Slask.Domain.Groups
                 return true;
             }
 
-            // LOGG 
+            // LOGG Error: Could not remove player from group; player with provided name does not exist: {name}
             return false;
         }
 
@@ -152,6 +154,7 @@ namespace Slask.Domain.Groups
         {
             if (GetPlayState() != PlayState.NotBegun)
             {
+                // LOGG Error: Cannot remove player reference from group that has already begun.
                 return false;
             }
 
@@ -164,7 +167,7 @@ namespace Slask.Domain.Groups
                 return true;
             }
 
-            // LOGG 
+            // LOGG Error: Could not remove player from group; provided player reference with name "{name}" does not exist in group
             return false;
         }
 
