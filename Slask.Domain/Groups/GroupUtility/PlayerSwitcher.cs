@@ -1,4 +1,4 @@
-using Slask.Domain.Utilities;
+﻿using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,35 +9,78 @@ namespace Slask.Domain.Groups
     {
         public static bool SwitchMatchesOn(Player player1, Player player2)
         {
-            if (player1 == null || player2 == null)
-            {
-                // LOG Error: One of given players was null when trying to switch places
-                return false;
-            }
-
-            bool bothPlayersHasPlayerReferences = player1.PlayerReference != null && player2.PlayerReference != null;
-            bool noMatchHasStartedInGroup = player1.Match.Group.GetPlayState() == PlayState.NotBegun;
-
-            if (bothPlayersHasPlayerReferences && noMatchHasStartedInGroup)
+            if (SwitchIsPossible(player1, player2))
             {
                 bool bothPlayersResidesInSameMatch = player1.Match.Id == player2.Match.Id;
 
                 if (bothPlayersResidesInSameMatch)
                 {
                     MakeSwitchOnPlayerReferencesInSameMatch(player1.Match);
-                    return true;
                 }
-
-                bool bothPlayersResidesInSameGroup = player1.Match.Group.Id == player2.Match.Group.Id;
-
-                if (bothPlayersResidesInSameGroup)
+                else
                 {
                     MakeSwitchOnPlayerReferencesInDifferentMatch(player1, player2);
-                    return true;
                 }
+
+                return true;
             }
 
             return false;
+        }
+
+        private static bool SwitchIsPossible(Player player1, Player player2)
+        {
+            if (EitherPlayerIsInvalid(player1, player2))
+            {
+                // LOG Error: Either player that is attempting to switch match is invalid
+                return false;
+            }
+
+            if (EitherPlayerHasAnInvalidPlayerReference(player1, player2))
+            {
+                // LOG Error: Either or both players that are switching matches has invalid player references
+                return false;
+            }
+
+            if (EitherPlayersGroupHasBegun(player1, player2))
+            {
+                // LOG Error: Either player that wants to switch matches is residing in a group that has already started, it's too late to switch matches with other players
+                return false;
+            }
+
+            if (EitherPlayerResidesInGroupThatDisallowSwitching(player1, player2))
+            {
+                // LOGG Error: Either player that wants to switch matches resides in a group that does not allow switching
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool EitherPlayerIsInvalid(Player player1, Player player2)
+        {
+            return player1 == null || player2 == null;
+        }
+
+        private static bool EitherPlayerHasAnInvalidPlayerReference(Player player1, Player player2)
+        {
+            return player1.PlayerReference == null || player2.PlayerReference == null;
+        }
+
+        private static bool EitherPlayersGroupHasBegun(Player player1, Player player2)
+        {
+            bool player1MatchHasBegun = player1.Match.Group.GetPlayState() != PlayState.NotBegun;
+            bool player2MatchHasBegun = player2.Match.Group.GetPlayState() != PlayState.NotBegun;
+
+            return player1MatchHasBegun || player2MatchHasBegun;
+        }
+
+        private static bool EitherPlayerResidesInGroupThatDisallowSwitching(Player player1, Player player2)
+        {
+            bool player1GroupDisallowsSwitching = player1.Match.Group is RoundRobinGroup;
+            bool player2GroupDisallowsSwitching = player2.Match.Group is RoundRobinGroup;
+
+            return player1GroupDisallowsSwitching && player2GroupDisallowsSwitching;
         }
 
         private static void MakeSwitchOnPlayerReferencesInSameMatch(Match match)
