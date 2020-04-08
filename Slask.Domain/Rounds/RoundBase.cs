@@ -1,4 +1,5 @@
-﻿using Slask.Domain.Groups;
+using Slask.Domain.Groups;
+using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Slask.Domain.Utilities;
+using System;
 
 namespace Slask.Domain.Bets
 {

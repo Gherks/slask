@@ -1,8 +1,9 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
+using Slask.Domain.Utilities;
 using Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests;
 using System;
 using System.Collections.Generic;
@@ -72,7 +73,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
                 ParseSoreAddedToMatchPlayer(row, out int createdGroupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
 
                 GroupBase group = createdGroups[createdGroupIndex];
-                Domain.Match match = group.Matches[matchIndex];
+                Match match = group.Matches[matchIndex];
 
                 SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 

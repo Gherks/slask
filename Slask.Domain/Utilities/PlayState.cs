@@ -1,4 +1,4 @@
-﻿namespace Slask.Domain
+﻿namespace Slask.Domain.Utilities
 {
     public enum PlayState
     {
