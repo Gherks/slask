@@ -90,22 +90,6 @@ namespace Slask.Domain.Groups
             return null;
         }
 
-        public void AddAdvancingPlayerReferenceFromPreviousRound(RoundBase previousRound, PlayerReference playerReference)
-        {
-            bool givenRoundIsPreviousRound = previousRound == Round.GetPreviousRound();
-
-            if (givenRoundIsPreviousRound)
-            {
-                bool previousRoundHasFinished = previousRound.GetPlayState() == PlayState.IsFinished;
-                bool givenPlayerReferenceAdvancedFromPreviousRound = previousRound.PlayerReferenceIsAdvancingPlayer(playerReference);
-
-                if (previousRoundHasFinished && givenPlayerReferenceAdvancedFromPreviousRound)
-                {
-                    AddPlayerReference(playerReference);
-                }
-            }
-        }
-
         public bool AddPlayerReference(PlayerReference playerReference)
         {
             bool hasBegun = GetPlayState() != PlayState.NotBegun;

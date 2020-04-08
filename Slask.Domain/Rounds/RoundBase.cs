@@ -1,4 +1,5 @@
 using Slask.Domain.Groups;
+using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
@@ -75,7 +76,7 @@ namespace Slask.Domain.Rounds
         {
             if (GetPlayState() == PlayState.IsFinished)
             {
-                AddAdvancingPlayersToNextRound();
+                AdvancingPlayerTransfer.TransferToNextRound(this);
             }
         }
 
@@ -158,36 +159,6 @@ namespace Slask.Domain.Rounds
             }
 
             return PlayState.IsPlaying;
-        }
-
-        private void AddAdvancingPlayersToNextRound()
-        {
-            RoundBase nextRound = GetNextRound();
-
-            if (nextRound != null)
-            {
-                bool currentRoundHasFinished = GetPlayState() == PlayState.IsFinished;
-
-                if (currentRoundHasFinished)
-                {
-                    AssignAdvancingPlayerReferencesToGroupsWithinNextRoundEvenly(nextRound, GetAdvancingPlayers());
-                }
-            }
-        }
-
-        private void AssignAdvancingPlayerReferencesToGroupsWithinNextRoundEvenly(RoundBase nextRound, List<PlayerReference> advancingPlayerReferences)
-        {
-            int playerReferencesPerGroupCount = advancingPlayerReferences.Count / nextRound.Groups.Count;
-            int playerReferenceIndex = 0;
-
-            foreach (GroupBase group in nextRound.Groups)
-            {
-                for (int perGroupIndex = 0; perGroupIndex < playerReferencesPerGroupCount; ++perGroupIndex)
-                {
-                    group.AddAdvancingPlayerReferenceFromPreviousRound(this, advancingPlayerReferences[playerReferenceIndex]);
-                    playerReferenceIndex++;
-                }
-            }
         }
     }
 }
