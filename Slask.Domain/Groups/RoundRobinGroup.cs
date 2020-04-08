@@ -1,4 +1,3 @@
-using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;

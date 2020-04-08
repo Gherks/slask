@@ -1,9 +1,9 @@
-﻿using Slask.Domain.Utilities;
+using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Slask.Domain.Groups.GroupUtility
+namespace Slask.Domain.Groups
 {
     public static class PlayerSwitcher
     {

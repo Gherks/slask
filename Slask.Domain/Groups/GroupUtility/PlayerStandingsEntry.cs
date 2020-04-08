@@ -1,4 +1,4 @@
-﻿namespace Slask.Domain.Groups.GroupUtility
+﻿namespace Slask.Domain.Groups
 {
     public class PlayerStandingEntry
     {
