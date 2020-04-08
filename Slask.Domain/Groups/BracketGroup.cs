@@ -31,7 +31,7 @@ namespace Slask.Domain.Groups
             };
         }
 
-        public override bool NewDateTimeIsValidWithGroupRules(Match match, DateTime dateTime)
+        public override bool NewDateTimeIsValid(Match match, DateTime dateTime)
         {
             int matchTier = -1;
 

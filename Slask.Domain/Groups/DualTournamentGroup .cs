@@ -1,4 +1,4 @@
-using Slask.Domain.Rounds;
+﻿using Slask.Domain.Rounds;
 using Slask.Domain.Utilities;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -45,7 +45,7 @@ namespace Slask.Domain.Groups
             return null;
         }
 
-        public override bool NewDateTimeIsValidWithGroupRules(Match match, DateTime dateTime)
+        public override bool NewDateTimeIsValid(Match match, DateTime dateTime)
         {
             for (int matchIndex = 0; matchIndex < Matches.Count; ++matchIndex)
             {

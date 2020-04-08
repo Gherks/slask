@@ -141,7 +141,7 @@ namespace Slask.Domain
                 return false;
             }
 
-            if (!Group.NewDateTimeIsValidWithGroupRules(this, dateTime))
+            if (!Group.NewDateTimeIsValid(this, dateTime))
             {
                 // LOG Error: New start date time does not work with group rules
                 return false;

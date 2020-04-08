@@ -168,7 +168,7 @@ namespace Slask.Domain.Groups
             return false;
         }
 
-        public virtual bool NewDateTimeIsValidWithGroupRules(Match match, DateTime dateTime)
+        public virtual bool NewDateTimeIsValid(Match match, DateTime dateTime)
         {
             return true;
         }
