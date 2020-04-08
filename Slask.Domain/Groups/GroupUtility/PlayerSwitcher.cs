@@ -46,8 +46,6 @@ namespace Slask.Domain.Groups.GroupUtility
             PlayerReference secondPlayerReference = match.Player2.PlayerReference;
 
             match.SetPlayers(secondPlayerReference, firstPlayerReference);
-
-            //RemoveBettersMatchBetsOnMatches(new List<Match> { match });
         }
 
         private static void MakeSwitchOnPlayerReferencesInDifferentMatch(Player player1, Player player2)
@@ -75,8 +73,6 @@ namespace Slask.Domain.Groups.GroupUtility
             {
                 player2Match.SetPlayers(player2Match.Player1.PlayerReference, firstPlayerReference);
             }
-
-            //RemoveBettersMatchBetsOnMatches(new List<Match> { player1Match, player2Match });
         }
     }
 }
