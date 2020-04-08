@@ -206,7 +206,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             PlayerReference thirdPlayerReference = group.Matches[1].Player1.PlayerReference;
             PlayerReference fourthPlayerReference = group.Matches[1].Player2.PlayerReference;
 
-            group.SwitchPlayerReferences(firstMatch.Player1, secondMatch.Player2);
+            PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
 
             firstMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
             firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);

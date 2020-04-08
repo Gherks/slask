@@ -249,7 +249,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
             PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
 
-            group.SwitchPlayerReferences(group.Matches.First().Player1, group.Matches.First().Player2);
+            PlayerSwitcher.SwitchMatchesOn(group.Matches.First().Player1, group.Matches.First().Player2);
 
             group.Matches.First().Player1.PlayerReference.Should().Be(secondPlayerReference);
             group.Matches.First().Player2.PlayerReference.Should().Be(firstPlayerReference);
@@ -268,7 +268,28 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             Match firstMatch = group.Matches[0];
             Match secondMatch = group.Matches[1];
 
-            group.SwitchPlayerReferences(firstMatch.Player1, secondMatch.Player2);
+            PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
+
+            firstMatch.Player1.PlayerReference.Should().Be(fourthPlayerReference);
+            firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
+            secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
+            secondMatch.Player2.PlayerReference.Should().Be(firstPlayerReference);
+        }
+
+        [Fact]
+        public void CanSwitchPlacesOnPlayerReferencesThatAreInDifferentGroups()
+        {
+            DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
+
+            PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
+            PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
+            PlayerReference thirdPlayerReference = group.AddNewPlayerReference("Taeja");
+            PlayerReference fourthPlayerReference = group.AddNewPlayerReference("Rain");
+
+            Match firstMatch = group.Matches[0];
+            Match secondMatch = group.Matches[1];
+
+            PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
 
             firstMatch.Player1.PlayerReference.Should().Be(fourthPlayerReference);
             firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
@@ -290,8 +311,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             Match secondMatch = group.Matches[1];
             Match thirdMatch = group.Matches[2];
 
-            group.SwitchPlayerReferences(thirdMatch.Player1, secondMatch.Player2);
-            group.SwitchPlayerReferences(firstMatch.Player1, thirdMatch.Player2);
+            PlayerSwitcher.SwitchMatchesOn(thirdMatch.Player1, secondMatch.Player2);
+            PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, thirdMatch.Player2);
 
             firstMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
             firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
@@ -314,35 +335,12 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             SystemTimeMocker.SetOneSecondAfter(firstMatch.StartDateTime);
 
-            group.SwitchPlayerReferences(firstMatch.Player1, secondMatch.Player2);
+            PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
 
             firstMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
             firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
             secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
             secondMatch.Player2.PlayerReference.Should().Be(fourthPlayerReference);
-        }
-
-        [Fact]
-        public void CannotSwitchPlacesOnPlayerReferencesThatResidesInDifferentGroups()
-        {
-            DualTournamentGroup firstGroup = dualTournamentRound.AddGroup() as DualTournamentGroup;
-            DualTournamentGroup secondGroup = dualTournamentRound.AddGroup() as DualTournamentGroup;
-
-            PlayerReference firstPlayerReference = firstGroup.AddNewPlayerReference("Maru");
-            PlayerReference secondPlayerReference = firstGroup.AddNewPlayerReference("Stork");
-
-            PlayerReference thirdPlayerReference = secondGroup.AddNewPlayerReference("Taeja");
-            PlayerReference fourthPlayerReference = secondGroup.AddNewPlayerReference("Rain");
-
-            Match firstGroupMatch = firstGroup.Matches.First();
-            Match secondGroupMatch = secondGroup.Matches.First();
-
-            firstGroup.SwitchPlayerReferences(firstGroupMatch.Player1, secondGroupMatch.Player2);
-
-            firstGroupMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
-            firstGroupMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
-            secondGroupMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
-            secondGroupMatch.Player2.PlayerReference.Should().Be(fourthPlayerReference);
         }
 
         [Fact]
