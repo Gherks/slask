@@ -1,4 +1,5 @@
 using Slask.Domain.Bets;
+using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds;
 using Slask.Domain.Utilities;
 using System;

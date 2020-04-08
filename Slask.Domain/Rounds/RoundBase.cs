@@ -1,4 +1,4 @@
-using Slask.Domain.Groups;
+﻿using Slask.Domain.Groups;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
@@ -108,7 +108,7 @@ namespace Slask.Domain.Rounds
             return null;
         }
 
-        public List<PlayerReference> GetAdvancingPlayers()
+        public List<PlayerReference> GetAdvancingPlayerReferences()
         {
             if (GetPlayState() != PlayState.IsFinished)
             {

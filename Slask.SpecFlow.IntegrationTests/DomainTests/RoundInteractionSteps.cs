@@ -76,7 +76,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
     {
         public static void FetchingAdvancingPlayersInRoundYieldsGivenPlayerNames(RoundBase round, List<string> playerNames)
         {
-            List<PlayerReference> fetchedPlayerReferences = round.GetAdvancingPlayers();
+            List<PlayerReference> fetchedPlayerReferences = round.GetAdvancingPlayerReferences();
 
             fetchedPlayerReferences.Should().HaveCount(playerNames.Count);
 
@@ -88,7 +88,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
         public static void FetchingAdvancingPlayersInRoundYieldsNull(RoundBase round)
         {
-            round.GetAdvancingPlayers().Should().BeNull();
+            round.GetAdvancingPlayerReferences().Should().BeNull();
         }
     }
 }
