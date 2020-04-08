@@ -1,4 +1,4 @@
-﻿Feature: RoundRobinGroup
+Feature: RoundRobinGroup
 	Does a bunch of tests on Round robin group
 
 @RoundRobinGroupTag
@@ -20,8 +20,6 @@ Scenario: Start time in matches in round robin groups is spaced with one hour up
 	Then minutes between matches in created group 0 should be 60
 
 Scenario: Creates proper round robin layout upon group creation
-	# See comment right above 'AssignPlayersToMatches()' in RoundRobinGroup.cs for 
-	# explanation of Round robin progression
 	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
 			| Round type      | Round name            | Best of |
@@ -34,8 +32,6 @@ Scenario: Creates proper round robin layout upon group creation
 		| 1           | Third         | Fourth        |
 
 Scenario: Round robin progression with four players goes as expected
-	# See comment right above 'AssignPlayersToMatches()' in RoundRobinGroup.cs for 
-	# explanation of Round robin progression
 	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
 			| Round type             | Round name        | Best of | Advancing amount |
