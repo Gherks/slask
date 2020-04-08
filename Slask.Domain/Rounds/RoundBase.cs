@@ -108,6 +108,32 @@ namespace Slask.Domain.Rounds
             return null;
         }
 
+        // CREATE TESTS
+        public Match GetFirstMatch()
+        {
+            List<Match> matches = new List<Match>();
+
+            foreach(GroupBase group in Groups)
+            {
+                matches.AddRange(group.Matches);
+            }
+
+            return matches.OrderBy(match => match.StartDateTime).First();
+        }
+
+        // CREATE TESTS
+        public Match GetLastMatch()
+        {
+            List<Match> matches = new List<Match>();
+
+            foreach (GroupBase group in Groups)
+            {
+                matches.AddRange(group.Matches);
+            }
+
+            return matches.OrderBy(match => match.StartDateTime).Last();
+        }
+
         public List<PlayerReference> GetAdvancingPlayerReferences()
         {
             if (GetPlayState() != PlayState.IsFinished)
