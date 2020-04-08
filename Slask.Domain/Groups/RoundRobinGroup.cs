@@ -31,6 +31,26 @@ namespace Slask.Domain.Groups
             };
         }
 
+        // CREATE TESTS
+        public override bool NewDateTimeIsValid(Match match, DateTime dateTime)
+        {
+            bool matchBelongsToFirstRound = match.Group.Round.IsFirstRound();
+
+            if (matchBelongsToFirstRound)
+            {
+                return true;
+            }
+
+            Match lastMatchOfPreviousRound = match.Group.Round.GetPreviousRound().GetLastMatch();
+
+            if (dateTime < lastMatchOfPreviousRound.StartDateTime)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         protected override void ConstructGroupLayout()
         {
             Matches = RoundRobinGroupLayoutGenerator.Generate(ParticipatingPlayers, this);
