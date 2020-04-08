@@ -1,4 +1,4 @@
-Feature: BracketRound
+﻿Feature: BracketRound
 	Does a bunch of tests on Bracket rounds
 
 @BracketRoundTag
@@ -93,7 +93,3 @@ Scenario: Cannot fetch previous round with first round
 			| Bracket    | Bracket round | 3       |
 	When created round 0 fetches previous round
 	Then fetched round 0 in tournament should be invalid
-
-#CanFetchPreviousRoundFromRoundWithRoundPredecessor
-#OnlyWinningPlayersCanAdvanceToNextRound
-#ADVANCING PLAYERS MUST ALWAYS BE EQUAL OR LESS THAN NUMBER OF GROUPS IN ROUND

@@ -1,4 +1,4 @@
-Feature: DualTournamentRound
+﻿Feature: DualTournamentRound
 	Does a bunch of tests on Dual tournament rounds
 
 @DualTournamentRoundTag
@@ -93,6 +93,3 @@ Scenario: Cannot fetch previous round with first round
 			| Dual tournament | Dual tournament round | 3       |
 	When created round 0 fetches previous round
 	Then fetched round 0 in tournament should be invalid
-
-#OnlyWinningPlayersCanAdvanceToNextRound
-#ADVANCING PLAYERS MUST ALWAYS BE EQUAL OR LESS THAN NUMBER OF GROUPS IN ROUND

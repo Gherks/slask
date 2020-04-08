@@ -1,4 +1,4 @@
-Feature: RoundRobinRound
+﻿Feature: RoundRobinRound
 	Does a bunch of tests on Round robin rounds
 
 @RoundRobinRoundTag
@@ -98,7 +98,3 @@ Scenario: Cannot fetch previous round with first round
 			| Round robin | Round robin round | 3       |
 	When created round 0 fetches previous round
 	Then fetched round 0 in tournament should be invalid
-
-#OnlyWinningPlayersCanAdvanceToNextRound
-#SolveRoundRobinTies
-#ADVANCING PLAYERS MUST ALWAYS BE EQUAL OR LESS THAN NUMBER OF GROUPS IN ROUND
