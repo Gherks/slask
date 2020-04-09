@@ -33,15 +33,10 @@ namespace Slask.Domain.Groups
 
         public PlayState GetPlayState()
         {
-            if (Matches.Count == 0)
-            {
-                return PlayState.NotBegun;
-            }
-
             bool hasNoMatches = Matches.Count == 0;
-            bool hasNotStarted = Matches.First().GetPlayState() == PlayState.NotBegun;
+            bool hasNotStarted = hasNoMatches || Matches.First().GetPlayState() == PlayState.NotBegun;
 
-            if (hasNoMatches || hasNotStarted)
+            if (hasNotStarted)
             {
                 return PlayState.NotBegun;
             }
@@ -53,10 +48,7 @@ namespace Slask.Domain.Groups
 
         public virtual PlayerReference AddNewPlayerReference(string name)
         {
-            RoundBase firstRound = Round.Tournament.Rounds.First();
-            bool groupDoesNotBelongToFirstRound = Round.Id != firstRound.Id;
-
-            if (groupDoesNotBelongToFirstRound)
+            if (!Round.IsFirstRound())
             {
                 // LOG Error: Trying to add brand new player reference to group not within first round.
                 return null;
