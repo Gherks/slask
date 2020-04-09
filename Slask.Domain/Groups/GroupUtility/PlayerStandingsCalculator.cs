@@ -1,4 +1,5 @@
-﻿using Slask.Domain.Utilities;
+﻿using Slask.Domain.Rounds;
+using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,8 +7,21 @@ using System.Text;
 
 namespace Slask.Domain.Groups
 {
+    // CREATE TESTS
     public static class PlayerStandingsCalculator
     {
+        public static List<PlayerReference> GetAdvancingPlayers(RoundBase round)
+        {
+            List<PlayerReference> advancingPlayers = new List<PlayerReference>();
+
+            foreach (GroupBase group in round.Groups)
+            {
+                advancingPlayers.AddRange(PlayerStandingsCalculator.GetAdvancingPlayers(group));
+            }
+
+            return advancingPlayers;
+        }
+
         public static List<PlayerReference> GetAdvancingPlayers(GroupBase group)
         {
             if (group.GetPlayState() == PlayState.IsFinished)

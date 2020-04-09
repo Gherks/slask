@@ -141,14 +141,7 @@ namespace Slask.Domain.Rounds
                 return null;
             }
 
-            List<PlayerReference> winningPlayers = new List<PlayerReference>();
-
-            foreach (GroupBase group in Groups)
-            {
-                winningPlayers.AddRange(PlayerStandingsCalculator.GetAdvancingPlayers(group));
-            }
-
-            return winningPlayers;
+            return PlayerStandingsCalculator.GetAdvancingPlayers(this);
         }
 
         public bool PlayerReferenceIsAdvancingPlayer(PlayerReference playerReference)
