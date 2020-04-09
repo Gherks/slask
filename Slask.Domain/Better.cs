@@ -44,8 +44,8 @@ namespace Slask.Domain
             MatchBet newMatchBet = MatchBet.Create(this, match, player);
             MatchBet existingMatchBet = FindMatchBet(match);
 
-            bool matchBetForThisMatchAlreadyExists = existingMatchBet != null;
             bool createdNewMatchBetSuccessfully = newMatchBet != null;
+            bool matchBetForThisMatchAlreadyExists = existingMatchBet != null;
 
             if (createdNewMatchBetSuccessfully)
             {
