@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Slask.Domain.Groups
 {
+    // CREATE TESTS
     public static class PlayerSwitcher
     {
         public static bool SwitchMatchesOn(Player player1, Player player2)

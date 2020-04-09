@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Slask.Domain.Groups
 {
+    // CREATE TESTS
     public static class RoundRobinGroupLayoutGenerator
     {
         public static List<Match> Generate(List<PlayerReference> participants, GroupBase parentGroup)

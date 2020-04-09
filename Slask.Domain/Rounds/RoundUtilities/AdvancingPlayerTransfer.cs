@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 namespace Slask.Domain.Rounds
 {
+    // CREATE TESTS
     public static class AdvancingPlayerTransfer
     {
         public static bool TransferToNextRound(RoundBase round)
