@@ -101,9 +101,8 @@ namespace Slask.Domain.Groups
 
         public bool RemovePlayerReference(string name)
         {
-            if (GetPlayState() != PlayState.NotBegun)
+            if (ValidateRemoval())
             {
-                // LOGG Error: Cannot remove player reference from group that has already begun.
                 return false;
             }
 
@@ -122,9 +121,8 @@ namespace Slask.Domain.Groups
 
         public virtual bool RemovePlayerReference(PlayerReference playerReference)
         {
-            if (GetPlayState() != PlayState.NotBegun)
+            if (ValidateRemoval())
             {
-                // LOGG Error: Cannot remove player reference from group that has already begun.
                 return false;
             }
 
@@ -172,6 +170,27 @@ namespace Slask.Domain.Groups
         private PlayerReference GetPlayerReferenceFromTournamentRegistryByName(string name)
         {
             return Round.Tournament.GetPlayerReferenceByPlayerName(name);
+        }
+
+        // CREATE TEST for these two new checks
+        private bool ValidateRemoval()
+        {
+            if (!Round.IsFirstRound())
+            {
+                // LOGG Error: Cannot remove player reference from this group since this group does not belong to the first round.
+                return false;
+            }
+
+            Match firstMatch = Round.GetFirstMatch();
+            bool firstMatchHasBegun = firstMatch != null && firstMatch.GetPlayState() != PlayState.NotBegun;
+
+            if (firstMatchHasBegun)
+            {
+                // LOGG Error: Cannot remove player reference from group within round that has already begun.
+                return false;
+            }
+
+            return true;
         }
 
         internal void RemoveAllMatchBetsOnMatch(Match match)
