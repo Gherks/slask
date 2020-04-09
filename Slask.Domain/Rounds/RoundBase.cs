@@ -1,4 +1,4 @@
-﻿using Slask.Domain.Groups;
+using Slask.Domain.Groups;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
@@ -118,7 +118,7 @@ namespace Slask.Domain.Rounds
                 matches.AddRange(group.Matches);
             }
 
-            return matches.OrderBy(match => match.StartDateTime).First();
+            return matches.OrderBy(match => match.StartDateTime).FirstOrDefault();
         }
 
         // CREATE TESTS
@@ -131,7 +131,7 @@ namespace Slask.Domain.Rounds
                 matches.AddRange(group.Matches);
             }
 
-            return matches.OrderBy(match => match.StartDateTime).Last();
+            return matches.OrderBy(match => match.StartDateTime).LastOrDefault();
         }
 
         public List<PlayerReference> GetAdvancingPlayerReferences()
