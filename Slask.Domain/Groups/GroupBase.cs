@@ -101,7 +101,7 @@ namespace Slask.Domain.Groups
 
         public bool RemovePlayerReference(string name)
         {
-            if (ValidateRemoval())
+            if (!ValidateRemoval())
             {
                 return false;
             }
@@ -121,7 +121,7 @@ namespace Slask.Domain.Groups
 
         public virtual bool RemovePlayerReference(PlayerReference playerReference)
         {
-            if (ValidateRemoval())
+            if (!ValidateRemoval())
             {
                 return false;
             }
