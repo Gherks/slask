@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace Slask.Common
 {
+    // CREATE TESTS
     public static class StringUtility
     {
         public static List<string> ToStringList(string text, string delimiter)

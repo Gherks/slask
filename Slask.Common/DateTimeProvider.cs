@@ -4,6 +4,7 @@ using System.Threading;
 
 namespace Slask.Common
 {
+    // CREATE TESTS
     public static class SystemTime
     {
         private static int concurrencyLevel = Environment.ProcessorCount * 2;
