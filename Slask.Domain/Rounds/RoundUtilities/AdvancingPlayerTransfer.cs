@@ -4,7 +4,7 @@ using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 
-namespace Slask.Domain.Rounds.RoundUtilities
+namespace Slask.Domain.Rounds
 {
     public static class AdvancingPlayerTransfer
     {
