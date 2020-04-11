@@ -1,9 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Slask.Domain.Rounds;
+using Slask.Domain.Utilities;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace Slask.Domain
+namespace Slask.Domain.Groups
 {
     public class DualTournamentGroup : GroupBase
     {
@@ -14,7 +15,10 @@ namespace Slask.Domain
         [NotMapped]
         private const int ParticipatingPlayerCapacity = 4;
 
-        public static DualTournamentGroup Create(Round round)
+        [NotMapped]
+        private const int MatchCapacity = 5;
+
+        public static DualTournamentGroup Create(DualTournamentRound round)
         {
             if (round == null)
             {
@@ -28,50 +32,49 @@ namespace Slask.Domain
                 Round = round
             };
 
-            group.Matches.Add(Match.Create(group));
-            group.Matches.Add(Match.Create(group));
-            group.Matches.Add(Match.Create(group));
-            group.Matches.Add(Match.Create(group));
-            group.Matches.Add(Match.Create(group));
-
             return group;
         }
 
-        public override void Clear()
-        {
-            ParticipatingPlayers.Clear();
-            Matches.Clear();
-
-            Matches.Add(Match.Create(this));
-            Matches.Add(Match.Create(this));
-            Matches.Add(Match.Create(this));
-            Matches.Add(Match.Create(this));
-            Matches.Add(Match.Create(this));
-        }
-
-        public override bool AddPlayerReference(string name)
+        public override PlayerReference AddNewPlayerReference(string name)
         {
             if (ParticipatingPlayers.Count < ParticipatingPlayerCapacity)
             {
-                base.AddPlayerReference(name);
-                return true;
+                return base.AddNewPlayerReference(name);
+            }
+
+            return null;
+        }
+
+        public override bool NewDateTimeIsValid(Match match, DateTime dateTime)
+        {
+            for (int matchIndex = 0; matchIndex < Matches.Count; ++matchIndex)
+            {
+                if (Matches[matchIndex].Id == match.Id)
+                {
+                    if (matchIndex > 0)
+                    {
+                        if (Matches[matchIndex - 1].StartDateTime > dateTime)
+                        {
+                            return false;
+                        }
+                    }
+
+                    if (matchIndex < Matches.Count - 1)
+                    {
+                        if (Matches[matchIndex + 1].StartDateTime < dateTime)
+                        {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
             }
 
             return false;
         }
 
-        protected override void OnParticipantAdded(PlayerReference playerReference)
-        {
-            PlayerReference participant1 = ParticipatingPlayers.Count > 0 ? ParticipatingPlayers[0] : null;
-            PlayerReference participant2 = ParticipatingPlayers.Count > 1 ? ParticipatingPlayers[1] : null;
-            PlayerReference participant3 = ParticipatingPlayers.Count > 2 ? ParticipatingPlayers[2] : null;
-            PlayerReference participant4 = ParticipatingPlayers.Count > 3 ? ParticipatingPlayers[3] : null;
-
-            Matches[0].AssignPlayerReferences(participant1, participant2);
-            Matches[1].AssignPlayerReferences(participant3, participant4);
-        }
-
-        public override void MatchScoreIncreased(Match match)
+        public override void OnMatchScoreIncreased(Match match)
         {
             bool matchExistInThisGroup = Matches.Where(currentMatch => currentMatch.Id == match.Id).Any();
 
@@ -94,13 +97,17 @@ namespace Slask.Domain
             }
         }
 
-        public override List<PlayerReference> TallyUpAdvancingPlayers()
+        protected override void ConstructGroupLayout()
         {
-            return new List<PlayerReference>
-            {
-                GetWinnersMatch().GetWinningPlayer().PlayerReference,
-                GetTiebreakerMatch().GetWinningPlayer().PlayerReference
-            };
+            ChangeMatchAmountTo(MatchCapacity);
+
+            PlayerReference participant1 = ParticipatingPlayers.Count > 0 ? ParticipatingPlayers[0] : null;
+            PlayerReference participant2 = ParticipatingPlayers.Count > 1 ? ParticipatingPlayers[1] : null;
+            PlayerReference participant3 = ParticipatingPlayers.Count > 2 ? ParticipatingPlayers[2] : null;
+            PlayerReference participant4 = ParticipatingPlayers.Count > 3 ? ParticipatingPlayers[3] : null;
+
+            Matches[0].SetPlayers(participant1, participant2);
+            Matches[1].SetPlayers(participant3, participant4);
         }
 
         private bool FirstMatchPairHasPlayed(Match match)
@@ -132,7 +139,7 @@ namespace Slask.Domain
             PlayerReference Match1Winner = GetMatch1().GetWinningPlayer().PlayerReference;
             PlayerReference Match2Winner = GetMatch2().GetWinningPlayer().PlayerReference;
 
-            GetWinnersMatch().AssignPlayerReferences(Match1Winner, Match2Winner);
+            GetWinnersMatch().SetPlayers(Match1Winner, Match2Winner);
         }
 
         private void AssignPlayersToLosersMatch()
@@ -140,7 +147,7 @@ namespace Slask.Domain
             PlayerReference Match1Loser = GetMatch1().GetLosingPlayer().PlayerReference;
             PlayerReference Match2Loser = GetMatch2().GetLosingPlayer().PlayerReference;
 
-            GetLosersMatch().AssignPlayerReferences(Match1Loser, Match2Loser);
+            GetLosersMatch().SetPlayers(Match1Loser, Match2Loser);
         }
 
         private void AssignPlayersToTiebreakerMatch()
@@ -148,7 +155,7 @@ namespace Slask.Domain
             PlayerReference WinnersMatchLoser = GetWinnersMatch().GetLosingPlayer().PlayerReference;
             PlayerReference LosersMatchWinner = GetLosersMatch().GetWinningPlayer().PlayerReference;
 
-            GetTiebreakerMatch().AssignPlayerReferences(WinnersMatchLoser, LosersMatchWinner);
+            GetTiebreakerMatch().SetPlayers(WinnersMatchLoser, LosersMatchWinner);
         }
 
         private Match GetMatch1()

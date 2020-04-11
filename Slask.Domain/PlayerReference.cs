@@ -15,7 +15,10 @@ namespace Slask.Domain
 
         public static PlayerReference Create(string name, Tournament tournament)
         {
-            if (tournament == null)
+            bool invalidNameGiven = name == null || name == "";
+            bool noTournamentGiven = tournament == null;
+
+            if (invalidNameGiven || noTournamentGiven)
             {
                 return null;
             }
@@ -32,7 +35,6 @@ namespace Slask.Domain
                     Tournament = tournament
                 };
 
-                tournament.PlayerReferences.Add(playerReference);
                 return playerReference;
             }
 

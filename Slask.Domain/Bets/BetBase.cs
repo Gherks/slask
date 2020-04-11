@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Slask.Domain.Bets
 {
@@ -8,9 +6,10 @@ namespace Slask.Domain.Bets
     {
         protected BetBase()
         {
-            Id = Guid.NewGuid();
         }
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; protected set; }
+        public Guid BetterId { get; protected set; }
+        public Better Better { get; protected set; }
     }
 }

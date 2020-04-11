@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
+using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Bets;
-using Slask.TestCore;
+using Slask.Domain.Groups;
+using Slask.Domain.Rounds;
 using System;
 using System.Linq;
 using Xunit;
@@ -10,135 +12,176 @@ namespace Slask.UnitTests.DomainTests
 {
     public class BetterTests
     {
-        [Fact]
-        public void CanCreateBetter()
+        private readonly User user;
+        private readonly Tournament tournament;
+        private readonly BracketRound round;
+        private readonly BracketGroup group;
+        private readonly Match match;
+
+        public BetterTests()
         {
-            TournamentServiceContext services = GivenServices();
-            Tournament tournament = HomestoryCupSetup.Part02_BettersAddedToTournament(services);
-
-            Better better = tournament.Betters.First();
-
-            better.Id.Should().NotBeEmpty();
-            better.User.Should().NotBeNull();
-            better.Bets.Should().NotBeEmpty();
-            better.TournamentId.Should().NotBeEmpty();
-            better.Tournament.Should().NotBeNull();
+            user = User.Create("Stålberto");
+            tournament = Tournament.Create("GSL 2019");
+            round = tournament.AddBracketRound("Bracket round", 7) as BracketRound;
+            group = round.AddGroup() as BracketGroup;
+            group.AddNewPlayerReference("Maru");
+            group.AddNewPlayerReference("Stork");
+            match = group.Matches.First();
         }
 
         [Fact]
-        public void ReturnNullIfMissingUserWhenCreatingBetter()
+        public void CanCreateBetter()
         {
-            TournamentServiceContext services = GivenServices();
-            Tournament tournament = HomestoryCupSetup.Part01_CreateTournament(services);
+            Better better = GivenABetterIsCreated();
 
+            better.Id.Should().NotBeEmpty();
+            better.User.Should().NotBeNull();
+            better.Bets.Should().BeEmpty();
+            better.TournamentId.Should().Be(tournament.Id);
+            better.Tournament.Should().Be(tournament);
+        }
+
+        [Fact]
+        public void CannotCreateBetterWithNullUser()
+        {
             Better better = Better.Create(null, tournament);
 
             better.Should().BeNull();
         }
 
         [Fact]
-        public void ReturnNullIfMissingTournamentWhenCreatingBetter()
+        public void CannotCreateBetterWithNullTournament()
         {
-            TournamentServiceContext services = GivenServices();
-            HomestoryCupSetup.Part01_CreateTournament(services);
-            services.WhenCreatedUsers();
-
-            User user = services.UserService.GetUserByName("Stålberto");
             Better better = Better.Create(user, null);
 
             better.Should().BeNull();
         }
 
         [Fact]
-        public void BetterCanPlaceMatchBet()
+        public void CanPlaceMatchBetOnMatch()
         {
-            TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part06_StartDateTimeSetToMatchesInRoundRobinGroup(services);
+            Better better = GivenABetterIsCreated();
 
-            Tournament tournament = group.Round.Tournament;
-            Better better = tournament.Betters.First();
-            Match match = group.Matches.First();
+            better.PlaceMatchBet(match, match.Player1);
 
-            bool result = better.PlaceMatchBet(match, match.Player1);
-
-            result.Should().BeTrue();
             better.Bets.Should().HaveCount(1);
-
-            MatchBet bet = better.Bets.First() as MatchBet;
-            bet.Match.Should().Be(match);
-            bet.PlayerId.Should().Be(match.Player1.Id);
+            better.Bets.First().Should().NotBeNull();
+            MatchBet matchBet = better.Bets.First() as MatchBet;
+            ValidateMatchBet(matchBet, better, match, match.Player1);
         }
 
         [Fact]
-        public void BetterCannotPlaceAMatchBetWithoutMatch()
+        public void CannotPlaceMatchBetOnMatchThatIsNotReady()
         {
-            TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part06_StartDateTimeSetToMatchesInRoundRobinGroup(services);
+            Better better = GivenABetterIsCreated();
+            group.AddNewPlayerReference("Taeja");
+            Match incompleteMatch = group.Matches.Last();
 
-            Tournament tournament = group.Round.Tournament;
-            Better better = tournament.Betters.First();
-            Match match = group.Matches.First();
+            better.PlaceMatchBet(incompleteMatch, incompleteMatch.Player1);
 
-            bool result = better.PlaceMatchBet(null, match.Player1);
-
-            result.Should().BeFalse();
             better.Bets.Should().BeEmpty();
         }
 
         [Fact]
-        public void BetterCannotPlaceAMatchBetWithoutPlayer()
+        public void CannotPlaceMatchBetOnMatchThatIsPlaying()
         {
-            TournamentServiceContext services = GivenServices();
-            RoundRobinGroup group = HomestoryCupSetup.Part06_StartDateTimeSetToMatchesInRoundRobinGroup(services);
+            Better better = GivenABetterIsCreated();
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
-            Tournament tournament = group.Round.Tournament;
-            Better better = tournament.Betters.First();
-            Match match = group.Matches.First();
+            better.PlaceMatchBet(match, match.Player1);
 
-            bool result = better.PlaceMatchBet(match, null);
-
-            result.Should().BeFalse();
             better.Bets.Should().BeEmpty();
         }
 
         [Fact]
-        public void BetterCannotPlaceAMatchBetOnMatchThatIsNotReady()
+        public void CannotPlaceMatchBetOnMatchThatIsFinished()
         {
-            TournamentServiceContext services = GivenServices();
-            throw new NotImplementedException();
+            Better better = GivenABetterIsCreated();
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+
+            int winningScore = (int)Math.Ceiling(round.BestOf / 2.0);
+            match.Player1.IncreaseScore(winningScore);
+
+            better.PlaceMatchBet(match, match.Player1);
+
+            better.Bets.Should().BeEmpty();
         }
 
         [Fact]
-        public void BetterCanFindExistingMatchBet()
+        public void BettingOnMatchThatHasAlreadyBeenBettedOnCreatesANewBet()
         {
-            TournamentServiceContext services = GivenServices();
-            throw new NotImplementedException();
+            Better better = GivenABetterIsCreated();
+
+            better.PlaceMatchBet(match, match.Player1);
+            better.PlaceMatchBet(match, match.Player2);
+
+            better.Bets.Should().HaveCount(1);
+            better.Bets.First().Should().NotBeNull();
+            MatchBet matchBet = better.Bets.First() as MatchBet;
+            ValidateMatchBet(matchBet, better, match, match.Player2);
         }
 
         [Fact]
-        public void ReturnsNullWhenTryingToFindNonexistingMatchBet()
+        public void CannotCreateNewBetOnMatchThatHasBegun()
         {
-            TournamentServiceContext services = GivenServices();
-            throw new NotImplementedException();
+            Better better = GivenABetterIsCreated();
+
+            better.PlaceMatchBet(match, match.Player1);
+
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+
+            better.PlaceMatchBet(match, match.Player2);
+
+            better.Bets.Should().HaveCount(1);
+            better.Bets.First().Should().NotBeNull();
+            MatchBet matchBet = better.Bets.First() as MatchBet;
+            ValidateMatchBet(matchBet, better, match, match.Player1);
         }
 
         [Fact]
-        public void CanCreateMatchBetWhenPlacingBetOnNewMatch()
+        public void MatchBetIsRemovedWhenMatchLayoutIsChangedInOneMatch()
         {
-            TournamentServiceContext services = GivenServices();
-            throw new NotImplementedException();
+            Better better = GivenABetterIsCreated();
+
+            better.PlaceMatchBet(match, match.Player1);
+
+            PlayerSwitcher.SwitchMatchesOn(match.Player1, match.Player2);
+
+            better.Bets.Should().BeEmpty();
         }
 
         [Fact]
-        public void CanUpdateMatchBetWhenPlacingBetOnExistingMatchBet()
+        public void MatchBetIsRemovedWhenMatchLayoutIsChangedInTwoMatches()
         {
-            TournamentServiceContext services = GivenServices();
-            throw new NotImplementedException();
+            Better better = GivenABetterIsCreated();
+
+            group.AddNewPlayerReference("Taeja");
+            group.AddNewPlayerReference("Rain");
+
+            Match firstMatch = group.Matches[0];
+            Match secondMatch = group.Matches[1];
+
+            better.PlaceMatchBet(firstMatch, firstMatch.Player1);
+            better.PlaceMatchBet(secondMatch, secondMatch.Player1);
+
+            PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player1);
+
+            better.Bets.Should().BeEmpty();
         }
 
-        private TournamentServiceContext GivenServices()
+        private Better GivenABetterIsCreated()
         {
-            return TournamentServiceContext.GivenServices(new UnitTestSlaskContextCreator());
+            return tournament.AddBetter(user);
+        }
+
+        private void ValidateMatchBet(MatchBet matchBet, Better correctBetter, Match correctMatch, Player correctPlayer)
+        {
+            matchBet.BetterId.Should().Be(correctBetter.Id);
+            matchBet.Better.Should().Be(correctBetter);
+            matchBet.MatchId.Should().Be(correctMatch.Id);
+            matchBet.Match.Should().Be(correctMatch);
+            matchBet.PlayerId.Should().Be(correctPlayer.Id);
+            matchBet.Player.Should().Be(correctPlayer);
         }
     }
 }

@@ -1,6 +1,10 @@
 using Slask.Common;
+using Slask.Domain.Groups;
+using Slask.Domain.Rounds;
+using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Slask.Domain
 {
@@ -9,8 +13,8 @@ namespace Slask.Domain
         private Match()
         {
             Players = new List<Player>();
-            Players.Add(Player.Create(this));
-            Players.Add(Player.Create(this));
+            Players.Add(null);
+            Players.Add(null);
         }
 
         public Guid Id { get; private set; }
@@ -25,7 +29,7 @@ namespace Slask.Domain
 
         public static Match Create(GroupBase group)
         {
-            if(group == null)
+            if (group == null)
             {
                 // LOGG
                 return null;
@@ -35,17 +39,25 @@ namespace Slask.Domain
             {
                 Id = Guid.NewGuid(),
                 GroupId = group.Id,
-                Group = group,
-
+                Group = group
             };
 
             if (group.Matches.Count == 0)
             {
-                match.StartDateTime = SystemTime.Now.AddDays(7);
+                if (group.Round.IsFirstRound())
+                {
+                    match.StartDateTime = SystemTime.Now.AddDays(7);
+                }
+                else
+                {
+                    RoundBase previousRound = group.Round.GetPreviousRound();
+                    Match lastMatchInPreviousRound = previousRound.Groups.Last().Matches.Last();
+                    match.StartDateTime = lastMatchInPreviousRound.StartDateTime.AddHours(1);
+                }
             }
             else
             {
-                Match previousMatch = group.Matches[group.Matches.Count - 1];
+                Match previousMatch = group.Matches.Last();
                 match.StartDateTime = previousMatch.StartDateTime.AddHours(1);
             }
 
@@ -54,16 +66,41 @@ namespace Slask.Domain
 
         public bool IsReady()
         {
-            return Player1.PlayerReference != null && Player2.PlayerReference != null;
+            return Player1 != null && Player2 != null;
         }
 
-        public void AssignPlayerReferences(PlayerReference player1Reference, PlayerReference player2Reference)
+        public bool AddPlayer(PlayerReference playerReference)
+        {
+            if (playerReference == null)
+            {
+                throw new ArgumentNullException(nameof(playerReference));
+            }
+
+            if (Player1 == null)
+            {
+                CreatePlayerWithReference(0, playerReference);
+                return true;
+            }
+
+            if (Player2 == null)
+            {
+                CreatePlayerWithReference(1, playerReference);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetPlayers(PlayerReference player1Reference, PlayerReference player2Reference)
         {
             if (player1Reference == null || player2Reference == null || player1Reference.Id != player2Reference.Id)
             {
-                Player1.SetPlayerReference(player1Reference);
-                Player2.SetPlayerReference(player2Reference);
+                CreatePlayerWithReference(0, player1Reference);
+                CreatePlayerWithReference(1, player2Reference);
+                return true;
             }
+
+            return false;
         }
 
         public Player FindPlayer(Guid id)
@@ -100,7 +137,13 @@ namespace Slask.Domain
         {
             if (SystemTime.Now > dateTime)
             {
-                // LOGG
+                // LOG Error: New start date time must be a future date time
+                return false;
+            }
+
+            if (!Group.NewDateTimeIsValid(this, dateTime))
+            {
+                // LOG Error: New start date time does not work with group rules
                 return false;
             }
 
@@ -138,47 +181,27 @@ namespace Slask.Domain
             return null;
         }
 
-        private bool ValidateNewPlayerReference(PlayerReference playerReference)
+        private bool CreatePlayerWithReference(int playerIndex, PlayerReference playerReference)
         {
-            if (playerReference == null)
+            if (GetPlayState() == PlayState.NotBegun)
             {
-                return false;
+                Players[playerIndex] = Player.Create(this, playerReference);
+                return true;
             }
 
-            bool matchIsFilled = Player1.PlayerReference != null && Player2.PlayerReference != null;
-
-            if (matchIsFilled)
-            {
-                return false;
-            }
-
-            bool alreadyAddedToMatch = FindPlayer(playerReference.Name) != null;
-
-            if (alreadyAddedToMatch)
-            {
-                return false;
-            }
-
-            return true;
+            return false;
         }
 
         private bool AnyPlayerHasWon()
         {
-            int matchPointBarrier = Group.Round.BestOf - (Group.Round.BestOf / 2);
-
-            return Player1.Score >= matchPointBarrier || Player2.Score >= matchPointBarrier;
-        }
-
-        private DateTime GetInitialStartDateTime()
-        {
-            if(Group.Matches.Count == 0)
+            if (Player1 != null && Player2 != null)
             {
-                return SystemTime.Now.AddYears(1);
+                int matchPointBarrier = Group.Round.BestOf - (Group.Round.BestOf / 2);
+
+                return Player1.Score >= matchPointBarrier || Player2.Score >= matchPointBarrier;
             }
 
-            Match previousMatch = Group.Matches[Group.Matches.Count - 1];
-
-            return previousMatch.StartDateTime.AddHours(1);
+            return false;
         }
     }
 }

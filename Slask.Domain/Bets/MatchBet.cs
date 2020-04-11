@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Slask.Domain.Utilities;
+using System;
 
 namespace Slask.Domain.Bets
 {
@@ -8,18 +9,24 @@ namespace Slask.Domain.Bets
         {
         }
 
+        public Guid MatchId { get; private set; }
         public Match Match { get; private set; }
         public Guid PlayerId { get; private set; }
+        public Player Player { get; private set; }
 
-        public static MatchBet Create(Match match, Player player)
+        public static MatchBet Create(Better better, Match match, Player player)
         {
-            if (match == null || player == null)
+            if (better == null || match == null || player == null)
             {
                 // LOGG
                 return null;
             }
 
-            if(match.FindPlayer(player.Id) == null)
+            bool givenPlayerIsNotParticipantInGivenMatch = match.FindPlayer(player.Id) == null;
+            bool matchIsNotReady = !match.IsReady();
+            bool matchHasBegun = match.GetPlayState() != PlayState.NotBegun;
+
+            if (givenPlayerIsNotParticipantInGivenMatch || matchIsNotReady || matchHasBegun)
             {
                 // LOGG
                 return null;
@@ -27,26 +34,14 @@ namespace Slask.Domain.Bets
 
             return new MatchBet
             {
+                Id = Guid.NewGuid(),
+                BetterId = better.Id,
+                Better = better,
+                MatchId = match.Id,
                 Match = match,
-                PlayerId = player.Id
+                PlayerId = player.Id,
+                Player = player
             };
-        }
-
-        public void UpdatePlayer(Player player)
-        {
-            if(player == null)
-            {
-                // LOGG
-                return;
-            }
-
-            if (Match.FindPlayer(player.Id) == null)
-            {
-                // LOGG
-                return;
-            }
-
-            PlayerId = player.Id;
         }
     }
 }

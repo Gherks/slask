@@ -18,7 +18,7 @@ namespace Slask.Domain
 
         public static MiscBetCatalogue Create(int type, Tournament tournament)
         {
-            if(tournament == null)
+            if (tournament == null)
             {
                 return null;
             }

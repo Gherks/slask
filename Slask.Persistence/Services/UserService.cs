@@ -15,19 +15,15 @@ namespace Slask.Persistence.Services
 
         public User CreateUser(string name)
         {
-            bool nameIsEmpty = name == "";
-            bool userAlreadyExists = GetUserByName(name) != null;
-
-            if (nameIsEmpty || userAlreadyExists)
-            {
-                return null;
-            }
-
-            User user = User.Create(name);
-
-            _slaskContext.Add(user);
+            User user = Create(name);
             _slaskContext.SaveChanges();
+            return user;
+        }
 
+        public User CreateUserAsync(string name)
+        {
+            User user = Create(name);
+            _slaskContext.SaveChangesAsync();
             return user;
         }
 
@@ -39,6 +35,22 @@ namespace Slask.Persistence.Services
         public User GetUserById(Guid id)
         {
             return _slaskContext.Users.FirstOrDefault(user => user.Id == id);
+        }
+
+        private User Create(string name)
+        {
+            bool nameIsEmpty = name == "";
+            bool userAlreadyExists = GetUserByName(name) != null;
+
+            if (nameIsEmpty || userAlreadyExists)
+            {
+                return null;
+            }
+
+            User user = User.Create(name);
+            _slaskContext.Add(user);
+
+            return user;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Slask.Domain.Utilities;
+using System;
 
 namespace Slask.Domain
 {
@@ -21,9 +22,9 @@ namespace Slask.Domain
             private set { }
         }
 
-        public static Player Create(Match match)
+        public static Player Create(Match match, PlayerReference playerReference)
         {
-            if (match == null)
+            if (match == null || playerReference == null)
             {
                 return null;
             }
@@ -31,93 +32,42 @@ namespace Slask.Domain
             return new Player
             {
                 Id = Guid.NewGuid(),
-                PlayerReference = null,
+                PlayerReference = playerReference,
                 Score = 0,
                 MatchId = match.Id,
                 Match = match
             };
         }
 
-        public void SetPlayerReference(PlayerReference playerReference)
-        {
-            if (PlayerReference != null)
-            {
-                bool playerReferenceIsRemoved = playerReference == null;
-                bool playerReferenceChanged = playerReference != null && PlayerReference.Id != playerReference.Id;
-
-                if(playerReferenceIsRemoved || playerReferenceChanged)
-                {
-                    Match.Group.OnParticipantRemoved(PlayerReference);
-                }
-            }
-            
-            PlayerReference = playerReference;
-        }
-
-        //public void IncrementScore()
-        //{
-        //    bool matchHasNotBegun = Match.GetPlayState() == PlayState.NotBegun;
-
-        //    if (matchHasNotBegun)
-        //    {
-        //        return;
-        //    }
-
-        //    bool isAlreadyFinished = Match.GetPlayState() == PlayState.IsFinished;
-
-        //    Score++;
-
-        //    if (!isAlreadyFinished)
-        //    {
-        //        Match.Group.MatchScoreIncreased(Match);
-        //    }
-        //}
-
-        //public void DecrementScore()
-        //{
-        //    Score = Math.Max(Score - 1, 0);
-
-        //    bool isPlaying = Match.GetPlayState() == PlayState.IsPlaying;
-        //    if (!isPlaying)
-        //    {
-        //        Match.Group.MatchScoreDecreased(Match);
-        //    }
-        //}
-
         public void IncreaseScore(int value)
         {
-            bool matchHasNotBegun = Match.GetPlayState() == PlayState.NotBegun;
+            bool matchIsReady = Match.IsReady();
+            bool matchIsPlaying = Match.GetPlayState() == PlayState.IsPlaying;
 
-            if(matchHasNotBegun)
+            if (matchIsReady && matchIsPlaying)
             {
-                return;
-            }
+                Score += value;
+                Match.Group.OnMatchScoreIncreased(Match);
 
-            bool matchIsAlreadyFinished = Match.GetPlayState() == PlayState.IsFinished;
+                bool groupJustFinished = Match.Group.GetPlayState() == PlayState.IsFinished;
 
-            Score += value;
-
-            if (!matchIsAlreadyFinished)
-            {
-                Match.Group.MatchScoreIncreased(Match);
+                if (groupJustFinished)
+                {
+                    Match.Group.Round.OnGroupJustFinished();
+                }
             }
         }
 
         public void DecreaseScore(int value)
         {
-            bool matchHasNotBegun = Match.GetPlayState() == PlayState.NotBegun;
+            bool matchIsReady = Match.IsReady();
+            bool matchIsPlaying = Match.GetPlayState() == PlayState.IsPlaying;
 
-            if (matchHasNotBegun)
+            if (matchIsReady && matchIsPlaying)
             {
-                return;
-            }
-
-            Score = Math.Max(Score - value, 0);
-
-            bool isPlaying = Match.GetPlayState() == PlayState.IsPlaying;
-            if (!isPlaying)
-            {
-                Match.Group.MatchScoreDecreased(Match);
+                Score -= value;
+                Score = Math.Max(Score, 0);
+                Match.Group.OnMatchScoreDecreased(Match);
             }
         }
     }

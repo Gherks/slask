@@ -35,32 +35,30 @@ namespace Slask.Domain
 
         public bool PlaceMatchBet(Match match, Player player)
         {
-            if(match == null || player == null)
+            if (match == null || player == null)
             {
                 // LOGG
                 return false;
             }
 
-            if (!match.IsReady())
+            MatchBet newMatchBet = MatchBet.Create(this, match, player);
+            MatchBet existingMatchBet = FindMatchBet(match);
+
+            bool createdNewMatchBetSuccessfully = newMatchBet != null;
+            bool matchBetForThisMatchAlreadyExists = existingMatchBet != null;
+
+            if (createdNewMatchBetSuccessfully)
             {
-                // LOGG MATCH IS NOT READY
-                return false;
+                if (matchBetForThisMatchAlreadyExists)
+                {
+                    Bets.Remove(existingMatchBet);
+                }
+
+                Bets.Add(newMatchBet);
+                return true;
             }
 
-            MatchBet matchBet = FindMatchBet(match);
-
-            if (matchBet == null)
-            {
-                // LOGG THAT BET WAS CREATED
-                Bets.Add(MatchBet.Create(match, player));
-            }
-            else
-            {
-                // LOGG THAT BET WAS UPDATED
-                matchBet.UpdatePlayer(player);
-            }
-
-            return true;
+            return false;
         }
 
         private MatchBet FindMatchBet(Match match)

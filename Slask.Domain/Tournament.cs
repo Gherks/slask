@@ -1,4 +1,6 @@
 ﻿using Slask.Common;
+using Slask.Domain.Groups;
+using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +11,7 @@ namespace Slask.Domain
     {
         private Tournament()
         {
-            Rounds = new List<Round>();
-            PlayerReferences = new List<PlayerReference>();
+            Rounds = new List<RoundBase>();
             Betters = new List<Better>();
             Settings = new List<Settings>();
             MiscBetCatalogue = new List<MiscBetCatalogue>();
@@ -18,8 +19,7 @@ namespace Slask.Domain
 
         public Guid Id { get; private set; }
         public string Name { get; private set; }
-        public List<Round> Rounds { get; private set; }
-        public List<PlayerReference> PlayerReferences { get; private set; }
+        public List<RoundBase> Rounds { get; private set; }
         public List<Better> Betters { get; private set; }
         public List<Settings> Settings { get; private set; }
         public List<MiscBetCatalogue> MiscBetCatalogue { get; private set; }
@@ -38,40 +38,42 @@ namespace Slask.Domain
             Name = name;
         }
 
-        public Round AddRoundRobinRound(string name, int bestOf, int advanceAmount)
+        public RoundBase AddBracketRound(string name, int bestOf)
         {
-            if (!BasicRoundValidation(name, bestOf, advanceAmount))
+            RoundBase round = BracketRound.Create(name, bestOf, this);
+
+            if (round == null)
             {
                 return null;
             }
 
-            Rounds.Add(Round.Create(name, RoundType.RoundRobin, bestOf, advanceAmount, this));
+            Rounds.Add(round);
             return Rounds.Last();
         }
 
-        public Round AddDualTournamentRound(string name, int bestOf)
+        public RoundBase AddDualTournamentRound(string name, int bestOf)
         {
-            const int advanceAmount = 2;
+            RoundBase round = DualTournamentRound.Create(name, bestOf, this);
 
-            if (!BasicRoundValidation(name, bestOf, advanceAmount))
+            if (round == null)
             {
                 return null;
             }
 
-            Rounds.Add(Round.Create(name, RoundType.DualTournament, bestOf, advanceAmount, this));
+            Rounds.Add(round);
             return Rounds.Last();
         }
 
-        public Round AddBracketRound(string name, int bestOf)
+        public RoundBase AddRoundRobinRound(string name, int bestOf, int advanceAmount)
         {
-            const int advanceAmount = 1;
+            RoundBase round = RoundRobinRound.Create(name, bestOf, advanceAmount, this);
 
-            if (!BasicRoundValidation(name, bestOf, advanceAmount))
+            if (round == null)
             {
                 return null;
             }
 
-            Rounds.Add(Round.Create(name, RoundType.Bracket, bestOf, advanceAmount, this));
+            Rounds.Add(round);
             return Rounds.Last();
         }
 
@@ -89,24 +91,24 @@ namespace Slask.Domain
             return Betters.Last();
         }
 
-        public Round GetRoundByRoundId(Guid id)
+        public RoundBase GetRoundByRoundId(Guid id)
         {
-            throw new NotImplementedException();
+            return Rounds.FirstOrDefault(round => round.Id == id);
         }
 
-        public Round GetRoundByRoundName(string name)
+        public RoundBase GetRoundByRoundName(string name)
         {
-            throw new NotImplementedException();
+            return Rounds.FirstOrDefault(round => round.Name.ToLower() == name.ToLower());
         }
 
         public PlayerReference GetPlayerReferenceByPlayerId(Guid id)
         {
-            return PlayerReferences.FirstOrDefault(playerReference => playerReference.Id == id);
+            return GetPlayerReferencesInTournament().FirstOrDefault(playerReference => playerReference.Id == id);
         }
 
         public PlayerReference GetPlayerReferenceByPlayerName(string name)
         {
-            return PlayerReferences.FirstOrDefault(playerReference => playerReference.Name.ToLower() == name.ToLower());
+            return GetPlayerReferencesInTournament().FirstOrDefault(playerReference => playerReference.Name.ToLower() == name.ToLower());
         }
 
         public Better GetBetterById(Guid id)
@@ -119,13 +121,25 @@ namespace Slask.Domain
             return Betters.FirstOrDefault(better => better.User.Name.ToLower() == name.ToLower());
         }
 
-        private bool BasicRoundValidation(string name, int bestOf, int advanceAmount)
+        public List<PlayerReference> GetPlayerReferencesInTournament()
         {
-            bool nameIsNotEmpty = name != "";
-            bool bestOfIsNotEven = bestOf % 2 != 0;
-            bool advanceAmountIsGreaterThanZero = advanceAmount > 0;
+            Dictionary<string, PlayerReference> playerReferenceDictionary = new Dictionary<string, PlayerReference>();
 
-            return nameIsNotEmpty && bestOfIsNotEven && advanceAmountIsGreaterThanZero;
+            foreach (RoundBase round in Rounds)
+            {
+                foreach (GroupBase group in round.Groups)
+                {
+                    foreach(PlayerReference playerReference in group.ParticipatingPlayers)
+                    {
+                        try
+                        {
+                            playerReferenceDictionary.Add(playerReference.Name, playerReference);
+                        } catch (Exception) { }
+                    }
+                }
+            }
+
+            return playerReferenceDictionary.Values.ToList();
         }
     }
 }
