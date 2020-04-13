@@ -250,9 +250,10 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             Tournament tournament = createdTournaments[tournamentIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparetedPlayerNames, ",");
 
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-            playerReferences.Should().NotBeNull();
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferences();
+
             playerReferences.Should().HaveCount(playerNames.Count);
+
             foreach (string playerName in playerNames)
             {
                 playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();

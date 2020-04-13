@@ -116,19 +116,6 @@ namespace Slask.UnitTests.DomainTests.RoundTests
             }
         }
 
-        [Fact]
-        public void AddingGroupToBracketRoundCreatesABracketGroup()
-        {
-            BracketRound bracketRound = CreateBracketRound();
-
-            //bracketRound.AddGroup();
-
-            BracketGroup group = bracketRound.Groups.First() as BracketGroup;
-
-            bracketRound.Groups.Should().HaveCount(1);
-            group.Should().BeOfType<BracketGroup>();
-        }
-
         private BracketRound CreateBracketRound(string name = "Bracket round", int bestOf = 3)
         {
             return tournament.AddBracketRound(name, bestOf) as BracketRound;

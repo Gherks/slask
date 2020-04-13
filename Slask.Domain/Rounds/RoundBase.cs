@@ -13,20 +13,17 @@ namespace Slask.Domain.Rounds
     {
         protected RoundBase()
         {
+            PlayersPerGroupCount = 2;
             Groups = new List<GroupBase>();
             PlayerReferences = new List<PlayerReference>();
         }
 
         public Guid Id { get; protected set; }
         public string Name { get; protected set; }
-        public int BestOf { get; protected set; }
         // CREATE TESTS do not allow group sizes to be less than advancing amount
         // CREATE TESTS make sure PlayerPerGroupCount cant be set to anything less than 2
-        public int PlayersPerGroupCount 
-        { 
-            get { return PlayersPerGroupCount; }
-            protected set { PlayersPerGroupCount = Math.Max(2, value); }
-        }
+        public int PlayersPerGroupCount { get; private set; }
+        public int BestOf { get; protected set; }
         public int AdvancingPerGroupCount { get; protected set; }
         public List<GroupBase> Groups { get; protected set; }
         public List<PlayerReference> PlayerReferences { get; protected set; }
@@ -40,6 +37,11 @@ namespace Slask.Domain.Rounds
             private set { }
         }
 
+        public int SetPlayersPerGroupCount(int count)
+        {
+            return PlayersPerGroupCount = Math.Max(2, count);
+        }
+
         public PlayerReference RegisterPlayerReference(string name)
         {
             bool roundIsFirstRound = IsFirstRound();
@@ -51,8 +53,11 @@ namespace Slask.Domain.Rounds
             {
                 PlayerReferences.Add(PlayerReference.Create(name, Tournament));
 
-                ConstructRound();
-                FillGroupsWithPlayerReferences();
+                if (PlayerReferences.Count > 1)
+                {
+                    ConstructRound();
+                    FillGroupsWithPlayerReferences();
+                }
 
                 return PlayerReferences.Last();
             }
@@ -87,34 +92,19 @@ namespace Slask.Domain.Rounds
             return true;
         }
 
-        private bool ConstructGroups(int participantCount)
-        {
-            int groupCount = (int)Math.Ceiling(participantCount / (double)PlayersPerGroupCount);
-
-            Groups.Clear();
-
-            for (int groupIndex = 0; groupIndex < groupCount; ++groupIndex)
-            {
-                Groups.Add(AddGroup());
-                Groups.Last().ConstructGroupLayout(PlayersPerGroupCount);
-            }
-
-            return true;
-        }
-
         public bool FillGroupsWithPlayerReferences()
         {
-            if(PlayerReferences.Count <= 1)
+            if (PlayerReferences.Count <= 1)
             {
                 // LOGG Error: Cant fill groups with players references unless round contains two or more player references.
                 return false;
             }
 
-            for(int groupIndex = 0; groupIndex < Groups.Count; ++groupIndex)
+            for (int groupIndex = 0; groupIndex < Groups.Count; ++groupIndex)
             {
-                int playerReferenceIndex = groupIndex * PlayersPerGroupCount;
+                int startPlayerReferenceIndex = groupIndex * PlayersPerGroupCount;
 
-                List<PlayerReference> playerReferences = PlayerReferences.GetRange(playerReferenceIndex, PlayersPerGroupCount);
+                List<PlayerReference> playerReferences = GetNextGroupOfPlayers(startPlayerReferenceIndex, PlayersPerGroupCount);
 
                 Groups[groupIndex].AddPlayerReferences(playerReferences);
             }
@@ -270,6 +260,38 @@ namespace Slask.Domain.Rounds
             bool lastGroupIsFinished = Groups.Last().GetPlayState() == PlayState.IsFinished;
 
             return lastGroupIsFinished ? PlayState.IsFinished : PlayState.IsPlaying;
+        }
+
+        private bool ConstructGroups(int participantCount)
+        {
+            int groupCount = (int)Math.Ceiling(participantCount / (double)PlayersPerGroupCount);
+
+            Groups.Clear();
+
+            for (int groupIndex = 0; groupIndex < groupCount; ++groupIndex)
+            {
+                Groups.Add(AddGroup());
+                Groups.Last().ConstructGroupLayout(PlayersPerGroupCount);
+            }
+
+            return true;
+        }
+
+        private List<PlayerReference> GetNextGroupOfPlayers(int startPlayerReferenceIndex, int playerReferenceCount)
+        {
+            List<PlayerReference> playerReferences = new List<PlayerReference>();
+
+            for (int playerReferenceIndex = startPlayerReferenceIndex; playerReferenceIndex < PlayerReferences.Count; ++playerReferenceIndex)
+            {
+                playerReferences.Add(PlayerReferences[playerReferenceIndex]);
+
+                if (playerReferences.Count >= playerReferenceCount)
+                {
+                    return playerReferences;
+                }
+            }
+
+            return playerReferences;
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             Tournament tournament = createdTournaments[createdTournamentIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferences();
 
             playerReferences.Should().HaveCount(playerReferencesInTournamentCount);
 

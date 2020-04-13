@@ -123,14 +123,6 @@ namespace Slask.Domain.Groups
 
         public override bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
         {
-            bool incorrectParticipantAmount = playerReferences.Count != ParticipatingPlayerCapacity;
-
-            if (incorrectParticipantAmount)
-            {
-                // LOGG Error: 
-                return false;
-            }
-
             PlayerReference participant1 = playerReferences.Count > 0 ? playerReferences[0] : null;
             PlayerReference participant2 = playerReferences.Count > 1 ? playerReferences[1] : null;
             PlayerReference participant3 = playerReferences.Count > 2 ? playerReferences[2] : null;

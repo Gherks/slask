@@ -12,25 +12,27 @@ namespace Slask.UnitTests.DomainTests
 {
     public class MatchTests
     {
+        private const string firstPlayerName = "Maru";
+        private const string secondPlayerName = "Stork";
+
         private readonly Tournament tournament;
         private readonly BracketRound bracketRound;
         private readonly BracketGroup bracketGroup;
+        private readonly Match match;
 
         public MatchTests()
         {
             tournament = Tournament.Create("GSL 2019");
             bracketRound = tournament.AddBracketRound("Bracket round", 3) as BracketRound;
-            //bracketGroup = bracketRound.AddGroup() as BracketGroup;
+            bracketRound.RegisterPlayerReference(firstPlayerName);
+            bracketRound.RegisterPlayerReference(secondPlayerName);
+            bracketGroup = bracketRound.Groups.First() as BracketGroup;
+            match = bracketGroup.Matches.First();
         }
 
         [Fact]
         public void CanCreateMatch()
         {
-            string firstPlayerName = "Maru";
-            string secondPlayerName = "Stork";
-
-            Match match = InitializeFirstMatch(firstPlayerName, secondPlayerName);
-
             match.Should().NotBeNull();
             match.Player1.Should().NotBeNull();
             match.Player1.Name.Should().Be(firstPlayerName);
@@ -44,18 +46,17 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void MatchMustContainDifferentPlayers()
         {
-            string playerName = "Maru";
+            Tournament tournament = Tournament.Create("GSL 2019");
+            BracketRound bracketRound = tournament.AddBracketRound("Bracket round", 3) as BracketRound;
+            bracketRound.RegisterPlayerReference(firstPlayerName);
+            bracketRound.RegisterPlayerReference(firstPlayerName);
 
-            InitializeFirstMatch(playerName, playerName);
-
-            bracketGroup.Matches.Should().BeEmpty();
+            bracketRound.Groups.Should().BeEmpty();
         }
 
         [Fact]
         public void CanAssignNewPlayerReferencesToMatch()
         {
-            Match match = InitializeFirstMatch();
-
             PlayerReference taejaPlayerReference = PlayerReference.Create("Taeja", tournament);
             PlayerReference rainPlayerReference = PlayerReference.Create("Rain", tournament);
 
@@ -68,8 +69,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CannotAssignSamePlayerReferenceAsBothPlayersInMatch()
         {
-            Match match = InitializeFirstMatch();
-
             PlayerReference firstPlayerReference = match.Player1.PlayerReference;
             PlayerReference secondPlayerReference = match.Player2.PlayerReference;
 
@@ -84,8 +83,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CanAssignNullPlayerReferenceToEitherPlayerInMatch()
         {
-            Match match = InitializeFirstMatch();
-
             PlayerReference maruPlayerReference = PlayerReference.Create("Maru", tournament);
             PlayerReference storkPlayerReference = PlayerReference.Create("Stork", tournament);
 
@@ -105,8 +102,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CanAssignNullPlayerReferenceToBothPlayersInMatch()
         {
-            Match match = InitializeFirstMatch();
-
             match.SetPlayers(null, null);
 
             match.Player1.Should().Be(null);
@@ -116,8 +111,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void MatchIsReadyWhenPlayerReferencesHasBeenAssignedToPlayers()
         {
-            Match match = InitializeFirstMatch();
-
             match.IsReady().Should().BeTrue();
             match.Player1.PlayerReference.Should().NotBeNull();
             match.Player2.PlayerReference.Should().NotBeNull();
@@ -126,8 +119,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void MatchIsNotReadyWhenNoPlayerReferenceHasBeenAssignedToMatch()
         {
-            Match match = InitializeFirstMatch();
-
             match.SetPlayers(null, null);
 
             match.IsReady().Should().BeFalse();
@@ -138,8 +129,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void MatchIsNotReadyWhenEitherPlayerReferenceHasBeenAssignedNull()
         {
-            Match match = InitializeFirstMatch();
-
             PlayerReference firstPlayerReference = match.Player1.PlayerReference;
             PlayerReference secondPlayerReference = match.Player2.PlayerReference;
 
@@ -159,11 +148,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CanFindPlayerInMatchByPlayerName()
         {
-            string firstPlayerName = "Maru";
-            string secondPlayerName = "Stork";
-
-            Match match = InitializeFirstMatch(firstPlayerName, secondPlayerName);
-
             Player firstFoundPlayer = match.FindPlayer(firstPlayerName);
             Player secondFoundPlayer = match.FindPlayer(secondPlayerName);
 
@@ -179,8 +163,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CanFindPlayerInMatchByPlayerId()
         {
-            Match match = InitializeFirstMatch();
-
             Player firstFoundPlayer = match.FindPlayer(match.Player1.Id);
             Player secondFoundPlayer = match.FindPlayer(match.Player2.Id);
 
@@ -196,8 +178,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void ReturnsNullWhenLookingForNonExistingPlayerInMatchByPlayerName()
         {
-            Match match = InitializeFirstMatch();
-
             Player foundPlayer = match.FindPlayer("non-existing-player");
 
             foundPlayer.Should().BeNull();
@@ -206,8 +186,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void ReturnsNullWhenLookingForNonExistingPlayerInMatchByPlayerId()
         {
-            Match match = InitializeFirstMatch();
-
             Player foundPlayer = match.FindPlayer(Guid.NewGuid());
 
             foundPlayer.Should().BeNull();
@@ -216,7 +194,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void MatchStartDateTimeCannotBeChangedToSometimeInThePast()
         {
-            Match match = InitializeFirstMatch();
             DateTime initialDateTime = match.StartDateTime;
 
             match.SetStartDateTime(DateTime.Now.AddSeconds(-1));
@@ -227,8 +204,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void PlayStateIsEqualToNotBegunBeforeMactchHasStarted()
         {
-            Match match = InitializeFirstMatch();
-
             PlayState playState = match.GetPlayState();
 
             playState.Should().Be(PlayState.NotBegun);
@@ -237,8 +212,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void PlayStateIsEqualToIsPlayingWhenMatchHasStartedButNotFinished()
         {
-            Match match = InitializeFirstMatch();
-
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore() - 1);
 
@@ -250,8 +223,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void PlayStateIsEqualToIsFinishedWhenMatchHasAWinner()
         {
-            Match match = InitializeFirstMatch();
-
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore());
 
@@ -263,8 +234,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CanGetWinningPlayerWhenMatchIsFinished()
         {
-            Match match = InitializeFirstMatch();
-
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore());
 
@@ -276,8 +245,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CanGetLosingPlayerWhenMatchIsFinished()
         {
-            Match match = InitializeFirstMatch();
-
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore());
 
@@ -289,8 +256,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CannotGetWinningPlayerBeforeMatchHasStarted()
         {
-            Match match = InitializeFirstMatch();
-
             Player player = match.GetWinningPlayer();
 
             player.Should().BeNull();
@@ -299,8 +264,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CannotGetLosingPlayerBeforeMatchHasStarted()
         {
-            Match match = InitializeFirstMatch();
-
             Player player = match.GetLosingPlayer();
 
             player.Should().BeNull();
@@ -309,8 +272,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CannotGetWinningPlayerWhileMatchIsPlaying()
         {
-            Match match = InitializeFirstMatch();
-
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore() - 1);
 
@@ -319,11 +280,9 @@ namespace Slask.UnitTests.DomainTests
             player.Should().BeNull();
         }
 
-        [Fact] 
+        [Fact]
         public void CannotGetLosingPlayerWhileMatchIsPlaying()
         {
-            Match match = InitializeFirstMatch();
-
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore() - 1);
 
@@ -335,8 +294,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CannotIncreaseScoreBeforeMatchHasStarted()
         {
-            Match match = InitializeFirstMatch();
-
             match.Player1.IncreaseScore(1);
             match.Player2.IncreaseScore(1);
 
@@ -347,8 +304,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void CannotIncreaseScoreWhenMatchIsFinished()
         {
-            Match match = InitializeFirstMatch();
-
             match.Player1.IncreaseScore(1);
             match.Player2.IncreaseScore(1);
 
@@ -359,10 +314,6 @@ namespace Slask.UnitTests.DomainTests
         [Fact]
         public void MatchRemainsUnchangedWhenAddingPlayerReferenceToMatchWithTwoPlayersAlready()
         {
-            string firstPlayerName = "Maru";
-            string secondPlayerName = "Stork";
-
-            Match match = InitializeFirstMatch(firstPlayerName, secondPlayerName);
             PlayerReference playerReference = PlayerReference.Create("Taeja", tournament);
 
             match.AddPlayer(playerReference);
@@ -371,21 +322,6 @@ namespace Slask.UnitTests.DomainTests
             match.Player1.Name.Should().Be(firstPlayerName);
             match.Player2.Should().NotBeNull();
             match.Player2.Name.Should().Be(secondPlayerName);
-        }
-
-        private Match InitializeFirstMatch(string firstPlayerName = "Maru", string secondPlayerName = "Stork")
-        {
-            //bracketGroup.AddNewPlayerReference(firstPlayerName);
-            //bracketGroup.AddNewPlayerReference(secondPlayerName);
-            bracketRound.RegisterPlayerReference(firstPlayerName);
-            bracketRound.RegisterPlayerReference(secondPlayerName);
-
-            if(bracketGroup.Matches.Count > 0)
-            {
-                return bracketGroup.Matches.First();
-            }
-
-            return null;
         }
 
         private int GetWinningScore()

@@ -129,19 +129,6 @@ namespace Slask.UnitTests.DomainTests.RoundTests
             }
         }
 
-        [Fact]
-        public void AddingGroupToRoundRobinRoundCreatesARoundRobinGroup()
-        {
-            RoundRobinRound roundRobinRound = CreateRoundRobinRound();
-
-            //roundRobinRound.AddGroup();
-
-            RoundRobinGroup group = roundRobinRound.Groups.First() as RoundRobinGroup;
-
-            roundRobinRound.Groups.Should().HaveCount(1);
-            group.Should().BeOfType<RoundRobinGroup>();
-        }
-
         private RoundRobinRound CreateRoundRobinRound(string name = "Round robin round", int bestOf = 3, int advancingPerGroupAmount = 2)
         {
             return tournament.AddRoundRobinRound(name, bestOf, advancingPerGroupAmount) as RoundRobinRound;

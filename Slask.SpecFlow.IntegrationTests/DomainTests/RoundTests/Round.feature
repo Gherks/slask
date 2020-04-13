@@ -13,4 +13,4 @@ Scenario: Cannot register new players references when tournament has begun
 			| Created tournament index | Round index | Group index | 
 			| 0                        | 0           | 0           | 
 		And players "FailedRegistration" is registered to round 0 
-	Then registered players in tournament 0 should be exactly "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth"
+	Then created tournament 0 should contain exactly these player references with names: "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth"

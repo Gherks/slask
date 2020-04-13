@@ -167,7 +167,7 @@ namespace Slask.UnitTests.ServiceTests
 
             RoundBase round = tournament.AddRoundRobinRound("Round robin round", 3, 2);
 
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferences();
 
             playerReferences.Should().HaveCount(0);
         }
@@ -178,7 +178,7 @@ namespace Slask.UnitTests.ServiceTests
             InitializeUsersAndBetters();
             InitializeRoundGroupAndPlayers();
 
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferences();
 
             playerReferences.Should().NotBeNull();
             playerReferences.Should().HaveCount(8);
@@ -256,8 +256,6 @@ namespace Slask.UnitTests.ServiceTests
             round.RegisterPlayerReference("FanTaSy");
             round.RegisterPlayerReference("Stephano");
             round.RegisterPlayerReference("Thorzain");
-
-            //GroupBase group = round.AddGroup();
         }
     }
 }

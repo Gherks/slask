@@ -116,19 +116,6 @@ namespace Slask.UnitTests.DomainTests.RoundTests
             }
         }
 
-        [Fact]
-        public void AddingGroupToDualTournamentRoundCreatesADualTournamentGroup()
-        {
-            DualTournamentRound dualTournamentRound = CreateDualTournamentRound();
-
-            //dualTournamentRound.AddGroup();
-
-            DualTournamentGroup group = dualTournamentRound.Groups.First() as DualTournamentGroup;
-
-            dualTournamentRound.Groups.Should().HaveCount(1);
-            group.Should().BeOfType<DualTournamentGroup>();
-        }
-
         private DualTournamentRound CreateDualTournamentRound(string name = "Dual tournament round", int bestOf = 3)
         {
             return tournament.AddDualTournamentRound(name, bestOf) as DualTournamentRound;

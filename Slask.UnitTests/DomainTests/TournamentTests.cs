@@ -185,7 +185,7 @@ namespace Slask.UnitTests.DomainTests
                 bracketRound.RegisterPlayerReference(playerName);
             }
 
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferences();
 
             playerReferences.Should().HaveCount(playerNames.Count);
             foreach (string playerName in playerNames)
@@ -202,7 +202,7 @@ namespace Slask.UnitTests.DomainTests
             bracketRound.RegisterPlayerReference(playerName);
             bracketRound.RegisterPlayerReference(playerName);
 
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferences();
 
             playerReferences.Should().HaveCount(1);
             playerReferences.First().Name.Should().Be(playerName);

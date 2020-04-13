@@ -215,20 +215,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             fetchedRounds[roundIndex].Should().BeNull();
         }
 
-        [Then(@"registered players in tournament (.*) should be exactly ""(.*)""")]
-        public void ThenRegisteredPlayersInTournamentShouldBeExactly(int tournamentIndex, string commaSeparatedPlayerNames)
-        {
-            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
-            RoundBase round = createdTournaments[tournamentIndex].Rounds.First();
-
-            round.PlayerReferences.Should().HaveCount(playerNames.Count);
-
-            foreach (string playerName in playerNames)
-            {
-                round.PlayerReferences.SingleOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
-            }
-        }
-
         protected static void CheckRoundValidity(RoundBase round, string correctName, int bestOf)
         {
             if (round == null)

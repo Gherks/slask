@@ -10,9 +10,9 @@ namespace Slask.Domain.Rounds
         {
         }
 
-        public static RoundRobinRound Create(string name, int bestOf, int advancingPerGroupAmount, Tournament tournament)
+        public static RoundRobinRound Create(string name, int bestOf, int advancingPerGroupCount, Tournament tournament)
         {
-            if (!InitialValidationSucceeds(name, bestOf, advancingPerGroupAmount) || tournament == null)
+            if (!InitialValidationSucceeds(name, bestOf, advancingPerGroupCount) || tournament == null)
             {
                 return null;
             }
@@ -22,7 +22,7 @@ namespace Slask.Domain.Rounds
                 Id = Guid.NewGuid(),
                 Name = name,
                 BestOf = bestOf,
-                AdvancingPerGroupCount = advancingPerGroupAmount,
+                AdvancingPerGroupCount = advancingPerGroupCount,
                 TournamentId = tournament.Id,
                 Tournament = tournament
             };

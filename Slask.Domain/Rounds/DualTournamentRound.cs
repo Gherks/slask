@@ -8,6 +8,7 @@ namespace Slask.Domain.Rounds
     {
         private DualTournamentRound()
         {
+            SetPlayersPerGroupCount(4);
         }
 
         public static DualTournamentRound Create(string name, int bestOf, Tournament tournament)

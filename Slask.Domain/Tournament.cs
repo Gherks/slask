@@ -64,9 +64,9 @@ namespace Slask.Domain
             return Rounds.Last();
         }
 
-        public RoundBase AddRoundRobinRound(string name, int bestOf, int advanceAmount)
+        public RoundBase AddRoundRobinRound(string name, int bestOf, int advancingPerGroupCount)
         {
-            RoundBase round = RoundRobinRound.Create(name, bestOf, advanceAmount, this);
+            RoundBase round = RoundRobinRound.Create(name, bestOf, advancingPerGroupCount, this);
 
             if (round == null)
             {
@@ -103,12 +103,12 @@ namespace Slask.Domain
 
         public PlayerReference GetPlayerReferenceByPlayerId(Guid id)
         {
-            return GetPlayerReferencesInTournament().FirstOrDefault(playerReference => playerReference.Id == id);
+            return GetPlayerReferences().FirstOrDefault(playerReference => playerReference.Id == id);
         }
 
         public PlayerReference GetPlayerReferenceByPlayerName(string name)
         {
-            return GetPlayerReferencesInTournament().FirstOrDefault(playerReference => playerReference.Name.ToLower() == name.ToLower());
+            return GetPlayerReferences().FirstOrDefault(playerReference => playerReference.Name.ToLower() == name.ToLower());
         }
 
         public Better GetBetterById(Guid id)
@@ -121,7 +121,7 @@ namespace Slask.Domain
             return Betters.FirstOrDefault(better => better.User.Name.ToLower() == name.ToLower());
         }
 
-        public List<PlayerReference> GetPlayerReferencesInTournament()
+        public List<PlayerReference> GetPlayerReferences()
         {
             bool tournamentHasNoRounds = Rounds.Count == 0;
 

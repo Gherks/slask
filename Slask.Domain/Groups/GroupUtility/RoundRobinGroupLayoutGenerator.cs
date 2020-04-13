@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Slask.Domain.Groups
@@ -62,15 +63,23 @@ namespace Slask.Domain.Groups
          */
         public static void FillMatchesWithPlayers(List<PlayerReference> participants, List<Match> matches, GroupBase parentGroup)
         {
+            bool groupContainsOneParticipant = participants.Count == 1;
+
+            if (groupContainsOneParticipant)
+            {
+                matches.First().SetPlayers(participants.First(), null);
+                return;
+            }
+
             bool hasEvenAmountOfPlayers = (participants.Count % 2) == 0;
 
             if (hasEvenAmountOfPlayers)
             {
-                UseEvenPlayerAmountAlgorithm(participants, matches, parentGroup);
+                UseEvenPlayerAmountAlgorithm(new List<PlayerReference>(participants), matches, parentGroup);
             }
             else
             {
-                UseUnevenPlayerAmountAlgorithm(participants, matches, parentGroup);
+                UseUnevenPlayerAmountAlgorithm(new List<PlayerReference>(participants), matches, parentGroup);
             }
         }
 
