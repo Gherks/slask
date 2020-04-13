@@ -107,9 +107,9 @@ namespace Slask.Domain.Groups
             }
         }
 
-        protected override void ConstructGroupLayout()
+        public override bool ConstructGroupLayout(int playersPerGroupAmount)
         {
-            int matchAmount = ParticipatingPlayers.Count - 1;
+            int matchAmount = playersPerGroupAmount - 1;
             ChangeMatchAmountTo(matchAmount);
 
             if (Matches.Count > 0)
@@ -118,10 +118,12 @@ namespace Slask.Domain.Groups
                 BracketNodeSystem.Construct(Matches);
             }
 
-            FillMatchesWithPlayerReferences();
+            //FillMatchesWithPlayerReferences();
+
+            return true;
         }
 
-        private void FillMatchesWithPlayerReferences()
+        public override bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
         {
             for (int matchIndex = 0; matchIndex < Matches.Count; ++matchIndex)
             {
@@ -130,8 +132,8 @@ namespace Slask.Domain.Groups
 
                 try
                 {
-                    playerReference1 = ParticipatingPlayers[matchIndex * 2];
-                    playerReference2 = ParticipatingPlayers[(matchIndex * 2) + 1];
+                    playerReference1 = playerReferences[matchIndex * 2];
+                    playerReference2 = playerReferences[(matchIndex * 2) + 1];
 
                     Matches[matchIndex].SetPlayers(playerReference1, playerReference2);
                 }
@@ -144,6 +146,33 @@ namespace Slask.Domain.Groups
                     break;
                 }
             }
+
+            return true;
         }
+
+        //private void FillMatchesWithPlayerReferences()
+        //{
+        //    for (int matchIndex = 0; matchIndex < Matches.Count; ++matchIndex)
+        //    {
+        //        PlayerReference playerReference1 = null;
+        //        PlayerReference playerReference2 = null;
+
+        //        try
+        //        {
+        //            //playerReference1 = ParticipatingPlayers[matchIndex * 2];
+        //            //playerReference2 = ParticipatingPlayers[(matchIndex * 2) + 1];
+
+        //            Matches[matchIndex].SetPlayers(playerReference1, playerReference2);
+        //        }
+        //        catch
+        //        {
+        //            if (playerReference1 != null || playerReference2 != null)
+        //            {
+        //                Matches[matchIndex].SetPlayers(playerReference1, playerReference2);
+        //            }
+        //            break;
+        //        }
+        //    }
+        //}
     }
 }

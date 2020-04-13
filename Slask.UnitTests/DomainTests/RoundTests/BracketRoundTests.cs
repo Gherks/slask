@@ -83,11 +83,45 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         }
 
         [Fact]
+        public void CanRegisterPlayerReferencesToFirstBracketRound()
+        {
+            string playerName = "Maru";
+
+            BracketRound bracketRound = CreateBracketRound();
+
+            PlayerReference playerReference = bracketRound.RegisterPlayerReference(playerName);
+
+            playerReference.Id.Should().NotBeEmpty();
+            playerReference.Name.Should().Be(playerName);
+            playerReference.TournamentId.Should().Be(bracketRound.TournamentId);
+            playerReference.Tournament.Should().Be(bracketRound.Tournament);
+        }
+
+        [Fact]
+        public void CannotRegisterPlayerReferencesToBracketRoundsThatIsNotTheFirstOne()
+        {
+            string playerName = "Maru";
+            string roundName = "Bracket round";
+            int roundAmount = 5;
+
+            BracketRound firstBracketRound = CreateBracketRound();
+
+            for (int index = 1; index < roundAmount; ++index)
+            {
+                BracketRound bracketRound = CreateBracketRound(roundName + index.ToString());
+                PlayerReference playerReference = bracketRound.RegisterPlayerReference(playerName + index.ToString());
+
+                playerReference.Should().BeNull();
+                bracketRound.PlayerReferences.Should().HaveCount(0);
+            }
+        }
+
+        [Fact]
         public void AddingGroupToBracketRoundCreatesABracketGroup()
         {
             BracketRound bracketRound = CreateBracketRound();
 
-            bracketRound.AddGroup();
+            //bracketRound.AddGroup();
 
             BracketGroup group = bracketRound.Groups.First() as BracketGroup;
 

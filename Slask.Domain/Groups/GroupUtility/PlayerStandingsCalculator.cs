@@ -45,7 +45,7 @@ namespace Slask.Domain.Groups
         {
             List<PlayerStandingEntry> playerStandings = new List<PlayerStandingEntry>();
 
-            foreach (PlayerReference participant in group.ParticipatingPlayers)
+            foreach (PlayerReference participant in group.GetPlayerReferences())
             {
                 playerStandings.Add(PlayerStandingEntry.Create(participant));
             }

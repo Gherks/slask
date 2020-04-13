@@ -20,7 +20,7 @@ namespace Slask.UnitTests.DomainTests
         {
             tournament = Tournament.Create("GSL 2019");
             bracketRound = tournament.AddBracketRound("Bracket round", 3) as BracketRound;
-            bracketGroup = bracketRound.AddGroup() as BracketGroup;
+            //bracketGroup = bracketRound.AddGroup() as BracketGroup;
         }
 
         [Fact]
@@ -375,8 +375,10 @@ namespace Slask.UnitTests.DomainTests
 
         private Match InitializeFirstMatch(string firstPlayerName = "Maru", string secondPlayerName = "Stork")
         {
-            bracketGroup.AddNewPlayerReference(firstPlayerName);
-            bracketGroup.AddNewPlayerReference(secondPlayerName);
+            //bracketGroup.AddNewPlayerReference(firstPlayerName);
+            //bracketGroup.AddNewPlayerReference(secondPlayerName);
+            bracketRound.RegisterPlayerReference(firstPlayerName);
+            bracketRound.RegisterPlayerReference(secondPlayerName);
 
             if(bracketGroup.Matches.Count > 0)
             {

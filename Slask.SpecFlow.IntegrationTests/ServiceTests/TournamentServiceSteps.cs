@@ -81,15 +81,16 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
             RoundBase bracketRound = tournament.AddBracketRound("BracketRound", 3);
-            BracketGroup bracketGroup = (BracketGroup)bracketRound.AddGroup();
-
-            createdRounds.Add(bracketRound);
-            createdGroups.Add(bracketGroup);
 
             foreach (string playerName in playerNames)
             {
-                createdPlayerReferences.Add(bracketGroup.AddNewPlayerReference(playerName));
+                createdPlayerReferences.Add(bracketRound.RegisterPlayerReference(playerName));
             }
+
+            //BracketGroup bracketGroup = (BracketGroup)bracketRound.AddGroup();
+
+            //createdRounds.Add(bracketRound);
+            //createdGroups.Add(bracketGroup);
 
             return tournament;
         }
@@ -262,6 +263,8 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
         public void ThenFetchedPlayerReferencesShouldBeExactlyThesePlayerReferencesWithNames(string commaSeparetedPlayerNames)
         {
             List<string> playerNames = StringUtility.ToStringList(commaSeparetedPlayerNames, ",");
+
+            fetchedPlayerReferences.Should().HaveCount(playerNames.Count);
 
             foreach (string playerName in playerNames)
             {

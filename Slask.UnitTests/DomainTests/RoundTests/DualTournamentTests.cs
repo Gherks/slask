@@ -83,11 +83,45 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         }
 
         [Fact]
+        public void CanRegisterPlayerReferencesToFirstDualTournamentRound()
+        {
+            string playerName = "Maru";
+
+            DualTournamentRound dualTournamentRound = CreateDualTournamentRound();
+
+            PlayerReference playerReference = dualTournamentRound.RegisterPlayerReference(playerName);
+
+            playerReference.Id.Should().NotBeEmpty();
+            playerReference.Name.Should().Be(playerName);
+            playerReference.TournamentId.Should().Be(dualTournamentRound.TournamentId);
+            playerReference.Tournament.Should().Be(dualTournamentRound.Tournament);
+        }
+
+        [Fact]
+        public void CannotRegisterPlayerReferencesToDualTournamentRoundsThatIsNotTheFirstOne()
+        {
+            string playerName = "Maru";
+            string roundName = "Dual tournament round";
+            int roundAmount = 5;
+
+            DualTournamentRound firstDualTournamentRound = CreateDualTournamentRound();
+
+            for (int index = 1; index < roundAmount; ++index)
+            {
+                DualTournamentRound dualTournamentRound = CreateDualTournamentRound(roundName + index.ToString());
+                PlayerReference playerReference = dualTournamentRound.RegisterPlayerReference(playerName + index.ToString());
+
+                playerReference.Should().BeNull();
+                dualTournamentRound.PlayerReferences.Should().HaveCount(0);
+            }
+        }
+
+        [Fact]
         public void AddingGroupToDualTournamentRoundCreatesADualTournamentGroup()
         {
             DualTournamentRound dualTournamentRound = CreateDualTournamentRound();
 
-            dualTournamentRound.AddGroup();
+            //dualTournamentRound.AddGroup();
 
             DualTournamentGroup group = dualTournamentRound.Groups.First() as DualTournamentGroup;
 

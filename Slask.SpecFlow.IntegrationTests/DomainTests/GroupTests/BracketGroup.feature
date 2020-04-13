@@ -12,11 +12,12 @@ Scenario: Adding group to bracket round creates bracket group
 
 Scenario: Start time in matches in bracket group is spaced with one hour upon creation
 	Given a tournament named "GSL 2019" has been created
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 		And created tournament 0 adds rounds
 			| Round type | Round name    | Best of |
 			| Bracket    | Bracket round | 3       |
 		And created round 0 adds 1 groups
-	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is added to created group 0
+	#When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is added to created group 0
 	Then minutes between matches in created group 0 should be 60
 
 Scenario: Creates proper bracket layout upon group creation
@@ -40,8 +41,9 @@ Scenario: Creates proper bracket layout upon group creation
 		And created tournament 0 adds rounds
 			| Round type | Round name    | Best of |
 			| Bracket    | Bracket round | 3       |
+		And players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to first round in tournament 0
 		And created round 0 adds 1 groups
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is added to created group 0
+	#When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is added to created group 0
 	Then participating players in created group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |

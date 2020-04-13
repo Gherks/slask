@@ -20,9 +20,12 @@ namespace Slask.UnitTests.DomainTests.PlayerTests
         {
             tournament = Tournament.Create("GSL 2019");
             round = tournament.AddBracketRound("Bracket round", 7) as BracketRound;
-            group = round.AddGroup() as BracketGroup;
-            playerReference = group.AddNewPlayerReference("Maru");
-            group.AddNewPlayerReference("Stork");
+            playerReference = round.RegisterPlayerReference("Maru");
+            round.RegisterPlayerReference("Stork");
+            group = round.Groups.First() as BracketGroup;
+            //group = round.AddGroup() as BracketGroup;
+            //playerReference = group.AddNewPlayerReference("Maru");
+            //group.AddNewPlayerReference("Stork");
             match = group.Matches.First();
         }
 

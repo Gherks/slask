@@ -28,10 +28,9 @@ namespace Slask.Domain.Rounds
             };
         }
 
-        public override GroupBase AddGroup()
+        protected override GroupBase AddGroup()
         {
-            Groups.Add(RoundRobinGroup.Create(this));
-            return Groups.Last();
+            return RoundRobinGroup.Create(this);
         }
 
         public static bool InitialValidationSucceeds(string name, int bestOf, int advanceAmount)

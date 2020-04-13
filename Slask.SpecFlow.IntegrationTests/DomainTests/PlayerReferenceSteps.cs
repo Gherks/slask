@@ -21,9 +21,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
         [When(@"a player named ""(.*)"" has been added to created group (.*)")]
         public void GivenAPlayerNamedHasBeenAddedToCreatedGroup(string playerName, int groupIndex)
         {
-            GroupBase group = createdGroups[groupIndex];
+            //GroupBase group = createdGroups[groupIndex];
 
-            group.AddNewPlayerReference(playerName);
+            //group.AddNewPlayerReference(playerName);
         }
 
         [When(@"renaming created player reference (.*) to ""(.*)""")]

@@ -7,9 +7,9 @@ namespace Slask.Domain.Groups
     // CREATE TESTS
     public static class RoundRobinGroupLayoutGenerator
     {
-        public static List<Match> Generate(List<PlayerReference> participants, GroupBase parentGroup)
+        public static List<Match> GenerateMatches(int participatingPlayerAmount, GroupBase parentGroup)
         {
-            int matchAmount = CalculateMatchAmount(participants.Count);
+            int matchAmount = CalculateMatchAmount(participatingPlayerAmount);
 
             List<Match> matches = new List<Match>();
 
@@ -18,7 +18,7 @@ namespace Slask.Domain.Groups
                 matches.Add(Match.Create(parentGroup));
             }
 
-            AssignPlayersToMatches(new List<PlayerReference>(participants), matches, parentGroup);
+            //AssignPlayersToMatches(new List<PlayerReference>(participants), matches, parentGroup);
 
             return matches;
         }
@@ -60,7 +60,7 @@ namespace Slask.Domain.Groups
          * | 2 vs 5 |   | 1 vs 3 |   | 4 vs 2 |   | 5 vs 1 |   | 3 vs 4 |
          *     3            2            1            4            5
          */
-        private static void AssignPlayersToMatches(List<PlayerReference> participants, List<Match> matches, GroupBase parentGroup)
+        public static void FillMatchesWithPlayers(List<PlayerReference> participants, List<Match> matches, GroupBase parentGroup)
         {
             bool hasEvenAmountOfPlayers = (participants.Count % 2) == 0;
 

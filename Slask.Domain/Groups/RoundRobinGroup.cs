@@ -51,9 +51,16 @@ namespace Slask.Domain.Groups
             return true;
         }
 
-        protected override void ConstructGroupLayout()
+        public override bool ConstructGroupLayout(int playersPerGroupAmount)
         {
-            Matches = RoundRobinGroupLayoutGenerator.Generate(ParticipatingPlayers, this);
+            Matches = RoundRobinGroupLayoutGenerator.GenerateMatches(playersPerGroupAmount, this);
+            return true;
+        }
+
+        public override bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
+        {
+            RoundRobinGroupLayoutGenerator.FillMatchesWithPlayers(playerReferences, Matches, this);
+            return true;
         }
     }
 }

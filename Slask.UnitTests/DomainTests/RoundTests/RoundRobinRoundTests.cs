@@ -96,11 +96,45 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         }
 
         [Fact]
+        public void CanRegisterPlayerReferencesToFirstRoundRobinRound()
+        {
+            string playerName = "Maru";
+
+            RoundRobinRound roundRobinRound = CreateRoundRobinRound();
+
+            PlayerReference playerReference =  roundRobinRound.RegisterPlayerReference(playerName);
+
+            playerReference.Id.Should().NotBeEmpty();
+            playerReference.Name.Should().Be(playerName);
+            playerReference.TournamentId.Should().Be(roundRobinRound.TournamentId);
+            playerReference.Tournament.Should().Be(roundRobinRound.Tournament);
+        }
+
+        [Fact]
+        public void CannotRegisterPlayerReferencesToRoundRobinRoundsThatIsNotTheFirstOne()
+        {
+            string playerName = "Maru";
+            string roundName = "Round robin round";
+            int roundAmount = 5;
+
+            RoundRobinRound firstRoundRobinRound = CreateRoundRobinRound();
+
+            for(int index = 1; index < roundAmount; ++index)
+            {
+                RoundRobinRound roundRobinRound = CreateRoundRobinRound(roundName + index.ToString());
+                PlayerReference playerReference = roundRobinRound.RegisterPlayerReference(playerName + index.ToString());
+
+                playerReference.Should().BeNull();
+                roundRobinRound.PlayerReferences.Should().HaveCount(0);
+            }
+        }
+
+        [Fact]
         public void AddingGroupToRoundRobinRoundCreatesARoundRobinGroup()
         {
             RoundRobinRound roundRobinRound = CreateRoundRobinRound();
 
-            roundRobinRound.AddGroup();
+            //roundRobinRound.AddGroup();
 
             RoundRobinGroup group = roundRobinRound.Groups.First() as RoundRobinGroup;
 

@@ -123,23 +123,33 @@ namespace Slask.Domain
 
         public List<PlayerReference> GetPlayerReferencesInTournament()
         {
-            Dictionary<string, PlayerReference> playerReferenceDictionary = new Dictionary<string, PlayerReference>();
+            bool tournamentHasNoRounds = Rounds.Count == 0;
 
-            foreach (RoundBase round in Rounds)
+            if(tournamentHasNoRounds)
             {
-                foreach (GroupBase group in round.Groups)
-                {
-                    foreach(PlayerReference playerReference in group.ParticipatingPlayers)
-                    {
-                        try
-                        {
-                            playerReferenceDictionary.Add(playerReference.Name, playerReference);
-                        } catch (Exception) { }
-                    }
-                }
+                // LOGG Error: 
+                return new List<PlayerReference>();
             }
 
-            return playerReferenceDictionary.Values.ToList();
+            //Dictionary<string, PlayerReference> playerReferenceDictionary = new Dictionary<string, PlayerReference>();
+
+            ////foreach (RoundBase round in Rounds)
+            //{
+            //    //foreach (GroupBase group in Rounds.First().Groups)
+            //    {
+            //        foreach(PlayerReference playerReference in group.ParticipatingPlayers)
+            //        {
+            //            try
+            //            {
+            //                playerReferenceDictionary.Add(playerReference.Name, playerReference);
+            //            } catch (Exception) { }
+            //        }
+            //    }
+            //}
+
+            //return playerReferenceDictionary.Values.ToList();
+
+            return Rounds.First().PlayerReferences;
         }
     }
 }

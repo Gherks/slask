@@ -1,5 +1,6 @@
 ﻿using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
@@ -13,21 +14,112 @@ namespace Slask.Domain.Rounds
         protected RoundBase()
         {
             Groups = new List<GroupBase>();
+            PlayerReferences = new List<PlayerReference>();
         }
 
         public Guid Id { get; protected set; }
         public string Name { get; protected set; }
         public int BestOf { get; protected set; }
+        // CREATE TESTS do not allow group sizes to be less than advancing amount
+        // CREATE TESTS make sure PlayerPerGroupCount cant be set to anything less than 2
+        public int PlayersPerGroupCount 
+        { 
+            get { return PlayersPerGroupCount; }
+            protected set { PlayersPerGroupCount = Math.Max(2, value); }
+        }
         public int AdvancingPerGroupCount { get; protected set; }
         public List<GroupBase> Groups { get; protected set; }
+        public List<PlayerReference> PlayerReferences { get; protected set; }
         public Guid TournamentId { get; protected set; }
         public Tournament Tournament { get; protected set; }
 
         [NotMapped]
-        public int AdvancingCount
+        public int AdvancingPlayersCount
         {
             get { return AdvancingPerGroupCount * Groups.Count; }
             private set { }
+        }
+
+        public PlayerReference RegisterPlayerReference(string name)
+        {
+            bool roundIsFirstRound = IsFirstRound();
+            bool tournamentHasNotBegun = GetPlayState() == PlayState.NotBegun;
+            bool nameIsNotRegistered = !PlayerReferences.Any(playerReference => playerReference.Name == name);
+            bool nameIsNotEmpty = name.Length != 0;
+
+            if (roundIsFirstRound && tournamentHasNotBegun && nameIsNotRegistered && nameIsNotEmpty)
+            {
+                PlayerReferences.Add(PlayerReference.Create(name, Tournament));
+
+                ConstructRound();
+                FillGroupsWithPlayerReferences();
+
+                return PlayerReferences.Last();
+            }
+
+            return null;
+        }
+
+        public bool ConstructRound()
+        {
+            int participantCount;
+
+            if (IsFirstRound())
+            {
+                participantCount = PlayerReferences.Count;
+            }
+            else
+            {
+                participantCount = GetPreviousRound().AdvancingPlayersCount;
+            }
+
+            ConstructGroups(participantCount);
+            RoundIssueFinder.FindIssues(this, participantCount);
+
+            RoundBase nextRound = GetNextRound();
+            bool nextRoundExist = nextRound != null;
+
+            if (nextRoundExist)
+            {
+                return nextRound.ConstructRound();
+            }
+
+            return true;
+        }
+
+        private bool ConstructGroups(int participantCount)
+        {
+            int groupCount = (int)Math.Ceiling(participantCount / (double)PlayersPerGroupCount);
+
+            Groups.Clear();
+
+            for (int groupIndex = 0; groupIndex < groupCount; ++groupIndex)
+            {
+                Groups.Add(AddGroup());
+                Groups.Last().ConstructGroupLayout(PlayersPerGroupCount);
+            }
+
+            return true;
+        }
+
+        public bool FillGroupsWithPlayerReferences()
+        {
+            if(PlayerReferences.Count <= 1)
+            {
+                // LOGG Error: Cant fill groups with players references unless round contains two or more player references.
+                return false;
+            }
+
+            for(int groupIndex = 0; groupIndex < Groups.Count; ++groupIndex)
+            {
+                int playerReferenceIndex = groupIndex * PlayersPerGroupCount;
+
+                List<PlayerReference> playerReferences = PlayerReferences.GetRange(playerReferenceIndex, PlayersPerGroupCount);
+
+                Groups[groupIndex].AddPlayerReferences(playerReferences);
+            }
+
+            return true;
         }
 
         // CREATE TESTS
@@ -66,18 +158,18 @@ namespace Slask.Domain.Rounds
             return false;
         }
 
-        public virtual GroupBase AddGroup()
-        {
-            // LOGG Error: Adding group using base, something when horribly wrong.
-            throw new NotImplementedException();
-        }
-
         public void OnGroupJustFinished()
         {
             if (GetPlayState() == PlayState.IsFinished)
             {
                 AdvancingPlayerTransfer.TransferToNextRound(this);
             }
+        }
+
+        protected virtual GroupBase AddGroup()
+        {
+            // LOGG Error: Adding group using base, something when horribly wrong.
+            throw new NotImplementedException();
         }
 
         // CREATE TESTS?
@@ -113,7 +205,7 @@ namespace Slask.Domain.Rounds
         {
             List<Match> matches = new List<Match>();
 
-            foreach(GroupBase group in Groups)
+            foreach (GroupBase group in Groups)
             {
                 matches.AddRange(group.Matches);
             }
@@ -167,17 +259,17 @@ namespace Slask.Domain.Rounds
 
         public PlayState GetPlayState()
         {
-            if (Groups.First().GetPlayState() == PlayState.NotBegun)
+            bool hasNoGroups = Groups.Count == 0;
+            bool hasNotBegun = hasNoGroups || Groups.First().GetPlayState() == PlayState.NotBegun;
+
+            if (hasNotBegun)
             {
                 return PlayState.NotBegun;
             }
 
-            if (Groups.Last().GetPlayState() == PlayState.IsFinished)
-            {
-                return PlayState.IsFinished;
-            }
+            bool lastGroupIsFinished = Groups.Last().GetPlayState() == PlayState.IsFinished;
 
-            return PlayState.IsPlaying;
+            return lastGroupIsFinished ? PlayState.IsFinished : PlayState.IsPlaying;
         }
     }
 }
