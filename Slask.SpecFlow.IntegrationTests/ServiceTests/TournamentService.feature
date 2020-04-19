@@ -54,7 +54,7 @@ Scenario: Can add user to tournament with user service
 Scenario: Can only add user to tournament once
 	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
 	When users "Stålberto" is added to created tournament "GSL 2019"
-	Then better amount in created tournament 0 should be 3
+	Then better count in created tournament 0 should be 3
 
 Scenario: Can fetch all betters in tournament by tournament id
 	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it

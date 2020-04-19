@@ -1,20 +1,19 @@
-﻿using System;
+﻿using Slask.Domain.Groups.Bases;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace Slask.Domain.Groups
+namespace Slask.Domain.Groups.GroupUtility
 {
     // CREATE TESTS
     public static class RoundRobinGroupLayoutGenerator
     {
-        public static List<Match> GenerateMatches(int participatingPlayerAmount, GroupBase parentGroup)
+        public static List<Match> GenerateMatches(int participatingPlayerCount, GroupBase parentGroup)
         {
-            int matchAmount = CalculateMatchAmount(participatingPlayerAmount);
+            int matchCount= CalculateMatchCount(participatingPlayerCount);
 
             List<Match> matches = new List<Match>();
 
-            while (matches.Count < matchAmount)
+            while (matches.Count < matchCount)
             {
                 matches.Add(Match.Create(parentGroup));
             }
@@ -24,17 +23,17 @@ namespace Slask.Domain.Groups
             return matches;
         }
 
-        private static int CalculateMatchAmount(int participantAmount)
+        private static int CalculateMatchCount(int participantCount)
         {
-            bool evenAmountOfPlayers = (participantAmount % 2) == 0;
+            bool evenCountOfPlayers = (participantCount % 2) == 0;
 
-            if (evenAmountOfPlayers)
+            if (evenCountOfPlayers)
             {
-                return (participantAmount / 2) * (participantAmount - 1);
+                return (participantCount / 2) * (participantCount - 1);
             }
             else
             {
-                return ((participantAmount - 1) / 2) * participantAmount;
+                return ((participantCount - 1) / 2) * participantCount;
             }
         }
 
@@ -43,7 +42,7 @@ namespace Slask.Domain.Groups
          * The circle method is the standard algorithm to create a schedule for a round-robin tournament. All competitors are assigned 
          * a number, and then paired in the first round:
          * 
-         * Even amount: first one stays, all else go around in a circle counter-clockwise
+         * Even count: first one stays, all else go around in a circle counter-clockwise
          * 
          *  Match 1      Match 3      Match 5
          * | 1 vs 3 |   | 1 vs 4 |   | 1 vs 2 |
@@ -52,7 +51,7 @@ namespace Slask.Domain.Groups
          * | 2 vs 4 |   | 3 vs 2 |   | 4 vs 3 |
          * 
          * 
-         * Uneven amount: everyone go around in a circle counter-clockwise, one stays out each match round
+         * Uneven count: everyone go around in a circle counter-clockwise, one stays out each match round
          * 
          *  Match 1      Match 3      Match 5      Match 7      Match 9
          * | 1 vs 4 |   | 4 vs 5 |   | 5 vs 3 |   | 3 vs 2 |   | 2 vs 1 |
@@ -71,19 +70,19 @@ namespace Slask.Domain.Groups
                 return;
             }
 
-            bool hasEvenAmountOfPlayers = (participants.Count % 2) == 0;
+            bool hasEvenCountOfPlayers = (participants.Count % 2) == 0;
 
-            if (hasEvenAmountOfPlayers)
+            if (hasEvenCountOfPlayers)
             {
-                UseEvenPlayerAmountAlgorithm(new List<PlayerReference>(participants), matches, parentGroup);
+                UseEvenPlayerCountAlgorithm(new List<PlayerReference>(participants), matches, parentGroup);
             }
             else
             {
-                UseUnevenPlayerAmountAlgorithm(new List<PlayerReference>(participants), matches, parentGroup);
+                UseUnevenPlayerCountAlgorithm(new List<PlayerReference>(participants), matches, parentGroup);
             }
         }
 
-        private static void UseEvenPlayerAmountAlgorithm(List<PlayerReference> participants, List<Match> matches, GroupBase parentGroup)
+        private static void UseEvenPlayerCountAlgorithm(List<PlayerReference> participants, List<Match> matches, GroupBase parentGroup)
         {
             int numRounds = participants.Count - 1;
             int numMatchesPerRound = participants.Count / 2;
@@ -112,7 +111,7 @@ namespace Slask.Domain.Groups
             }
         }
 
-        private static void UseUnevenPlayerAmountAlgorithm(List<PlayerReference> participants, List<Match> matches, GroupBase parentGroup)
+        private static void UseUnevenPlayerCountAlgorithm(List<PlayerReference> participants, List<Match> matches, GroupBase parentGroup)
         {
             int numRounds = participants.Count;
             int numMatchesPerRound = participants.Count / 2;

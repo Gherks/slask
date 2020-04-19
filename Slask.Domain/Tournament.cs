@@ -1,6 +1,7 @@
 ﻿using Slask.Common;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.Bases;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,7 +49,9 @@ namespace Slask.Domain
             }
 
             Rounds.Add(round);
-            return Rounds.Last();
+            round.Construct();
+
+            return round;
         }
 
         public RoundBase AddDualTournamentRound(string name, int bestOf)
@@ -61,7 +64,9 @@ namespace Slask.Domain
             }
 
             Rounds.Add(round);
-            return Rounds.Last();
+            round.Construct();
+
+            return round;
         }
 
         public RoundBase AddRoundRobinRound(string name, int bestOf, int advancingPerGroupCount)
@@ -74,7 +79,9 @@ namespace Slask.Domain
             }
 
             Rounds.Add(round);
-            return Rounds.Last();
+            round.Construct();
+
+            return round;
         }
 
         public Better AddBetter(User user)
@@ -130,24 +137,6 @@ namespace Slask.Domain
                 // LOGG Error: 
                 return new List<PlayerReference>();
             }
-
-            //Dictionary<string, PlayerReference> playerReferenceDictionary = new Dictionary<string, PlayerReference>();
-
-            ////foreach (RoundBase round in Rounds)
-            //{
-            //    //foreach (GroupBase group in Rounds.First().Groups)
-            //    {
-            //        foreach(PlayerReference playerReference in group.ParticipatingPlayers)
-            //        {
-            //            try
-            //            {
-            //                playerReferenceDictionary.Add(playerReference.Name, playerReference);
-            //            } catch (Exception) { }
-            //        }
-            //    }
-            //}
-
-            //return playerReferenceDictionary.Values.ToList();
 
             return Rounds.First().PlayerReferences;
         }

@@ -2,7 +2,9 @@ using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
+using Slask.Domain.Groups.Bases;
 using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.Bases;
 using Slask.Domain.Utilities;
 using Slask.SpecFlow.IntegrationTests.ServiceTests;
 using System;
@@ -35,7 +37,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 
             foreach (TableRow row in table.Rows)
             {
-                ParseRoundTable(row, out string type, out string name, out int bestOf, out int advancingAmount);
+                ParseRoundTable(row, out string type, out string name, out int bestOf, out int advancingCount);
 
                 if (type.Length > 0)
                 {
@@ -51,7 +53,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
                     }
                     else if (type == "ROUNDROBIN")
                     {
-                        createdRounds.Add(tournament.AddRoundRobinRound(name, bestOf, advancingAmount));
+                        createdRounds.Add(tournament.AddRoundRobinRound(name, bestOf, advancingCount));
                     }
                 }
             }
@@ -149,7 +151,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             for (int rowIndex = 0; rowIndex < table.Rows.Count; ++rowIndex)
             {
                 TableRow row = table.Rows[rowIndex];
-                ParseRoundTable(row, out string roundType, out string name, out int bestOf, out int advancingAmount);
+                ParseRoundTable(row, out string roundType, out string name, out int bestOf, out int advancingCount);
 
                 RoundBase createdRound = createdRounds[rowIndex];
                 CheckRoundValidity(createdRound, name, bestOf);
@@ -167,7 +169,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
                 else if (createdRound is RoundRobinRound roundRobinRound)
                 {
                     roundType.Should().Be("Round robin");
-                    roundRobinRound.AdvancingPerGroupCount.Should().Be(advancingAmount);
+                    roundRobinRound.AdvancingPerGroupCount.Should().Be(advancingCount);
                 }
             }
         }
@@ -187,7 +189,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
                 throw new ArgumentNullException(nameof(table));
             }
 
-            ParseRoundTable(table.Rows[0], out string roundType, out string name, out int bestOf, out int advancingAmount);
+            ParseRoundTable(table.Rows[0], out string roundType, out string name, out int bestOf, out int advancingCount);
 
             RoundBase fetchedRound = fetchedRounds[roundIndex];
             CheckRoundValidity(fetchedRound, name, bestOf);
@@ -205,7 +207,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             else if (fetchedRound is RoundRobinRound roundRobinRound)
             {
                 roundType.Should().Be("Round robin");
-                roundRobinRound.AdvancingPerGroupCount.Should().Be(advancingAmount);
+                roundRobinRound.AdvancingPerGroupCount.Should().Be(advancingCount);
             }
         }
 
@@ -231,12 +233,12 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             round.Tournament.Should().NotBeNull();
         }
 
-        protected static void ParseRoundTable(TableRow row, out string typeName, out string name, out int bestOf, out int advancingAmount)
+        protected static void ParseRoundTable(TableRow row, out string typeName, out string name, out int bestOf, out int advancingCount)
         {
             typeName = "";
             name = "";
             bestOf = 1;
-            advancingAmount = 1;
+            advancingCount = 1;
 
             if (row.ContainsKey("Round type"))
             {
@@ -253,9 +255,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
                 int.TryParse(row["Best of"], out bestOf);
             }
 
-            if (row.ContainsKey("Advancing amount"))
+            if (row.ContainsKey("Advancing count"))
             {
-                int.TryParse(row["Advancing amount"], out advancingAmount);
+                int.TryParse(row["Advancing count"], out advancingCount);
             }
         }
 

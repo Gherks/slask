@@ -1,4 +1,6 @@
-﻿using Slask.Domain.Rounds;
+﻿using Slask.Domain.Groups.Bases;
+using Slask.Domain.Groups.GroupUtility;
+using Slask.Domain.Rounds;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
@@ -107,18 +109,16 @@ namespace Slask.Domain.Groups
             }
         }
 
-        public override bool ConstructGroupLayout(int playersPerGroupAmount)
+        public override bool ConstructGroupLayout(int playersPerGroupCount)
         {
-            int matchAmount = playersPerGroupAmount - 1;
-            ChangeMatchAmountTo(matchAmount);
+            int matchCount = playersPerGroupCount - 1;
+            ChangeMatchCountTo(matchCount);
 
             if (Matches.Count > 0)
             {
                 BracketNodeSystem = new BracketNodeSystem();
                 BracketNodeSystem.Construct(Matches);
             }
-
-            //FillMatchesWithPlayerReferences();
 
             return true;
         }
@@ -149,30 +149,5 @@ namespace Slask.Domain.Groups
 
             return true;
         }
-
-        //private void FillMatchesWithPlayerReferences()
-        //{
-        //    for (int matchIndex = 0; matchIndex < Matches.Count; ++matchIndex)
-        //    {
-        //        PlayerReference playerReference1 = null;
-        //        PlayerReference playerReference2 = null;
-
-        //        try
-        //        {
-        //            //playerReference1 = ParticipatingPlayers[matchIndex * 2];
-        //            //playerReference2 = ParticipatingPlayers[(matchIndex * 2) + 1];
-
-        //            Matches[matchIndex].SetPlayers(playerReference1, playerReference2);
-        //        }
-        //        catch
-        //        {
-        //            if (playerReference1 != null || playerReference2 != null)
-        //            {
-        //                Matches[matchIndex].SetPlayers(playerReference1, playerReference2);
-        //            }
-        //            break;
-        //        }
-        //    }
-        //}
     }
 }

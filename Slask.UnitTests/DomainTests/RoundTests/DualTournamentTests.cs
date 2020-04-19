@@ -2,11 +2,13 @@
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.Bases;
 using System.Linq;
 using Xunit;
 
 namespace Slask.UnitTests.DomainTests.RoundTests
 {
+    // CREATE TESTS CannotChangeGroupSize
     public class DualTournamentRoundTests
     {
         private readonly Tournament tournament;
@@ -102,11 +104,11 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         {
             string playerName = "Maru";
             string roundName = "Dual tournament round";
-            int roundAmount = 5;
+            int roundCount = 5;
 
             DualTournamentRound firstDualTournamentRound = CreateDualTournamentRound();
 
-            for (int index = 1; index < roundAmount; ++index)
+            for (int index = 1; index < roundCount; ++index)
             {
                 DualTournamentRound dualTournamentRound = CreateDualTournamentRound(roundName + index.ToString());
                 PlayerReference playerReference = dualTournamentRound.RegisterPlayerReference(playerName + index.ToString());

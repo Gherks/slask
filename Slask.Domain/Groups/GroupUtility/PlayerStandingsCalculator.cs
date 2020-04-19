@@ -1,11 +1,11 @@
-﻿using Slask.Domain.Rounds;
+﻿using Slask.Domain.Groups.Bases;
+using Slask.Domain.Rounds.Bases;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace Slask.Domain.Groups
+namespace Slask.Domain.Groups.GroupUtility
 {
     // CREATE TESTS
     public static class PlayerStandingsCalculator
@@ -45,7 +45,7 @@ namespace Slask.Domain.Groups
         {
             List<PlayerStandingEntry> playerStandings = new List<PlayerStandingEntry>();
 
-            foreach (PlayerReference participant in group.GetPlayerReferences())
+            foreach (PlayerReference participant in group.PlayerReferences)
             {
                 playerStandings.Add(PlayerStandingEntry.Create(participant));
             }

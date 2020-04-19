@@ -2,7 +2,8 @@
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
-using Slask.Domain.Rounds;
+using Slask.Domain.Groups.Bases;
+using Slask.Domain.Rounds.Bases;
 using Slask.Persistence.Services;
 using Slask.TestCore;
 using System;
@@ -237,11 +238,11 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             tournament.Betters[betterIndex].Should().BeNull();
         }
 
-        [Then(@"better amount in created tournament (.*) should be (.*)")]
-        public void ThenBetterAmountInCreatedTournamentShouldBe(int tournamentIndex, int betterAmount)
+        [Then(@"better count in created tournament (.*) should be (.*)")]
+        public void ThenBetterCountInCreatedTournamentShouldBe(int tournamentIndex, int betterCount)
         {
             Tournament tournament = createdTournaments[tournamentIndex];
-            tournament.Betters.Should().HaveCount(betterAmount);
+            tournament.Betters.Should().HaveCount(betterCount);
         }
 
         [Then(@"created tournament (.*) should contain exactly these player references with names: ""(.*)""")]

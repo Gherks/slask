@@ -1,4 +1,6 @@
 ﻿using Slask.Domain.Groups;
+using Slask.Domain.Groups.Bases;
+using Slask.Domain.Rounds.Bases;
 using System;
 using System.Linq;
 
@@ -8,7 +10,6 @@ namespace Slask.Domain.Rounds
     {
         private DualTournamentRound()
         {
-            SetPlayersPerGroupCount(4);
         }
 
         public static DualTournamentRound Create(string name, int bestOf, Tournament tournament)
@@ -18,15 +19,18 @@ namespace Slask.Domain.Rounds
                 return null;
             }
 
-            return new DualTournamentRound
+            DualTournamentRound round = new DualTournamentRound
             {
                 Id = Guid.NewGuid(),
                 Name = name,
+                PlayersPerGroupCount = 4,
                 BestOf = bestOf,
                 AdvancingPerGroupCount = 2,
                 TournamentId = tournament.Id,
                 Tournament = tournament
             };
+
+            return round;
         }
 
         protected override GroupBase AddGroup()

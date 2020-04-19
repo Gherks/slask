@@ -2,7 +2,8 @@ using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
-using Slask.Domain.Rounds;
+using Slask.Domain.Groups.Bases;
+using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Utilities;
 using Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests;
 using System;
@@ -124,11 +125,11 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
         //}
 
         [When(@"created rounds (.*) to (.*) creates (.*) groups each")]
-        public void WhenCreatedRoundsToCreatesGroupsEach(int roundStartIndex, int roundEndIndex, int groupAmount)
+        public void WhenCreatedRoundsToCreatesGroupsEach(int roundStartIndex, int roundEndIndex, int groupCount)
         {
             //for (int roundIndex = roundStartIndex; roundIndex < roundEndIndex; ++roundIndex)
             //{
-            //    for (int groupCounter = 0; groupCounter < groupAmount; ++groupCounter)
+            //    for (int groupCounter = 0; groupCounter < groupCount; ++groupCounter)
             //    {
             //        createdGroups.Add(createdRounds[roundIndex].AddGroup());
             //    }
@@ -136,13 +137,13 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
         }
 
         [Then(@"created rounds (.*) to (.*) should contain (.*) groups each")]
-        public void ThenCreatedRoundsToShouldContainGroupsEach(int roundStartIndex, int roundEndIndex, int groupAmount)
+        public void ThenCreatedRoundsToShouldContainGroupsEach(int roundStartIndex, int roundEndIndex, int groupCount)
         {
             for (int roundIndex = roundStartIndex; roundIndex < roundEndIndex; ++roundIndex)
             {
-                for (int groupCounter = 0; groupCounter < groupAmount; ++groupCounter)
+                for (int groupCounter = 0; groupCounter < groupCount; ++groupCounter)
                 {
-                    createdRounds[roundIndex].Groups.Should().HaveCount(groupAmount);
+                    createdRounds[roundIndex].Groups.Should().HaveCount(groupCount);
                 }
             }
         }

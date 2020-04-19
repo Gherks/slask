@@ -1,3 +1,5 @@
+using Slask.Domain.Groups.Bases;
+using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
@@ -51,9 +53,9 @@ namespace Slask.Domain.Groups
             return true;
         }
 
-        public override bool ConstructGroupLayout(int playersPerGroupAmount)
+        public override bool ConstructGroupLayout(int playersPerGroupCount)
         {
-            Matches = RoundRobinGroupLayoutGenerator.GenerateMatches(playersPerGroupAmount, this);
+            Matches = RoundRobinGroupLayoutGenerator.GenerateMatches(playersPerGroupCount, this);
             return true;
         }
 

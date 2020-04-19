@@ -29,356 +29,110 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         [Fact]
         public void CanCreateGroup()
         {
-            DualTournamentGroup group = DualTournamentGroup.Create(dualTournamentRound);
+            DualTournamentGroup dualTournamenGroup = DualTournamentGroup.Create(dualTournamentRound);
 
-            group.Should().NotBeNull();
-            group.Id.Should().NotBeEmpty();
-            //group.ParticipatingPlayers.Should().BeEmpty();
-            group.Matches.Should().BeEmpty();
-            group.RoundId.Should().Be(dualTournamentRound.Id);
-            group.Round.Should().Be(dualTournamentRound);
+            dualTournamenGroup.Should().NotBeNull();
+            dualTournamenGroup.Id.Should().NotBeEmpty();
+            dualTournamenGroup.Matches.Should().BeEmpty();
+            dualTournamenGroup.PlayerReferences.Should().BeEmpty();
+            dualTournamenGroup.RoundId.Should().Be(dualTournamentRound.Id);
+            dualTournamenGroup.Round.Should().Be(dualTournamentRound);
         }
 
-        //[Fact]
-        //public void CanAddPlayerReferenceToGroup()
-        //{
-        //    DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-        //    string playerName = "Maru";
-
-        //    group.AddNewPlayerReference(playerName);
-
-        //    group.ParticipatingPlayers.Should().HaveCount(1);
-        //    group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
-        //}
-
-        //[Fact]
-        //public void PlayerReferenceIsReturnedWhenSuccessfullyAddedPlayerReference()
-        //{
-        //    DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-        //    string playerName = "Maru";
-
-        //    PlayerReference returnedPlayerReference = group.AddNewPlayerReference(playerName);
-
-        //    returnedPlayerReference.Should().NotBeNull();
-        //    returnedPlayerReference.Name.Should().Be(playerName);
-        //}
-
-        //[Fact]
-        //public void CannotAddPlayerReferenceToGroupTwice()
-        //{
-        //    DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-        //    string playerName = "Maru";
-
-        //    group.AddNewPlayerReference(playerName);
-        //    group.AddNewPlayerReference(playerName);
+        [Fact]
+        public void CanConstructDualTournamentMatchLayout()
+        {
+            List<string> playerNames = new List<string> { "Maru", "Stork", "Taeja", "Rain" };
 
-        //    group.ParticipatingPlayers.Should().HaveCount(1);
-        //    group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
-        //}
+            DualTournamentGroup dualTournamentGroup = RegisterPlayers(playerNames);
 
-        //[Fact]
-        //public void NullIsReturnedWhenNotSuccessfullyAddedPlayerReference()
-        //{
-        //    DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-        //    string playerName = "Maru";
-
-        //    PlayerReference firstReturnedPlayerReference = group.AddNewPlayerReference(playerName);
-        //    PlayerReference secondReturnedPlayerReference = group.AddNewPlayerReference(playerName);
-
-        //    firstReturnedPlayerReference.Should().NotBeNull();
-        //    firstReturnedPlayerReference.Name.Should().Be(playerName);
-
-        //    secondReturnedPlayerReference.Should().BeNull();
-        //}
-
-        //[Fact]
-        //public void CanRemovePlayerReferenceFromGroup()
-        //{
-        //    DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-        //    string playerName = "Maru";
-
-        //    group.AddNewPlayerReference(playerName);
-        //    group.RemovePlayerReference(playerName);
+            dualTournamentGroup.Matches.Should().HaveCount(5);
 
-        //    group.ParticipatingPlayers.Should().BeEmpty();
-        //    group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().BeNull();
-        //}
+            dualTournamentGroup.Matches[0].Player1.Name.Should().Be(playerNames[0]);
+            dualTournamentGroup.Matches[0].Player2.Name.Should().Be(playerNames[1]);
 
-        //[Fact]
-        //public void ReturnsTrueFlagWhenSuccessfullyRemovingPlayerReference()
-        //{
-        //    DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-        //    string playerName = "Maru";
-
-        //    group.AddNewPlayerReference(playerName);
-        //    bool result = group.RemovePlayerReference(playerName);
+            dualTournamentGroup.Matches[1].Player1.Name.Should().Be(playerNames[2]);
+            dualTournamentGroup.Matches[1].Player2.Name.Should().Be(playerNames[3]);
 
-        //    result.Should().BeTrue();
-        //}
+            dualTournamentGroup.Matches[2].Player1.Should().BeNull();
+            dualTournamentGroup.Matches[2].Player2.Should().BeNull();
 
-        //[Fact]
-        //public void CannotAddPlayerReferenceAfterFirstMatchStartDateTimeHasPassed()
-        //{
-        //    DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-        //    string firstPlayerName = "Maru";
-        //    string secondPlayerName = "Stork";
-        //    string thirdPlayerName = "Rain";
-
-        //    group.AddNewPlayerReference(firstPlayerName);
-        //    group.AddNewPlayerReference(secondPlayerName);
+            dualTournamentGroup.Matches[3].Player1.Should().BeNull();
+            dualTournamentGroup.Matches[3].Player2.Should().BeNull();
 
-        //    SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
-
-        //    group.AddNewPlayerReference(thirdPlayerName);
+            dualTournamentGroup.Matches[4].Player1.Should().BeNull();
+            dualTournamentGroup.Matches[4].Player2.Should().BeNull();
+        }
 
-        //    group.ParticipatingPlayers.Should().HaveCount(2);
-        //    group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
-        //    group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
-        //    group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == thirdPlayerName).Should().BeNull();
-        //}
+        [Fact]
+        public void CannotAddMoreThanFourPlayerReferencesToGroup()
+        {
+            List<string> playerNames = new List<string> { "Maru", "Stork", "Taeja", "Rain", "Bomber" };
 
-        //[Fact]
-        //public void CannotRemovePlayerReferenceAfterFirstMatchStartDateTimeHasPassed()
-        //{
-        //    DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-        //    string firstPlayerName = "Maru";
-        //    string secondPlayerName = "Stork";
+            DualTournamentGroup dualTournamentGroup = RegisterPlayers(playerNames);
 
-        //    group.AddNewPlayerReference(firstPlayerName);
-        //    group.AddNewPlayerReference(secondPlayerName);
+            dualTournamentGroup.PlayerReferences.Single(playerReference => playerReference.Name == playerNames[0]).Should().NotBeNull();
+            dualTournamentGroup.PlayerReferences.Single(playerReference => playerReference.Name == playerNames[1]).Should().NotBeNull();
+            dualTournamentGroup.PlayerReferences.Single(playerReference => playerReference.Name == playerNames[2]).Should().NotBeNull();
+            dualTournamentGroup.PlayerReferences.Single(playerReference => playerReference.Name == playerNames[3]).Should().NotBeNull();
+            dualTournamentGroup.PlayerReferences.SingleOrDefault(playerReference => playerReference.Name == playerNames[4]).Should().BeNull();
 
-        //    SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
+            dualTournamentGroup.Matches.Should().HaveCount(5);
 
-        //    group.RemovePlayerReference(firstPlayerName);
+            dualTournamentGroup.Matches[0].Player1.Name.Should().NotBeNull();
+            dualTournamentGroup.Matches[0].Player2.Name.Should().NotBeNull();
 
-        //    group.ParticipatingPlayers.Should().HaveCount(2);
-        //    group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
-        //    group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
-        //}
+            dualTournamentGroup.Matches[1].Player1.Name.Should().NotBeNull();
+            dualTournamentGroup.Matches[1].Player2.Name.Should().NotBeNull();
 
-        //[Fact]
-        //public void ReturnsFalseFlagWhenNotSuccessfullyRemovingPlayerReference()
-        //{
-        //    DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-        //    string firstPlayerName = "Maru";
-        //    string secondPlayerName = "Stork";
+            dualTournamentGroup.Matches[2].Player1.Should().BeNull();
+            dualTournamentGroup.Matches[2].Player2.Should().BeNull();
 
-        //    group.AddNewPlayerReference(firstPlayerName);
-        //    group.AddNewPlayerReference(secondPlayerName);
+            dualTournamentGroup.Matches[3].Player1.Should().BeNull();
+            dualTournamentGroup.Matches[3].Player2.Should().BeNull();
 
-        //    SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
+            dualTournamentGroup.Matches[4].Player1.Should().BeNull();
+            dualTournamentGroup.Matches[4].Player2.Should().BeNull();
+        }
 
-        //    bool result = group.RemovePlayerReference(firstPlayerName);
+        [Fact]
+        public void StartDateTimeForMatchesMustBeInMatchOrder()
+        {
+            DualTournamentGroup dualTournamentGroup = RegisterPlayers(new List<string> { "Maru", "Stork", "Taeja", "Rain" });
 
-        //    result.Should().BeFalse();
-        //}
+            List<DateTime> dateTimesBeforeChange = new List<DateTime>();
 
-        //[Fact]
-        //public void CanConstructDualTournamentMatchLayout()
-        //{
-        //    DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-        //    string firstPlayerName = "Maru";
-        //    string secondPlayerName = "Stork";
-        //    string thirdPlayerName = "Taeja";
-        //    string fourthPlayerName = "Rain";
+            foreach (Match match in dualTournamentGroup.Matches)
+            {
+                dateTimesBeforeChange.Add(match.StartDateTime);
+            }
 
-        //    group.AddNewPlayerReference(firstPlayerName);
-        //    group.AddNewPlayerReference(secondPlayerName);
-        //    group.AddNewPlayerReference(thirdPlayerName);
-        //    group.AddNewPlayerReference(fourthPlayerName);
+            DateTime twoHoursLater = dualTournamentGroup.Matches[0].StartDateTime.AddHours(2);
+            DateTime threeHoursEarlier = dualTournamentGroup.Matches[1].StartDateTime.AddHours(-3);
+            DateTime fourHoursLater = dualTournamentGroup.Matches[2].StartDateTime.AddHours(4);
+            DateTime threeHoursLater = dualTournamentGroup.Matches[3].StartDateTime.AddHours(3);
+            DateTime nineHoursEarlier = dualTournamentGroup.Matches[4].StartDateTime.AddHours(-9);
 
-        //    group.Matches.Should().HaveCount(5);
+            dualTournamentGroup.Matches[0].SetStartDateTime(twoHoursLater);
+            dualTournamentGroup.Matches[1].SetStartDateTime(threeHoursEarlier);
+            dualTournamentGroup.Matches[2].SetStartDateTime(fourHoursLater);
+            dualTournamentGroup.Matches[3].SetStartDateTime(threeHoursLater);
+            dualTournamentGroup.Matches[4].SetStartDateTime(nineHoursEarlier);
 
-        //    group.Matches[0].Player1.Name.Should().Be(firstPlayerName);
-        //    group.Matches[0].Player2.Name.Should().Be(secondPlayerName);
+            for (int matchIndex = 0; matchIndex < dualTournamentGroup.Matches.Count; ++matchIndex)
+            {
+                dualTournamentGroup.Matches[matchIndex].StartDateTime.Should().Be(dateTimesBeforeChange[matchIndex]);
+            }
+        }
 
-        //    group.Matches[1].Player1.Name.Should().Be(thirdPlayerName);
-        //    group.Matches[1].Player2.Name.Should().Be(fourthPlayerName);
+        private DualTournamentGroup RegisterPlayers(List<string> playerNames)
+        {
+            foreach (string playerName in playerNames)
+            {
+                dualTournamentRound.RegisterPlayerReference(playerName);
+            }
 
-        //    group.Matches[2].Player1.Should().BeNull();
-        //    group.Matches[2].Player2.Should().BeNull();
-
-        //    group.Matches[3].Player1.Should().BeNull();
-        //    group.Matches[3].Player2.Should().BeNull();
-
-        //    group.Matches[4].Player1.Should().BeNull();
-        //    group.Matches[4].Player2.Should().BeNull();
-        //}
-
-        //[Fact]
-        //public void CannotAddMoreThanFourPlayerReferencesToGroup()
-        //{
-        //    DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-
-        //    List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber" };
-
-        //    foreach (string playerName in playerNames)
-        //    {
-        //        //group.AddNewPlayerReference(playerName);
-        //        dualTournamentRound.RegisterPlayerReference(playerName);
-        //    }
-
-        //    group.ParticipatingPlayers.Single(playerReference => playerReference.Name == playerNames[0]).Should().NotBeNull();
-        //    group.ParticipatingPlayers.Single(playerReference => playerReference.Name == playerNames[1]).Should().NotBeNull();
-        //    group.ParticipatingPlayers.Single(playerReference => playerReference.Name == playerNames[2]).Should().NotBeNull();
-        //    group.ParticipatingPlayers.Single(playerReference => playerReference.Name == playerNames[3]).Should().NotBeNull();
-        //    group.ParticipatingPlayers.SingleOrDefault(playerReference => playerReference.Name == playerNames[4]).Should().BeNull();
-
-        //    group.Matches.Should().HaveCount(5);
-
-        //    group.Matches[0].Player1.Name.Should().NotBeNull();
-        //    group.Matches[0].Player2.Name.Should().NotBeNull();
-
-        //    group.Matches[1].Player1.Name.Should().NotBeNull();
-        //    group.Matches[1].Player2.Name.Should().NotBeNull();
-
-        //    group.Matches[2].Player1.Should().BeNull();
-        //    group.Matches[2].Player2.Should().BeNull();
-
-        //    group.Matches[3].Player1.Should().BeNull();
-        //    group.Matches[3].Player2.Should().BeNull();
-
-        //    group.Matches[4].Player1.Should().BeNull();
-        //    group.Matches[4].Player2.Should().BeNull();
-        //}
-
-        //[Fact]
-        //public void CanSwitchPlacesOnPlayerReferencesThatAreInSameMatch()
-        //{
-        //    DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-
-        //    PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
-        //    PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
-
-        //    PlayerSwitcher.SwitchMatchesOn(group.Matches.First().Player1, group.Matches.First().Player2);
-
-        //    group.Matches.First().Player1.PlayerReference.Should().Be(secondPlayerReference);
-        //    group.Matches.First().Player2.PlayerReference.Should().Be(firstPlayerReference);
-        //}
-
-        //[Fact]
-        //public void CanSwitchPlacesOnPlayerReferencesThatAreInSameGroup()
-        //{
-        //    DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-
-        //    PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
-        //    PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
-        //    PlayerReference thirdPlayerReference = group.AddNewPlayerReference("Taeja");
-        //    PlayerReference fourthPlayerReference = group.AddNewPlayerReference("Rain");
-
-        //    Match firstMatch = group.Matches[0];
-        //    Match secondMatch = group.Matches[1];
-
-        //    PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
-
-        //    firstMatch.Player1.PlayerReference.Should().Be(fourthPlayerReference);
-        //    firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
-        //    secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
-        //    secondMatch.Player2.PlayerReference.Should().Be(firstPlayerReference);
-        //}
-
-        //[Fact]
-        //public void CanSwitchPlacesOnPlayerReferencesThatAreInDifferentGroups()
-        //{
-        //    DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-
-        //    PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
-        //    PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
-        //    PlayerReference thirdPlayerReference = group.AddNewPlayerReference("Taeja");
-        //    PlayerReference fourthPlayerReference = group.AddNewPlayerReference("Rain");
-
-        //    Match firstMatch = group.Matches[0];
-        //    Match secondMatch = group.Matches[1];
-
-        //    PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
-
-        //    firstMatch.Player1.PlayerReference.Should().Be(fourthPlayerReference);
-        //    firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
-        //    secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
-        //    secondMatch.Player2.PlayerReference.Should().Be(firstPlayerReference);
-        //}
-
-        //[Fact]
-        //public void CannotSwitchPlacesOnPlayerReferenceWhenAnyPlayerIsNull()
-        //{
-        //    DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-
-        //    PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
-        //    PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
-        //    PlayerReference thirdPlayerReference = group.AddNewPlayerReference("Taeja");
-        //    PlayerReference fourthPlayerReference = group.AddNewPlayerReference("Rain");
-
-        //    Match firstMatch = group.Matches[0];
-        //    Match secondMatch = group.Matches[1];
-        //    Match thirdMatch = group.Matches[2];
-
-        //    PlayerSwitcher.SwitchMatchesOn(thirdMatch.Player1, secondMatch.Player2);
-        //    PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, thirdMatch.Player2);
-
-        //    firstMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
-        //    firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
-        //    secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
-        //    secondMatch.Player2.PlayerReference.Should().Be(fourthPlayerReference);
-        //}
-
-        //[Fact]
-        //public void CannotSwitchPlacesOnAnyPlayerReferencesWhenAMatchInGroupHasBegun()
-        //{
-        //    DualTournamentGroup group = dualTournamentRound.AddGroup() as DualTournamentGroup;
-
-        //    PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
-        //    PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
-        //    PlayerReference thirdPlayerReference = group.AddNewPlayerReference("Taeja");
-        //    PlayerReference fourthPlayerReference = group.AddNewPlayerReference("Rain");
-
-        //    Match firstMatch = group.Matches[0];
-        //    Match secondMatch = group.Matches[1];
-
-        //    SystemTimeMocker.SetOneSecondAfter(firstMatch.StartDateTime);
-
-        //    PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
-
-        //    firstMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
-        //    firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
-        //    secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
-        //    secondMatch.Player2.PlayerReference.Should().Be(fourthPlayerReference);
-        //}
-
-        //[Fact]
-        //public void StartDateTimeForMatchesMustBeInMatchOrder()
-        //{
-        //    DualTournamentGroup dualTournamentGroup = dualTournamentRound.AddGroup() as DualTournamentGroup;
-
-        //    List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain" };
-
-        //    foreach (string playerName in playerNames)
-        //    {
-        //        dualTournamentGroup.AddNewPlayerReference(playerName);
-        //    }
-
-        //    List<DateTime> dateTimesBeforeChange = new List<DateTime>();
-
-        //    foreach (Match match in dualTournamentGroup.Matches)
-        //    {
-        //        dateTimesBeforeChange.Add(match.StartDateTime);
-        //    }
-
-        //    DateTime twoHoursLater = dualTournamentGroup.Matches[0].StartDateTime.AddHours(2);
-        //    DateTime threeHoursEarlier = dualTournamentGroup.Matches[1].StartDateTime.AddHours(-3);
-        //    DateTime fourHoursLater = dualTournamentGroup.Matches[2].StartDateTime.AddHours(4);
-        //    DateTime threeHoursLater = dualTournamentGroup.Matches[3].StartDateTime.AddHours(3);
-        //    DateTime nineHoursEarlier = dualTournamentGroup.Matches[4].StartDateTime.AddHours(-9);
-
-        //    dualTournamentGroup.Matches[0].SetStartDateTime(twoHoursLater);
-        //    dualTournamentGroup.Matches[1].SetStartDateTime(threeHoursEarlier);
-        //    dualTournamentGroup.Matches[2].SetStartDateTime(fourHoursLater);
-        //    dualTournamentGroup.Matches[3].SetStartDateTime(threeHoursLater);
-        //    dualTournamentGroup.Matches[4].SetStartDateTime(nineHoursEarlier);
-
-        //    for (int matchIndex = 0; matchIndex < dualTournamentGroup.Matches.Count; ++matchIndex)
-        //    {
-        //        dualTournamentGroup.Matches[matchIndex].StartDateTime.Should().Be(dateTimesBeforeChange[matchIndex]);
-        //    }
-        //}
+            return dualTournamentRound.Groups.First() as DualTournamentGroup;
+        }
     }
 }

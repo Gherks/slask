@@ -2,6 +2,7 @@
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.Bases;
 using System.Linq;
 using Xunit;
 
@@ -102,11 +103,11 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         {
             string playerName = "Maru";
             string roundName = "Bracket round";
-            int roundAmount = 5;
+            int roundCount = 5;
 
             BracketRound firstBracketRound = CreateBracketRound();
 
-            for (int index = 1; index < roundAmount; ++index)
+            for (int index = 1; index < roundCount; ++index)
             {
                 BracketRound bracketRound = CreateBracketRound(roundName + index.ToString());
                 PlayerReference playerReference = bracketRound.RegisterPlayerReference(playerName + index.ToString());

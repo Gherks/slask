@@ -1,4 +1,5 @@
-﻿using Slask.Domain.Rounds;
+﻿using Slask.Domain.Groups.Bases;
+using Slask.Domain.Rounds;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
@@ -35,16 +36,6 @@ namespace Slask.Domain.Groups
 
             return group;
         }
-
-        //public override PlayerReference AddNewPlayerReference(string name)
-        //{
-        //    if (ParticipatingPlayers.Count < ParticipatingPlayerCapacity)
-        //    {
-        //        return base.AddNewPlayerReference(name);
-        //    }
-
-        //    return null;
-        //}
 
         public override bool NewDateTimeIsValid(Match match, DateTime dateTime)
         {
@@ -98,26 +89,9 @@ namespace Slask.Domain.Groups
             }
         }
 
-        public override bool ConstructGroupLayout(int playersPerGroupAmount)
+        public override bool ConstructGroupLayout(int playersPerGroupCount)
         {
-            //bool incorrectParticipantAmount = participatingPlayerAmount != ParticipatingPlayerCapacity;
-
-            //if(incorrectParticipantAmount)
-            //{
-            //    // LOGG Error: 
-            //    return false;
-            //}
-
-            ChangeMatchAmountTo(MatchCapacity);
-
-            //PlayerReference participant1 = ParticipatingPlayers.Count > 0 ? ParticipatingPlayers[0] : null;
-            //PlayerReference participant2 = ParticipatingPlayers.Count > 1 ? ParticipatingPlayers[1] : null;
-            //PlayerReference participant3 = ParticipatingPlayers.Count > 2 ? ParticipatingPlayers[2] : null;
-            //PlayerReference participant4 = ParticipatingPlayers.Count > 3 ? ParticipatingPlayers[3] : null;
-
-            //Matches[0].SetPlayers(participant1, participant2);
-            //Matches[1].SetPlayers(participant3, participant4);
-
+            ChangeMatchCountTo(MatchCapacity);
             return true;
         }
 

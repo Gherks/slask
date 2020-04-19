@@ -23,9 +23,6 @@ namespace Slask.UnitTests.DomainTests.PlayerTests
             playerReference = round.RegisterPlayerReference("Maru");
             round.RegisterPlayerReference("Stork");
             group = round.Groups.First() as RoundRobinGroup;
-            //group = round.AddGroup() as RoundRobinGroup;
-            //playerReference = group.AddNewPlayerReference("Maru");
-            //group.AddNewPlayerReference("Stork");
             match = group.Matches.First();
         }
 

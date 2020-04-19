@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
 using Slask.Domain.Groups;
-using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.Bases;
 using Slask.Persistence;
 using Slask.Persistence.Services;
 using Slask.TestCore;

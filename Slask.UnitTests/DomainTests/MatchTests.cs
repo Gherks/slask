@@ -48,10 +48,14 @@ namespace Slask.UnitTests.DomainTests
         {
             Tournament tournament = Tournament.Create("GSL 2019");
             BracketRound bracketRound = tournament.AddBracketRound("Bracket round", 3) as BracketRound;
-            bracketRound.RegisterPlayerReference(firstPlayerName);
-            bracketRound.RegisterPlayerReference(firstPlayerName);
+            PlayerReference playerReference = bracketRound.RegisterPlayerReference(firstPlayerName);
 
-            bracketRound.Groups.Should().BeEmpty();
+            Match match = bracketRound.Groups.First().Matches.First();
+
+            match.SetPlayers(playerReference, playerReference);
+
+            match.Player1.PlayerReference.Should().Be(playerReference);
+            match.Player2.Should().BeNull();
         }
 
         [Fact]

@@ -1,4 +1,6 @@
-﻿namespace Slask.Domain.Rounds.RoundUtilities
+﻿using Slask.Domain.Rounds.Bases;
+
+namespace Slask.Domain.Rounds.RoundUtilities
 {
     public static class RoundIssueFinder
     {
@@ -26,7 +28,7 @@
 
             if (doesNotFillAllGroupsEvenly)
             {
-                // LOGG Issue: Current player amount does not fill all group(s) to capacity. Add more players or reduce group capacity.
+                // LOGG Issue: Current player count does not fill all group(s) to capacity. Add more players or reduce group capacity.
             }
         }
 

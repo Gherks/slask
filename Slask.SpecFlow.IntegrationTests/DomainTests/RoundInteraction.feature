@@ -78,9 +78,9 @@ Scenario: A bracket round with a predecessor dual tournament round is set up usi
 Scenario: A bracket round with a predecessor round robin round is set up using only winners of that predecessor round
 	Given a tournament named "GSL 2019" with users "Stålberto" added to it
 		And created tournament 0 adds rounds
-			| Round type  | Round name        | Best of | Advancing amount |
-			| Round robin | Round robin round | 3       | 2                |
-			| Bracket     | Bracket round     | 3       | 1                |
+			| Round type  | Round name        | Best of | Advancing count |
+			| Round robin | Round robin round | 3       | 2               |
+			| Bracket     | Bracket round     | 3       | 1               |
 		And created round 0 adds 2 groups
 		And created round 1 adds 1 groups
 		And players "First, Second, Third, Fourth, Fifth" is added to created group 0
@@ -175,9 +175,9 @@ Scenario: A dual tournament round with a predecessor dual tournament round is se
 Scenario: A dual tournament round with a predecessor round robin round is set up using only winners of that predecessor round
 	Given a tournament named "GSL 2019" with users "Stålberto" added to it
 		And created tournament 0 adds rounds
-			| Round type      | Round name            | Best of | Advancing amount |
-			| Round robin     | Round robin round     | 3       | 2                |
-			| Dual tournament | Dual tournament round | 3       | 1                |
+			| Round type      | Round name            | Best of | Advancing count |
+			| Round robin     | Round robin round     | 3       | 2               |
+			| Dual tournament | Dual tournament round | 3       | 1               |
 		And created round 0 adds 2 groups
 		And created round 1 adds 1 groups
 		And players "First, Second, Third, Fourth, Fifth" is added to created group 0
@@ -197,8 +197,8 @@ Scenario: A dual tournament round with a predecessor round robin round is set up
 Scenario: Can fetch all winning players in a round robin round that contains several round robin groups
 	Given a tournament named "GSL 2019" with users "Stålberto" added to it
 		And created tournament 0 adds rounds
-			| Round type  | Round name        | Best of | Advancing amount |
-			| Round robin | Round robin round | 3       | 2                |
+			| Round type  | Round name        | Best of | Advancing count |
+			| Round robin | Round robin round | 3       | 2               |
 		And created round 0 adds 2 groups
 		And players "First, Second, Third, Fourth" is added to created group 0
 		And players "Fifth, Sixth, Seventh, Eighth" is added to created group 1
@@ -212,8 +212,8 @@ Scenario: Can fetch all winning players in a round robin round that contains sev
 Scenario: Cannot fetch winning players from round robin group in a round robin round that has not played out
 	Given a tournament named "GSL 2019" with users "Stålberto" added to it
 		And created tournament 0 adds rounds
-			| Round type  | Round name        | Best of | Advancing amount |
-			| Round robin | Round robin round | 3       | 2                |
+			| Round type  | Round name        | Best of | Advancing count |
+			| Round robin | Round robin round | 3       | 2               |
 		And created round 0 adds 2 groups
 		And players "First, Second, Third, Fourth" is added to created group 0
 		And players "Fifth, Sixth, Seventh, Eighth" is added to created group 1
@@ -226,9 +226,9 @@ Scenario: Cannot fetch winning players from round robin group in a round robin r
 Scenario: A round robin round with a predecessor bracket round is set up using only winners of that predecessor round
 	Given a tournament named "GSL 2019" with users "Stålberto" added to it
 		And created tournament 0 adds rounds
-			| Round type  | Round name        | Best of | Advancing amount |
-			| Bracket     | Bracket round     | 3       | 1                |
-			| Round robin | Round robin round | 3       | 1                |
+			| Round type  | Round name        | Best of | Advancing count |
+			| Bracket     | Bracket round     | 3       | 1               |
+			| Round robin | Round robin round | 3       | 1               |
 		And created round 0 adds 4 groups
 		And created round 1 adds 1 groups
 		And players "First, Second, Third, Fourth" is added to created group 0
@@ -254,9 +254,9 @@ Scenario: A round robin round with a predecessor bracket round is set up using o
 Scenario: A round robin round with a predecessor dual tournament round is set up using only winners of that predecessor round
 	Given a tournament named "GSL 2019" with users "Stålberto" added to it
 		And created tournament 0 adds rounds
-			| Round type      | Round name            | Best of | Advancing amount |
-			| Dual tournament | Dual tournament round | 3       | 2                |
-			| Round robin     | Round robin round     | 3       | 1                |
+			| Round type      | Round name            | Best of | Advancing count |
+			| Dual tournament | Dual tournament round | 3       | 2               |
+			| Round robin     | Round robin round     | 3       | 1               |
 		And created round 0 adds 2 groups
 		And created round 1 adds 1 groups
 		And players "First, Second, Third, Fourth" is added to created group 0
@@ -278,9 +278,9 @@ Scenario: A round robin round with a predecessor dual tournament round is set up
 Scenario: A round robin round with a predecessor round robin round is set up using only winners of that predecessor round
 	Given a tournament named "GSL 2019" with users "Stålberto" added to it
 		And created tournament 0 adds rounds
-			| Round type  | Round name          | Best of | Advancing amount |
-			| Round robin | Round robin round 1 | 3       | 2                |
-			| Round robin | Round robin round 2 | 3       | 1                |
+			| Round type  | Round name          | Best of | Advancing count |
+			| Round robin | Round robin round 1 | 3       | 2               |
+			| Round robin | Round robin round 2 | 3       | 1               |
 		And created round 0 adds 2 groups
 		And created round 1 adds 1 groups
 		And players "First, Second, Third, Fourth, Fifth" is added to created group 0

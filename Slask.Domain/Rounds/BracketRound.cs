@@ -1,10 +1,12 @@
 ﻿using Slask.Domain.Groups;
+using Slask.Domain.Groups.Bases;
+using Slask.Domain.Rounds.Bases;
 using System;
 using System.Linq;
 
 namespace Slask.Domain.Rounds
 {
-    public class BracketRound : RoundBase
+    public class BracketRound : ResizableRound
     {
         private BracketRound()
         {
@@ -17,7 +19,7 @@ namespace Slask.Domain.Rounds
                 return null;
             }
 
-            return new BracketRound
+            BracketRound round = new BracketRound
             {
                 Id = Guid.NewGuid(),
                 Name = name,
@@ -26,6 +28,8 @@ namespace Slask.Domain.Rounds
                 TournamentId = tournament.Id,
                 Tournament = tournament
             };
+
+            return round;
         }
 
         protected override GroupBase AddGroup()

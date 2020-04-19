@@ -3,6 +3,7 @@ using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Bets;
 using Slask.Domain.Groups;
+using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds;
 using System;
 using System.Linq;
@@ -14,22 +15,19 @@ namespace Slask.UnitTests.DomainTests
     {
         private readonly User user;
         private readonly Tournament tournament;
-        private readonly BracketRound round;
-        private readonly BracketGroup group;
-        private readonly Match match;
+        private readonly BracketRound bracketRound;
+        private BracketGroup bracketGroup;
+        private Match match;
 
         public BetterTests()
         {
             user = User.Create("Stålberto");
             tournament = Tournament.Create("GSL 2019");
-            round = tournament.AddBracketRound("Bracket round", 7) as BracketRound;
-            round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Stork");
-            group = round.Groups.First() as BracketGroup;
-            //group = round.AddGroup() as BracketGroup;
-            //group.AddNewPlayerReference("Maru");
-            //group.AddNewPlayerReference("Stork");
-            match = group.Matches.First();
+            bracketRound = tournament.AddBracketRound("Bracket round", 7) as BracketRound;
+            bracketRound.RegisterPlayerReference("Maru");
+            bracketRound.RegisterPlayerReference("Stork");
+            bracketGroup = bracketRound.Groups.First() as BracketGroup;
+            match = bracketGroup.Matches.First();
         }
 
         [Fact]
@@ -73,17 +71,20 @@ namespace Slask.UnitTests.DomainTests
             ValidateMatchBet(matchBet, better, match, match.Player1);
         }
 
-        //[Fact]
-        //public void CannotPlaceMatchBetOnMatchThatIsNotReady()
-        //{
-        //    Better better = GivenABetterIsCreated();
-        //    group.AddNewPlayerReference("Taeja");
-        //    Match incompleteMatch = group.Matches.Last();
+        [Fact]
+        public void CannotPlaceMatchBetOnMatchThatIsNotReady()
+        {
+            Better better = GivenABetterIsCreated();
+            bracketRound.SetPlayersPerGroupCount(3);
+            bracketRound.RegisterPlayerReference("Taeja");
 
-        //    better.PlaceMatchBet(incompleteMatch, incompleteMatch.Player1);
+            bracketGroup = bracketRound.Groups.First() as BracketGroup;
+            Match incompleteMatch = bracketGroup.Matches.Last();
 
-        //    better.Bets.Should().BeEmpty();
-        //}
+            better.PlaceMatchBet(incompleteMatch, incompleteMatch.Player1);
+
+            better.Bets.Should().BeEmpty();
+        }
 
         [Fact]
         public void CannotPlaceMatchBetOnMatchThatIsPlaying()
@@ -102,7 +103,7 @@ namespace Slask.UnitTests.DomainTests
             Better better = GivenABetterIsCreated();
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
-            int winningScore = (int)Math.Ceiling(round.BestOf / 2.0);
+            int winningScore = (int)Math.Ceiling(bracketRound.BestOf / 2.0);
             match.Player1.IncreaseScore(winningScore);
 
             better.PlaceMatchBet(match, match.Player1);
@@ -153,24 +154,26 @@ namespace Slask.UnitTests.DomainTests
             better.Bets.Should().BeEmpty();
         }
 
-        //[Fact]
-        //public void MatchBetIsRemovedWhenMatchLayoutIsChangedInTwoMatches()
-        //{
-        //    Better better = GivenABetterIsCreated();
+        [Fact]
+        public void MatchBetIsRemovedWhenMatchLayoutIsChangedInTwoMatches()
+        {
+            Better better = GivenABetterIsCreated();
 
-        //    group.AddNewPlayerReference("Taeja");
-        //    group.AddNewPlayerReference("Rain");
+            bracketRound.SetPlayersPerGroupCount(4);
+            bracketRound.RegisterPlayerReference("Taeja");
+            bracketRound.RegisterPlayerReference("Rain");
+            bracketGroup = bracketRound.Groups.First() as BracketGroup;
 
-        //    Match firstMatch = group.Matches[0];
-        //    Match secondMatch = group.Matches[1];
+            Match firstMatch = bracketGroup.Matches[0];
+            Match secondMatch = bracketGroup.Matches[1];
 
-        //    better.PlaceMatchBet(firstMatch, firstMatch.Player1);
-        //    better.PlaceMatchBet(secondMatch, secondMatch.Player1);
+            better.PlaceMatchBet(firstMatch, firstMatch.Player1);
+            better.PlaceMatchBet(secondMatch, secondMatch.Player1);
 
-        //    PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player1);
+            PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player1);
 
-        //    better.Bets.Should().BeEmpty();
-        //}
+            better.Bets.Should().BeEmpty();
+        }
 
         private Better GivenABetterIsCreated()
         {

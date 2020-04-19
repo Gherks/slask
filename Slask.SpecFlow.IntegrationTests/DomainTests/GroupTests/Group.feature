@@ -5,18 +5,18 @@
 Scenario: Rounds can create groups
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds
-			| Round type      | Round name            | Best of | Advancing amount |
-			| Bracket         | Bracket round         | 3       | 1                |
-			| Dual tournament | Dual tournament round | 3       | 1                |
-			| Round robin     | Round robin round     | 3       | 1                |
+			| Round type      | Round name            | Best of | Advancing count |
+			| Bracket         | Bracket round         | 3       | 1               |
+			| Dual tournament | Dual tournament round | 3       | 1               |
+			| Round robin     | Round robin round     | 3       | 1               |
 	When created rounds 0 to 2 creates 1 groups each
 	Then created rounds 0 to 2 should contain 1 groups each
 
 Scenario: Player reference is added to tournament when new player is added to group
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds
-			| Round type | Round name    | Best of | Advancing amount |
-			| Bracket    | Bracket round | 3       | 1                |
+			| Round type | Round name    | Best of | Advancing count |
+			| Bracket    | Bracket round | 3       | 1               |
 		And created round 0 adds 1 groups
 	When players "Maru, Stork, Taeja, Rain" is added to created group 0
 	Then created tournament 0 should contain exactly these player references with names: "Maru, Stork, Taeja, Rain"
@@ -24,9 +24,9 @@ Scenario: Player reference is added to tournament when new player is added to gr
 Scenario: Cannot add new players to groups not within first round
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds
-			| Round type      | Round name   | Best of | Advancing amount |
-			| Round robin     | First round  | 3       | 4                |
-			| Round robin     | Second round | 3       | 4                |
+			| Round type      | Round name   | Best of | Advancing count |
+			| Round robin     | First round  | 3       | 4               |
+			| Round robin     | Second round | 3       | 4               |
 		And created round 0 adds 1 groups
 		And created round 1 adds 1 groups
 		And players "Maru, Stork, Taeja, Rain" is added to created group 0

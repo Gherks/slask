@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Slask.Domain.Groups
+namespace Slask.Domain.Groups.GroupUtility
 {
     public class BracketNodeSystem
     {
