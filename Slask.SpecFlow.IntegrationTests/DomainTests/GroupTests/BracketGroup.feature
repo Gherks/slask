@@ -4,19 +4,17 @@
 @BracketGroupTag
 Scenario: Adding group to bracket round creates bracket group
 	Given a tournament named "GSL 2019" has been created
-		And created tournament 0 adds rounds
-			| Round type | Round name    | Best of |
-			| Bracket    | Bracket round | 3       |
-	When created round 0 adds 1 groups
+	When created tournament 0 adds rounds
+		| Round type | Round name    | Best of |
+		| Bracket    | Bracket round | 3       |
 	Then group 0 should be valid of type "Bracket"
 
 Scenario: Start time in matches in bracket group is spaced with one hour upon creation
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds
-			| Round type | Round name    | Best of |
-			| Bracket    | Bracket round | 3       |
-		And created round 0 adds 1 groups
-	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is added to created group 0
+			| Round type | Round name    | Best of | Players per group count |
+			| Bracket    | Bracket round | 3       | 8                       |
+	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
 	Then minutes between matches in created group 0 should be 60
 
 Scenario: Creates proper bracket layout upon group creation
@@ -38,10 +36,9 @@ Scenario: Creates proper bracket layout upon group creation
 	#
 	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
-			| Round type | Round name    | Best of |
-			| Bracket    | Bracket round | 3       |
-		And created round 0 adds 1 groups
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is added to created group 0
+			| Round type | Round name    | Best of | Players per group count |
+			| Bracket    | Bracket round | 3       | 8                       |
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
 	Then participating players in created group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |
@@ -59,10 +56,9 @@ Scenario: When bracket has five participants the first match should contain two 
 	#
 	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
-			| Round type | Round name    | Best of |
-			| Bracket    | Bracket round | 3       |
-		And created round 0 adds 1 groups
-	When players "First, Second, Third, Fourth, Fifth" is added to created group 0
+			| Round type | Round name    | Best of | Players per group count |
+			| Bracket    | Bracket round | 3       | 5                       |
+	When players "First, Second, Third, Fourth, Fifth" is registered to round 0
 	Then participating players in created group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |
@@ -85,10 +81,9 @@ Scenario: When bracket has seven participants the third match should contain two
 	#
 	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
-			| Round type | Round name    | Best of |
-			| Bracket    | Bracket round | 3       |
-		And created round 0 adds 1 groups
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh" is added to created group 0
+			| Round type | Round name    | Best of | Players per group count |
+			| Bracket    | Bracket round | 3       | 7                       |
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh" is registered to round 0
 	Then participating players in created group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |
@@ -115,10 +110,9 @@ Scenario: When bracket has nine participants the first match should contain two 
 	#
 	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
-			| Round type | Round name    | Best of |
-			| Bracket    | Bracket round | 3       |
-		And created round 0 adds 1 groups
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth" is added to created group 0
+			| Round type | Round name    | Best of | Players per group count |
+			| Bracket    | Bracket round | 3       | 9                       |
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth" is registered to round 0
 	Then participating players in created group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |
@@ -146,13 +140,12 @@ Scenario: Bracket progression goes as expected
 	#
 	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
-			| Round type | Round name    | Best of |
-			| Bracket    | Bracket round | 3       |
-		And created round 0 adds 1 groups
-		And players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is added to created group 0
+			| Round type | Round name    | Best of | Players per group count |
+			| Bracket    | Bracket round | 3       | 8                       |
+		And players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
 		And created groups within created tournament is played out and betted on
-			| Created tournament index | Round index | Group index |
-			| 0                        | 0           | 0           |
+			| Tournament index | Round index | Group index |
+			| 0                | 0           | 0           |
 	Then advancing players in created group 0 is exactly "Sixth"
 		And participating players in created group 0 should be mapped accordingly
 			| Match index | Player 1 name | Player 2 name |
@@ -164,5 +157,4 @@ Scenario: Bracket progression goes as expected
 			| 5           | Sixth         | Eighth        |
 			| 6           | First         | Sixth         |
 
-#Scenario: Can clear bracket group
 # Create tests for GetPlayState

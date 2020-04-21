@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
-using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.Bases;
 using Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests;
 using System.Collections.Generic;
 using System.Linq;

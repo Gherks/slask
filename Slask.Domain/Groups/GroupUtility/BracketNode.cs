@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Slask.Domain.Groups
+namespace Slask.Domain.Groups.GroupUtility
 {
     // Represents all matches in bracket with a node tree strucutre. All nodes contains a parent node and two 
     // children nodes. The parent node represents the match the winning player will advance to. The two children

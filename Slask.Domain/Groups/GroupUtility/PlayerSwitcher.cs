@@ -1,9 +1,6 @@
 ﻿using Slask.Domain.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Slask.Domain.Groups
+namespace Slask.Domain.Groups.GroupUtility
 {
     // CREATE TESTS
     public static class PlayerSwitcher

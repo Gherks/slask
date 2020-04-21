@@ -2,7 +2,8 @@ using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
-using Slask.Domain.Rounds;
+using Slask.Domain.Groups.Bases;
+using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Utilities;
 using Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests;
 using System;
@@ -24,40 +25,23 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
     public class GroupStepDefinitions : RoundStepDefinitions
     {
-        private Random randomizer;
+        //[Given(@"players ""(.*)"" is added to created group (.*)")]
+        //[When(@"players ""(.*)"" is added to created group (.*)")]
+        //public void GivenPlayersIsAddedToCreatedGroup(string commaSeparatedPlayerNames, int groupIndex)
+        //{
+        //    //if (createdGroups.Count <= groupIndex)
+        //    //{
+        //    //    throw new IndexOutOfRangeException("Given created group index is out of bounds");
+        //    //}
 
-        [Given(@"created round (.*) adds (.*) groups")]
-        [When(@"created round (.*) adds (.*) groups")]
-        public void GivenCreatedRoundAddsGroups(int roundIndex, int groupCount)
-        {
-            if (createdRounds.Count <= roundIndex)
-            {
-                throw new IndexOutOfRangeException("Given created round index is out of bounds");
-            }
+        //    //List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+        //    //GroupBase group = createdGroups[groupIndex];
 
-            for(int counter = 0; counter < groupCount; ++counter)
-            {
-                createdGroups.Add(createdRounds[roundIndex].AddGroup());
-            }
-        }
-
-        [Given(@"players ""(.*)"" is added to created group (.*)")]
-        [When(@"players ""(.*)"" is added to created group (.*)")]
-        public void GivenPlayersIsAddedToCreatedGroup(string commaSeparatedPlayerNames, int groupIndex)
-        {
-            if (createdGroups.Count <= groupIndex)
-            {
-                throw new IndexOutOfRangeException("Given created group index is out of bounds");
-            }
-
-            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
-            GroupBase group = createdGroups[groupIndex];
-
-            foreach (string playerName in playerNames)
-            {
-                group.AddNewPlayerReference(playerName);
-            }
-        }
+        //    //foreach (string playerName in playerNames)
+        //    //{
+        //    //    group.AddNewPlayerReference(playerName);
+        //    //}
+        //}
 
         [Given(@"score is added to players in given matches in created groups")]
         [When(@"score is added to players in given matches in created groups")]
@@ -79,61 +63,13 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
                 Player player = match.FindPlayer(scoringPlayer);
 
-                if(player != null)
+                if (player != null)
                 {
                     player.IncreaseScore(scoreAdded);
                 }
                 else
                 {
                     throw new Exception("Invalid player name in given match within given created group");
-                }
-            }
-        }
-
-
-        [Given(@"created groups within created tournament is played out and betted on")]
-        [When(@"created groups within created tournament is played out and betted on")]
-        public void GivenCreatedGroupsWithinCreatedTournamentIsPlayedOutAndBettedOn(Table table)
-        {
-            if (table == null)
-            {
-                throw new ArgumentNullException(nameof(table));
-            }
-
-            foreach (TableRow row in table.Rows)
-            {
-                ParseTargetGroupToPlaceBets(row, out int tournamentIndex, out int roundIndex, out int groupIndex);
-
-                bool tournamentIndexIsValid = createdTournaments.Count > tournamentIndex;
-                bool roundIndexIsValid = createdTournaments[tournamentIndex].Rounds.Count > roundIndex;
-                bool groupIndexIsValid = createdTournaments[tournamentIndex].Rounds[roundIndex].Groups.Count > groupIndex;
-
-                if (!tournamentIndexIsValid || !roundIndexIsValid || !groupIndexIsValid)
-                {
-                    throw new IndexOutOfRangeException("Tournament, round, or group with given index does not exist");
-                }
-
-                SystemTimeMocker.Reset();
-                randomizer = new Random(133742069);
-
-                Tournament tournament = createdTournaments[tournamentIndex];
-                RoundBase round = tournament.Rounds[roundIndex];
-                GroupBase group = round.Groups[groupIndex];
-
-                while (group.GetPlayState() != PlayState.IsFinished)
-                {
-                    PlaceBetsOnAvailableMatchesInGroup(tournament.Betters, group);
-
-                    foreach (Match match in group.Matches)
-                    {
-                        if (match.IsReady() && match.GetPlayState() == PlayState.NotBegun)
-                        {
-                            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-                            break;
-                        }
-                    }
-
-                    PlayAvailableMatches(group);
                 }
             }
         }
@@ -188,26 +124,14 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
         //    }
         //}
 
-        [When(@"created rounds (.*) to (.*) creates (.*) groups each")]
-        public void WhenCreatedRoundsToCreatesGroupsEach(int roundStartIndex, int roundEndIndex, int groupAmount)
-        {
-            for (int roundIndex = roundStartIndex; roundIndex < roundEndIndex; ++roundIndex)
-            {
-                for (int groupCounter = 0; groupCounter < groupAmount; ++groupCounter)
-                {
-                    createdGroups.Add(createdRounds[roundIndex].AddGroup());
-                }
-            }
-        }
-
         [Then(@"created rounds (.*) to (.*) should contain (.*) groups each")]
-        public void ThenCreatedRoundsToShouldContainGroupsEach(int roundStartIndex, int roundEndIndex, int groupAmount)
+        public void ThenCreatedRoundsToShouldContainGroupsEach(int roundStartIndex, int roundEndIndex, int groupCount)
         {
             for (int roundIndex = roundStartIndex; roundIndex < roundEndIndex; ++roundIndex)
             {
-                for (int groupCounter = 0; groupCounter < groupAmount; ++groupCounter)
+                for (int groupCounter = 0; groupCounter < groupCount; ++groupCounter)
                 {
-                    createdRounds[roundIndex].Groups.Should().HaveCount(groupAmount);
+                    createdRounds[roundIndex].Groups.Should().HaveCount(groupCount);
                 }
             }
         }
@@ -253,6 +177,21 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             }
         }
 
+        [Then(@"created group (.*) should contain exactly these player references with names: ""(.*)""")]
+        public void ThenCreatedGroupShouldContainExactlyThesePlayerReferencesWithNames(int groupIndex, string commaSeparatedPlayerNames)
+        {
+            GroupBase group = createdGroups[groupIndex];
+            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+
+            group.PlayerReferences.Should().HaveCount(playerNames.Count);
+
+            foreach (string playerName in playerNames)
+            {
+                group.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+            }
+        }
+
+
         [Then(@"advancing players in created group (.*) is exactly ""(.*)""")]
         public void ThenWinningPlayersInGroupIs(int groupIndex, string commaSeparatedPlayerNames)
         {
@@ -261,7 +200,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
             List<PlayerReference> playerReferences = PlayerStandingsCalculator.GetAdvancingPlayers(group);
 
-            playerReferences.Should().NotBeEmpty();
             playerReferences.Should().HaveCount(playerNames.Count);
 
             foreach (string playerName in playerNames)
@@ -284,7 +222,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
                 ParseBracketGroupMatchSetup(row, out int matchIndex, out string player1Name, out string player2Name);
 
-                if(player1Name.Length > 0)
+                if (player1Name.Length > 0)
                 {
                     group.Matches[matchIndex].Player1.Name.Should().Be(player1Name);
                 }
@@ -293,7 +231,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
                     group.Matches[matchIndex].Player1.Should().BeNull();
                 }
 
-                if(player2Name.Length > 0)
+                if (player2Name.Length > 0)
                 {
                     group.Matches[matchIndex].Player2.Name.Should().Be(player2Name);
                 }
@@ -309,8 +247,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             group.Should().NotBeNull();
             group.Should().BeOfType<GroupType>();
             group.Id.Should().NotBeEmpty();
-            group.ParticipatingPlayers.Should().BeEmpty();
-            group.Matches.Should().BeEmpty();
+            group.Matches.Should().NotBeEmpty();
             group.RoundId.Should().NotBeEmpty();
             group.Round.Should().NotBeNull();
         }
@@ -343,28 +280,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             }
         }
 
-        protected static void ParseTargetGroupToPlaceBets(TableRow row, out int tournamentIndex, out int roundIndex, out int groupIndex)
-        {
-            tournamentIndex = 0;
-            roundIndex = 0;
-            groupIndex = 0;
-
-            if (row.ContainsKey("Created tournament index"))
-            {
-                int.TryParse(row["Created tournament index"], out tournamentIndex);
-            }
-
-            if (row.ContainsKey("Round index"))
-            {
-                int.TryParse(row["Round index"], out roundIndex);
-            }
-
-            if (row.ContainsKey("Group index"))
-            {
-                int.TryParse(row["Group index"], out groupIndex);
-            }
-        }
-
         protected static void ParseBracketGroupMatchSetup(TableRow row, out int matchIndex, out string player1Name, out string player2Name)
         {
             matchIndex = -1;
@@ -386,62 +301,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             if (row.ContainsKey("Player 2 name"))
             {
                 player2Name = row["Player 2 name"];
-            }
-        }
-     
-        private void PlaceBetsOnAvailableMatchesInGroup(List<Better> betters, GroupBase group)
-        {
-            Random random = new Random(133742069);
-            int matchCounter = 0;
-
-            foreach (Domain.Match match in group.Matches)
-            {
-                if (match.GetPlayState() != PlayState.NotBegun)
-                {
-                    continue;
-                }
-
-                Better better = betters[0];
-
-                if (matchCounter % 4 != 0)
-                {
-                    better.PlaceMatchBet(match, match.Player1);
-                }
-
-                for (int betterIndex = 1; betterIndex < betters.Count; ++betterIndex)
-                {
-                    Player player = random.Next(2) == 0 ? match.Player1 : match.Player2;
-
-                    better = betters[betterIndex];
-                    better.PlaceMatchBet(match, player);
-                }
-
-                matchCounter++;
-            }
-        }
-
-        protected void PlayAvailableMatches(GroupBase group)
-        {
-            int winningScore = (int)Math.Ceiling(group.Round.BestOf / 2.0);
-
-            foreach (Match match in group.Matches)
-            {
-                bool matchShouldHaveStarted = match.StartDateTime < SystemTime.Now;
-                bool matchIsNotFinished = match.GetPlayState() != PlayState.IsFinished;
-
-                if (matchShouldHaveStarted && matchIsNotFinished)
-                {
-                    bool increasePlayer1Score = randomizer.Next(2) == 0;
-
-                    if (increasePlayer1Score)
-                    {
-                        match.Player1.IncreaseScore(winningScore);
-                    }
-                    else
-                    {
-                        match.Player2.IncreaseScore(winningScore);
-                    }
-                }
             }
         }
     }

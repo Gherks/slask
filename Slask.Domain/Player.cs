@@ -1,4 +1,5 @@
-﻿using Slask.Domain.Utilities;
+﻿using Slask.Domain.Rounds;
+using Slask.Domain.Utilities;
 using System;
 
 namespace Slask.Domain
@@ -53,7 +54,10 @@ namespace Slask.Domain
 
                 if (groupJustFinished)
                 {
-                    Match.Group.Round.OnGroupJustFinished();
+                    if (Match.Group.Round.GetPlayState() == PlayState.IsFinished)
+                    {
+                        AdvancingPlayerTransfer.TransferToNextRound(Match.Group.Round);
+                    }
                 }
             }
         }
@@ -67,7 +71,6 @@ namespace Slask.Domain
             {
                 Score -= value;
                 Score = Math.Max(Score, 0);
-                Match.Group.OnMatchScoreDecreased(Match);
             }
         }
     }

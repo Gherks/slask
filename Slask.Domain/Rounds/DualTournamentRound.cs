@@ -1,4 +1,6 @@
 ﻿using Slask.Domain.Groups;
+using Slask.Domain.Groups.Bases;
+using Slask.Domain.Rounds.Bases;
 using System;
 using System.Linq;
 
@@ -17,21 +19,23 @@ namespace Slask.Domain.Rounds
                 return null;
             }
 
-            return new DualTournamentRound
+            DualTournamentRound round = new DualTournamentRound
             {
                 Id = Guid.NewGuid(),
                 Name = name,
+                PlayersPerGroupCount = 4,
                 BestOf = bestOf,
                 AdvancingPerGroupCount = 2,
                 TournamentId = tournament.Id,
                 Tournament = tournament
             };
+
+            return round;
         }
 
-        public override GroupBase AddGroup()
+        protected override GroupBase AddGroup()
         {
-            Groups.Add(DualTournamentGroup.Create(this));
-            return Groups.Last();
+            return DualTournamentGroup.Create(this);
         }
 
         protected static bool InitialValidationSucceeds(string name, int bestOf)

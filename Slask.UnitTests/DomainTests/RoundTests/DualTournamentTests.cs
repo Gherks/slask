@@ -2,11 +2,13 @@
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.Bases;
 using System.Linq;
 using Xunit;
 
 namespace Slask.UnitTests.DomainTests.RoundTests
 {
+    // CREATE TESTS CannotChangeGroupSize
     public class DualTournamentRoundTests
     {
         private readonly Tournament tournament;
@@ -83,16 +85,37 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         }
 
         [Fact]
-        public void AddingGroupToDualTournamentRoundCreatesADualTournamentGroup()
+        public void CanRegisterPlayerReferencesToFirstDualTournamentRound()
         {
+            string playerName = "Maru";
+
             DualTournamentRound dualTournamentRound = CreateDualTournamentRound();
 
-            dualTournamentRound.AddGroup();
+            PlayerReference playerReference = dualTournamentRound.RegisterPlayerReference(playerName);
 
-            DualTournamentGroup group = dualTournamentRound.Groups.First() as DualTournamentGroup;
+            playerReference.Id.Should().NotBeEmpty();
+            playerReference.Name.Should().Be(playerName);
+            playerReference.TournamentId.Should().Be(dualTournamentRound.TournamentId);
+            playerReference.Tournament.Should().Be(dualTournamentRound.Tournament);
+        }
 
-            dualTournamentRound.Groups.Should().HaveCount(1);
-            group.Should().BeOfType<DualTournamentGroup>();
+        [Fact]
+        public void CannotRegisterPlayerReferencesToDualTournamentRoundsThatIsNotTheFirstOne()
+        {
+            string playerName = "Maru";
+            string roundName = "Dual tournament round";
+            int roundCount = 5;
+
+            DualTournamentRound firstDualTournamentRound = CreateDualTournamentRound();
+
+            for (int index = 1; index < roundCount; ++index)
+            {
+                DualTournamentRound dualTournamentRound = CreateDualTournamentRound(roundName + index.ToString());
+                PlayerReference playerReference = dualTournamentRound.RegisterPlayerReference(playerName + index.ToString());
+
+                playerReference.Should().BeNull();
+                dualTournamentRound.PlayerReferences.Should().HaveCount(0);
+            }
         }
 
         private DualTournamentRound CreateDualTournamentRound(string name = "Dual tournament round", int bestOf = 3)

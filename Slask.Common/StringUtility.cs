@@ -10,9 +10,11 @@ namespace Slask.Common
     {
         public static List<string> ToStringList(string text, string delimiter)
         {
-            if (text == null)
+            bool textIsInvalid = IsNullOrEmpty(text);
+
+            if (textIsInvalid)
             {
-                throw new ArgumentNullException(nameof(text));
+                return new List<string>();
             }
 
             List<string> textList = text.Split(delimiter).ToList();
@@ -33,6 +35,21 @@ namespace Slask.Common
             }
 
             return text.ToUpper(CultureInfo.CurrentCulture).Replace(" ", string.Empty, StringComparison.CurrentCulture);
+        }
+
+        public static bool IsNullOrEmpty(string text)
+        {
+            bool textIsInvalid = text == null;
+
+            if (textIsInvalid)
+            {
+                return true;
+            }
+
+            string textSansWhitespace = text.Replace(" ", string.Empty, StringComparison.CurrentCulture);
+            bool textIsEmpty = textSansWhitespace.Length == 0;
+
+            return textIsEmpty;
         }
     }
 }

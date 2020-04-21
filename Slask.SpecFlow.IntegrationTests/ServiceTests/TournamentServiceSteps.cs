@@ -2,7 +2,8 @@
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
-using Slask.Domain.Rounds;
+using Slask.Domain.Groups.Bases;
+using Slask.Domain.Rounds.Bases;
 using Slask.Persistence.Services;
 using Slask.TestCore;
 using System;
@@ -80,16 +81,17 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             Tournament tournament = GivenATournamentNamedHasBeenCreated(tournamentName);
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
-            RoundBase bracketRound = tournament.AddBracketRound("BracketRound", 3);
-            BracketGroup bracketGroup = (BracketGroup)bracketRound.AddGroup();
-
-            createdRounds.Add(bracketRound);
-            createdGroups.Add(bracketGroup);
+            RoundBase bracketRound = tournament.AddBracketRound("BracketRound", 3, playerNames.Count);
 
             foreach (string playerName in playerNames)
             {
-                createdPlayerReferences.Add(bracketGroup.AddNewPlayerReference(playerName));
+                createdPlayerReferences.Add(bracketRound.RegisterPlayerReference(playerName));
             }
+
+            //BracketGroup bracketGroup = (BracketGroup)bracketRound.AddGroup();
+
+            //createdRounds.Add(bracketRound);
+            //createdGroups.Add(bracketGroup);
 
             return tournament;
         }
@@ -236,11 +238,11 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             tournament.Betters[betterIndex].Should().BeNull();
         }
 
-        [Then(@"better amount in created tournament (.*) should be (.*)")]
-        public void ThenBetterAmountInCreatedTournamentShouldBe(int tournamentIndex, int betterAmount)
+        [Then(@"better count in created tournament (.*) should be (.*)")]
+        public void ThenBetterCountInCreatedTournamentShouldBe(int tournamentIndex, int betterCount)
         {
             Tournament tournament = createdTournaments[tournamentIndex];
-            tournament.Betters.Should().HaveCount(betterAmount);
+            tournament.Betters.Should().HaveCount(betterCount);
         }
 
         [Then(@"created tournament (.*) should contain exactly these player references with names: ""(.*)""")]
@@ -249,9 +251,10 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             Tournament tournament = createdTournaments[tournamentIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparetedPlayerNames, ",");
 
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
-            playerReferences.Should().NotBeNull();
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferences();
+
             playerReferences.Should().HaveCount(playerNames.Count);
+
             foreach (string playerName in playerNames)
             {
                 playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
@@ -262,6 +265,8 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
         public void ThenFetchedPlayerReferencesShouldBeExactlyThesePlayerReferencesWithNames(string commaSeparetedPlayerNames)
         {
             List<string> playerNames = StringUtility.ToStringList(commaSeparetedPlayerNames, ",");
+
+            fetchedPlayerReferences.Should().HaveCount(playerNames.Count);
 
             foreach (string playerName in playerNames)
             {

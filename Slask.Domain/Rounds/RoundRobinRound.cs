@@ -1,47 +1,55 @@
 ﻿using Slask.Domain.Groups;
+using Slask.Domain.Groups.Bases;
+using Slask.Domain.Rounds.Bases;
 using System;
 using System.Linq;
 
 namespace Slask.Domain.Rounds
 {
-    public class RoundRobinRound : RoundBase
+    public class RoundRobinRound : ResizableRound
     {
         private RoundRobinRound()
         {
         }
 
-        public static RoundRobinRound Create(string name, int bestOf, int advancingPerGroupAmount, Tournament tournament)
+        public static RoundRobinRound Create(string name, int bestOf, int advancingPerGroupCount, int playersPerGroupCount, Tournament tournament)
         {
-            if (!InitialValidationSucceeds(name, bestOf, advancingPerGroupAmount) || tournament == null)
+            bool validationFails = !InitialValidationSucceeds(name, bestOf, advancingPerGroupCount, playersPerGroupCount);
+            bool givenTournamentIsInvalid = tournament == null;
+
+            if (validationFails || givenTournamentIsInvalid)
             {
                 return null;
             }
 
-            return new RoundRobinRound
+            RoundRobinRound round = new RoundRobinRound
             {
                 Id = Guid.NewGuid(),
                 Name = name,
+                PlayersPerGroupCount = playersPerGroupCount,
                 BestOf = bestOf,
-                AdvancingPerGroupCount = advancingPerGroupAmount,
+                AdvancingPerGroupCount = advancingPerGroupCount,
                 TournamentId = tournament.Id,
                 Tournament = tournament
             };
+
+            return round;
         }
 
-        public override GroupBase AddGroup()
+        protected override GroupBase AddGroup()
         {
-            Groups.Add(RoundRobinGroup.Create(this));
-            return Groups.Last();
+            return RoundRobinGroup.Create(this);
         }
 
-        public static bool InitialValidationSucceeds(string name, int bestOf, int advanceAmount)
+        public static bool InitialValidationSucceeds(string name, int bestOf, int advancingPerGroupCount, int playersPerGroupCount)
         {
             bool nameIsNotEmpty = name.Length > 0;
             bool bestOfIsNotEven = bestOf % 2 != 0;
             bool bestOfIsGreaterThanZero = bestOf > 0;
-            bool advanceAmountIsGreaterThanZero = advanceAmount > 0;
+            bool advancingPerGroupCountIsGreaterThanZero = advancingPerGroupCount > 0;
+            bool playersPerGroupCountIsGreaterThanZero = playersPerGroupCount >= 2;
 
-            return nameIsNotEmpty && bestOfIsNotEven && bestOfIsGreaterThanZero && advanceAmountIsGreaterThanZero;
+            return nameIsNotEmpty && bestOfIsNotEven && bestOfIsGreaterThanZero && advancingPerGroupCountIsGreaterThanZero && playersPerGroupCountIsGreaterThanZero;
         }
     }
 }

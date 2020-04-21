@@ -21,9 +21,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
         [When(@"a player named ""(.*)"" has been added to created group (.*)")]
         public void GivenAPlayerNamedHasBeenAddedToCreatedGroup(string playerName, int groupIndex)
         {
-            GroupBase group = createdGroups[groupIndex];
+            //GroupBase group = createdGroups[groupIndex];
 
-            group.AddNewPlayerReference(playerName);
+            //group.AddNewPlayerReference(playerName);
         }
 
         [When(@"renaming created player reference (.*) to ""(.*)""")]
@@ -40,7 +40,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             Tournament tournament = createdTournaments[createdTournamentIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferencesInTournament();
+            List<PlayerReference> playerReferences = tournament.GetPlayerReferences();
 
             playerReferences.Should().HaveCount(playerReferencesInTournamentCount);
 

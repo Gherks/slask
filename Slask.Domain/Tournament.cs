@@ -1,6 +1,7 @@
 ﻿using Slask.Common;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.Bases;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,9 +39,9 @@ namespace Slask.Domain
             Name = name;
         }
 
-        public RoundBase AddBracketRound(string name, int bestOf)
+        public RoundBase AddBracketRound(string name, int bestOf, int playersPerGroupCount = 2)
         {
-            RoundBase round = BracketRound.Create(name, bestOf, this);
+            RoundBase round = BracketRound.Create(name, bestOf, playersPerGroupCount, this);
 
             if (round == null)
             {
@@ -48,7 +49,9 @@ namespace Slask.Domain
             }
 
             Rounds.Add(round);
-            return Rounds.Last();
+            round.Construct();
+
+            return round;
         }
 
         public RoundBase AddDualTournamentRound(string name, int bestOf)
@@ -61,12 +64,14 @@ namespace Slask.Domain
             }
 
             Rounds.Add(round);
-            return Rounds.Last();
+            round.Construct();
+
+            return round;
         }
 
-        public RoundBase AddRoundRobinRound(string name, int bestOf, int advanceAmount)
+        public RoundBase AddRoundRobinRound(string name, int bestOf, int advancingPerGroupCount, int playersPerGroupCount = 2)
         {
-            RoundBase round = RoundRobinRound.Create(name, bestOf, advanceAmount, this);
+            RoundBase round = RoundRobinRound.Create(name, bestOf, advancingPerGroupCount, playersPerGroupCount, this);
 
             if (round == null)
             {
@@ -74,7 +79,9 @@ namespace Slask.Domain
             }
 
             Rounds.Add(round);
-            return Rounds.Last();
+            round.Construct();
+
+            return round;
         }
 
         public Better AddBetter(User user)
@@ -101,14 +108,40 @@ namespace Slask.Domain
             return Rounds.FirstOrDefault(round => round.Name.ToLower() == name.ToLower());
         }
 
+        // CREATE TESTS
+        public RoundBase GetFirstRound()
+        {
+            bool hasNoRounds = Rounds.Count == 0;
+
+            if (hasNoRounds)
+            {
+                return null;
+            }
+
+            return Rounds.First();
+        }
+
+        // CREATE TESTS
+        public RoundBase GetLastRound()
+        {
+            bool hasNoRounds = Rounds.Count == 0;
+
+            if (hasNoRounds)
+            {
+                return null;
+            }
+
+            return Rounds.Last();
+        }
+
         public PlayerReference GetPlayerReferenceByPlayerId(Guid id)
         {
-            return GetPlayerReferencesInTournament().FirstOrDefault(playerReference => playerReference.Id == id);
+            return GetPlayerReferences().FirstOrDefault(playerReference => playerReference.Id == id);
         }
 
         public PlayerReference GetPlayerReferenceByPlayerName(string name)
         {
-            return GetPlayerReferencesInTournament().FirstOrDefault(playerReference => playerReference.Name.ToLower() == name.ToLower());
+            return GetPlayerReferences().FirstOrDefault(playerReference => playerReference.Name.ToLower() == name.ToLower());
         }
 
         public Better GetBetterById(Guid id)
@@ -121,25 +154,17 @@ namespace Slask.Domain
             return Betters.FirstOrDefault(better => better.User.Name.ToLower() == name.ToLower());
         }
 
-        public List<PlayerReference> GetPlayerReferencesInTournament()
+        public List<PlayerReference> GetPlayerReferences()
         {
-            Dictionary<string, PlayerReference> playerReferenceDictionary = new Dictionary<string, PlayerReference>();
+            bool tournamentHasNoRounds = Rounds.Count == 0;
 
-            foreach (RoundBase round in Rounds)
+            if (tournamentHasNoRounds)
             {
-                foreach (GroupBase group in round.Groups)
-                {
-                    foreach(PlayerReference playerReference in group.ParticipatingPlayers)
-                    {
-                        try
-                        {
-                            playerReferenceDictionary.Add(playerReference.Name, playerReference);
-                        } catch (Exception) { }
-                    }
-                }
+                // LOGG Error: 
+                return new List<PlayerReference>();
             }
 
-            return playerReferenceDictionary.Values.ToList();
+            return Rounds.First().PlayerReferences;
         }
     }
 }

@@ -2,6 +2,7 @@
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.Bases;
 using System.Linq;
 using Xunit;
 
@@ -21,12 +22,14 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         {
             string name = "Bracket round";
             int bestOf = 3;
+            int playersPerGroupCount = 2;
 
-            BracketRound bracketRound = BracketRound.Create(name, bestOf, tournament);
+            BracketRound bracketRound = BracketRound.Create(name, bestOf, playersPerGroupCount, tournament);
 
             bracketRound.Should().NotBeNull();
             bracketRound.Id.Should().NotBeEmpty();
             bracketRound.Name.Should().Be(name);
+            bracketRound.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
             bracketRound.BestOf.Should().Be(bestOf);
             bracketRound.AdvancingPerGroupCount.Should().Be(1);
             bracketRound.Groups.Should().BeEmpty();
@@ -83,16 +86,37 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         }
 
         [Fact]
-        public void AddingGroupToBracketRoundCreatesABracketGroup()
+        public void CanRegisterPlayerReferencesToFirstBracketRound()
         {
+            string playerName = "Maru";
+
             BracketRound bracketRound = CreateBracketRound();
 
-            bracketRound.AddGroup();
+            PlayerReference playerReference = bracketRound.RegisterPlayerReference(playerName);
 
-            BracketGroup group = bracketRound.Groups.First() as BracketGroup;
+            playerReference.Id.Should().NotBeEmpty();
+            playerReference.Name.Should().Be(playerName);
+            playerReference.TournamentId.Should().Be(bracketRound.TournamentId);
+            playerReference.Tournament.Should().Be(bracketRound.Tournament);
+        }
 
-            bracketRound.Groups.Should().HaveCount(1);
-            group.Should().BeOfType<BracketGroup>();
+        [Fact]
+        public void CannotRegisterPlayerReferencesToBracketRoundsThatIsNotTheFirstOne()
+        {
+            string playerName = "Maru";
+            string roundName = "Bracket round";
+            int roundCount = 5;
+
+            BracketRound firstBracketRound = CreateBracketRound();
+
+            for (int index = 1; index < roundCount; ++index)
+            {
+                BracketRound bracketRound = CreateBracketRound(roundName + index.ToString());
+                PlayerReference playerReference = bracketRound.RegisterPlayerReference(playerName + index.ToString());
+
+                playerReference.Should().BeNull();
+                bracketRound.PlayerReferences.Should().HaveCount(0);
+            }
         }
 
         private BracketRound CreateBracketRound(string name = "Bracket round", int bestOf = 3)

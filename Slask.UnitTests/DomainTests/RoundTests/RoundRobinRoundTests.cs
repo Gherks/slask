@@ -2,6 +2,7 @@
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.Bases;
 using System.Linq;
 using Xunit;
 
@@ -16,25 +17,26 @@ namespace Slask.UnitTests.DomainTests.RoundTests
             tournament = Tournament.Create("GSL 2019");
         }
 
-        // Tests covering advancing amount 
+        // Tests covering advancing count 
 
         [Fact]
         public void CanCreateRound()
         {
             string name = "Round robin round";
             int bestOf = 3;
-            int advancingPerGroupAmount = 2;
+            int advancingPerGroupCount = 1;
 
-            RoundRobinRound roundRobinRound = RoundRobinRound.Create(name, bestOf, advancingPerGroupAmount, tournament);
+            RoundRobinRound roundRobinRound = CreateRoundRobinRound(name, bestOf, advancingPerGroupCount);
 
             roundRobinRound.Should().NotBeNull();
             roundRobinRound.Id.Should().NotBeEmpty();
             roundRobinRound.Name.Should().Be(name);
+            roundRobinRound.PlayersPerGroupCount.Should().Be(2);
             roundRobinRound.BestOf.Should().Be(bestOf);
-            roundRobinRound.AdvancingPerGroupCount.Should().Be(advancingPerGroupAmount);
-            roundRobinRound.Groups.Should().BeEmpty();
-            roundRobinRound.TournamentId.Should().NotBeEmpty();
-            roundRobinRound.Tournament.Should().NotBeNull();
+            roundRobinRound.AdvancingPerGroupCount.Should().Be(advancingPerGroupCount);
+            roundRobinRound.Groups.Should().HaveCount(1);
+            roundRobinRound.TournamentId.Should().Be(tournament.Id);
+            roundRobinRound.Tournament.Should().Be(tournament);
         }
 
         [Fact]
@@ -67,11 +69,35 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         [Fact]
         public void CannotCreateRoundWithZeroOrLessAdvancingPlayers()
         {
-            RoundRobinRound firstRoundRobinRound = CreateRoundRobinRound(advancingPerGroupAmount: 0);
-            RoundRobinRound secondRoundRobinRound = CreateRoundRobinRound(advancingPerGroupAmount: -1);
+            RoundRobinRound firstRoundRobinRound = CreateRoundRobinRound(advancingPerGroupCount: 0);
+            RoundRobinRound secondRoundRobinRound = CreateRoundRobinRound(advancingPerGroupCount: -1);
 
             firstRoundRobinRound.Should().BeNull();
             secondRoundRobinRound.Should().BeNull();
+        }
+
+        [Fact]
+        public void CanChangeGroupSize()
+        {
+            RoundRobinRound roundRobinRound = CreateRoundRobinRound();
+
+            roundRobinRound.Groups.First().Matches.Should().HaveCount(1);
+            roundRobinRound.SetPlayersPerGroupCount(4);
+            roundRobinRound.Groups.First().Matches.Should().HaveCount(6);
+        }
+
+        // CREATE TESTS
+        [Fact]
+        public void CannotChangeGroupSizeOnRoundThatIsNotFirstRound()
+        {
+            RoundRobinRound roundRobinRound = CreateRoundRobinRound();
+        }
+
+        // CREATE TESTS
+        [Fact]
+        public void CannotChangeGroupSizeOnRoundWhenTournamentHasStarted()
+        {
+            RoundRobinRound roundRobinRound = CreateRoundRobinRound();
         }
 
         [Fact]
@@ -96,21 +122,42 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         }
 
         [Fact]
-        public void AddingGroupToRoundRobinRoundCreatesARoundRobinGroup()
+        public void CanRegisterPlayerReferencesToFirstRoundRobinRound()
         {
+            string playerName = "Maru";
+
             RoundRobinRound roundRobinRound = CreateRoundRobinRound();
 
-            roundRobinRound.AddGroup();
+            PlayerReference playerReference =  roundRobinRound.RegisterPlayerReference(playerName);
 
-            RoundRobinGroup group = roundRobinRound.Groups.First() as RoundRobinGroup;
-
-            roundRobinRound.Groups.Should().HaveCount(1);
-            group.Should().BeOfType<RoundRobinGroup>();
+            playerReference.Id.Should().NotBeEmpty();
+            playerReference.Name.Should().Be(playerName);
+            playerReference.TournamentId.Should().Be(roundRobinRound.TournamentId);
+            playerReference.Tournament.Should().Be(roundRobinRound.Tournament);
         }
 
-        private RoundRobinRound CreateRoundRobinRound(string name = "Round robin round", int bestOf = 3, int advancingPerGroupAmount = 2)
+        [Fact]
+        public void CannotRegisterPlayerReferencesToRoundRobinRoundsThatIsNotTheFirstOne()
         {
-            return tournament.AddRoundRobinRound(name, bestOf, advancingPerGroupAmount) as RoundRobinRound;
+            string playerName = "Maru";
+            string roundName = "Round robin round";
+            int roundCount = 5;
+
+            RoundRobinRound firstRoundRobinRound = CreateRoundRobinRound();
+
+            for(int index = 1; index < roundCount; ++index)
+            {
+                RoundRobinRound roundRobinRound = CreateRoundRobinRound(roundName + index.ToString());
+                PlayerReference playerReference = roundRobinRound.RegisterPlayerReference(playerName + index.ToString());
+
+                playerReference.Should().BeNull();
+                roundRobinRound.PlayerReferences.Should().HaveCount(0);
+            }
+        }
+
+        private RoundRobinRound CreateRoundRobinRound(string name = "Round robin round", int bestOf = 3, int advancingPerGroupCount = 2)
+        {
+            return tournament.AddRoundRobinRound(name, bestOf, advancingPerGroupCount) as RoundRobinRound;
         }
     }
 }

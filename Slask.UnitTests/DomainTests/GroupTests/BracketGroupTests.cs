@@ -2,6 +2,7 @@ using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
+using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,15 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 {
     public class BracketGroupTests : IDisposable
     {
+        private const string firstPlayerName = "Maru";
+        private const string secondPlayerName = "Stork";
+
         private readonly Tournament tournament;
         private readonly BracketRound bracketRound;
+        private BracketGroup bracketGroup;
+        private Match match;
+        private PlayerReference firstPlayerReference;
+        private PlayerReference secondPlayerReference;
 
         // StartDateTime for matches is properly set up according to layout (child nodes needs to be resolved before current node can start)
 
@@ -21,6 +29,14 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         {
             tournament = Tournament.Create("GSL 2019");
             bracketRound = tournament.AddBracketRound("Bracket round", 3) as BracketRound;
+        }
+
+        private void RegisterFirstTwoPlayers()
+        {
+            firstPlayerReference = bracketRound.RegisterPlayerReference(firstPlayerName);
+            secondPlayerReference = bracketRound.RegisterPlayerReference(secondPlayerName);
+            bracketGroup = bracketRound.Groups.First() as BracketGroup;
+            match = bracketGroup.Matches.First();
         }
 
         public void Dispose()
@@ -31,280 +47,39 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         [Fact]
         public void CanCreateGroup()
         {
-            BracketGroup group = BracketGroup.Create(bracketRound);
+            BracketGroup bracketGroup = BracketGroup.Create(bracketRound);
 
-            group.Should().NotBeNull();
-            group.Id.Should().NotBeEmpty();
-            group.ParticipatingPlayers.Should().BeEmpty();
-            group.Matches.Should().BeEmpty();
-            group.RoundId.Should().Be(bracketRound.Id);
-            group.Round.Should().Be(bracketRound);
-            group.BracketNodeSystem.Should().BeNull();
-        }
-
-        [Fact]
-        public void CanAddPlayerReferenceToGroup()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-            string playerName = "Maru";
-
-            group.AddNewPlayerReference(playerName);
-
-            group.ParticipatingPlayers.Should().HaveCount(1);
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
-        }
-
-        [Fact]
-        public void PlayerReferenceIsReturnedWhenSuccessfullyAddedPlayerReference()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-            string playerName = "Maru";
-
-            PlayerReference returnedPlayerReference = group.AddNewPlayerReference(playerName);
-
-            returnedPlayerReference.Should().NotBeNull();
-            returnedPlayerReference.Name.Should().Be(playerName);
-        }
-
-        [Fact]
-        public void CannotAddPlayerReferenceToGroupTwice()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-            string playerName = "Maru";
-
-            group.AddNewPlayerReference(playerName);
-            group.AddNewPlayerReference(playerName);
-
-            group.ParticipatingPlayers.Should().HaveCount(1);
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
-        }
-
-        [Fact]
-        public void NullIsReturnedWhenNotSuccessfullyAddedPlayerReference()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-            string playerName = "Maru";
-
-            PlayerReference firstReturnedPlayerReference = group.AddNewPlayerReference(playerName);
-            PlayerReference secondReturnedPlayerReference = group.AddNewPlayerReference(playerName);
-
-            firstReturnedPlayerReference.Should().NotBeNull();
-            firstReturnedPlayerReference.Name.Should().Be(playerName);
-
-            secondReturnedPlayerReference.Should().BeNull();
-        }
-
-        [Fact]
-        public void CanRemovePlayerReferenceFromGroup()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-            string playerName = "Maru";
-
-            group.AddNewPlayerReference(playerName);
-            group.RemovePlayerReference(playerName);
-
-            group.ParticipatingPlayers.Should().BeEmpty();
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().BeNull();
-        }
-
-        [Fact]
-        public void ReturnsTrueFlagWhenSuccessfullyRemovingPlayerReference()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-            string playerName = "Maru";
-
-            group.AddNewPlayerReference(playerName);
-            bool result = group.RemovePlayerReference(playerName);
-
-            result.Should().BeTrue();
+            bracketGroup.Should().NotBeNull();
+            bracketGroup.Id.Should().NotBeEmpty();
+            bracketGroup.Matches.Should().BeEmpty();
+            bracketGroup.PlayerReferences.Should().BeEmpty();
+            bracketGroup.RoundId.Should().Be(bracketRound.Id);
+            bracketGroup.Round.Should().Be(bracketRound);
+            bracketGroup.BracketNodeSystem.Should().BeNull();
         }
 
         [Fact]
         public void MatchIsCreatedWhenTwoPlayerReferencesAreAddedToGroup()
         {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-            string firstPlayerName = "Maru";
-            string secondPlayerName = "Stork";
+            RegisterFirstTwoPlayers();
 
-            group.AddNewPlayerReference(firstPlayerName);
-            group.AddNewPlayerReference(secondPlayerName);
-
-            group.Matches.Should().HaveCount(1);
-            group.Matches.FirstOrDefault(match => match.Player1.Name == firstPlayerName).Should().NotBeNull();
-            group.Matches.FirstOrDefault(match => match.Player2.Name == secondPlayerName).Should().NotBeNull();
-        }
-
-        [Fact]
-        public void CannotAddPlayerReferenceAfterFirstMatchStartDateTimeHasPassed()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-            string firstPlayerName = "Maru";
-            string secondPlayerName = "Stork";
-            string thirdPlayerName = "Rain";
-
-            group.AddNewPlayerReference(firstPlayerName);
-            group.AddNewPlayerReference(secondPlayerName);
-
-            SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
-
-            group.AddNewPlayerReference(thirdPlayerName);
-
-            group.ParticipatingPlayers.Should().HaveCount(2);
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == thirdPlayerName).Should().BeNull();
-        }
-
-        [Fact]
-        public void CannotRemovePlayerReferenceAfterFirstMatchStartDateTimeHasPassed()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-            string firstPlayerName = "Maru";
-            string secondPlayerName = "Stork";
-
-            group.AddNewPlayerReference(firstPlayerName);
-            group.AddNewPlayerReference(secondPlayerName);
-
-            SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
-
-            group.RemovePlayerReference(firstPlayerName);
-
-            group.ParticipatingPlayers.Should().HaveCount(2);
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
-        }
-
-        [Fact]
-        public void ReturnsFalseFlagWhenNotSuccessfullyRemovingPlayerReference()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-            string firstPlayerName = "Maru";
-            string secondPlayerName = "Stork";
-
-            group.AddNewPlayerReference(firstPlayerName);
-            group.AddNewPlayerReference(secondPlayerName);
-
-            SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
-
-            bool result = group.RemovePlayerReference(firstPlayerName);
-
-            result.Should().BeFalse();
-        }
-
-        [Fact]
-        public void CanSwitchPlacesOnPlayerReferencesThatAreInSameMatch()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-
-            PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
-            PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
-
-            PlayerSwitcher.SwitchMatchesOn(group.Matches.First().Player1, group.Matches.First().Player2);
-
-            group.Matches.First().Player1.PlayerReference.Should().Be(secondPlayerReference);
-            group.Matches.First().Player2.PlayerReference.Should().Be(firstPlayerReference);
-        }
-
-        [Fact]
-        public void CanSwitchPlacesOnPlayerReferencesThatAreInSameGroup()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-
-            PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
-            PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
-            PlayerReference thirdPlayerReference = group.AddNewPlayerReference("Taeja");
-            PlayerReference fourthPlayerReference = group.AddNewPlayerReference("Rain");
-
-            Match firstMatch = group.Matches[0];
-            Match secondMatch = group.Matches[1];
-
-            PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
-
-            firstMatch.Player1.PlayerReference.Should().Be(fourthPlayerReference);
-            firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
-            secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
-            secondMatch.Player2.PlayerReference.Should().Be(firstPlayerReference);
-        }
-
-        [Fact]
-        public void CanSwitchPlacesOnPlayerReferencesThatAreInDifferentGroups()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-
-            PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
-            PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
-            PlayerReference thirdPlayerReference = group.AddNewPlayerReference("Taeja");
-            PlayerReference fourthPlayerReference = group.AddNewPlayerReference("Rain");
-
-            Match firstMatch = group.Matches[0];
-            Match secondMatch = group.Matches[1];
-
-            PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
-
-            firstMatch.Player1.PlayerReference.Should().Be(fourthPlayerReference);
-            firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
-            secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
-            secondMatch.Player2.PlayerReference.Should().Be(firstPlayerReference);
-        }
-
-        [Fact]
-        public void CannotSwitchPlacesOnPlayerReferenceWhenAnyPlayerIsNull()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-
-            PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
-            PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
-            PlayerReference thirdPlayerReference = group.AddNewPlayerReference("Taeja");
-            PlayerReference fourthPlayerReference = group.AddNewPlayerReference("Rain");
-
-            Match firstMatch = group.Matches[0];
-            Match secondMatch = group.Matches[1];
-            Match thirdMatch = group.Matches[2];
-
-            PlayerSwitcher.SwitchMatchesOn(thirdMatch.Player1, secondMatch.Player2);
-            PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, thirdMatch.Player2);
-
-            firstMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
-            firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
-            secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
-            secondMatch.Player2.PlayerReference.Should().Be(fourthPlayerReference);
-        }
-
-        [Fact]
-        public void CannotSwitchPlacesOnAnyPlayerReferencesWhenAMatchInGroupHasBegun()
-        {
-            BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-
-            PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
-            PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
-            PlayerReference thirdPlayerReference = group.AddNewPlayerReference("Taeja");
-            PlayerReference fourthPlayerReference = group.AddNewPlayerReference("Rain");
-
-            Match firstMatch = group.Matches[0];
-            Match secondMatch = group.Matches[1];
-
-            SystemTimeMocker.SetOneSecondAfter(firstMatch.StartDateTime);
-
-            PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
-
-            firstMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
-            firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
-            secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
-            secondMatch.Player2.PlayerReference.Should().Be(fourthPlayerReference);
+            bracketGroup.Matches.Should().HaveCount(1);
+            bracketGroup.Matches.FirstOrDefault(match => match.Player1.Name == firstPlayerName).Should().NotBeNull();
+            bracketGroup.Matches.FirstOrDefault(match => match.Player2.Name == secondPlayerName).Should().NotBeNull();
         }
 
         [Fact]
         public void CanConstructBracketLayoutWithEvenPlayers()
         {
-            BracketGroup bracketGroup = bracketRound.AddGroup() as BracketGroup;
-
             List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
+            bracketRound.SetPlayersPerGroupCount(playerNames.Count);
 
             foreach (string playerName in playerNames)
             {
-                bracketGroup.AddNewPlayerReference(playerName);
+                bracketRound.RegisterPlayerReference(playerName);
             }
 
+            BracketGroup bracketGroup = bracketRound.Groups.First() as BracketGroup;
             bracketGroup.Matches.Should().HaveCount(playerNames.Count - 1);
 
             foreach (Match match in bracketGroup.Matches)
@@ -312,17 +87,17 @@ namespace Slask.UnitTests.DomainTests.GroupTests
                 match.Should().NotBeNull();
             }
 
-            bracketGroup.Matches[0].Player1.Name.Should().Be("Maru");
-            bracketGroup.Matches[0].Player2.Name.Should().Be("Stork");
+            bracketGroup.Matches[0].Player1.Name.Should().Be(playerNames[0]);
+            bracketGroup.Matches[0].Player2.Name.Should().Be(playerNames[1]);
 
-            bracketGroup.Matches[1].Player1.Name.Should().Be("Taeja");
-            bracketGroup.Matches[1].Player2.Name.Should().Be("Rain");
+            bracketGroup.Matches[1].Player1.Name.Should().Be(playerNames[2]);
+            bracketGroup.Matches[1].Player2.Name.Should().Be(playerNames[3]);
 
-            bracketGroup.Matches[2].Player1.Name.Should().Be("Bomber");
-            bracketGroup.Matches[2].Player2.Name.Should().Be("FanTaSy");
+            bracketGroup.Matches[2].Player1.Name.Should().Be(playerNames[4]);
+            bracketGroup.Matches[2].Player2.Name.Should().Be(playerNames[5]);
 
-            bracketGroup.Matches[3].Player1.Name.Should().Be("Stephano");
-            bracketGroup.Matches[3].Player2.Name.Should().Be("Thorzain");
+            bracketGroup.Matches[3].Player1.Name.Should().Be(playerNames[6]);
+            bracketGroup.Matches[3].Player2.Name.Should().Be(playerNames[7]);
 
             bracketGroup.Matches[4].Player1.Should().BeNull();
             bracketGroup.Matches[4].Player2.Should().BeNull();
@@ -337,15 +112,15 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         [Fact]
         public void CanConstructBracketLayoutWithUnevenPlayers()
         {
-            BracketGroup bracketGroup = bracketRound.AddGroup() as BracketGroup;
-
             List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano" };
+            bracketRound.SetPlayersPerGroupCount(playerNames.Count);
 
             foreach (string playerName in playerNames)
             {
-                bracketGroup.AddNewPlayerReference(playerName);
+                bracketRound.RegisterPlayerReference(playerName);
             }
 
+            BracketGroup bracketGroup = bracketRound.Groups.First() as BracketGroup;
             bracketGroup.Matches.Should().HaveCount(playerNames.Count - 1);
 
             foreach (Match match in bracketGroup.Matches)
@@ -353,16 +128,16 @@ namespace Slask.UnitTests.DomainTests.GroupTests
                 match.Should().NotBeNull();
             }
 
-            bracketGroup.Matches[0].Player1.Name.Should().Be("Maru");
-            bracketGroup.Matches[0].Player2.Name.Should().Be("Stork");
+            bracketGroup.Matches[0].Player1.Name.Should().Be(playerNames[0]);
+            bracketGroup.Matches[0].Player2.Name.Should().Be(playerNames[1]);
 
-            bracketGroup.Matches[1].Player1.Name.Should().Be("Taeja");
-            bracketGroup.Matches[1].Player2.Name.Should().Be("Rain");
+            bracketGroup.Matches[1].Player1.Name.Should().Be(playerNames[2]);
+            bracketGroup.Matches[1].Player2.Name.Should().Be(playerNames[3]);
 
-            bracketGroup.Matches[2].Player1.Name.Should().Be("Bomber");
-            bracketGroup.Matches[2].Player2.Name.Should().Be("FanTaSy");
+            bracketGroup.Matches[2].Player1.Name.Should().Be(playerNames[4]);
+            bracketGroup.Matches[2].Player2.Name.Should().Be(playerNames[5]);
 
-            bracketGroup.Matches[3].Player1.Name.Should().Be("Stephano");
+            bracketGroup.Matches[3].Player1.Name.Should().Be(playerNames[6]);
             bracketGroup.Matches[3].Player2.Should().BeNull();
 
             bracketGroup.Matches[4].Player1.Should().BeNull();
@@ -375,14 +150,15 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         [Fact]
         public void CanConstructBracketNodeSystemWithEvenPlayers()
         {
-            BracketGroup bracketGroup = bracketRound.AddGroup() as BracketGroup;
-
             List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
+            bracketRound.SetPlayersPerGroupCount(playerNames.Count);
 
             foreach (string playerName in playerNames)
             {
-                bracketGroup.AddNewPlayerReference(playerName);
+                bracketRound.RegisterPlayerReference(playerName);
             }
+
+            bracketGroup = bracketRound.Groups.First() as BracketGroup;
 
             BracketNode finalNode = bracketGroup.BracketNodeSystem.FinalNode;
 
@@ -410,14 +186,15 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         [Fact]
         public void CanConstructBracketNodeSystemWithUnevenPlayers()
         {
-            BracketGroup bracketGroup = bracketRound.AddGroup() as BracketGroup;
-
             List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano" };
+            bracketRound.SetPlayersPerGroupCount(playerNames.Count);
 
             foreach (string playerName in playerNames)
             {
-                bracketGroup.AddNewPlayerReference(playerName);
+                bracketRound.RegisterPlayerReference(playerName);
             }
+
+            bracketGroup = bracketRound.Groups.First() as BracketGroup;
 
             BracketNode finalNode = bracketGroup.BracketNodeSystem.FinalNode;
 
@@ -445,15 +222,15 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         [Fact]
         public void CreatesMatchTierListWhenBracketMatchesAreAdded()
         {
-            BracketGroup bracketGroup = bracketRound.AddGroup() as BracketGroup;
-
             List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano" };
+            bracketRound.SetPlayersPerGroupCount(playerNames.Count);
 
             foreach (string playerName in playerNames)
             {
-                bracketGroup.AddNewPlayerReference(playerName);
+                bracketRound.RegisterPlayerReference(playerName);
             }
 
+            bracketGroup = bracketRound.Groups.First() as BracketGroup;
             bracketGroup.BracketNodeSystem.TierCount.Should().Be(3);
 
             List<BracketNode> finalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(0);
@@ -476,15 +253,15 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         [Fact]
         public void StartDateTimeOnMatchesWithinATierDoesNotHaveToBeInOrder()
         {
-            BracketGroup bracketGroup = bracketRound.AddGroup() as BracketGroup;
-
             List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
+            bracketRound.SetPlayersPerGroupCount(playerNames.Count);
 
             foreach (string playerName in playerNames)
             {
-                bracketGroup.AddNewPlayerReference(playerName);
+                bracketRound.RegisterPlayerReference(playerName);
             }
 
+            bracketGroup = bracketRound.Groups.First() as BracketGroup;
             List<BracketNode> quarterfinalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(2);
 
             DateTime twoHoursEarlier = quarterfinalTier[0].Match.StartDateTime.AddHours(-2);
@@ -506,15 +283,15 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         [Fact]
         public void StartDateTimeForMatchesInACertainMatchTierMustAlwaysBeLaterThanLatestStartDateTimeOfPreviousTier()
         {
-            BracketGroup bracketGroup = bracketRound.AddGroup() as BracketGroup;
-
             List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
+            bracketRound.SetPlayersPerGroupCount(playerNames.Count);
 
             foreach (string playerName in playerNames)
             {
-                bracketGroup.AddNewPlayerReference(playerName);
+                bracketRound.RegisterPlayerReference(playerName);
             }
 
+            bracketGroup = bracketRound.Groups.First() as BracketGroup;
             List<BracketNode> finalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(0);
             List<BracketNode> semifinalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(1);
             List<BracketNode> quarterfinalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(2);

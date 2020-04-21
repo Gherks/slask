@@ -2,6 +2,7 @@
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
+using Slask.Domain.Groups.Bases;
 using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
@@ -29,202 +30,36 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         [Fact]
         public void CanCreateGroup()
         {
-            RoundRobinGroup group = RoundRobinGroup.Create(roundRobinRound);
+            RoundRobinGroup roundRobinGroup = RoundRobinGroup.Create(roundRobinRound);
 
-            group.Should().NotBeNull();
-            group.Id.Should().NotBeEmpty();
-            group.ParticipatingPlayers.Should().BeEmpty();
-            group.Matches.Should().BeEmpty();
-            group.RoundId.Should().Be(roundRobinRound.Id);
-            group.Round.Should().Be(roundRobinRound);
-        }
-
-        [Fact]
-        public void CanAddPlayerReferenceToGroup()
-        {
-            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
-            string playerName = "Maru";
-
-            group.AddNewPlayerReference(playerName);
-
-            group.ParticipatingPlayers.Should().HaveCount(1);
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
-        }
-
-        [Fact]
-        public void PlayerReferenceIsReturnedWhenSuccessfullyAddedPlayerReference()
-        {
-            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
-            string playerName = "Maru";
-
-            PlayerReference returnedPlayerReference = group.AddNewPlayerReference(playerName);
-
-            returnedPlayerReference.Should().NotBeNull();
-            returnedPlayerReference.Name.Should().Be(playerName);
-        }
-
-        [Fact]
-        public void CannotAddPlayerReferenceToGroupTwice()
-        {
-            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
-            string playerName = "Maru";
-
-            group.AddNewPlayerReference(playerName);
-            group.AddNewPlayerReference(playerName);
-
-            group.ParticipatingPlayers.Should().HaveCount(1);
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
-        }
-
-        [Fact]
-        public void NullIsReturnedWhenNotSuccessfullyAddedPlayerReference()
-        {
-            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
-            string playerName = "Maru";
-
-            PlayerReference firstReturnedPlayerReference = group.AddNewPlayerReference(playerName);
-            PlayerReference secondReturnedPlayerReference = group.AddNewPlayerReference(playerName);
-
-            firstReturnedPlayerReference.Should().NotBeNull();
-            firstReturnedPlayerReference.Name.Should().Be(playerName);
-
-            secondReturnedPlayerReference.Should().BeNull();
-        }
-
-        [Fact]
-        public void CanRemovePlayerReferenceFromGroup()
-        {
-            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
-            string playerName = "Maru";
-
-            group.AddNewPlayerReference(playerName);
-            group.RemovePlayerReference(playerName);
-
-            group.ParticipatingPlayers.Should().BeEmpty();
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().BeNull();
-        }
-
-        [Fact]
-        public void ReturnsTrueFlagWhenSuccessfullyRemovingPlayerReference()
-        {
-            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
-            string playerName = "Maru";
-
-            group.AddNewPlayerReference(playerName);
-            bool result = group.RemovePlayerReference(playerName);
-
-            result.Should().BeTrue();
+            roundRobinGroup.Should().NotBeNull();
+            roundRobinGroup.Id.Should().NotBeEmpty();
+            roundRobinGroup.Matches.Should().BeEmpty();
+            roundRobinGroup.PlayerReferences.Should().BeEmpty();
+            roundRobinGroup.RoundId.Should().Be(roundRobinRound.Id);
+            roundRobinGroup.Round.Should().Be(roundRobinRound);
         }
 
         [Fact]
         public void MatchIsCreatedWhenTwoPlayerReferencesAreAddedToGroup()
         {
-            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
             string firstPlayerName = "Maru";
             string secondPlayerName = "Stork";
 
-            group.AddNewPlayerReference(firstPlayerName);
-            group.AddNewPlayerReference(secondPlayerName);
+            RoundRobinGroup roundRobinGroup = RegisterPlayers(new List<string>() { firstPlayerName, secondPlayerName });
 
-            group.Matches.Should().HaveCount(1);
-            group.Matches.FirstOrDefault(match => match.Player1.Name == firstPlayerName).Should().NotBeNull();
-            group.Matches.FirstOrDefault(match => match.Player2.Name == secondPlayerName).Should().NotBeNull();
-        }
-
-        [Fact]
-        public void CannotAddPlayerReferenceAfterFirstMatchStartDateTimeHasPassed()
-        {
-            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
-            string firstPlayerName = "Maru";
-            string secondPlayerName = "Stork";
-            string thirdPlayerName = "Rain";
-
-            group.AddNewPlayerReference(firstPlayerName);
-            group.AddNewPlayerReference(secondPlayerName);
-
-            SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
-
-            group.AddNewPlayerReference(thirdPlayerName);
-
-            group.ParticipatingPlayers.Should().HaveCount(2);
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == thirdPlayerName).Should().BeNull();
-        }
-
-        [Fact]
-        public void CannotRemovePlayerReferenceAfterFirstMatchStartDateTimeHasPassed()
-        {
-            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
-            string firstPlayerName = "Maru";
-            string secondPlayerName = "Stork";
-
-            group.AddNewPlayerReference(firstPlayerName);
-            group.AddNewPlayerReference(secondPlayerName);
-
-            SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
-
-            group.RemovePlayerReference(firstPlayerName);
-
-            group.ParticipatingPlayers.Should().HaveCount(2);
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == firstPlayerName).Should().NotBeNull();
-            group.ParticipatingPlayers.FirstOrDefault(playerReference => playerReference.Name == secondPlayerName).Should().NotBeNull();
-        }
-
-        [Fact]
-        public void ReturnsFalseFlagWhenNotSuccessfullyRemovingPlayerReference()
-        {
-            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
-            string firstPlayerName = "Maru";
-            string secondPlayerName = "Stork";
-
-            group.AddNewPlayerReference(firstPlayerName);
-            group.AddNewPlayerReference(secondPlayerName);
-
-            SystemTimeMocker.SetOneSecondAfter(group.Matches.First().StartDateTime);
-
-            bool result = group.RemovePlayerReference(firstPlayerName);
-
-            result.Should().BeFalse();
-        }
-
-        [Fact]
-        public void CannotSwitchPlacesOnPlayerReferences()
-        {
-            RoundRobinGroup group = roundRobinRound.AddGroup() as RoundRobinGroup;
-
-            group.AddNewPlayerReference("Maru");
-            group.AddNewPlayerReference("Stork");
-            group.AddNewPlayerReference("Taeja");
-            group.AddNewPlayerReference("Rain");
-
-            Match firstMatch = group.Matches[0];
-            Match secondMatch = group.Matches[1];
-
-            PlayerReference firstPlayerReference = group.Matches[0].Player1.PlayerReference;
-            PlayerReference secondPlayerReference = group.Matches[0].Player2.PlayerReference;
-            PlayerReference thirdPlayerReference = group.Matches[1].Player1.PlayerReference;
-            PlayerReference fourthPlayerReference = group.Matches[1].Player2.PlayerReference;
-
-            PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
-
-            firstMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
-            firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
-            secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
-            secondMatch.Player2.PlayerReference.Should().Be(fourthPlayerReference);
+            roundRobinGroup.Matches.Should().HaveCount(1);
+            roundRobinGroup.Matches.FirstOrDefault(match => match.Player1.Name == firstPlayerName).Should().NotBeNull();
+            roundRobinGroup.Matches.FirstOrDefault(match => match.Player2.Name == secondPlayerName).Should().NotBeNull();
         }
 
         [Fact]
         public void NoStartDateTimeRestrictionIsAppliedToMatches()
         {
-            RoundRobinGroup roundRobinGroup = roundRobinRound.AddGroup() as RoundRobinGroup;
-
             List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain" };
 
-            foreach (string playerName in playerNames)
-            {
-                roundRobinGroup.AddNewPlayerReference(playerName);
-            }
+            roundRobinRound.SetPlayersPerGroupCount(playerNames.Count);
+            RoundRobinGroup roundRobinGroup = RegisterPlayers(playerNames);
 
             DateTime twoHoursLater = SystemTime.Now.AddHours(2);
             DateTime oneHourLater = SystemTime.Now.AddHours(1);
@@ -249,52 +84,81 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         }
 
         [Fact]
+        public void ConstructsAppropriateCountOfMatchesDependingOnGroupSize()
+        {
+            int groupSizeCounter = 0;
+
+            roundRobinRound.SetPlayersPerGroupCount(++groupSizeCounter);
+            roundRobinRound.Groups.First().Matches.Should().HaveCount(1);
+
+            roundRobinRound.SetPlayersPerGroupCount(++groupSizeCounter);
+            roundRobinRound.Groups.First().Matches.Should().HaveCount(1);
+
+            roundRobinRound.SetPlayersPerGroupCount(++groupSizeCounter);
+            roundRobinRound.Groups.First().Matches.Should().HaveCount(3);
+
+            roundRobinRound.SetPlayersPerGroupCount(++groupSizeCounter);
+            roundRobinRound.Groups.First().Matches.Should().HaveCount(6);
+
+            roundRobinRound.SetPlayersPerGroupCount(++groupSizeCounter);
+            roundRobinRound.Groups.First().Matches.Should().HaveCount(10);
+
+            roundRobinRound.SetPlayersPerGroupCount(++groupSizeCounter);
+            roundRobinRound.Groups.First().Matches.Should().HaveCount(15);
+
+            roundRobinRound.SetPlayersPerGroupCount(++groupSizeCounter);
+            roundRobinRound.Groups.First().Matches.Should().HaveCount(21);
+
+            roundRobinRound.SetPlayersPerGroupCount(++groupSizeCounter);
+            roundRobinRound.Groups.First().Matches.Should().HaveCount(28);
+        }
+
+        [Fact]
         public void CanConstructRoundRobinMatchLayout()
         {
-            RoundRobinGroup group = RoundRobinGroup.Create(roundRobinRound);
+            List<string> playerNames = new List<string> { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
 
-            group.AddNewPlayerReference("Maru").Should().NotBeNull();
-            RunTestsWithOnePlayer(group);
+            roundRobinRound.SetPlayersPerGroupCount(playerNames.Count);
 
-            group.AddNewPlayerReference("Stork").Should().NotBeNull();
-            RunTestsWithTwoPlayers(group);
+            roundRobinRound.RegisterPlayerReference(playerNames[0]).Should().NotBeNull();
+            RunTestsWithOnePlayer(roundRobinRound.Groups.First());
 
-            group.AddNewPlayerReference("Taeja").Should().NotBeNull();
-            RunTestsWithThreePlayers(group);
+            roundRobinRound.RegisterPlayerReference(playerNames[1]).Should().NotBeNull();
+            RunTestsWithTwoPlayers(roundRobinRound.Groups.First());
 
-            group.AddNewPlayerReference("Rain").Should().NotBeNull();
-            RunTestsWithFourPlayers(group);
+            roundRobinRound.RegisterPlayerReference(playerNames[2]).Should().NotBeNull();
+            RunTestsWithThreePlayers(roundRobinRound.Groups.First());
 
-            group.AddNewPlayerReference("Bomber").Should().NotBeNull();
-            RunTestsWithFivePlayers(group);
+            roundRobinRound.RegisterPlayerReference(playerNames[3]).Should().NotBeNull();
+            RunTestsWithFourPlayers(roundRobinRound.Groups.First());
 
-            group.AddNewPlayerReference("FanTaSy").Should().NotBeNull();
-            RunTestsWithSixPlayers(group);
+            roundRobinRound.RegisterPlayerReference(playerNames[4]).Should().NotBeNull();
+            RunTestsWithFivePlayers(roundRobinRound.Groups.First());
 
-            group.AddNewPlayerReference("Stephano").Should().NotBeNull();
-            RunTestsWithSevenPlayers(group);
+            roundRobinRound.RegisterPlayerReference(playerNames[5]).Should().NotBeNull();
+            RunTestsWithSixPlayers(roundRobinRound.Groups.First());
 
-            group.AddNewPlayerReference("Thorzain").Should().NotBeNull();
-            RunTestsWithEightPlayers(group);
+            roundRobinRound.RegisterPlayerReference(playerNames[6]).Should().NotBeNull();
+            RunTestsWithSevenPlayers(roundRobinRound.Groups.First());
+
+            roundRobinRound.RegisterPlayerReference(playerNames[7]).Should().NotBeNull();
+            RunTestsWithEightPlayers(roundRobinRound.Groups.First());
         }
 
-        private void RunTestsWithOnePlayer(RoundRobinGroup group)
+        private void RunTestsWithOnePlayer(GroupBase group)
         {
-            group.Matches.Should().BeEmpty();
+            group.Matches[0].Player1.Name.Should().Be("Maru");
+            group.Matches[0].Player2.Should().BeNull();
         }
 
-        private void RunTestsWithTwoPlayers(RoundRobinGroup group)
+        private void RunTestsWithTwoPlayers(GroupBase group)
         {
-            group.Matches.Should().HaveCount(1);
-
             group.Matches[0].Player1.Name.Should().Be("Maru");
             group.Matches[0].Player2.Name.Should().Be("Stork");
         }
 
-        private void RunTestsWithThreePlayers(RoundRobinGroup group)
+        private void RunTestsWithThreePlayers(GroupBase group)
         {
-            group.Matches.Should().HaveCount(3);
-
             group.Matches[0].Player1.Name.Should().Be("Maru");
             group.Matches[0].Player2.Name.Should().Be("Taeja");
 
@@ -305,10 +169,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             group.Matches[2].Player2.Name.Should().Be("Maru");
         }
 
-        private void RunTestsWithFourPlayers(RoundRobinGroup group)
+        private void RunTestsWithFourPlayers(GroupBase group)
         {
-            group.Matches.Should().HaveCount(6);
-
             group.Matches[0].Player1.Name.Should().Be("Maru");
             group.Matches[0].Player2.Name.Should().Be("Taeja");
 
@@ -328,10 +190,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             group.Matches[5].Player2.Name.Should().Be("Taeja");
         }
 
-        private void RunTestsWithFivePlayers(RoundRobinGroup group)
+        private void RunTestsWithFivePlayers(GroupBase group)
         {
-            group.Matches.Should().HaveCount(10);
-
             group.Matches[0].Player1.Name.Should().Be("Maru");
             group.Matches[0].Player2.Name.Should().Be("Rain");
 
@@ -363,10 +223,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             group.Matches[9].Player2.Name.Should().Be("Rain");
         }
 
-        private void RunTestsWithSixPlayers(RoundRobinGroup group)
+        private void RunTestsWithSixPlayers(GroupBase group)
         {
-            group.Matches.Should().HaveCount(15);
-
             group.Matches[0].Player1.Name.Should().Be("Maru");
             group.Matches[0].Player2.Name.Should().Be("Rain");
 
@@ -413,10 +271,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             group.Matches[14].Player2.Name.Should().Be("Bomber");
         }
 
-        private void RunTestsWithSevenPlayers(RoundRobinGroup group)
+        private void RunTestsWithSevenPlayers(GroupBase group)
         {
-            group.Matches.Should().HaveCount(21);
-
             group.Matches[0].Player1.Name.Should().Be("Maru");
             group.Matches[0].Player2.Name.Should().Be("Bomber");
 
@@ -481,10 +337,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             group.Matches[20].Player2.Name.Should().Be("FanTaSy");
         }
 
-        private void RunTestsWithEightPlayers(RoundRobinGroup group)
+        private void RunTestsWithEightPlayers(GroupBase group)
         {
-            group.Matches.Should().HaveCount(28);
-
             group.Matches[0].Player1.Name.Should().Be("Maru");
             group.Matches[0].Player2.Name.Should().Be("Bomber");
 
@@ -568,6 +422,16 @@ namespace Slask.UnitTests.DomainTests.GroupTests
 
             group.Matches[27].Player1.Name.Should().Be("Thorzain");
             group.Matches[27].Player2.Name.Should().Be("Stephano");
+        }
+
+        private RoundRobinGroup RegisterPlayers(List<string> playerNames)
+        {
+            foreach (string playerName in playerNames)
+            {
+                roundRobinRound.RegisterPlayerReference(playerName);
+            }
+
+            return roundRobinRound.Groups.First() as RoundRobinGroup;
         }
     }
 }

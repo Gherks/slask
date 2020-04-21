@@ -1,6 +1,8 @@
-﻿using Slask.Domain.Rounds;
+﻿using Slask.Domain.Groups.Bases;
+using Slask.Domain.Rounds;
 using Slask.Domain.Utilities;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
@@ -33,16 +35,6 @@ namespace Slask.Domain.Groups
             };
 
             return group;
-        }
-
-        public override PlayerReference AddNewPlayerReference(string name)
-        {
-            if (ParticipatingPlayers.Count < ParticipatingPlayerCapacity)
-            {
-                return base.AddNewPlayerReference(name);
-            }
-
-            return null;
         }
 
         public override bool NewDateTimeIsValid(Match match, DateTime dateTime)
@@ -97,17 +89,23 @@ namespace Slask.Domain.Groups
             }
         }
 
-        protected override void ConstructGroupLayout()
+        public override bool ConstructGroupLayout(int playersPerGroupCount)
         {
-            ChangeMatchAmountTo(MatchCapacity);
+            ChangeMatchCountTo(MatchCapacity);
+            return true;
+        }
 
-            PlayerReference participant1 = ParticipatingPlayers.Count > 0 ? ParticipatingPlayers[0] : null;
-            PlayerReference participant2 = ParticipatingPlayers.Count > 1 ? ParticipatingPlayers[1] : null;
-            PlayerReference participant3 = ParticipatingPlayers.Count > 2 ? ParticipatingPlayers[2] : null;
-            PlayerReference participant4 = ParticipatingPlayers.Count > 3 ? ParticipatingPlayers[3] : null;
+        public override bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
+        {
+            PlayerReference participant1 = playerReferences.Count > 0 ? playerReferences[0] : null;
+            PlayerReference participant2 = playerReferences.Count > 1 ? playerReferences[1] : null;
+            PlayerReference participant3 = playerReferences.Count > 2 ? playerReferences[2] : null;
+            PlayerReference participant4 = playerReferences.Count > 3 ? playerReferences[3] : null;
 
             Matches[0].SetPlayers(participant1, participant2);
             Matches[1].SetPlayers(participant3, participant4);
+
+            return true;
         }
 
         private bool FirstMatchPairHasPlayed(Match match)

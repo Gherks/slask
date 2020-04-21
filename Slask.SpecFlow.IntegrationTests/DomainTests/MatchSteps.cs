@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
 using Slask.Domain.Groups;
+using Slask.Domain.Groups.Bases;
 using Slask.Domain.Utilities;
 using Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests;
 using System;
@@ -26,7 +27,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                             "Round type",
                             "Round name",
                             "Best of",
-                            "Advancing amount"});
+                            "Advancing count"});
 
             roundTable.AddRow(new string[] {
                             "Round robin",
@@ -35,8 +36,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                             "3"});
 
             GivenCreatedTournamentAddsRounds(0, roundTable);
-            GivenCreatedRoundAddsGroups(0, 1);
-            GivenPlayersIsAddedToCreatedGroup("First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth", 0);
+            GivenPlayersIsRegisteredToTournament("First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth", 0);
         }
 
         [Then(@"match (.*) in created group (.*) should be in state ""(.*)""")]
