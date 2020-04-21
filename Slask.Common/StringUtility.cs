@@ -11,8 +11,9 @@ namespace Slask.Common
         public static List<string> ToStringList(string text, string delimiter)
         {
             bool textIsInvalid = IsNullOrEmpty(text);
+            bool delimiterIsInvalid = IsNullOrEmpty(delimiter);
 
-            if (textIsInvalid)
+            if (textIsInvalid || delimiterIsInvalid)
             {
                 return new List<string>();
             }
@@ -21,6 +22,14 @@ namespace Slask.Common
 
             for (int index = 0; index < textList.Count; ++index)
             {
+                bool isEmpty = textList[index].Length == 0;
+
+                if (isEmpty)
+                {
+                    textList.RemoveAt(index--);
+                    continue;
+                }
+
                 textList[index] = textList[index].Replace(" ", string.Empty, StringComparison.CurrentCulture);
             }
 
@@ -29,9 +38,11 @@ namespace Slask.Common
 
         public static string ToUpperNoSpaces(string text)
         {
-            if (text == null)
+            bool textIsInvalid = IsNullOrEmpty(text);
+
+            if (textIsInvalid)
             {
-                throw new ArgumentNullException(nameof(text));
+                return text;
             }
 
             return text.ToUpper(CultureInfo.CurrentCulture).Replace(" ", string.Empty, StringComparison.CurrentCulture);
