@@ -44,7 +44,7 @@ namespace Slask.Common
                 }
                 else if (dateTimes[threadId] != null)
                 {
-                    return dateTimes[threadId].Value;
+                    return new DateTime(dateTimes[threadId].Value.Year, dateTimes[threadId].Value.Month, dateTimes[threadId].Value.Day);
                 }
 
                 return DateTime.Today;
@@ -65,7 +65,7 @@ namespace Slask.Common
                 }
                 else if (dateTimes[threadId] != null)
                 {
-                    return dateTimes[threadId].Value;
+                    return dateTimes[threadId].Value.ToUniversalTime();
                 }
 
                 return DateTime.UtcNow;
