@@ -22,12 +22,14 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         {
             string name = "Bracket round";
             int bestOf = 3;
+            int playersPerGroupCount = 2;
 
-            BracketRound bracketRound = BracketRound.Create(name, bestOf, tournament);
+            BracketRound bracketRound = BracketRound.Create(name, bestOf, playersPerGroupCount, tournament);
 
             bracketRound.Should().NotBeNull();
             bracketRound.Id.Should().NotBeEmpty();
             bracketRound.Name.Should().Be(name);
+            bracketRound.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
             bracketRound.BestOf.Should().Be(bestOf);
             bracketRound.AdvancingPerGroupCount.Should().Be(1);
             bracketRound.Groups.Should().BeEmpty();

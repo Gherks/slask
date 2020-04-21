@@ -81,7 +81,7 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             Tournament tournament = GivenATournamentNamedHasBeenCreated(tournamentName);
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
-            RoundBase bracketRound = tournament.AddBracketRound("BracketRound", 3);
+            RoundBase bracketRound = tournament.AddBracketRound("BracketRound", 3, playerNames.Count);
 
             foreach (string playerName in playerNames)
             {

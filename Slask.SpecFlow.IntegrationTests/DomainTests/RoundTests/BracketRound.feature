@@ -8,21 +8,21 @@ Scenario: Can create bracket round
 		| Round type | Round name    | Best of |
 		| Bracket    | Bracket round | 3       |
 	Then created rounds in tournament should be valid with values:
-		| Round type | Round name    | Best of | Advancing count |
-		| Bracket    | Bracket round | 3       | 1               |
+		| Round type | Round name    | Best of | Advancing per group count |
+		| Bracket    | Bracket round | 3       | 1                         |
 
 Scenario: Advancing count in bracket rounds cannot be anything other than one
 	Given a tournament named "GSL 2019" has been created
 	When created tournament 0 adds rounds
-		| Round type | Round name      | Best of | Advancing count |
-		| Bracket    | Bracket round 1 | 3       | 0               |
-		| Bracket    | Bracket round 2 | 3       | 2               |
-		| Bracket    | Bracket round 3 | 3       | 3               |
+		| Round type | Round name      | Best of | Advancing per group count |
+		| Bracket    | Bracket round 1 | 3       | 0                         |
+		| Bracket    | Bracket round 2 | 3       | 2                         |
+		| Bracket    | Bracket round 3 | 3       | 3                         |
 	Then created rounds in tournament should be valid with values:
-		| Round type | Round name      | Best of | Advancing count |
-		| Bracket    | Bracket round 1 | 3       | 1               |
-		| Bracket    | Bracket round 2 | 3       | 1               |
-		| Bracket    | Bracket round 3 | 3       | 1               |
+		| Round type | Round name      | Best of | Advancing per group count |
+		| Bracket    | Bracket round 1 | 3       | 1                         |
+		| Bracket    | Bracket round 2 | 3       | 1                         |
+		| Bracket    | Bracket round 3 | 3       | 1                         |
 
 Scenario: Cannot create bracket round without name
 	Given a tournament named "GSL 2019" has been created

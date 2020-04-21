@@ -12,9 +12,9 @@ namespace Slask.Domain.Rounds
         {
         }
 
-        public static RoundRobinRound Create(string name, int bestOf, int advancingPerGroupCount, Tournament tournament)
+        public static RoundRobinRound Create(string name, int bestOf, int advancingPerGroupCount, int playersPerGroupCount, Tournament tournament)
         {
-            bool validationFails = !InitialValidationSucceeds(name, bestOf, advancingPerGroupCount);
+            bool validationFails = !InitialValidationSucceeds(name, bestOf, advancingPerGroupCount, playersPerGroupCount);
             bool givenTournamentIsInvalid = tournament == null;
 
             if (validationFails || givenTournamentIsInvalid)
@@ -26,6 +26,7 @@ namespace Slask.Domain.Rounds
             {
                 Id = Guid.NewGuid(),
                 Name = name,
+                PlayersPerGroupCount = playersPerGroupCount,
                 BestOf = bestOf,
                 AdvancingPerGroupCount = advancingPerGroupCount,
                 TournamentId = tournament.Id,
@@ -40,14 +41,15 @@ namespace Slask.Domain.Rounds
             return RoundRobinGroup.Create(this);
         }
 
-        public static bool InitialValidationSucceeds(string name, int bestOf, int advanceCount)
+        public static bool InitialValidationSucceeds(string name, int bestOf, int advancingPerGroupCount, int playersPerGroupCount)
         {
             bool nameIsNotEmpty = name.Length > 0;
             bool bestOfIsNotEven = bestOf % 2 != 0;
             bool bestOfIsGreaterThanZero = bestOf > 0;
-            bool advanceCountIsGreaterThanZero = advanceCount > 0;
+            bool advancingPerGroupCountIsGreaterThanZero = advancingPerGroupCount > 0;
+            bool playersPerGroupCountIsGreaterThanZero = playersPerGroupCount >= 2;
 
-            return nameIsNotEmpty && bestOfIsNotEven && bestOfIsGreaterThanZero && advanceCountIsGreaterThanZero;
+            return nameIsNotEmpty && bestOfIsNotEven && bestOfIsGreaterThanZero && advancingPerGroupCountIsGreaterThanZero && playersPerGroupCountIsGreaterThanZero;
         }
     }
 }

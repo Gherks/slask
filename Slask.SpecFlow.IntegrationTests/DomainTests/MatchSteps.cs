@@ -36,8 +36,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                             "3"});
 
             GivenCreatedTournamentAddsRounds(0, roundTable);
-            GivenCreatedRoundAddsGroups(0, 1);
-            GivenPlayersIsAddedToCreatedGroup("First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth", 0);
+            GivenPlayersIsRegisteredToTournament("First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth", 0);
         }
 
         [Then(@"match (.*) in created group (.*) should be in state ""(.*)""")]

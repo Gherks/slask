@@ -39,9 +39,9 @@ namespace Slask.Domain
             Name = name;
         }
 
-        public RoundBase AddBracketRound(string name, int bestOf)
+        public RoundBase AddBracketRound(string name, int bestOf, int playersPerGroupCount = 2)
         {
-            RoundBase round = BracketRound.Create(name, bestOf, this);
+            RoundBase round = BracketRound.Create(name, bestOf, playersPerGroupCount, this);
 
             if (round == null)
             {
@@ -69,9 +69,9 @@ namespace Slask.Domain
             return round;
         }
 
-        public RoundBase AddRoundRobinRound(string name, int bestOf, int advancingPerGroupCount)
+        public RoundBase AddRoundRobinRound(string name, int bestOf, int advancingPerGroupCount, int playersPerGroupCount = 2)
         {
-            RoundBase round = RoundRobinRound.Create(name, bestOf, advancingPerGroupCount, this);
+            RoundBase round = RoundRobinRound.Create(name, bestOf, advancingPerGroupCount, playersPerGroupCount, this);
 
             if (round == null)
             {
@@ -108,6 +108,32 @@ namespace Slask.Domain
             return Rounds.FirstOrDefault(round => round.Name.ToLower() == name.ToLower());
         }
 
+        // CREATE TESTS
+        public RoundBase GetFirstRound()
+        {
+            bool hasNoRounds = Rounds.Count == 0;
+
+            if (hasNoRounds)
+            {
+                return null;
+            }
+
+            return Rounds.First();
+        }
+
+        // CREATE TESTS
+        public RoundBase GetLastRound()
+        {
+            bool hasNoRounds = Rounds.Count == 0;
+
+            if (hasNoRounds)
+            {
+                return null;
+            }
+
+            return Rounds.Last();
+        }
+
         public PlayerReference GetPlayerReferenceByPlayerId(Guid id)
         {
             return GetPlayerReferences().FirstOrDefault(playerReference => playerReference.Id == id);
@@ -132,7 +158,7 @@ namespace Slask.Domain
         {
             bool tournamentHasNoRounds = Rounds.Count == 0;
 
-            if(tournamentHasNoRounds)
+            if (tournamentHasNoRounds)
             {
                 // LOGG Error: 
                 return new List<PlayerReference>();

@@ -37,7 +37,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 
             foreach (TableRow row in table.Rows)
             {
-                ParseRoundTable(row, out string type, out string name, out int bestOf, out int advancingCount);
+                ParseRoundTable(row, out string type, out string name, out int bestOf, out int advancingCount, out int playersPerGroupCount);
 
                 if (type.Length > 0)
                 {
@@ -45,7 +45,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 
                     if (type == "BRACKET")
                     {
-                        createdRounds.Add(tournament.AddBracketRound(name, bestOf));
+                        createdRounds.Add(CreateBracketRound(name, bestOf, playersPerGroupCount, tournament));
                     }
                     else if (type == "DUALTOURNAMENT")
                     {
@@ -53,7 +53,15 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
                     }
                     else if (type == "ROUNDROBIN")
                     {
-                        createdRounds.Add(tournament.AddRoundRobinRound(name, bestOf, advancingCount));
+                        createdRounds.Add(CreateRoundRobinRound(name, bestOf, advancingCount, playersPerGroupCount, tournament));
+                    }
+
+                    RoundBase round = createdRounds.Last();
+                    bool addedValidRound = round != null;
+
+                    if (addedValidRound)
+                    {
+                        createdGroups.AddRange(round.Groups);
                     }
                 }
             }
@@ -70,6 +78,28 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             {
                 round.RegisterPlayerReference(playerName);
             }
+
+            round = round.Tournament.GetFirstRound();
+
+            createdGroups.Clear();
+            while (round != null)
+            {
+                createdGroups.AddRange(round.Groups);
+                round = round.GetNextRound();
+            }
+        }
+
+        [Given(@"players ""(.*)"" is excluded from round (.*)")]
+        [When(@"players ""(.*)"" is excluded from round (.*)")]
+        public void GivenPlayersIsExcludedFromRound(string commaSeparatedPlayerNames, int roundIndex)
+        {
+            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            RoundBase round = createdRounds[roundIndex];
+
+            foreach (string playerName in playerNames)
+            {
+                round.ExcludePlayerReference(playerName);
+            }
         }
 
         [When(@"created round (.*) fetches previous round")]
@@ -78,20 +108,20 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             fetchedRounds.Add(createdRounds[roundIndex].GetPreviousRound());
         }
 
-        [Given(@"created round (.*) adds (.*) groups")]
-        [When(@"created round (.*) adds (.*) groups")]
-        public void GivenCreatedRoundAddsGroups(int roundIndex, int groupCount)
-        {
-            //if (createdRounds.Count <= roundIndex)
-            //{
-            //    throw new IndexOutOfRangeException("Given created round index is out of bounds");
-            //}
+        //[Given(@"created round (.*) adds (.*) groups")]
+        //[When(@"created round (.*) adds (.*) groups")]
+        //public void GivenCreatedRoundAddsGroups(int roundIndex, int groupCount)
+        //{
+        //    //if (createdRounds.Count <= roundIndex)
+        //    //{
+        //    //    throw new IndexOutOfRangeException("Given created round index is out of bounds");
+        //    //}
 
-            //for (int counter = 0; counter < groupCount; ++counter)
-            //{
-            //    createdGroups.Add(createdRounds[roundIndex].AddGroup());
-            //}
-        }
+        //    //for (int counter = 0; counter < groupCount; ++counter)
+        //    //{
+        //    //    createdGroups.Add(createdRounds[roundIndex].AddGroup());
+        //    //}
+        //}
 
         [Given(@"created groups within created tournament is played out and betted on")]
         [When(@"created groups within created tournament is played out and betted on")]
@@ -151,7 +181,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             for (int rowIndex = 0; rowIndex < table.Rows.Count; ++rowIndex)
             {
                 TableRow row = table.Rows[rowIndex];
-                ParseRoundTable(row, out string roundType, out string name, out int bestOf, out int advancingCount);
+                ParseRoundTable(row, out string roundType, out string name, out int bestOf, out int advancingCount, out int playersPerGroupCount);
 
                 RoundBase createdRound = createdRounds[rowIndex];
                 CheckRoundValidity(createdRound, name, bestOf);
@@ -160,16 +190,19 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
                 {
                     roundType.Should().Be("Bracket");
                     bracketRound.AdvancingPerGroupCount.Should().Be(1);
+                    bracketRound.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
                 }
                 else if (createdRound is DualTournamentRound dualTournamentRound)
                 {
                     roundType.Should().Be("Dual tournament");
                     dualTournamentRound.AdvancingPerGroupCount.Should().Be(2);
+                    dualTournamentRound.PlayersPerGroupCount.Should().Be(4);
                 }
                 else if (createdRound is RoundRobinRound roundRobinRound)
                 {
                     roundType.Should().Be("Round robin");
                     roundRobinRound.AdvancingPerGroupCount.Should().Be(advancingCount);
+                    roundRobinRound.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
                 }
             }
         }
@@ -189,7 +222,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
                 throw new ArgumentNullException(nameof(table));
             }
 
-            ParseRoundTable(table.Rows[0], out string roundType, out string name, out int bestOf, out int advancingCount);
+            ParseRoundTable(table.Rows[0], out string roundType, out string name, out int bestOf, out int advancingCount, out int playersPerGroupCount);
 
             RoundBase fetchedRound = fetchedRounds[roundIndex];
             CheckRoundValidity(fetchedRound, name, bestOf);
@@ -198,16 +231,19 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             {
                 roundType.Should().Be("Bracket");
                 bracketRound.AdvancingPerGroupCount.Should().Be(1);
+                bracketRound.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
             }
             else if (fetchedRound is DualTournamentRound dualTournamentRound)
             {
                 roundType.Should().Be("Dual tournament");
                 dualTournamentRound.AdvancingPerGroupCount.Should().Be(2);
+                dualTournamentRound.PlayersPerGroupCount.Should().Be(4);
             }
             else if (fetchedRound is RoundRobinRound roundRobinRound)
             {
                 roundType.Should().Be("Round robin");
                 roundRobinRound.AdvancingPerGroupCount.Should().Be(advancingCount);
+                roundRobinRound.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
             }
         }
 
@@ -228,17 +264,18 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             round.Id.Should().NotBeEmpty();
             round.Name.Should().Be(correctName);
             round.BestOf.Should().Be(bestOf);
-            round.Groups.Should().BeEmpty();
+            round.Groups.Should().HaveCount(1);
             round.TournamentId.Should().NotBeEmpty();
             round.Tournament.Should().NotBeNull();
         }
 
-        protected static void ParseRoundTable(TableRow row, out string typeName, out string name, out int bestOf, out int advancingCount)
+        protected static void ParseRoundTable(TableRow row, out string typeName, out string name, out int bestOf, out int advancingCount, out int playersPerGroupCount)
         {
             typeName = "";
             name = "";
             bestOf = 1;
             advancingCount = 1;
+            playersPerGroupCount = 2;
 
             if (row.ContainsKey("Round type"))
             {
@@ -255,9 +292,14 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
                 int.TryParse(row["Best of"], out bestOf);
             }
 
-            if (row.ContainsKey("Advancing count"))
+            if (row.ContainsKey("Advancing per group count"))
             {
-                int.TryParse(row["Advancing count"], out advancingCount);
+                int.TryParse(row["Advancing per group count"], out advancingCount);
+            }
+
+            if (row.ContainsKey("Players per group count"))
+            {
+                int.TryParse(row["Players per group count"], out playersPerGroupCount);
             }
         }
 
@@ -287,9 +329,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             roundIndex = 0;
             groupIndex = 0;
 
-            if (row.ContainsKey("Created tournament index"))
+            if (row.ContainsKey("Tournament index"))
             {
-                int.TryParse(row["Created tournament index"], out tournamentIndex);
+                int.TryParse(row["Tournament index"], out tournamentIndex);
             }
 
             if (row.ContainsKey("Round index"))
@@ -326,6 +368,34 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
                     }
                 }
             }
+        }
+
+        private RoundBase CreateBracketRound(string name, int bestOf, int playersPerGroupCount, Tournament tournament)
+        {
+            BracketRound bracketRound = tournament.AddBracketRound(name, bestOf, playersPerGroupCount) as BracketRound;
+
+            bool creationWasSuccessful = bracketRound != null;
+
+            //if (creationWasSuccessful)
+            //{
+            //    bracketRound.SetPlayersPerGroupCount(playersPerGroupCount);
+            //}
+
+            return bracketRound;
+        }
+
+        private RoundBase CreateRoundRobinRound(string name, int bestOf, int advancingCount, int playersPerGroupCount, Tournament tournament)
+        {
+            RoundRobinRound roundRobinRound = tournament.AddRoundRobinRound(name, bestOf, advancingCount, playersPerGroupCount) as RoundRobinRound;
+
+            bool creationWasSuccessful = roundRobinRound != null;
+
+            //if (creationWasSuccessful)
+            //{
+            //    roundRobinRound.SetPlayersPerGroupCount(playersPerGroupCount);
+            //}
+
+            return roundRobinRound;
         }
 
         private void PlaceBetsOnAvailableMatchesInGroup(List<Better> betters, GroupBase group)

@@ -25,23 +25,23 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
     public class GroupStepDefinitions : RoundStepDefinitions
     {
-        [Given(@"players ""(.*)"" is added to created group (.*)")]
-        [When(@"players ""(.*)"" is added to created group (.*)")]
-        public void GivenPlayersIsAddedToCreatedGroup(string commaSeparatedPlayerNames, int groupIndex)
-        {
-            //if (createdGroups.Count <= groupIndex)
-            //{
-            //    throw new IndexOutOfRangeException("Given created group index is out of bounds");
-            //}
+        //[Given(@"players ""(.*)"" is added to created group (.*)")]
+        //[When(@"players ""(.*)"" is added to created group (.*)")]
+        //public void GivenPlayersIsAddedToCreatedGroup(string commaSeparatedPlayerNames, int groupIndex)
+        //{
+        //    //if (createdGroups.Count <= groupIndex)
+        //    //{
+        //    //    throw new IndexOutOfRangeException("Given created group index is out of bounds");
+        //    //}
 
-            //List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
-            //GroupBase group = createdGroups[groupIndex];
+        //    //List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+        //    //GroupBase group = createdGroups[groupIndex];
 
-            //foreach (string playerName in playerNames)
-            //{
-            //    group.AddNewPlayerReference(playerName);
-            //}
-        }
+        //    //foreach (string playerName in playerNames)
+        //    //{
+        //    //    group.AddNewPlayerReference(playerName);
+        //    //}
+        //}
 
         [Given(@"score is added to players in given matches in created groups")]
         [When(@"score is added to players in given matches in created groups")]
@@ -63,7 +63,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
                 Player player = match.FindPlayer(scoringPlayer);
 
-                if(player != null)
+                if (player != null)
                 {
                     player.IncreaseScore(scoreAdded);
                 }
@@ -124,18 +124,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
         //    }
         //}
 
-        [When(@"created rounds (.*) to (.*) creates (.*) groups each")]
-        public void WhenCreatedRoundsToCreatesGroupsEach(int roundStartIndex, int roundEndIndex, int groupCount)
-        {
-            //for (int roundIndex = roundStartIndex; roundIndex < roundEndIndex; ++roundIndex)
-            //{
-            //    for (int groupCounter = 0; groupCounter < groupCount; ++groupCounter)
-            //    {
-            //        createdGroups.Add(createdRounds[roundIndex].AddGroup());
-            //    }
-            //}
-        }
-
         [Then(@"created rounds (.*) to (.*) should contain (.*) groups each")]
         public void ThenCreatedRoundsToShouldContainGroupsEach(int roundStartIndex, int roundEndIndex, int groupCount)
         {
@@ -189,6 +177,21 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             }
         }
 
+        [Then(@"created group (.*) should contain exactly these player references with names: ""(.*)""")]
+        public void ThenCreatedGroupShouldContainExactlyThesePlayerReferencesWithNames(int groupIndex, string commaSeparatedPlayerNames)
+        {
+            GroupBase group = createdGroups[groupIndex];
+            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+
+            group.PlayerReferences.Should().HaveCount(playerNames.Count);
+
+            foreach (string playerName in playerNames)
+            {
+                group.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+            }
+        }
+
+
         [Then(@"advancing players in created group (.*) is exactly ""(.*)""")]
         public void ThenWinningPlayersInGroupIs(int groupIndex, string commaSeparatedPlayerNames)
         {
@@ -197,7 +200,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
             List<PlayerReference> playerReferences = PlayerStandingsCalculator.GetAdvancingPlayers(group);
 
-            playerReferences.Should().NotBeEmpty();
             playerReferences.Should().HaveCount(playerNames.Count);
 
             foreach (string playerName in playerNames)
@@ -220,7 +222,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
                 ParseBracketGroupMatchSetup(row, out int matchIndex, out string player1Name, out string player2Name);
 
-                if(player1Name.Length > 0)
+                if (player1Name.Length > 0)
                 {
                     group.Matches[matchIndex].Player1.Name.Should().Be(player1Name);
                 }
@@ -229,7 +231,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
                     group.Matches[matchIndex].Player1.Should().BeNull();
                 }
 
-                if(player2Name.Length > 0)
+                if (player2Name.Length > 0)
                 {
                     group.Matches[matchIndex].Player2.Name.Should().Be(player2Name);
                 }
@@ -245,8 +247,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             group.Should().NotBeNull();
             group.Should().BeOfType<GroupType>();
             group.Id.Should().NotBeEmpty();
-            //group.ParticipatingPlayers.Should().BeEmpty();
-            group.Matches.Should().BeEmpty();
+            group.Matches.Should().NotBeEmpty();
             group.RoundId.Should().NotBeEmpty();
             group.Round.Should().NotBeNull();
         }

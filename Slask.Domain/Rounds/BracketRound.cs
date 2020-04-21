@@ -12,9 +12,9 @@ namespace Slask.Domain.Rounds
         {
         }
 
-        public static BracketRound Create(string name, int bestOf, Tournament tournament)
+        public static BracketRound Create(string name, int bestOf, int playersPerGroupCount, Tournament tournament)
         {
-            if (!InitialValidationSucceeds(name, bestOf) || tournament == null)
+            if (!InitialValidationSucceeds(name, bestOf, playersPerGroupCount) || tournament == null)
             {
                 return null;
             }
@@ -23,6 +23,7 @@ namespace Slask.Domain.Rounds
             {
                 Id = Guid.NewGuid(),
                 Name = name,
+                PlayersPerGroupCount = playersPerGroupCount,
                 BestOf = bestOf,
                 AdvancingPerGroupCount = 1,
                 TournamentId = tournament.Id,
@@ -37,13 +38,14 @@ namespace Slask.Domain.Rounds
             return BracketGroup.Create(this);
         }
 
-        protected static bool InitialValidationSucceeds(string name, int bestOf)
+        protected static bool InitialValidationSucceeds(string name, int bestOf, int playersPerGroupCount)
         {
             bool nameIsNotEmpty = name.Length > 0;
             bool bestOfIsNotEven = bestOf % 2 != 0;
             bool bestOfIsGreaterThanZero = bestOf > 0;
+            bool playersPerGroupCountIsGreaterThanZero = playersPerGroupCount >= 2;
 
-            return nameIsNotEmpty && bestOfIsNotEven && bestOfIsGreaterThanZero;
+            return nameIsNotEmpty && bestOfIsNotEven && bestOfIsGreaterThanZero && playersPerGroupCountIsGreaterThanZero;
         }
     }
 }
