@@ -2,7 +2,6 @@
 
 namespace Slask.Domain.Groups.GroupUtility
 {
-    // CREATE TESTS
     public static class PlayerSwitcher
     {
         public static bool SwitchMatchesOn(Player player1, Player player2)
