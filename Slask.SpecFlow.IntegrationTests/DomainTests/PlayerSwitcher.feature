@@ -1,4 +1,4 @@
-Feature: PlayerSwitcher
+﻿Feature: PlayerSwitcher
 	Does a bunch of tests on PlayerSwitcher
 
 @PlayerSwitcherTag
@@ -277,10 +277,3 @@ Scenario: Cannot switch player with other player in different group within same 
 			| 3           | Stephano      | FanTaSy       |
 			| 4           | Bomber        | FanTaSy       |
 			| 5           | Thorzain      | Stephano      |
-
-Scenario: Cannot switch player in round robin group that has started with other player in different round
-	Given a tournament named "GSL 2019" has been created
-		And created tournament 0 adds rounds
-			| Round type      | Round name        | Best of |
-			| Round robin     | Round robin round | 3       |
-		And players "Maru, Stork, Taeja, Rain" is registered to round 0
