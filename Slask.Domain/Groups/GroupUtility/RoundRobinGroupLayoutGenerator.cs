@@ -18,8 +18,6 @@ namespace Slask.Domain.Groups.GroupUtility
                 matches.Add(Match.Create(parentGroup));
             }
 
-            //AssignPlayersToMatches(new List<PlayerReference>(participants), matches, parentGroup);
-
             return matches;
         }
 
