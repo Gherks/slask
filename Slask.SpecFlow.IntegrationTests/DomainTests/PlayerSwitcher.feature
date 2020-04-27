@@ -89,23 +89,82 @@ Scenario: Cannot switch player with other player that resides in different group
 Scenario: Cannot switch player that resides in a bracket group with player in different round
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds
-			| Round type  | Round name        | Best of |
-			| Bracket     | Bracket round     | 3       |
-		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+			| Round type      | Round name | Best of | Players per group count |
+			| Dual Tournament | Round 1    | 3       | 4                       |
+			| Bracket         | Round 2    | 3       | 4                       |
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And created groups within created tournament is played out and betted on
+			| Tournament index | Round index | Group index |
+			| 0                | 0           | 0           |
+			| 0                | 0           | 1           |
+	When player "Maru" in group 0 and player "Bomber" in group 2 switches matches
+	Then participating players in group 0 should be mapped accordingly
+		| Match index | Player 1 name | Player 2 name |
+		| 0           | Maru          | Stork         |
+		| 1           | Taeja         | Rain          |
+		And participating players in group 1 should be mapped accordingly
+			| Match index | Player 1 name | Player 2 name |
+			| 0           | Bomber        | FanTaSy       |
+			| 1           | Stephano      | Thorzain      |
+		And participating players in group 2 should be mapped accordingly
+			| Match index | Player 1 name | Player 2 name |
+			| 0           | Maru          | Rain          |
+			| 1           | Bomber        | Thorzain      |
 
 Scenario: Cannot switch player that resides in a dual tournament group with player in different round
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds
-			| Round type      | Round name            | Best of |
-			| Dual tournament | Dual tournament round | 3       |
-		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+			| Round type      | Round name | Best of | Players per group count |
+			| Bracket         | Round 1    | 3       | 2                       |
+			| Dual tournament | Round 2    | 3       | 4                       |
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And created groups within created tournament is played out and betted on
+			| Tournament index | Round index | Group index |
+			| 0                | 0           | 0           |
+			| 0                | 0           | 1           |
+			| 0                | 0           | 2           |
+			| 0                | 0           | 3           |
+	When player "Maru" in group 0 and player "Bomber" in group 4 switches matches
+	Then participating players in group 0 should be mapped accordingly
+		| Match index | Player 1 name | Player 2 name |
+		| 0           | Maru          | Stork         |
+		And participating players in group 1 should be mapped accordingly
+			| Match index | Player 1 name | Player 2 name |
+			| 0           | Taeja         | Rain          |
+		And participating players in group 2 should be mapped accordingly
+			| Match index | Player 1 name | Player 2 name |
+			| 0           | Bomber        | FanTaSy       |
+		And participating players in group 3 should be mapped accordingly
+			| Match index | Player 1 name | Player 2 name |
+			| 0           | Stephano      | Thorzain      |
+		And participating players in group 4 should be mapped accordingly
+			| Match index | Player 1 name | Player 2 name |
+			| 0           | Maru          | Taeja         |
+			| 1           | Bomber        | Stephano      |
 
 Scenario: Cannot switch player that resides in a round robin group with player in different round
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds
-			| Round type  | Round name        | Best of |
-			| Round robin | Round robin round | 3       |
-		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+			| Round type  | Round name        | Best of | Players per group count |
+			| Bracket     | Round 1           | 3       | 4                       |
+			| Round robin | Round 2           | 3       | 2                       |
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And created groups within created tournament is played out and betted on
+			| Tournament index | Round index | Group index |
+			| 0                | 0           | 0           |
+			| 0                | 0           | 1           |
+	When player "Maru" in group 0 and player "Thorzain" in group 2 switches matches
+	Then participating players in group 0 should be mapped accordingly
+		| Match index | Player 1 name | Player 2 name |
+		| 0           | Maru          | Stork         |
+		| 1           | Taeja         | Rain          |
+		And participating players in group 1 should be mapped accordingly
+			| Match index | Player 1 name | Player 2 name |
+			| 0           | Bomber        | FanTaSy       |
+			| 1           | Stephano      | Thorzain      |
+		And participating players in group 2 should be mapped accordingly
+			| Match index | Player 1 name | Player 2 name |
+			| 0           | Rain          | Thorzain      |
 
 Scenario: Cannot switch player with other player in same bracket group that has started
 	Given a tournament named "GSL 2019" has been created
