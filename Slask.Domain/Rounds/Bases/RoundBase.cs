@@ -1,4 +1,4 @@
-using Slask.Common;
+﻿using Slask.Common;
 using Slask.Domain.Groups;
 using Slask.Domain.Groups.Bases;
 using Slask.Domain.Groups.GroupUtility;
@@ -255,8 +255,7 @@ namespace Slask.Domain.Rounds.Bases
 
         public PlayState GetPlayState()
         {
-            bool hasNoGroups = Groups.Count == 0;
-            bool hasNotBegun = hasNoGroups || Groups.First().GetPlayState() == PlayState.NotBegun;
+            bool hasNotBegun = Groups.First().GetPlayState() == PlayState.NotBegun;
 
             if (hasNotBegun)
             {
