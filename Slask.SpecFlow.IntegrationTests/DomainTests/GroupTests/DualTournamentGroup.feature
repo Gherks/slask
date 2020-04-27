@@ -30,7 +30,7 @@ Scenario: Creates proper dual tournament layout upon group creation
 			| Round type      | Round name            | Best of |
 			| Dual tournament | Dual tournament round | 3       |
 	When players "First, Second, Third, Fourth" is registered to round 0
-	Then participating players in created group 0 should be mapped accordingly
+	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |
 		| 1           | Third         | Fourth        |
@@ -52,7 +52,7 @@ Scenario: Dual tournament progression goes as expected
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 	Then advancing players in created group 0 is exactly "Fourth, First"
-		And participating players in created group 0 should be mapped accordingly
+		And participating players in group 0 should be mapped accordingly
 			| Match index | Player 1 name | Player 2 name |
 			| 0           | First         | Second        |
 			| 1           | Third         | Fourth        |

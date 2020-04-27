@@ -209,8 +209,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
         }
 
 
-        [Then(@"participating players in created group (.*) should be mapped accordingly")]
-        public void ThenparticipatingPlayersInCreatedGroupShouldBeMappedAccordingly(int createdGroupIndex, Table table)
+        [Then(@"participating players in group (.*) should be mapped accordingly")]
+        public void ThenParticipatingPlayersInCreatedGroupShouldBeMappedAccordingly(int createdGroupIndex, Table table)
         {
             GroupBase group = createdGroups[createdGroupIndex];
 

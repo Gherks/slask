@@ -23,7 +23,7 @@ Scenario: Creates proper round robin layout upon group creation
 			| Round type      | Round name            | Best of |
 			| Dual tournament | Dual tournament round | 3       |
 	When players "First, Second, Third, Fourth" is registered to round 0
-	Then participating players in created group 0 should be mapped accordingly
+	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |
 		| 1           | Third         | Fourth        |
@@ -38,7 +38,7 @@ Scenario: Round robin progression with four players goes as expected
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 	Then advancing players in created group 0 is exactly "Fourth, First"
-		And participating players in created group 0 should be mapped accordingly
+		And participating players in group 0 should be mapped accordingly
 			| Match index | Player 1 name | Player 2 name |
 			| 0           | First         | Third         |
 			| 1           | Second        | Fourth        |
@@ -57,7 +57,7 @@ Scenario: Round robin progression with five players goes as expected
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 	Then advancing players in created group 0 is exactly "Fifth, Third, Second"
-		And participating players in created group 0 should be mapped accordingly
+		And participating players in group 0 should be mapped accordingly
 			| Match index | Player 1 name | Player 2 name |
 			| 0           | First         | Fourth        |
 			| 1           | Second        | Fifth         |
