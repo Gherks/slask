@@ -38,28 +38,10 @@ namespace Slask.Domain
             Match match = new Match()
             {
                 Id = Guid.NewGuid(),
+                StartDateTime = DateTime.MaxValue,
                 GroupId = group.Id,
                 Group = group
             };
-
-            if (group.Matches.Count == 0)
-            {
-                if (group.Round.IsFirstRound())
-                {
-                    match.StartDateTime = SystemTime.Now.AddDays(7);
-                }
-                else
-                {
-                    RoundBase previousRound = group.Round.GetPreviousRound();
-                    Match lastMatchInPreviousRound = previousRound.Groups.Last().Matches.Last();
-                    match.StartDateTime = lastMatchInPreviousRound.StartDateTime.AddHours(1);
-                }
-            }
-            else
-            {
-                Match previousMatch = group.Matches.Last();
-                match.StartDateTime = previousMatch.StartDateTime.AddHours(1);
-            }
 
             return match;
         }
