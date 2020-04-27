@@ -2,7 +2,7 @@ Feature: RoundRobinGroup
 	Does a bunch of tests on Round robin group
 
 @RoundRobinGroupTag
-Scenario: Adding group to round robin round creates bracket group
+Scenario: Adding group to round robin round creates round robin group
 	Given a tournament named "GSL 2019" has been created
 	When created tournament 0 adds rounds
 		| Round type  | Round name        | Best of | Advancing per group count |
@@ -12,21 +12,25 @@ Scenario: Adding group to round robin round creates bracket group
 Scenario: Start time in matches in round robin groups is spaced with one hour upon creation
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds
-			| Round type | Round name    | Best of | Advancing per group count | Players per group count |
-			| Bracket    | Bracket round | 3       | 1                         | 8                       |
+			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
+			| Round robin | Round robin round | 3       | 1                         | 8                       |
 	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
 	Then minutes between matches in created group 0 should be 60
 
 Scenario: Creates proper round robin layout upon group creation
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
+	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds
-			| Round type      | Round name            | Best of |
-			| Dual tournament | Dual tournament round | 3       |
+			| Round type      | Round name            | Best of | Players per group count |
+			| Round robin     | Round robin round     | 3       | 4                       |
 	When players "First, Second, Third, Fourth" is registered to round 0
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
-		| 0           | First         | Second        |
-		| 1           | Third         | Fourth        |
+		| 0           | First         | Third         |
+		| 1           | Second        | Fourth        |
+		| 2           | First         | Fourth        |
+		| 3           | Third         | Second        |
+		| 4           | First         | Second        |
+		| 5           | Fourth        | Third         |
 
 Scenario: Round robin progression with four players goes as expected
 	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
