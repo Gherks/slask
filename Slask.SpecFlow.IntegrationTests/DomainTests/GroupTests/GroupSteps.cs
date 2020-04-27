@@ -25,24 +25,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
     public class GroupStepDefinitions : RoundStepDefinitions
     {
-        //[Given(@"players ""(.*)"" is added to created group (.*)")]
-        //[When(@"players ""(.*)"" is added to created group (.*)")]
-        //public void GivenPlayersIsAddedToCreatedGroup(string commaSeparatedPlayerNames, int groupIndex)
-        //{
-        //    //if (createdGroups.Count <= groupIndex)
-        //    //{
-        //    //    throw new IndexOutOfRangeException("Given created group index is out of bounds");
-        //    //}
-
-        //    //List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
-        //    //GroupBase group = createdGroups[groupIndex];
-
-        //    //foreach (string playerName in playerNames)
-        //    //{
-        //    //    group.AddNewPlayerReference(playerName);
-        //    //}
-        //}
-
         [Given(@"score is added to players in given matches in created groups")]
         [When(@"score is added to players in given matches in created groups")]
         public void WhenScoreIsAddedToPlayersInGivenMatchesInCreatedGroups(Table table)
