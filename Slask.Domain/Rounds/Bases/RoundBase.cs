@@ -1,4 +1,5 @@
-﻿using Slask.Domain.Groups;
+﻿using Slask.Common;
+using Slask.Domain.Groups;
 using Slask.Domain.Groups.Bases;
 using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds.Interfaces;
@@ -83,6 +84,7 @@ namespace Slask.Domain.Rounds.Bases
             int participantCount = CalculateParticipantCount();
 
             ConstructGroups(participantCount);
+            AssignDefaultStartTimeToMatchesInRound();
             RoundIssueFinder.FindIssues(this, participantCount);
 
             RoundBase nextRound = GetNextRound();
@@ -253,8 +255,7 @@ namespace Slask.Domain.Rounds.Bases
 
         public PlayState GetPlayState()
         {
-            bool hasNoGroups = Groups.Count == 0;
-            bool hasNotBegun = hasNoGroups || Groups.First().GetPlayState() == PlayState.NotBegun;
+            bool hasNotBegun = Groups.First().GetPlayState() == PlayState.NotBegun;
 
             if (hasNotBegun)
             {
@@ -319,6 +320,29 @@ namespace Slask.Domain.Rounds.Bases
             }
 
             return Math.Max(2, participants);
+        }
+
+        private void AssignDefaultStartTimeToMatchesInRound()
+        {
+            DateTime startTime;
+
+            if(IsFirstRound())
+            {
+                startTime = SystemTime.Now.AddDays(7);
+            }
+            else
+            {
+                startTime = GetPreviousRound().GetLastMatch().StartDateTime.AddHours(1);
+            }
+
+            foreach (GroupBase group in Groups)
+            {
+                foreach(Match match in group.Matches)
+                {
+                    match.SetStartDateTime(startTime);
+                    startTime = startTime.AddHours(1);
+                }
+            }
         }
     }
 }

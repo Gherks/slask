@@ -39,7 +39,7 @@ Scenario: Creates proper bracket layout upon group creation
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 8                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
-	Then participating players in created group 0 should be mapped accordingly
+	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |
 		| 1           | Third         | Fourth        |
@@ -59,7 +59,7 @@ Scenario: When bracket has five participants the first match should contain two 
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 5                       |
 	When players "First, Second, Third, Fourth, Fifth" is registered to round 0
-	Then participating players in created group 0 should be mapped accordingly
+	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |
 		| 1           | Third         | Fourth        |
@@ -84,7 +84,7 @@ Scenario: When bracket has seven participants the third match should contain two
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 7                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh" is registered to round 0
-	Then participating players in created group 0 should be mapped accordingly
+	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |
 		| 1           | Third         | Fourth        |
@@ -113,7 +113,7 @@ Scenario: When bracket has nine participants the first match should contain two 
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 9                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth" is registered to round 0
-	Then participating players in created group 0 should be mapped accordingly
+	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |
 		| 1           | Third         | Fourth        |
@@ -147,7 +147,7 @@ Scenario: Bracket progression goes as expected
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 	Then advancing players in created group 0 is exactly "Sixth"
-		And participating players in created group 0 should be mapped accordingly
+		And participating players in group 0 should be mapped accordingly
 			| Match index | Player 1 name | Player 2 name |
 			| 0           | First         | Second        |
 			| 1           | Third         | Fourth        |

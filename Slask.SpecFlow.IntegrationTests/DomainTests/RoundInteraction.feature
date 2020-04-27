@@ -40,7 +40,7 @@ Scenario: A bracket round with a predecessor bracket round is set up using only 
 		| 0                | 0           | 1           |
 		| 0                | 0           | 2           |
 		| 0                | 0           | 3           |
-	Then participating players in created group 4 should be mapped accordingly
+	Then participating players in group 4 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | Fourth        | Eighth        |
 		| 1           | Twelfth       | Sixteenth     |
@@ -57,7 +57,7 @@ Scenario: A bracket round with a predecessor dual tournament round is set up usi
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 		| 0                | 0           | 1           |
-	Then participating players in created group 2 should be mapped accordingly
+	Then participating players in group 2 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First        | Fourth         |
 		| 1           | Fifth        | Eighth         |
@@ -74,7 +74,7 @@ Scenario: A bracket round with a predecessor round robin round is set up using o
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 		| 0                | 0           | 1           |
-	Then participating players in created group 2 should be mapped accordingly
+	Then participating players in group 2 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | Fifth         | Second        |
 		| 1           | Tenth         | Seventh       |
@@ -122,7 +122,7 @@ Scenario: A dual tournament round with a predecessor bracket round is set up usi
 		| 0                | 0           | 1           |
 		| 0                | 0           | 2           |
 		| 0                | 0           | 3           |
-	Then participating players in created group 4 should be mapped accordingly
+	Then participating players in group 4 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | Fourth        | Eighth        |
 		| 1           | Twelfth       | Sixteenth     |
@@ -139,7 +139,7 @@ Scenario: A dual tournament round with a predecessor dual tournament round is se
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 		| 0                | 0           | 1           |
-	Then participating players in created group 2 should be mapped accordingly
+	Then participating players in group 2 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Fourth        |
 		| 1           | Fifth         | Eighth        |
@@ -156,7 +156,7 @@ Scenario: A dual tournament round with a predecessor round robin round is set up
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 		| 0                | 0           | 1           |
-	Then participating players in created group 2 should be mapped accordingly
+	Then participating players in group 2 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | Fifth         | Second        |
 		| 1           | Tenth         | Seventh       |
@@ -202,7 +202,7 @@ Scenario: A round robin round with a predecessor bracket round is set up using o
 		| 0                | 0           | 1           |
 		| 0                | 0           | 2           |
 		| 0                | 0           | 3           |
-	Then participating players in created group 4 should be mapped accordingly
+	Then participating players in group 4 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | Fourth        | Twelfth       |
 		| 1           | Eighth        | Sixteenth     |
@@ -223,7 +223,7 @@ Scenario: A round robin round with a predecessor dual tournament round is set up
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 		| 0                | 0           | 1           |
-	Then participating players in created group 2 should be mapped accordingly
+	Then participating players in group 2 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Fifth         |
 		| 1           | Fourth        | Eighth        |
@@ -244,7 +244,7 @@ Scenario: A round robin round with a predecessor round robin round is set up usi
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 		| 0                | 0           | 1           |
-	Then participating players in created group 2 should be mapped accordingly
+	Then participating players in group 2 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | Fifth         | Tenth         |
 		| 1           | Second        | Seventh       |

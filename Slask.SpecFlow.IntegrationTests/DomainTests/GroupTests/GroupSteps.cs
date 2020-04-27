@@ -25,24 +25,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
     public class GroupStepDefinitions : RoundStepDefinitions
     {
-        //[Given(@"players ""(.*)"" is added to created group (.*)")]
-        //[When(@"players ""(.*)"" is added to created group (.*)")]
-        //public void GivenPlayersIsAddedToCreatedGroup(string commaSeparatedPlayerNames, int groupIndex)
-        //{
-        //    //if (createdGroups.Count <= groupIndex)
-        //    //{
-        //    //    throw new IndexOutOfRangeException("Given created group index is out of bounds");
-        //    //}
-
-        //    //List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
-        //    //GroupBase group = createdGroups[groupIndex];
-
-        //    //foreach (string playerName in playerNames)
-        //    //{
-        //    //    group.AddNewPlayerReference(playerName);
-        //    //}
-        //}
-
         [Given(@"score is added to players in given matches in created groups")]
         [When(@"score is added to players in given matches in created groups")]
         public void WhenScoreIsAddedToPlayersInGivenMatchesInCreatedGroups(Table table)
@@ -209,8 +191,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
         }
 
 
-        [Then(@"participating players in created group (.*) should be mapped accordingly")]
-        public void ThenparticipatingPlayersInCreatedGroupShouldBeMappedAccordingly(int createdGroupIndex, Table table)
+        [Then(@"participating players in group (.*) should be mapped accordingly")]
+        public void ThenParticipatingPlayersInCreatedGroupShouldBeMappedAccordingly(int createdGroupIndex, Table table)
         {
             GroupBase group = createdGroups[createdGroupIndex];
 

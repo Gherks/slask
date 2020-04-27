@@ -42,14 +42,6 @@ namespace Slask.Domain.Rounds
                 for (int perGroupIndex = 0; perGroupIndex < playerReferencesPerGroupCount; ++perGroupIndex)
                 {
                     playerReferences.Add(advancingPlayerReferences[playerReferenceIndex]);
-                    //bool addWasSuccessful = group.AddPlayerReference(advancingPlayerReferences[playerReferenceIndex]);
-
-                    //if (!addWasSuccessful)
-                    //{
-                    //    // LOGG Error: Failed to add advancing player to next round.
-                    //    return false;
-                    //}
-
                     playerReferenceIndex++;
                 }
 

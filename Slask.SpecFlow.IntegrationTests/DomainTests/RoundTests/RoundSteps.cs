@@ -154,7 +154,11 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 
                 while (group.GetPlayState() != PlayState.IsFinished)
                 {
-                    PlaceBetsOnAvailableMatchesInGroup(tournament.Betters, group);
+                    bool tournamentHasBetters = tournament.Betters.Count > 0;
+                    if (tournamentHasBetters)
+                    {
+                        PlaceBetsOnAvailableMatchesInGroup(tournament.Betters, group);
+                    }
 
                     foreach (Match match in group.Matches)
                     {

@@ -48,8 +48,7 @@ namespace Slask.Domain.Groups.Bases
 
         public PlayState GetPlayState()
         {
-            bool hasNoMatches = Matches.Count == 0;
-            bool hasNotBegun = hasNoMatches || Matches.First().GetPlayState() == PlayState.NotBegun;
+            bool hasNotBegun = Matches.First().GetPlayState() == PlayState.NotBegun;
 
             if (hasNotBegun)
             {
