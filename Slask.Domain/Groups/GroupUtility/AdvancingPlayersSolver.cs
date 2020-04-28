@@ -6,7 +6,6 @@ using System.Collections.Generic;
 
 namespace Slask.Domain.Groups.GroupUtility
 {
-    // CREATE TESTS
     public static class AdvancingPlayersSolver
     {
         public static List<PlayerReference> FetchFrom(RoundBase round)
