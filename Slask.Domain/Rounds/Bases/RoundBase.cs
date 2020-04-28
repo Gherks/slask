@@ -229,7 +229,7 @@ namespace Slask.Domain.Rounds.Bases
                 return null;
             }
 
-            return PlayerStandingsCalculator.GetAdvancingPlayers(this);
+            return AdvancingPlayersSolver.FetchFrom(this);
         }
 
         public bool PlayerReferenceIsAdvancingPlayer(PlayerReference playerReference)
@@ -241,7 +241,7 @@ namespace Slask.Domain.Rounds.Bases
 
             foreach (GroupBase group in Groups)
             {
-                foreach (PlayerReference advancingPlayerReference in PlayerStandingsCalculator.GetAdvancingPlayers(group))
+                foreach (PlayerReference advancingPlayerReference in AdvancingPlayersSolver.FetchFrom(group))
                 {
                     if (playerReference.Id == advancingPlayerReference.Id)
                     {
