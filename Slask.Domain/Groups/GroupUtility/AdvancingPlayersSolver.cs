@@ -13,9 +13,12 @@ namespace Slask.Domain.Groups.GroupUtility
         {
             List<PlayerReference> advancingPlayers = new List<PlayerReference>();
 
-            foreach (GroupBase group in round.Groups)
+            if (round.GetPlayState() == PlayState.IsFinished)
             {
-                advancingPlayers.AddRange(AdvancingPlayersSolver.FetchFrom(group));
+                foreach (GroupBase group in round.Groups)
+                {
+                    advancingPlayers.AddRange(AdvancingPlayersSolver.FetchFrom(group));
+                }
             }
 
             return advancingPlayers;
