@@ -7,7 +7,6 @@ using System.Linq;
 
 namespace Slask.Domain.Groups.GroupUtility
 {
-    // CREATE TESTS
     public static class PlayerStandingsSolver
     {
         public static List<PlayerStandingEntry> FetchFrom(GroupBase group)
