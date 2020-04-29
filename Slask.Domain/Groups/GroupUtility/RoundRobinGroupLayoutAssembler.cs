@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace Slask.Domain.Groups.GroupUtility
 {
-    // CREATE TESTS
     public static class RoundRobinGroupLayoutAssembler
     {
         public static List<Match> ConstructMathes(int participatingPlayerCount, GroupBase group)
