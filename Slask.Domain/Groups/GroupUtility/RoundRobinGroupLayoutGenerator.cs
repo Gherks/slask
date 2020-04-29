@@ -4,35 +4,27 @@ using System.Linq;
 
 namespace Slask.Domain.Groups.GroupUtility
 {
-    // CREATE TESTS
-    public static class RoundRobinGroupLayoutGenerator
+    public static class RoundRobinGroupLayoutAssembler
     {
-        public static List<Match> GenerateMatches(int participatingPlayerCount, GroupBase parentGroup)
+        public static List<Match> ConstructMathes(int participatingPlayerCount, GroupBase group)
         {
-            int matchCount= CalculateMatchCount(participatingPlayerCount);
+            bool invalidGroup = group == null;
+
+            if (invalidGroup)
+            {
+                return new List<Match>();
+            }
+
+            int matchCount = CalculateMatchCount(participatingPlayerCount);
 
             List<Match> matches = new List<Match>();
 
             while (matches.Count < matchCount)
             {
-                matches.Add(Match.Create(parentGroup));
+                matches.Add(Match.Create(group));
             }
 
             return matches;
-        }
-
-        private static int CalculateMatchCount(int participantCount)
-        {
-            bool evenCountOfPlayers = (participantCount % 2) == 0;
-
-            if (evenCountOfPlayers)
-            {
-                return (participantCount / 2) * (participantCount - 1);
-            }
-            else
-            {
-                return ((participantCount - 1) / 2) * participantCount;
-            }
         }
 
         /*
@@ -58,39 +50,80 @@ namespace Slask.Domain.Groups.GroupUtility
          * | 2 vs 5 |   | 1 vs 3 |   | 4 vs 2 |   | 5 vs 1 |   | 3 vs 4 |
          *     3            2            1            4            5
          */
-        public static void FillMatchesWithPlayers(List<PlayerReference> participants, List<Match> matches, GroupBase parentGroup)
+        public static void AssignPlayersToMatches(List<PlayerReference> playerReferences, List<Match> matches)
         {
-            bool groupContainsOneParticipant = participants.Count == 1;
-
-            if (groupContainsOneParticipant)
+            if (CannotFillGivenMatchesWithGivenPlayerReferences(playerReferences, matches))
             {
-                matches.First().SetPlayers(participants.First(), null);
                 return;
             }
 
-            bool hasEvenCountOfPlayers = (participants.Count % 2) == 0;
+            bool groupContainsOnePlayerReferences = playerReferences.Count == 1;
+
+            if (groupContainsOnePlayerReferences)
+            {
+                matches.First().SetPlayers(playerReferences.First(), null);
+                return;
+            }
+
+            bool hasEvenCountOfPlayers = (playerReferences.Count % 2) == 0;
 
             if (hasEvenCountOfPlayers)
             {
-                UseEvenPlayerCountAlgorithm(new List<PlayerReference>(participants), matches, parentGroup);
+                UseEvenPlayerCountAlgorithm(new List<PlayerReference>(playerReferences), matches);
             }
             else
             {
-                UseUnevenPlayerCountAlgorithm(new List<PlayerReference>(participants), matches, parentGroup);
+                UseUnevenPlayerCountAlgorithm(new List<PlayerReference>(playerReferences), matches);
             }
         }
 
-        private static void UseEvenPlayerCountAlgorithm(List<PlayerReference> participants, List<Match> matches, GroupBase parentGroup)
+        private static int CalculateMatchCount(int participantCount)
         {
-            int numRounds = participants.Count - 1;
-            int numMatchesPerRound = participants.Count / 2;
+            bool evenCountOfPlayers = (participantCount % 2) == 0;
+
+            if (evenCountOfPlayers)
+            {
+                return (participantCount / 2) * (participantCount - 1);
+            }
+            else
+            {
+                return ((participantCount - 1) / 2) * participantCount;
+            }
+        }
+
+        private static bool CannotFillGivenMatchesWithGivenPlayerReferences(List<PlayerReference> playerReferences, List<Match> matches)
+        {
+            bool invalidPlayerReferencesList = playerReferences == null;
+            bool invalidMatchesList = matches == null;
+
+            if (invalidPlayerReferencesList || invalidMatchesList)
+            {
+                // LOGG Error: Invalid parameters given when attempting to fill round robin matches with player references
+                return true;
+            }
+
+            bool cannotFitAllPlayerReferences = matches.Count < CalculateMatchCount(playerReferences.Count);
+
+            if (cannotFitAllPlayerReferences)
+            {
+                // LOGG Error: Cannot fit provided player references in provided list of matches
+                return true;
+            }
+
+            return false;
+        }
+
+        private static void UseEvenPlayerCountAlgorithm(List<PlayerReference> playerReferences, List<Match> matches)
+        {
+            int numRounds = playerReferences.Count - 1;
+            int numMatchesPerRound = playerReferences.Count / 2;
             int matchCounter = 0;
 
             for (int round = 0; round < numRounds; ++round)
             {
                 for (int index = 0; index < numMatchesPerRound; ++index)
                 {
-                    matches[matchCounter++].SetPlayers(participants[index], participants[index + numMatchesPerRound]);
+                    matches[matchCounter++].SetPlayers(playerReferences[index], playerReferences[index + numMatchesPerRound]);
                 }
 
                 if (matchCounter >= matches.Count)
@@ -98,28 +131,28 @@ namespace Slask.Domain.Groups.GroupUtility
                     break;
                 }
 
-                PlayerReference movedReference1 = participants[numMatchesPerRound - 1];
-                PlayerReference movedReference2 = participants[numMatchesPerRound];
+                PlayerReference movedReference1 = playerReferences[numMatchesPerRound - 1];
+                PlayerReference movedReference2 = playerReferences[numMatchesPerRound];
 
-                participants.RemoveAt(numMatchesPerRound - 1);
-                participants.RemoveAt(numMatchesPerRound - 1);
+                playerReferences.RemoveAt(numMatchesPerRound - 1);
+                playerReferences.RemoveAt(numMatchesPerRound - 1);
 
-                participants.Add(movedReference1);
-                participants.Insert(1, movedReference2);
+                playerReferences.Add(movedReference1);
+                playerReferences.Insert(1, movedReference2);
             }
         }
 
-        private static void UseUnevenPlayerCountAlgorithm(List<PlayerReference> participants, List<Match> matches, GroupBase parentGroup)
+        private static void UseUnevenPlayerCountAlgorithm(List<PlayerReference> playerReferences, List<Match> matches)
         {
-            int numRounds = participants.Count;
-            int numMatchesPerRound = participants.Count / 2;
+            int numRounds = playerReferences.Count;
+            int numMatchesPerRound = playerReferences.Count / 2;
             int matchCounter = 0;
 
             for (int round = 0; round < numRounds; ++round)
             {
                 for (int index = 0; index < numMatchesPerRound; ++index)
                 {
-                    matches[matchCounter++].SetPlayers(participants[index], participants[index + numMatchesPerRound + 1]);
+                    matches[matchCounter++].SetPlayers(playerReferences[index], playerReferences[index + numMatchesPerRound + 1]);
                 }
 
                 if (matchCounter >= matches.Count)
@@ -127,14 +160,14 @@ namespace Slask.Domain.Groups.GroupUtility
                     break;
                 }
 
-                PlayerReference movedReference1 = participants[numMatchesPerRound];
-                PlayerReference movedReference2 = participants[numMatchesPerRound + 1];
+                PlayerReference movedReference1 = playerReferences[numMatchesPerRound];
+                PlayerReference movedReference2 = playerReferences[numMatchesPerRound + 1];
 
-                participants.RemoveAt(numMatchesPerRound);
-                participants.RemoveAt(numMatchesPerRound);
+                playerReferences.RemoveAt(numMatchesPerRound);
+                playerReferences.RemoveAt(numMatchesPerRound);
 
-                participants.Add(movedReference1);
-                participants.Insert(0, movedReference2);
+                playerReferences.Add(movedReference1);
+                playerReferences.Insert(0, movedReference2);
             }
         }
     }
