@@ -50,7 +50,7 @@ namespace Slask.Domain.Groups.GroupUtility
          * | 2 vs 5 |   | 1 vs 3 |   | 4 vs 2 |   | 5 vs 1 |   | 3 vs 4 |
          *     3            2            1            4            5
          */
-        public static void FillMatchesWithPlayers(List<PlayerReference> playerReferences, List<Match> matches)
+        public static void AssignPlayersToMatches(List<PlayerReference> playerReferences, List<Match> matches)
         {
             if (CannotFillGivenMatchesWithGivenPlayerReferences(playerReferences, matches))
             {
@@ -102,7 +102,7 @@ namespace Slask.Domain.Groups.GroupUtility
                 return true;
             }
 
-            bool cannotFitAllPlayerReferences = matches.Count != CalculateMatchCount(playerReferences.Count);
+            bool cannotFitAllPlayerReferences = matches.Count < CalculateMatchCount(playerReferences.Count);
 
             if (cannotFitAllPlayerReferences)
             {

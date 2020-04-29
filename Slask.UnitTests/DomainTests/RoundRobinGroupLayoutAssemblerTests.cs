@@ -76,59 +76,85 @@ namespace Slask.UnitTests.DomainTests
             List<Match> matches;
 
             matches = RoundRobinGroupLayoutAssembler.ConstructMathes(++groupSizeCounter, roundRobinGroup);
-            RoundRobinGroupLayoutAssembler.FillMatchesWithPlayers(playerReferences.GetRange(0, groupSizeCounter), matches);
+            RoundRobinGroupLayoutAssembler.AssignPlayersToMatches(playerReferences.GetRange(0, groupSizeCounter), matches);
             RunTestsWithTwoPlayers(matches);
 
             matches = RoundRobinGroupLayoutAssembler.ConstructMathes(++groupSizeCounter, roundRobinGroup);
-            RoundRobinGroupLayoutAssembler.FillMatchesWithPlayers(playerReferences.GetRange(0, groupSizeCounter), matches);
+            RoundRobinGroupLayoutAssembler.AssignPlayersToMatches(playerReferences.GetRange(0, groupSizeCounter), matches);
             RunTestsWithThreePlayers(matches);
 
             matches = RoundRobinGroupLayoutAssembler.ConstructMathes(++groupSizeCounter, roundRobinGroup);
-            RoundRobinGroupLayoutAssembler.FillMatchesWithPlayers(playerReferences.GetRange(0, groupSizeCounter), matches);
+            RoundRobinGroupLayoutAssembler.AssignPlayersToMatches(playerReferences.GetRange(0, groupSizeCounter), matches);
             RunTestsWithFourPlayers(matches);
 
             matches = RoundRobinGroupLayoutAssembler.ConstructMathes(++groupSizeCounter, roundRobinGroup);
-            RoundRobinGroupLayoutAssembler.FillMatchesWithPlayers(playerReferences.GetRange(0, groupSizeCounter), matches);
+            RoundRobinGroupLayoutAssembler.AssignPlayersToMatches(playerReferences.GetRange(0, groupSizeCounter), matches);
             RunTestsWithFivePlayers(matches);
 
             matches = RoundRobinGroupLayoutAssembler.ConstructMathes(++groupSizeCounter, roundRobinGroup);
-            RoundRobinGroupLayoutAssembler.FillMatchesWithPlayers(playerReferences.GetRange(0, groupSizeCounter), matches);
+            RoundRobinGroupLayoutAssembler.AssignPlayersToMatches(playerReferences.GetRange(0, groupSizeCounter), matches);
             RunTestsWithSixPlayers(matches);
 
             matches = RoundRobinGroupLayoutAssembler.ConstructMathes(++groupSizeCounter, roundRobinGroup);
-            RoundRobinGroupLayoutAssembler.FillMatchesWithPlayers(playerReferences.GetRange(0, groupSizeCounter), matches);
+            RoundRobinGroupLayoutAssembler.AssignPlayersToMatches(playerReferences.GetRange(0, groupSizeCounter), matches);
             RunTestsWithSevenPlayers(matches);
 
             matches = RoundRobinGroupLayoutAssembler.ConstructMathes(++groupSizeCounter, roundRobinGroup);
-            RoundRobinGroupLayoutAssembler.FillMatchesWithPlayers(playerReferences.GetRange(0, groupSizeCounter), matches);
+            RoundRobinGroupLayoutAssembler.AssignPlayersToMatches(playerReferences.GetRange(0, groupSizeCounter), matches);
             RunTestsWithEightPlayers(matches);
         }
 
         [Fact]
-        public void CannotFillMatchesWithPlayersWithoutValidPlayerReferenceList()
+        public void CannotAssignPlayersToMatchesWithoutValidPlayerReferenceList()
         {
             List<Match> matches = null;
 
-            RoundRobinGroupLayoutAssembler.FillMatchesWithPlayers(null, matches);
+            RoundRobinGroupLayoutAssembler.AssignPlayersToMatches(null, matches);
 
             matches.Should().BeNull();
         }
 
         [Fact]
-        public void CannotFillMatchesWithPlayersWithoutValidMatchList()
+        public void CannotAssignPlayersToMatchesWithoutValidMatchList()
         {
             List<Match> matches = null;
 
-            RoundRobinGroupLayoutAssembler.FillMatchesWithPlayers(playerReferences, matches);
+            RoundRobinGroupLayoutAssembler.AssignPlayersToMatches(playerReferences, matches);
 
             matches.Should().BeNull();
         }
 
         [Fact]
-        public void CannotFillMatchesWithPlayersWhenMatchesCannotFitAllPlayerReferences()
+        public void CanAssignPlayersToMatchesWhenPlayerReferencesWontFillAllMatches()
         {
-            List<Match> matches = RoundRobinGroupLayoutAssembler.ConstructMathes(playerReferences.Count / 2, roundRobinGroup);
-            RoundRobinGroupLayoutAssembler.FillMatchesWithPlayers(playerReferences, matches);
+            int halfPlayerReferenceCount = playerReferences.Count / 2;
+
+            List<Match> matches = RoundRobinGroupLayoutAssembler.ConstructMathes(playerReferences.Count, roundRobinGroup);
+            RoundRobinGroupLayoutAssembler.AssignPlayersToMatches(playerReferences.GetRange(0, halfPlayerReferenceCount), matches);
+
+            int index = 0;
+            int validMatchesCount = 6;
+
+            for (; index < validMatchesCount; ++index)
+            {
+                matches[index].Player1.Should().NotBeNull();
+                matches[index].Player2.Should().NotBeNull();
+            }
+
+            for (; index < matches.Count; ++index)
+            {
+                matches[index].Player1.Should().BeNull();
+                matches[index].Player2.Should().BeNull();
+            }
+        }
+
+        [Fact]
+        public void CannotAssignPlayersToMatchesWhenMatchesCannotFitAllPlayerReferences()
+        {
+            int halfPlayerReferenceCount = playerReferences.Count / 2;
+
+            List<Match> matches = RoundRobinGroupLayoutAssembler.ConstructMathes(halfPlayerReferenceCount, roundRobinGroup);
+            RoundRobinGroupLayoutAssembler.AssignPlayersToMatches(playerReferences, matches);
 
             foreach (Match match in matches)
             {
