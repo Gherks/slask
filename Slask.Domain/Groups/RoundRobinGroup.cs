@@ -55,13 +55,13 @@ namespace Slask.Domain.Groups
 
         public override bool ConstructGroupLayout(int playersPerGroupCount)
         {
-            Matches = RoundRobinGroupLayoutAssembler.ConstructMathes(playersPerGroupCount, this);
+            Matches = RoundRobinGroupLayoutGenerator.GenerateMatches(playersPerGroupCount, this);
             return true;
         }
 
         public override bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
         {
-            RoundRobinGroupLayoutAssembler.FillMatchesWithPlayers(playerReferences, Matches);
+            RoundRobinGroupLayoutGenerator.FillMatchesWithPlayers(playerReferences, Matches, this);
             return true;
         }
     }
