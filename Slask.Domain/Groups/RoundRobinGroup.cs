@@ -33,7 +33,6 @@ namespace Slask.Domain.Groups
             };
         }
 
-        // CREATE TESTS
         public override bool NewDateTimeIsValid(Match match, DateTime dateTime)
         {
             bool matchBelongsToFirstRound = match.Group.Round.IsFirstRound();

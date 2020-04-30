@@ -23,8 +23,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         private PlayerReference firstPlayerReference;
         private PlayerReference secondPlayerReference;
 
-        // StartDateTime for matches is properly set up according to layout (child nodes needs to be resolved before current node can start)
-
         public BracketGroupTests()
         {
             tournament = Tournament.Create("GSL 2019");

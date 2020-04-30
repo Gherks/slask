@@ -59,9 +59,3 @@ Scenario: Dual tournament progression goes as expected
 			| 2           | First         | Fourth        |
 			| 3           | Second        | Third         |
 			| 4           | First         | Third         |
-
-#
-#Scenario: Can undo steps in
-#
-#Scenario: Creates proper dual tournament layout upon group creation
-# Create tests for GetPlayState

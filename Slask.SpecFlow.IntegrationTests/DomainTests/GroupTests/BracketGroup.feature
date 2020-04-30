@@ -156,5 +156,3 @@ Scenario: Bracket progression goes as expected
 			| 4           | First         | Fourth        |
 			| 5           | Sixth         | Eighth        |
 			| 6           | First         | Sixth         |
-
-# Create tests for GetPlayState

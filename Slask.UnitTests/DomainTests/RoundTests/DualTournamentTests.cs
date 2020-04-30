@@ -8,7 +8,6 @@ using Xunit;
 
 namespace Slask.UnitTests.DomainTests.RoundTests
 {
-    // CREATE TESTS CannotChangeGroupSize
     public class DualTournamentRoundTests
     {
         private readonly Tournament tournament;

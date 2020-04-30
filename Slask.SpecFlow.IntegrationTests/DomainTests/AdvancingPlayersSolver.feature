@@ -45,5 +45,3 @@ Scenario: Cannot fetch advancing players from group that is unfinished
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 	Then advancing players from group 1 should be ""
-
-	

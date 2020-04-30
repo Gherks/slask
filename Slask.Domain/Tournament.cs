@@ -108,7 +108,6 @@ namespace Slask.Domain
             return Rounds.FirstOrDefault(round => round.Name.ToLower() == name.ToLower());
         }
 
-        // CREATE TESTS
         public RoundBase GetFirstRound()
         {
             bool hasNoRounds = Rounds.Count == 0;
@@ -121,7 +120,6 @@ namespace Slask.Domain
             return Rounds.First();
         }
 
-        // CREATE TESTS
         public RoundBase GetLastRound()
         {
             bool hasNoRounds = Rounds.Count == 0;

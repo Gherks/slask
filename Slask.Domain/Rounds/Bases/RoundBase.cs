@@ -11,9 +11,6 @@ using System.Linq;
 
 namespace Slask.Domain.Rounds.Bases
 {
-    // CREATE TESTS do not allow group sizes to be less than advancing count
-    // CREATE TESTS make sure PlayerPerGroupCount cant be set to anything less than 2
-    // CREATE TESTS ´make sure rounds of different kind can be created even without any player reference added
     public class RoundBase : RoundInterface
     {
         protected RoundBase()
@@ -117,7 +114,6 @@ namespace Slask.Domain.Rounds.Bases
             return true;
         }
 
-        // CREATE TESTS
         public bool SetAdvancingPerGroupCount(int count)
         {
             bool isFirstRound = IsFirstRound();
@@ -132,7 +128,6 @@ namespace Slask.Domain.Rounds.Bases
             return false;
         }
 
-        // CREATE TESTS
         public bool IsFirstRound()
         {
             bool belongsToATournament = Tournament != null;
@@ -150,7 +145,6 @@ namespace Slask.Domain.Rounds.Bases
             return false;
         }
 
-        // CREATE TESTS
         public bool IsLastRound()
         {
             bool belongsToATournament = Tournament != null;
@@ -168,7 +162,6 @@ namespace Slask.Domain.Rounds.Bases
             return false;
         }
 
-        // CREATE TESTS?
         public RoundBase GetPreviousRound()
         {
             for (int index = 1; index < Tournament.Rounds.Count; ++index)
@@ -182,7 +175,6 @@ namespace Slask.Domain.Rounds.Bases
             return null;
         }
 
-        // CREATE TESTS
         public RoundBase GetNextRound()
         {
             for (int index = 0; index < Tournament.Rounds.Count - 1; ++index)
@@ -196,7 +188,6 @@ namespace Slask.Domain.Rounds.Bases
             return null;
         }
 
-        // CREATE TESTS
         public Match GetFirstMatch()
         {
             List<Match> matches = new List<Match>();
@@ -209,7 +200,6 @@ namespace Slask.Domain.Rounds.Bases
             return matches.OrderBy(match => match.StartDateTime).FirstOrDefault();
         }
 
-        // CREATE TESTS
         public Match GetLastMatch()
         {
             List<Match> matches = new List<Match>();

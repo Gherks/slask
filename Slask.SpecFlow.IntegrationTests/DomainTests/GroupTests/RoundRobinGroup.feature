@@ -73,6 +73,3 @@ Scenario: Round robin progression with five players goes as expected
 			| 7           | Fifth         | First         |
 			| 8           | Second        | First         |
 			| 9           | Third         | Fourth        |
-			
-# Create tests for GetPlayState
-#SolveRoundRobinTies

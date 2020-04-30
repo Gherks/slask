@@ -17,8 +17,6 @@ namespace Slask.UnitTests.DomainTests.RoundTests
             tournament = Tournament.Create("GSL 2019");
         }
 
-        // Tests covering advancing count 
-
         [Fact]
         public void CanCreateRound()
         {
@@ -84,20 +82,6 @@ namespace Slask.UnitTests.DomainTests.RoundTests
             roundRobinRound.Groups.First().Matches.Should().HaveCount(1);
             roundRobinRound.SetPlayersPerGroupCount(4);
             roundRobinRound.Groups.First().Matches.Should().HaveCount(6);
-        }
-
-        // CREATE TESTS
-        [Fact]
-        public void CannotChangeGroupSizeOnRoundThatIsNotFirstRound()
-        {
-            RoundRobinRound roundRobinRound = CreateRoundRobinRound();
-        }
-
-        // CREATE TESTS
-        [Fact]
-        public void CannotChangeGroupSizeOnRoundWhenTournamentHasStarted()
-        {
-            RoundRobinRound roundRobinRound = CreateRoundRobinRound();
         }
 
         [Fact]

@@ -29,21 +29,3 @@ Scenario: Cannot add new players to groups not within first round
 	When players "Bomber, FanTaSy, Stephano, Thorzain" is registered to round 1
 	Then created group 0 should contain exactly these player references with names: "Maru, Stork, Taeja, Rain"
 		And created group 1 should contain exactly these player references with names: ""
-
-#Scenario: Cannot add new player to group after first match has started
-#Scenario: Cannot increase score before match has started in round robin group
-#Scenario: Cannot increase score before match has started in dual tournament group
-#Scenario: Cannot increase score before match has started in bracket group
-
-
-#// Create tests for GetPlayState
-#
-#
-#
-#Scenario: Fetching advancing players in round robin group returns at least number of players set by parent round
-#Scenario: Fetching advancing players in round robin group returns all players if number of advancing players is greater than players participating
-#Scenario: Fetching advancing players in dual tournament group only returns top two players
-#Scenario: Fetching advancing players in bracket group only returns bracket winner
-#Scenario: Cannot fetch advancing players before group is played out
-
-# CanOnlyRemovePlayerReferencesFromGroupsWithinFirstRound

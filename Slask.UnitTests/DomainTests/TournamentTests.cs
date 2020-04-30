@@ -10,7 +10,6 @@ using Xunit;
 
 namespace Slask.UnitTests.DomainTests
 {
-    // CREATE TESTS IntegTest CannotExcludePlayerReferencesWhenTournamentHasStarted
     public class TournamentTests
     {
         private readonly Tournament tournament;
