@@ -81,7 +81,7 @@ namespace Slask.Domain.Groups.GroupUtility
 
                 if (nodeQueue.Count <= 0)
                 {
-                    // LOGG Error: Ran out of nodes to construct bracket system with before matches. Something went horribly wrong.
+                    // LOG Error: Ran out of nodes to construct bracket system with before matches. Something went horribly wrong.
                     return;
                 }
             }

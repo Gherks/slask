@@ -98,7 +98,7 @@ namespace Slask.Domain.Groups.GroupUtility
 
             if (invalidPlayerReferencesList || invalidMatchesList)
             {
-                // LOGG Error: Invalid parameters given when attempting to fill round robin matches with player references
+                // LOG Error: Invalid parameters given when attempting to fill round robin matches with player references
                 return true;
             }
 
@@ -106,7 +106,7 @@ namespace Slask.Domain.Groups.GroupUtility
 
             if (cannotFitAllPlayerReferences)
             {
-                // LOGG Error: Cannot fit provided player references in provided list of matches
+                // LOG Error: Cannot fit provided player references in provided list of matches
                 return true;
             }
 
