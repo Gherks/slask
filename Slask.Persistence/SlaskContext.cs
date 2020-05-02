@@ -31,6 +31,8 @@ namespace Slask.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Tournament>().Ignore(tournament => tournament.TournamentIssueReporter);
+
             modelBuilder.Entity<Match>().Ignore(match => match.Player1);
             modelBuilder.Entity<Match>().Ignore(match => match.Player2);
 
