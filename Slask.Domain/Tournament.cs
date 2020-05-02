@@ -17,6 +17,7 @@ namespace Slask.Domain
             Betters = new List<Better>();
             Settings = new List<Settings>();
             MiscBetCatalogue = new List<MiscBetCatalogue>();
+            TournamentIssueReporter = new TournamentIssueReporter();
         }
 
         public Guid Id { get; private set; }
