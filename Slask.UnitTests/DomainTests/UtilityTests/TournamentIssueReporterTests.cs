@@ -23,7 +23,7 @@ namespace Slask.UnitTests.DomainTests.UtilityTests
         public TournamentIssueReporterTests()
         {
             tournament = Tournament.Create("GSL 2019");
-            round = BracketRound.Create("Bracket round", 3, 3, tournament);
+            round = tournament.AddBracketRound("Bracket round", 3);
             round.RegisterPlayerReference("Maru");
             round.RegisterPlayerReference("Stork");
             group = round.Groups.First();
@@ -61,7 +61,7 @@ namespace Slask.UnitTests.DomainTests.UtilityTests
         [Fact]
         public void CanReportOnGroupIssue()
         {
-            string description = "An round issue";
+            string description = "An group issue";
 
             tournamentIssueReporter.Report(group, description);
 
@@ -74,13 +74,13 @@ namespace Slask.UnitTests.DomainTests.UtilityTests
         [Fact]
         public void CanReportOnMatchIssue()
         {
-            string description = "An round issue";
+            string description = "An match issue";
 
             tournamentIssueReporter.Report(match, description);
 
             tournamentIssueReporter.Issues.First().Round.Should().Be(0);
             tournamentIssueReporter.Issues.First().Group.Should().Be(0);
-            tournamentIssueReporter.Issues.First().Match.Should().Be(-1);
+            tournamentIssueReporter.Issues.First().Match.Should().Be(0);
             tournamentIssueReporter.Issues.First().Description.Should().Be(description);
         }
 
