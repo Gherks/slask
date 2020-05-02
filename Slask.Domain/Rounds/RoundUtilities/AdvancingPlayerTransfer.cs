@@ -21,11 +21,10 @@ namespace Slask.Domain.Rounds
                     return DistributeAdvancingPlayerReferencesToNextRoundEvenly(round.GetAdvancingPlayerReferences(), nextRound);
                 }
 
-                // LOGG Error: Tried to transfer advancing player references when there is no next round.
                 return false;
             }
 
-            // LOGG Error: Tried to transfer advancing player references to next round before current round is finished.
+            // LOG Error: Tried to transfer advancing player references to next round before current round is finished.
             return false;
         }
 

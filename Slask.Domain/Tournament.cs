@@ -2,6 +2,7 @@
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
+using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,9 @@ namespace Slask.Domain
         public List<Better> Betters { get; private set; }
         public List<Settings> Settings { get; private set; }
         public List<MiscBetCatalogue> MiscBetCatalogue { get; private set; }
+
+        // Ignored by SlaskContext
+        public TournamentIssueReporter TournamentIssueReporter { get; private set; }
 
         public static Tournament Create(string name)
         {
@@ -158,7 +162,6 @@ namespace Slask.Domain
 
             if (tournamentHasNoRounds)
             {
-                // LOGG Error: 
                 return new List<PlayerReference>();
             }
 

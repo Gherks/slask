@@ -44,13 +44,13 @@ namespace Slask.Domain.Groups.GroupUtility
 
             if (EitherPlayersGroupHasBegun(player1, player2))
             {
-                // LOG Error: Either player that wants to switch matches is residing in a group that has already started, it's too late to switch matches with other players
+                // LOG Issue?: Either player that wants to switch matches is residing in a group that has already started, it's too late to switch matches with other players
                 return false;
             }
 
             if (EitherPlayerResidesInGroupThatDisallowSwitching(player1, player2))
             {
-                // LOGG Error: Either player that wants to switch matches resides in a group that does not allow switching
+                // LOG Issue?: Either player that wants to switch matches resides in a group that does not allow switching
                 return false;
             }
 
