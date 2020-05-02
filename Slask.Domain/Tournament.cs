@@ -1,4 +1,4 @@
-using Slask.Common;
+﻿using Slask.Common;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
@@ -162,7 +162,6 @@ namespace Slask.Domain
 
             if (tournamentHasNoRounds)
             {
-                // LOGG Error: 
                 return new List<PlayerReference>();
             }
 

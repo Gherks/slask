@@ -91,7 +91,7 @@ namespace Slask.Domain.Groups
 
             if (!matchExistInThisGroup)
             {
-                // LOGG Error: Match does not exist in this group
+                // LOG Error: Match does not exist in this group
                 return;
             }
 

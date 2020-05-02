@@ -259,7 +259,7 @@ namespace Slask.Domain.Rounds.Bases
 
         protected virtual GroupBase AddGroup()
         {
-            // LOGG Error: Adding group using base, something when horribly wrong.
+            // LOG Error: Adding group using base, something went horribly wrong.
             throw new NotImplementedException();
         }
 

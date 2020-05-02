@@ -31,7 +31,7 @@ namespace Slask.Domain.Groups.Bases
 
             if (parentRoundHasStarted)
             {
-                // LOGG Error: Cannot add player references to a group in a round that has already started
+                // LOG Error: Cannot add player references to a group in a round that has already started
                 return false;
             }
 

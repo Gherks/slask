@@ -59,7 +59,7 @@ namespace Slask.Domain.Utilities
                 }
             }
 
-            // LOGG Error: Could not find given round within tournament when reporting issue.
+            // LOG Error: Could not find given round within tournament when reporting issue.
             return -1;
         }
 
@@ -73,7 +73,7 @@ namespace Slask.Domain.Utilities
                 }
             }
 
-            // LOGG Error: Could not find given group within tournament when reporting issue.
+            // LOG Error: Could not find given group within tournament when reporting issue.
             return -1;
         }
 
@@ -87,7 +87,7 @@ namespace Slask.Domain.Utilities
                 }
             }
 
-            // LOGG Error: Could not find given match within tournament when reporting issue.
+            // LOG Error: Could not find given match within tournament when reporting issue.
             return -1;
         }
     }
