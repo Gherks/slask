@@ -131,6 +131,10 @@ namespace Slask.Domain.Rounds.Bases
             if (isFirstRound && newCountIsLessThanPlayerCountPerGroup)
             {
                 AdvancingPerGroupCount = count;
+
+                Construct();
+                Tournament.FindIssues();
+                
                 return true;
             }
 
