@@ -49,7 +49,7 @@ namespace Slask.Domain.Utilities
             Issues.Clear();
         }
 
-        int GetIndexOf(RoundBase round)
+        private int GetIndexOf(RoundBase round)
         {
             for (int index = 0; index < round.Tournament.Rounds.Count; ++index)
             {
@@ -63,7 +63,7 @@ namespace Slask.Domain.Utilities
             return -1;
         }
 
-        int GetIndexOf(GroupBase group)
+        private int GetIndexOf(GroupBase group)
         {
             for (int index = 0; index < group.Round.Groups.Count; ++index)
             {
@@ -77,7 +77,7 @@ namespace Slask.Domain.Utilities
             return -1;
         }
 
-        int GetIndexOf(Match match)
+        private int GetIndexOf(Match match)
         {
             for (int index = 0; index < match.Group.Matches.Count; ++index)
             {
