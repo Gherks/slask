@@ -16,6 +16,13 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 {
     public class RoundStepDefinitions : TournamentStepDefinitions
     {
+        [When(@"players per group count in round (.*) is set to (.*)")]
+        public void WhenPlayersPerGroupCountInRoundIsSetTo(int roundIndex, int playersPerGroupCount)
+        {
+            ResizableRound round = createdRounds[roundIndex] as ResizableRound;
+
+            round.SetPlayersPerGroupCount(playersPerGroupCount);
+        }
 
         [When(@"created round (.*) fetches previous round")]
         public void WhenCreatedRoundFetchesPreviousRound(int roundIndex)
