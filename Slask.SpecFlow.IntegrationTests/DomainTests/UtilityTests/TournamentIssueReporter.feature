@@ -1,4 +1,4 @@
-Feature: TournamentIssueReporter
+﻿Feature: TournamentIssueReporter
 	Does a bunch of tests on TournamentIssueReporter
 
 @TournamentIssueReporterTag
@@ -80,4 +80,22 @@ Scenario: Tournament issue validation is run when players per group count has be
 	When players per group count in round 0 is set to 3
 	Then tournament 0 reports issues
 		| Issue type |
-		| Round      |
+		| Round      |
+
+
+Scenario: Tournament issue validation is run when advancing players per group count has been changed
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
+			| Round robin | Round robin round | 3       | 1                         | 4                       |
+			| Round robin | Round robin round | 3       | 1                         | 2                       |
+		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+		And tournament 0 reports issues
+			| Issue type |
+	When advancing players per group count in round 0 is set to 3
+	Then tournament 0 reports issues
+		| Issue type |
+		| Round      |
+		| Round      |
+#Scenario: Tournament issue validation is run when new player has been registered
+#Scenario: Tournament issue validation is run when player has been excluded

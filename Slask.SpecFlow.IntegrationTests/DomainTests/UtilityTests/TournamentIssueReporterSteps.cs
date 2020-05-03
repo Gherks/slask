@@ -28,7 +28,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.UtilityTests
 
             Tournament tournament = createdTournaments[tournamentIndex];
 
-            table.Rows.Should().HaveCount(tournament.TournamentIssueReporter.Issues.Count);
+            tournament.TournamentIssueReporter.Issues.Should().HaveCount(table.Rows.Count);
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
