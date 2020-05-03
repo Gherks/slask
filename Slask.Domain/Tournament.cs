@@ -1,7 +1,8 @@
-using Slask.Common;
+﻿using Slask.Common;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
+using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
@@ -53,9 +54,7 @@ namespace Slask.Domain
                 return null;
             }
 
-            Rounds.Add(round);
-            round.Construct();
-
+            IntegrateRoundToTournament(round);
             return round;
         }
 
@@ -68,9 +67,7 @@ namespace Slask.Domain
                 return null;
             }
 
-            Rounds.Add(round);
-            round.Construct();
-
+            IntegrateRoundToTournament(round);
             return round;
         }
 
@@ -83,9 +80,7 @@ namespace Slask.Domain
                 return null;
             }
 
-            Rounds.Add(round);
-            round.Construct();
-
+            IntegrateRoundToTournament(round);
             return round;
         }
 
@@ -114,6 +109,16 @@ namespace Slask.Domain
             Betters.Add(Better.Create(user, this));
 
             return Betters.Last();
+        }
+
+        public void FindIssues()
+        {
+            TournamentIssueReporter.Clear();
+
+            foreach (RoundBase round in Rounds)
+            {
+                RoundIssueFinder.FindIssues(round);
+            }
         }
 
         public RoundBase GetRoundByRoundId(Guid id)
@@ -182,6 +187,13 @@ namespace Slask.Domain
             return Rounds.First().PlayerReferences;
         }
 
+        private void IntegrateRoundToTournament(RoundBase round)
+        {
+            Rounds.Add(round);
+            round.Construct();
+            FindIssues();
+        }
+
         private bool ManageRoundRemoval(RoundBase round)
         {
             bool containsSoughtRound = Rounds.Contains(round);
@@ -197,18 +209,24 @@ namespace Slask.Domain
                 }
 
                 bool removalSuccessful = Rounds.Remove(round);
-                bool stillContainsRounds = Rounds.Count > 0;
 
-                if (removalSuccessful && stillContainsRounds)
+                if (removalSuccessful)
                 {
-                    RoundBase firstRound = GetFirstRound();
+                    bool stillContainsRounds = Rounds.Count > 0;
 
-                    foreach (PlayerReference playerReference in playerReferences)
+                    if(stillContainsRounds)
                     {
-                        firstRound.RegisterPlayerReference(playerReference.Name);
+                        RoundBase firstRound = GetFirstRound();
+
+                        foreach (PlayerReference playerReference in playerReferences)
+                        {
+                            firstRound.RegisterPlayerReference(playerReference.Name);
+                        }
+
+                        firstRound.Construct();
                     }
 
-                    firstRound.Construct();
+                    FindIssues();
                 }
             }
 

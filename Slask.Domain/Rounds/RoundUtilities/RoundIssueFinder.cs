@@ -4,68 +4,54 @@ namespace Slask.Domain.Rounds.RoundUtilities
 {
     public static class RoundIssueFinder
     {
-        public static void FindIssues(RoundBase round, int participatingPlayersCount)
+        public static void FindIssues(RoundBase round)
         {
-            if (round.IsFirstRound())
+            CheckWhetherRoundIsFilledUpToCapacityWithPlayers(round);
+
+            if (round.IsLastRound())
             {
-                FindIssuesInFirstRound(round, participatingPlayersCount);
-            }
-            else if (round.IsLastRound())
-            {
-                FindIssuesInLastRound(round, participatingPlayersCount);
-            }
-            else
-            {
-                FindIssuesInGeneralRounds(round, participatingPlayersCount);
+                CheckWhetherLastRoundContainsMoreThanOneGroup(round);
+                CheckWhetherLastRoundHasMoreThanOneAdvancingPerGroupCount(round);
             }
         }
 
-        private static void FindIssuesInFirstRound(RoundBase round, int participatingPlayersCount)
+        private static void CheckWhetherRoundIsFilledUpToCapacityWithPlayers(RoundBase round)
         {
+            int expectedParticipantCount = round.GetExpectedParticipantCount();
             int playerCapacityInRound = round.Groups.Count * round.PlayersPerGroupCount;
 
-            bool doesNotFillAllGroupsEvenly = (participatingPlayersCount - playerCapacityInRound) != 0;
+            bool doesNotFillAllGroupsEvenly = (expectedParticipantCount - playerCapacityInRound) != 0;
 
             if (doesNotFillAllGroupsEvenly)
             {
-                string description = "Current player count does not fill all group(s) to capacity. Add more players or reduce group capacity.";
+                string description;
+
+                if (round.IsFirstRound())
+                {
+                    description = "Current player count does not fill all group(s) to capacity. Add more players or reduce group capacity.";
+                }
+                else
+                {
+                    description = "Round does not synergize with previous round. Advancing players from previous round will not fill the groups within the current round to capacity.";
+                }
+
                 round.Tournament.TournamentIssueReporter.Report(round, description);
             }
         }
 
-        private static void FindIssuesInGeneralRounds(RoundBase round, int participatingPlayersCount)
+        private static void CheckWhetherLastRoundContainsMoreThanOneGroup(RoundBase round)
         {
-            int playerCapacityInRound = round.Groups.Count * round.PlayersPerGroupCount;
-
-            bool doesNotFillAllGroupsEvenly = (participatingPlayersCount - playerCapacityInRound) != 0;
-
-            if (doesNotFillAllGroupsEvenly)
-            {
-                string description = "Round does not synergize with previous round. Advancing players from previous round will not fill the groups within the current round to capacity.";
-                round.Tournament.TournamentIssueReporter.Report(round, description);
-            }
-        }
-
-        private static void FindIssuesInLastRound(RoundBase round, int participatingPlayersCount)
-        {
-            int playerCapacityInRound = round.Groups.Count * round.PlayersPerGroupCount;
-
-            bool doesNotFillAllGroupsEvenly = (participatingPlayersCount - playerCapacityInRound) != 0;
-
-            if (doesNotFillAllGroupsEvenly)
-            {
-                string description = "Round does not synergize with previous round. Advancing players from previous round will not fill the groups within the current round to capacity.";
-                round.Tournament.TournamentIssueReporter.Report(round, description);
-            }
-
             bool lastRoundHasSeveralGroups = round.Groups.Count > 1;
 
-            if(lastRoundHasSeveralGroups)
+            if (lastRoundHasSeveralGroups)
             {
                 string description = "Last round should not contain more than one group. Increase group capacity until all players will fit into one group.";
                 round.Tournament.TournamentIssueReporter.Report(round, description);
             }
+        }
 
+        private static void CheckWhetherLastRoundHasMoreThanOneAdvancingPerGroupCount(RoundBase round)
+        {
             bool lastRoundHasSeveralAdvancingPlayers = round.AdvancingPerGroupCount > 1;
 
             if (lastRoundHasSeveralAdvancingPlayers)
