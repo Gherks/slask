@@ -1,4 +1,4 @@
-﻿using Slask.Common;
+using Slask.Common;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
@@ -89,6 +89,19 @@ namespace Slask.Domain
             return round;
         }
 
+        public bool RemoveRound(RoundBase round)
+        {
+            bool soughtRoundIsValid = round != null;
+            bool tournamentHasNotBegun = GetFirstRound().GetPlayState() == PlayState.NotBegun;
+
+            if (soughtRoundIsValid && tournamentHasNotBegun)
+            {
+                return ManageRoundRemoval(round);
+            }
+
+            return false;
+        }
+
         public Better AddBetter(User user)
         {
             bool betterAlreadyExists = GetBetterByName(user.Name) != null;
@@ -167,6 +180,39 @@ namespace Slask.Domain
             }
 
             return Rounds.First().PlayerReferences;
+        }
+
+        private bool ManageRoundRemoval(RoundBase round)
+        {
+            bool containsSoughtRound = Rounds.Contains(round);
+
+            if (containsSoughtRound)
+            {
+                bool soughtRoundIsTheFirstOne = GetFirstRound().Id == round.Id;
+                List<PlayerReference> playerReferences = new List<PlayerReference>();
+
+                if (soughtRoundIsTheFirstOne)
+                {
+                    playerReferences = round.PlayerReferences;
+                }
+
+                bool removalSuccessful = Rounds.Remove(round);
+                bool stillContainsRounds = Rounds.Count > 0;
+
+                if (removalSuccessful && stillContainsRounds)
+                {
+                    RoundBase firstRound = GetFirstRound();
+
+                    foreach (PlayerReference playerReference in playerReferences)
+                    {
+                        firstRound.RegisterPlayerReference(playerReference.Name);
+                    }
+
+                    firstRound.Construct();
+                }
+            }
+
+            return false;
         }
     }
 }
