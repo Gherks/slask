@@ -3,7 +3,6 @@ using Slask.Domain.Groups;
 using Slask.Domain.Groups.Bases;
 using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds.Interfaces;
-using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
@@ -31,6 +30,23 @@ namespace Slask.Domain.Rounds.Bases
         public Guid TournamentId { get; protected set; }
         public Tournament Tournament { get; protected set; }
 
+        public int GetExpectedParticipantCount()
+        {
+            int participants;
+
+            if (IsFirstRound())
+            {
+                participants = PlayerReferences.Count;
+            }
+            else
+            {
+                RoundBase round = GetPreviousRound();
+                participants = round.Groups.Count * round.AdvancingPerGroupCount;
+            }
+
+            return Math.Max(2, participants);
+        }
+
         public PlayerReference RegisterPlayerReference(string name)
         {
             bool roundIsFirstRound = IsFirstRound();
@@ -41,9 +57,7 @@ namespace Slask.Domain.Rounds.Bases
             if (roundIsFirstRound && tournamentHasNotBegun && nameIsNotRegistered && nameIsNotEmpty)
             {
                 PlayerReferences.Add(PlayerReference.Create(name, Tournament));
-
-                Construct();
-                FillGroupsWithPlayerReferences();
+                OnPlayerReferencesChanged();
 
                 return PlayerReferences.Last();
             }
@@ -65,9 +79,7 @@ namespace Slask.Domain.Rounds.Bases
                 if (playerReferenceExistInRound)
                 {
                     PlayerReferences.Remove(PlayerReference.Create(name, Tournament));
-
-                    Construct();
-                    FillGroupsWithPlayerReferences();
+                    OnPlayerReferencesChanged();
 
                     return true;
                 }
@@ -78,11 +90,8 @@ namespace Slask.Domain.Rounds.Bases
 
         public bool Construct()
         {
-            int participantCount = CalculateParticipantCount();
-
-            ConstructGroups(participantCount);
+            ConstructGroups();
             AssignDefaultStartTimeToMatchesInRound();
-            RoundIssueFinder.FindIssues(this, participantCount);
 
             RoundBase nextRound = GetNextRound();
             bool nextRoundExist = nextRound != null;
@@ -122,6 +131,10 @@ namespace Slask.Domain.Rounds.Bases
             if (isFirstRound && newCountIsLessThanPlayerCountPerGroup)
             {
                 AdvancingPerGroupCount = count;
+
+                Construct();
+                Tournament.FindIssues();
+                
                 return true;
             }
 
@@ -263,9 +276,10 @@ namespace Slask.Domain.Rounds.Bases
             throw new NotImplementedException();
         }
 
-        private bool ConstructGroups(int participantCount)
+        private bool ConstructGroups()
         {
-            int groupCount = (int)Math.Ceiling(participantCount / (double)PlayersPerGroupCount);
+            int expectedParticipantCount = GetExpectedParticipantCount();
+            int groupCount = (int)Math.Ceiling(expectedParticipantCount / (double)PlayersPerGroupCount);
 
             Groups.Clear();
 
@@ -295,23 +309,6 @@ namespace Slask.Domain.Rounds.Bases
             return playerReferences;
         }
 
-        private int CalculateParticipantCount()
-        {
-            int participants;
-
-            if (IsFirstRound())
-            {
-                participants = PlayerReferences.Count;
-            }
-            else
-            {
-                RoundBase round = GetPreviousRound();
-                participants = round.Groups.Count * round.AdvancingPerGroupCount;
-            }
-
-            return Math.Max(2, participants);
-        }
-
         private void AssignDefaultStartTimeToMatchesInRound()
         {
             DateTime startTime;
@@ -333,6 +330,13 @@ namespace Slask.Domain.Rounds.Bases
                     startTime = startTime.AddHours(1);
                 }
             }
+        }
+
+        private void OnPlayerReferencesChanged()
+        {
+            Construct();
+            FillGroupsWithPlayerReferences();
+            Tournament.FindIssues();
         }
     }
 }

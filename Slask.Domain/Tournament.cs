@@ -2,6 +2,7 @@
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
+using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace Slask.Domain
             Betters = new List<Better>();
             Settings = new List<Settings>();
             MiscBetCatalogue = new List<MiscBetCatalogue>();
+            TournamentIssueReporter = new TournamentIssueReporter();
         }
 
         public Guid Id { get; private set; }
@@ -52,9 +54,7 @@ namespace Slask.Domain
                 return null;
             }
 
-            Rounds.Add(round);
-            round.Construct();
-
+            IntegrateRoundToTournament(round);
             return round;
         }
 
@@ -67,9 +67,7 @@ namespace Slask.Domain
                 return null;
             }
 
-            Rounds.Add(round);
-            round.Construct();
-
+            IntegrateRoundToTournament(round);
             return round;
         }
 
@@ -82,10 +80,21 @@ namespace Slask.Domain
                 return null;
             }
 
-            Rounds.Add(round);
-            round.Construct();
-
+            IntegrateRoundToTournament(round);
             return round;
+        }
+
+        public bool RemoveRound(RoundBase round)
+        {
+            bool soughtRoundIsValid = round != null;
+            bool tournamentHasNotBegun = GetFirstRound().GetPlayState() == PlayState.NotBegun;
+
+            if (soughtRoundIsValid && tournamentHasNotBegun)
+            {
+                return ManageRoundRemoval(round);
+            }
+
+            return false;
         }
 
         public Better AddBetter(User user)
@@ -100,6 +109,16 @@ namespace Slask.Domain
             Betters.Add(Better.Create(user, this));
 
             return Betters.Last();
+        }
+
+        public void FindIssues()
+        {
+            TournamentIssueReporter.Clear();
+
+            foreach (RoundBase round in Rounds)
+            {
+                RoundIssueFinder.FindIssues(round);
+            }
         }
 
         public RoundBase GetRoundByRoundId(Guid id)
@@ -166,6 +185,52 @@ namespace Slask.Domain
             }
 
             return Rounds.First().PlayerReferences;
+        }
+
+        private void IntegrateRoundToTournament(RoundBase round)
+        {
+            Rounds.Add(round);
+            round.Construct();
+            FindIssues();
+        }
+
+        private bool ManageRoundRemoval(RoundBase round)
+        {
+            bool containsSoughtRound = Rounds.Contains(round);
+
+            if (containsSoughtRound)
+            {
+                bool soughtRoundIsTheFirstOne = GetFirstRound().Id == round.Id;
+                List<PlayerReference> playerReferences = new List<PlayerReference>();
+
+                if (soughtRoundIsTheFirstOne)
+                {
+                    playerReferences = round.PlayerReferences;
+                }
+
+                bool removalSuccessful = Rounds.Remove(round);
+
+                if (removalSuccessful)
+                {
+                    bool stillContainsRounds = Rounds.Count > 0;
+
+                    if(stillContainsRounds)
+                    {
+                        RoundBase firstRound = GetFirstRound();
+
+                        foreach (PlayerReference playerReference in playerReferences)
+                        {
+                            firstRound.RegisterPlayerReference(playerReference.Name);
+                        }
+
+                        firstRound.Construct();
+                    }
+
+                    FindIssues();
+                }
+            }
+
+            return false;
         }
     }
 }

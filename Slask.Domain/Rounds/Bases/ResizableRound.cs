@@ -8,15 +8,15 @@ namespace Slask.Domain.Rounds.Bases
     {
         public bool SetPlayersPerGroupCount(int count)
         {
-            //bool roundIsFirstRound = IsFirstRound();
             bool tournamentHasNotBegun = GetPlayState() == PlayState.NotBegun;
 
-            if (/*roundIsFirstRound && */tournamentHasNotBegun)
+            if (tournamentHasNotBegun)
             {
                 PlayersPerGroupCount = Math.Max(2, count);
 
                 Construct();
                 FillGroupsWithPlayerReferences();
+                Tournament.FindIssues();
 
                 return true;
             }
