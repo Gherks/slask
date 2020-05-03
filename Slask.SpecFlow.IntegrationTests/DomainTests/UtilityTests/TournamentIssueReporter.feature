@@ -97,5 +97,31 @@ Scenario: Tournament issue validation is run when advancing players per group co
 		| Issue type |
 		| Round      |
 		| Round      |
-#Scenario: Tournament issue validation is run when new player has been registered
-#Scenario: Tournament issue validation is run when player has been excluded
+
+Scenario: Tournament issue validation is run when new player has been registered
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
+			| Round robin | Round robin round | 3       | 1                         | 4                       |
+			| Round robin | Round robin round | 3       | 1                         | 2                       |
+		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+		And tournament 0 reports issues
+			| Issue type |
+		And players "Bomber" is registered to round 0
+	Then tournament 0 reports issues
+		| Issue type |
+		| Round      |
+
+Scenario: Tournament issue validation is run when player has been excluded
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
+			| Round robin | Round robin round | 3       | 1                         | 4                       |
+			| Round robin | Round robin round | 3       | 1                         | 2                       |
+		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+		And tournament 0 reports issues
+			| Issue type |
+		And players "Rain" is excluded from round 0
+	Then tournament 0 reports issues
+		| Issue type |
+		| Round      |
