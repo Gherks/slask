@@ -4,6 +4,7 @@ using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds;
+using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,31 +12,83 @@ using Xunit;
 
 namespace Slask.UnitTests.DomainTests.GroupTests.StartDateTimeTests
 {
-    public class BracketStartDateTimeTests : IDisposable
+    public class BracketStartDateTimeTests
     {
         private const string firstPlayerName = "Maru";
         private const string secondPlayerName = "Stork";
 
         private readonly Tournament tournament;
+        private readonly TournamentIssueReporter tournamentIssueReporter;
         private readonly BracketRound bracketRound;
         private BracketGroup bracketGroup;
-        //private Match match;
-        //private PlayerReference firstPlayerReference;
-        //private PlayerReference secondPlayerReference;
 
         public BracketStartDateTimeTests()
         {
             tournament = Tournament.Create("GSL 2019");
+            tournamentIssueReporter = tournament.TournamentIssueReporter;
             bracketRound = tournament.AddBracketRound("Bracket round", 3) as BracketRound;
         }
 
-        public void Dispose()
+        [Fact]
+        public void IssueIsReportedWhenStartDateTimeForMatchIsSetEarlierThanAnyMatchInPreviousRound()
         {
-            SystemTimeMocker.Reset();
+            List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
+            bracketRound.SetPlayersPerGroupCount(4);
+            BracketRound secondBracketRound = tournament.AddBracketRound("Bracket round 2", 3, 2) as BracketRound;
+
+            foreach (string playerName in playerNames)
+            {
+                bracketRound.RegisterPlayerReference(playerName);
+            }
+
+            bracketGroup = bracketRound.Groups.First() as BracketGroup;
+            BracketNode finalNodeFromFirstRound = bracketGroup.BracketNodeSystem.FinalNode;
+
+            BracketGroup bracketGroupFromSecondRound = secondBracketRound.Groups.First() as BracketGroup;
+            BracketNode finalNodeFromSecondRound = bracketGroupFromSecondRound.BracketNodeSystem.FinalNode;
+
+            Match finalFromFirstRound = finalNodeFromFirstRound.Match;
+            Match finalFromSecondRound = finalNodeFromSecondRound.Match;
+            DateTime oneHourBeforeFinalFromFirstRound = finalFromFirstRound.StartDateTime.AddHours(-1);
+
+            finalFromSecondRound.SetStartDateTime(oneHourBeforeFinalFromFirstRound);
+
+            finalFromSecondRound.StartDateTime.Should().Be(oneHourBeforeFinalFromFirstRound);
+            tournamentIssueReporter.Issues.Should().HaveCount(1);
         }
 
         [Fact]
-        public void StartDateTimeOnMatchesWithinATierDoesNotHaveToBeInOrder()
+        public void IssueIsReportedWhenStartDateTimeForMatchIsEarlierThanAnyParentMatch()
+        {
+            List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
+            bracketRound.SetPlayersPerGroupCount(playerNames.Count);
+
+            foreach (string playerName in playerNames)
+            {
+                bracketRound.RegisterPlayerReference(playerName);
+            }
+
+            bracketGroup = bracketRound.Groups.First() as BracketGroup;
+            BracketNode finalNode = bracketGroup.BracketNodeSystem.FinalNode;
+
+            Match final = finalNode.Match;
+            Match firstSemifinal = finalNode.Children[0].Match;
+            Match secondSemifinal = finalNode.Children[1].Match;
+
+            DateTime oneHourBeforeFirstSemifinal = firstSemifinal.StartDateTime.AddHours(-1);
+            DateTime oneHourBeforeSecondSemifinal = secondSemifinal.StartDateTime.AddHours(-1);
+
+            final.SetStartDateTime(oneHourBeforeFirstSemifinal);
+            final.StartDateTime.Should().Be(oneHourBeforeFirstSemifinal);
+
+            final.SetStartDateTime(oneHourBeforeSecondSemifinal);
+            final.StartDateTime.Should().Be(oneHourBeforeSecondSemifinal);
+
+            tournamentIssueReporter.Issues.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public void NoIssueIsReportedWhenStartDateTimeOnMatchesWithinATierIsUnordered()
         {
             List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
             bracketRound.SetPlayersPerGroupCount(playerNames.Count);
@@ -62,32 +115,8 @@ namespace Slask.UnitTests.DomainTests.GroupTests.StartDateTimeTests
             quarterfinalTier[1].Match.StartDateTime.Should().Be(threeHoursEarlier);
             quarterfinalTier[2].Match.StartDateTime.Should().Be(oneHourEarlier);
             quarterfinalTier[3].Match.StartDateTime.Should().Be(twoHoursLater);
-        }
 
-        [Fact]
-        public void StartDateTimeForMatchesInACertainMatchTierMustAlwaysBeLaterThanLatestStartDateTimeOfPreviousTier()
-        {
-            List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
-            bracketRound.SetPlayersPerGroupCount(playerNames.Count);
-
-            foreach (string playerName in playerNames)
-            {
-                bracketRound.RegisterPlayerReference(playerName);
-            }
-
-            bracketGroup = bracketRound.Groups.First() as BracketGroup;
-            List<BracketNode> finalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(0);
-            List<BracketNode> semifinalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(1);
-            List<BracketNode> quarterfinalTier = bracketGroup.BracketNodeSystem.GetBracketNodesInTier(2);
-
-            DateTime finalStartDateTimeBeforeChange = finalTier[0].Match.StartDateTime;
-            DateTime quarterfinalStartDateTimeBeforeChange = quarterfinalTier[0].Match.StartDateTime;
-
-            finalTier[0].Match.SetStartDateTime(semifinalTier[0].Match.StartDateTime.AddHours(-4));
-            quarterfinalTier[0].Match.SetStartDateTime(semifinalTier[0].Match.StartDateTime.AddHours(4));
-
-            finalTier[0].Match.StartDateTime.Should().Be(finalStartDateTimeBeforeChange);
-            quarterfinalTier[0].Match.StartDateTime.Should().Be(quarterfinalStartDateTimeBeforeChange);
+            tournamentIssueReporter.Issues.Should().BeEmpty();
         }
     }
 }
