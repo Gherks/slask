@@ -2,7 +2,6 @@
 using Slask.Domain.Groups;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace Slask.UnitTests.DomainTests
