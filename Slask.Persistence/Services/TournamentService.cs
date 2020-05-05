@@ -29,7 +29,7 @@ namespace Slask.Persistence.Services
             return tournament;
         }
 
-        public bool SaveTournament(Tournament tournament)
+        public bool Save(Tournament tournament)
         {
             if (tournament.HasIssues())
             {
@@ -40,7 +40,7 @@ namespace Slask.Persistence.Services
             return true;
         }
 
-        public bool SaveTournamentAsync(Tournament tournament)
+        public bool SaveAsync(Tournament tournament)
         {
             if (tournament.HasIssues())
             {
@@ -65,7 +65,7 @@ namespace Slask.Persistence.Services
                 if (tournament != null)
                 {
                     tournament.ChangeName(name);
-                    SaveTournamentAsync(tournament);
+                    SaveAsync(tournament);
 
                     return true;
                 }

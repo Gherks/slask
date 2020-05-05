@@ -65,7 +65,7 @@ namespace Slask.UnitTests.ServiceTests
             InitializeUsersAndBetters();
             InitializeRoundGroupAndPlayers();
 
-            bool saveResult = tournamentService.SaveTournamentAsync(tournament);
+            bool saveResult = tournamentService.SaveAsync(tournament);
 
             saveResult.Should().BeTrue();
         }
@@ -75,7 +75,7 @@ namespace Slask.UnitTests.ServiceTests
         {
             tournament.AddDualTournamentRound("Bracket round", 3);
 
-            bool saveResult = tournamentService.SaveTournamentAsync(tournament);
+            bool saveResult = tournamentService.SaveAsync(tournament);
 
             saveResult.Should().BeFalse();
         }
