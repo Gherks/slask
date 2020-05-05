@@ -35,9 +35,10 @@ namespace Slask.Domain
 
         public bool PlaceMatchBet(Match match, Player player)
         {
-            if (match == null || player == null)
+            bool anyParameterIsInvalid = !PlaceMatchBetParametersAreValid(match, player);
+
+            if(anyParameterIsInvalid)
             {
-                // LOGG
                 return false;
             }
 
@@ -75,6 +76,27 @@ namespace Slask.Domain
             }
 
             return null;
+        }
+
+        private static bool PlaceMatchBetParametersAreValid(Match match, Player player)
+        {
+            bool invalidMatchGiven = match == null;
+
+            if (invalidMatchGiven)
+            {
+                // LOG Error: Cannot place match bet because given match was invalid
+                return false;
+            }
+
+            bool invalidPlayerGiven = player == null;
+
+            if (invalidPlayerGiven)
+            {
+                // LOG Error: Cannot place match bet because given player was invalid
+                return false;
+            }
+
+            return true;
         }
     }
 }

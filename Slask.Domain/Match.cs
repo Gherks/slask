@@ -29,9 +29,11 @@ namespace Slask.Domain
 
         public static Match Create(GroupBase group)
         {
-            if (group == null)
+            bool groupIsInvalid = group == null;
+
+            if (groupIsInvalid)
             {
-                // LOGG
+                // LOG Error: Cannot create match with invalid group
                 return null;
             }
 

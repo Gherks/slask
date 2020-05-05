@@ -43,9 +43,11 @@ namespace Slask.Persistence.Services
         {
             Tournament tournament = GetTournamentById(id);
 
-            if (tournament == null)
+            bool tournamentIsInvalid = tournament == null;
+
+            if (tournamentIsInvalid)
             {
-                // LOGG
+                // LOG Error: Cannot fetch players references from tournament by id, tournament does not exist.
                 return null;
             }
 
@@ -56,9 +58,11 @@ namespace Slask.Persistence.Services
         {
             Tournament tournament = GetTournamentByName(name);
 
-            if (tournament == null)
+            bool tournamentIsInvalid = tournament == null;
+
+            if (tournamentIsInvalid)
             {
-                // LOGG
+                // LOG Error: Cannot fetch players references from tournament by name, tournament does not exist.
                 return null;
             }
 
@@ -69,9 +73,11 @@ namespace Slask.Persistence.Services
         {
             Tournament tournament = GetTournamentById(id);
 
-            if (tournament == null)
+            bool tournamentIsInvalid = tournament == null;
+
+            if (tournamentIsInvalid)
             {
-                // LOGG
+                // LOG Error: Cannot fetch betters from tournament by id, tournament does not exist.
                 return null;
             }
 
@@ -82,9 +88,11 @@ namespace Slask.Persistence.Services
         {
             Tournament tournament = GetTournamentByName(name);
 
-            if (tournament == null)
+            bool tournamentIsInvalid = tournament == null;
+
+            if (tournamentIsInvalid)
             {
-                // LOGG
+                // LOG Error: Cannot fetch betters from tournament by name, tournament does not exist.
                 return null;
             }
 
@@ -116,12 +124,10 @@ namespace Slask.Persistence.Services
 
         private Tournament Create(string name)
         {
-            bool nameIsEmpty = name == "";
-            bool tournamentAlreadyExist = GetTournamentByName(name) != null;
+            bool givenParametersAreInvalid = !TournamentCreationParametersAreValid(name);
 
-            if (nameIsEmpty || tournamentAlreadyExist)
+            if (givenParametersAreInvalid)
             {
-                // LOGG
                 return null;
             }
 
@@ -129,6 +135,27 @@ namespace Slask.Persistence.Services
             _slaskContext.Add(tournament);
 
             return tournament;
+        }
+
+        private bool TournamentCreationParametersAreValid(string name)
+        {
+            bool nameIsEmpty = name == "";
+
+            if (nameIsEmpty)
+            {
+                // LOG Error: Cannot create tournament with empty name.
+                return false;
+            }
+
+            bool tournamentAlreadyExist = GetTournamentByName(name) != null;
+
+            if (tournamentAlreadyExist)
+            {
+                // LOG Error: Cannot create tournament with given name, it's already in use.
+                return false;
+            }
+
+            return true;
         }
     }
 }
