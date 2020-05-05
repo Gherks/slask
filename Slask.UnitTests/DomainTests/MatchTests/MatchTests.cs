@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace Slask.UnitTests.DomainTests
+namespace Slask.UnitTests.DomainTests.MatchTests
 {
     public class MatchTests
     {
@@ -38,7 +38,7 @@ namespace Slask.UnitTests.DomainTests
             match.Player1.Name.Should().Be(firstPlayerName);
             match.Player2.Should().NotBeNull();
             match.Player2.Name.Should().Be(secondPlayerName);
-            match.StartDateTime.Should().NotBeBefore(DateTime.Now);
+            match.StartDateTime.Should().NotBeBefore(SystemTime.Now);
             match.GroupId.Should().Be(bracketGroup.Id);
             match.Group.Should().Be(bracketGroup);
         }
@@ -193,6 +193,16 @@ namespace Slask.UnitTests.DomainTests
             Player foundPlayer = match.FindPlayer(Guid.NewGuid());
 
             foundPlayer.Should().BeNull();
+        }
+
+        [Fact]
+        public void MatchStartDateTimeCanBeSetToFutureDateTime()
+        {
+            DateTime futureStartDateTime = SystemTime.Now.AddHours(1);
+
+            match.SetStartDateTime(futureStartDateTime);
+
+            match.StartDateTime.Should().Be(futureStartDateTime);
         }
 
         [Fact]

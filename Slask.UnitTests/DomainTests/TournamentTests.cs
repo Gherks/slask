@@ -155,7 +155,7 @@ namespace Slask.UnitTests.DomainTests
                 bracketRound.Should().BeNull();
                 dualTournamentRound.Should().BeNull();
                 roundRobinRound.Should().BeNull();
-                tournament.Rounds.Should().HaveCount(0);
+                tournament.Rounds.Should().BeEmpty();
             }
         }
 
@@ -216,7 +216,7 @@ namespace Slask.UnitTests.DomainTests
             bracketRound.ExcludePlayerReference(playerName);
 
             playerReferences = tournament.GetPlayerReferences();
-            playerReferences.Should().HaveCount(0);
+            playerReferences.Should().BeEmpty();
         }
     }
 }

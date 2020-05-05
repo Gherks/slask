@@ -29,9 +29,11 @@ namespace Slask.Domain
 
         public static Match Create(GroupBase group)
         {
-            if (group == null)
+            bool groupIsInvalid = group == null;
+
+            if (groupIsInvalid)
             {
-                // LOGG
+                // LOG Error: Cannot create match with invalid group
                 return null;
             }
 
@@ -117,20 +119,15 @@ namespace Slask.Domain
 
         public bool SetStartDateTime(DateTime dateTime)
         {
-            if (SystemTime.Now > dateTime)
+            bool newDateTimeIsValid = MatchStartDateTimeValidator.Validate(this, dateTime);
+
+            if (newDateTimeIsValid)
             {
-                // LOG Issue: New start date time must be a future date time
-                return false;
+                StartDateTime = dateTime;
+                return true;
             }
 
-            if (!Group.NewDateTimeIsValid(this, dateTime))
-            {
-                // LOG Issue: New start date time does not work with group rules
-                return false;
-            }
-
-            StartDateTime = dateTime;
-            return true;
+            return false;
         }
 
         public PlayState GetPlayState()

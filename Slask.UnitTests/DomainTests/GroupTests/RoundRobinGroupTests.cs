@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Slask.UnitTests.DomainTests.GroupTests
 {
-    public class RoundRobinGroupTests : IDisposable
+    public class RoundRobinGroupTests
     {
         private readonly Tournament tournament;
         private readonly RoundRobinRound roundRobinRound;
@@ -20,11 +20,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         {
             tournament = Tournament.Create("GSL 2019");
             roundRobinRound = tournament.AddRoundRobinRound("Round robin round", 3, 2) as RoundRobinRound;
-        }
-
-        public void Dispose()
-        {
-            SystemTimeMocker.Reset();
         }
 
         [Fact]
@@ -51,36 +46,6 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             roundRobinGroup.Matches.Should().HaveCount(1);
             roundRobinGroup.Matches.FirstOrDefault(match => match.Player1.Name == firstPlayerName).Should().NotBeNull();
             roundRobinGroup.Matches.FirstOrDefault(match => match.Player2.Name == secondPlayerName).Should().NotBeNull();
-        }
-
-        [Fact]
-        public void NoStartDateTimeRestrictionIsAppliedToMatches()
-        {
-            List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain" };
-
-            roundRobinRound.SetPlayersPerGroupCount(playerNames.Count);
-            RoundRobinGroup roundRobinGroup = RegisterPlayers(playerNames);
-
-            DateTime twoHoursLater = SystemTime.Now.AddHours(2);
-            DateTime oneHourLater = SystemTime.Now.AddHours(1);
-            DateTime fourHoursLater = SystemTime.Now.AddHours(4);
-            DateTime threeHoursLater = SystemTime.Now.AddHours(3);
-            DateTime twelveHoursLater = SystemTime.Now.AddHours(12);
-            DateTime eightHoursLater = SystemTime.Now.AddHours(8);
-
-            roundRobinGroup.Matches[0].SetStartDateTime(twoHoursLater);
-            roundRobinGroup.Matches[1].SetStartDateTime(oneHourLater);
-            roundRobinGroup.Matches[2].SetStartDateTime(fourHoursLater);
-            roundRobinGroup.Matches[3].SetStartDateTime(threeHoursLater);
-            roundRobinGroup.Matches[4].SetStartDateTime(twelveHoursLater);
-            roundRobinGroup.Matches[5].SetStartDateTime(eightHoursLater);
-
-            roundRobinGroup.Matches[0].StartDateTime.Should().Be(twoHoursLater);
-            roundRobinGroup.Matches[1].StartDateTime.Should().Be(oneHourLater);
-            roundRobinGroup.Matches[2].StartDateTime.Should().Be(fourHoursLater);
-            roundRobinGroup.Matches[3].StartDateTime.Should().Be(threeHoursLater);
-            roundRobinGroup.Matches[4].StartDateTime.Should().Be(twelveHoursLater);
-            roundRobinGroup.Matches[5].StartDateTime.Should().Be(eightHoursLater);
         }
 
         [Fact]

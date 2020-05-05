@@ -60,6 +60,27 @@ namespace Slask.UnitTests.ServiceTests
         }
 
         [Fact]
+        public void CanSaveTournament()
+        {
+            InitializeUsersAndBetters();
+            InitializeRoundGroupAndPlayers();
+
+            bool saveResult = tournamentService.SaveAsync(tournament);
+
+            saveResult.Should().BeTrue();
+        }
+
+        [Fact]
+        public void CannotSaveTournamentWithIssues()
+        {
+            tournament.AddDualTournamentRound("Bracket round", 3);
+
+            bool saveResult = tournamentService.SaveAsync(tournament);
+
+            saveResult.Should().BeFalse();
+        }
+
+        [Fact]
         public void CanRenameTournament()
         {
             bool result = tournamentService.RenameTournament(tournament.Id, "BHA Open 2019");
@@ -169,7 +190,7 @@ namespace Slask.UnitTests.ServiceTests
 
             List<PlayerReference> playerReferences = tournament.GetPlayerReferences();
 
-            playerReferences.Should().HaveCount(0);
+            playerReferences.Should().BeEmpty();
         }
 
         [Fact]
@@ -246,16 +267,14 @@ namespace Slask.UnitTests.ServiceTests
 
         private void InitializeRoundGroupAndPlayers()
         {
-            RoundBase round = tournament.AddRoundRobinRound("Round robin round", 3, 2);
+            List<string> playerNames = new List<string> { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
 
-            round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Stork");
-            round.RegisterPlayerReference("Taeja");
-            round.RegisterPlayerReference("Rain");
-            round.RegisterPlayerReference("Bomber");
-            round.RegisterPlayerReference("FanTaSy");
-            round.RegisterPlayerReference("Stephano");
-            round.RegisterPlayerReference("Thorzain");
+            RoundBase round = tournament.AddRoundRobinRound("Round robin round", 3, 1, playerNames.Count);
+
+            foreach (string playerName in playerNames)
+            {
+                round.RegisterPlayerReference(playerName);
+            }
         }
     }
 }

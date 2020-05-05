@@ -29,66 +29,26 @@ namespace Slask.Persistence.Services
             return tournament;
         }
 
-        public Tournament GetTournamentById(Guid id)
+        public bool Save(Tournament tournament)
         {
-            return _slaskContext.Tournaments.FirstOrDefault(tournament => tournament.Id == id);
-        }
-
-        public Tournament GetTournamentByName(string name)
-        {
-            return _slaskContext.Tournaments.FirstOrDefault(tournament => tournament.Name.ToLower() == name.ToLower());
-        }
-
-        public List<PlayerReference> GetPlayerReferencesByTournamentId(Guid id)
-        {
-            Tournament tournament = GetTournamentById(id);
-
-            if (tournament == null)
+            if (tournament.HasIssues())
             {
-                // LOGG
-                return null;
+                return false;
             }
 
-            return tournament.GetPlayerReferences();
+            _slaskContext.SaveChanges();
+            return true;
         }
 
-        public List<PlayerReference> GetPlayerReferencesByTournamentName(string name)
+        public bool SaveAsync(Tournament tournament)
         {
-            Tournament tournament = GetTournamentByName(name);
-
-            if (tournament == null)
+            if (tournament.HasIssues())
             {
-                // LOGG
-                return null;
+                return false;
             }
 
-            return tournament.GetPlayerReferences();
-        }
-
-        public List<Better> GetBettersByTournamentId(Guid id)
-        {
-            Tournament tournament = GetTournamentById(id);
-
-            if (tournament == null)
-            {
-                // LOGG
-                return null;
-            }
-
-            return tournament.Betters;
-        }
-
-        public List<Better> GetBettersByTournamentName(string name)
-        {
-            Tournament tournament = GetTournamentByName(name);
-
-            if (tournament == null)
-            {
-                // LOGG
-                return null;
-            }
-
-            return tournament.Betters;
+            _slaskContext.SaveChangesAsync();
+            return true;
         }
 
         public bool RenameTournament(Guid id, string name)
@@ -105,7 +65,7 @@ namespace Slask.Persistence.Services
                 if (tournament != null)
                 {
                     tournament.ChangeName(name);
-                    _slaskContext.SaveChanges();
+                    SaveAsync(tournament);
 
                     return true;
                 }
@@ -114,14 +74,82 @@ namespace Slask.Persistence.Services
             return false;
         }
 
+        public Tournament GetTournamentById(Guid id)
+        {
+            return _slaskContext.Tournaments.FirstOrDefault(tournament => tournament.Id == id);
+        }
+
+        public Tournament GetTournamentByName(string name)
+        {
+            return _slaskContext.Tournaments.FirstOrDefault(tournament => tournament.Name.ToLower() == name.ToLower());
+        }
+
+        public List<PlayerReference> GetPlayerReferencesByTournamentId(Guid id)
+        {
+            Tournament tournament = GetTournamentById(id);
+
+            bool tournamentIsInvalid = tournament == null;
+
+            if (tournamentIsInvalid)
+            {
+                // LOG Error: Cannot fetch players references from tournament by id, tournament does not exist.
+                return null;
+            }
+
+            return tournament.GetPlayerReferences();
+        }
+
+        public List<PlayerReference> GetPlayerReferencesByTournamentName(string name)
+        {
+            Tournament tournament = GetTournamentByName(name);
+
+            bool tournamentIsInvalid = tournament == null;
+
+            if (tournamentIsInvalid)
+            {
+                // LOG Error: Cannot fetch players references from tournament by name, tournament does not exist.
+                return null;
+            }
+
+            return tournament.GetPlayerReferences();
+        }
+
+        public List<Better> GetBettersByTournamentId(Guid id)
+        {
+            Tournament tournament = GetTournamentById(id);
+
+            bool tournamentIsInvalid = tournament == null;
+
+            if (tournamentIsInvalid)
+            {
+                // LOG Error: Cannot fetch betters from tournament by id, tournament does not exist.
+                return null;
+            }
+
+            return tournament.Betters;
+        }
+
+        public List<Better> GetBettersByTournamentName(string name)
+        {
+            Tournament tournament = GetTournamentByName(name);
+
+            bool tournamentIsInvalid = tournament == null;
+
+            if (tournamentIsInvalid)
+            {
+                // LOG Error: Cannot fetch betters from tournament by name, tournament does not exist.
+                return null;
+            }
+
+            return tournament.Betters;
+        }
+
         private Tournament Create(string name)
         {
-            bool nameIsEmpty = name == "";
-            bool tournamentAlreadyExist = GetTournamentByName(name) != null;
+            bool givenParametersAreInvalid = !TournamentCreationParametersAreValid(name);
 
-            if (nameIsEmpty || tournamentAlreadyExist)
+            if (givenParametersAreInvalid)
             {
-                // LOGG
                 return null;
             }
 
@@ -129,6 +157,27 @@ namespace Slask.Persistence.Services
             _slaskContext.Add(tournament);
 
             return tournament;
+        }
+
+        private bool TournamentCreationParametersAreValid(string name)
+        {
+            bool nameIsEmpty = name == "";
+
+            if (nameIsEmpty)
+            {
+                // LOG Error: Cannot create tournament with empty name.
+                return false;
+            }
+
+            bool tournamentAlreadyExist = GetTournamentByName(name) != null;
+
+            if (tournamentAlreadyExist)
+            {
+                // LOG Error: Cannot create tournament with given name, it's already in use.
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -136,7 +136,7 @@ namespace Slask.UnitTests.CommonTests
 
             List<string> stringList = StringUtility.ToStringList(text, " ");
 
-            stringList.Should().HaveCount(0);
+            stringList.Should().BeEmpty();
         }
 
         [Fact]
@@ -146,7 +146,7 @@ namespace Slask.UnitTests.CommonTests
 
             List<string> stringList = StringUtility.ToStringList(text, "");
 
-            stringList.Should().HaveCount(0);
+            stringList.Should().BeEmpty();
         }
 
         [Fact]
