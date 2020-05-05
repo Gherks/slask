@@ -121,6 +121,11 @@ namespace Slask.Domain
             }
         }
 
+        public bool HasIssues()
+        {
+            return TournamentIssueReporter.Issues.Count > 0;
+        }
+
         public RoundBase GetRoundByRoundId(Guid id)
         {
             return Rounds.FirstOrDefault(round => round.Id == id);
