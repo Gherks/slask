@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Slask.Common;
@@ -27,6 +27,29 @@ namespace Slask.Persistence.Services
             Tournament tournament = Create(name);
             _slaskContext.SaveChangesAsync();
             return tournament;
+        }
+
+        public bool RenameTournament(Guid id, string name)
+        {
+            name = name.Trim();
+
+            bool nameIsNotEmpty = name != "";
+            bool nameIsNotInUse = GetTournamentByName(name) == null;
+
+            if (nameIsNotEmpty && nameIsNotInUse)
+            {
+                Tournament tournament = GetTournamentById(id);
+
+                if (tournament != null)
+                {
+                    tournament.ChangeName(name);
+                    SaveTournamentAsync(tournament);
+
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public Tournament GetTournamentById(Guid id)
@@ -97,29 +120,6 @@ namespace Slask.Persistence.Services
             }
 
             return tournament.Betters;
-        }
-
-        public bool RenameTournament(Guid id, string name)
-        {
-            name = name.Trim();
-
-            bool nameIsNotEmpty = name != "";
-            bool nameIsNotInUse = GetTournamentByName(name) == null;
-
-            if (nameIsNotEmpty && nameIsNotInUse)
-            {
-                Tournament tournament = GetTournamentById(id);
-
-                if (tournament != null)
-                {
-                    tournament.ChangeName(name);
-                    _slaskContext.SaveChanges();
-
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         private Tournament Create(string name)
