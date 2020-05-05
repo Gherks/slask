@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Slask.Common;
@@ -27,6 +27,28 @@ namespace Slask.Persistence.Services
             Tournament tournament = Create(name);
             _slaskContext.SaveChangesAsync();
             return tournament;
+        }
+
+        public bool SaveTournament(Tournament tournament)
+        {
+            if (tournament.HasIssues())
+            {
+                return false;
+            }
+
+            _slaskContext.SaveChanges();
+            return true;
+        }
+
+        public bool SaveTournamentAsync(Tournament tournament)
+        {
+            if (tournament.HasIssues())
+            {
+                return false;
+            }
+
+            _slaskContext.SaveChangesAsync();
+            return true;
         }
 
         public bool RenameTournament(Guid id, string name)
