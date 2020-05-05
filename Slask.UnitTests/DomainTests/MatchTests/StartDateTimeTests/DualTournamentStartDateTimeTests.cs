@@ -6,10 +6,9 @@ using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 
-namespace Slask.UnitTests.DomainTests.GroupTests.StartDateTimeTests
+namespace Slask.UnitTests.DomainTests.MatchTests.StartDateTimeTests
 {
     public class DualTournamentStartDateTimeTests : IDisposable
     {
