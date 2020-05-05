@@ -2,7 +2,6 @@
 using Slask.Domain.Rounds.Bases;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Slask.Domain.Utilities
 {
