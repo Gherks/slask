@@ -117,20 +117,15 @@ namespace Slask.Domain
 
         public bool SetStartDateTime(DateTime dateTime)
         {
-            if (SystemTime.Now > dateTime)
+            bool newDateTimeIsValid = MatchStartDateTimeValidator.ValidateStartDateTime(this, dateTime);
+
+            if (newDateTimeIsValid)
             {
-                // LOG Issue: New start date time must be a future date time
-                return false;
+                StartDateTime = dateTime;
+                return true;
             }
 
-            if (!Group.NewDateTimeIsValid(this, dateTime))
-            {
-                // LOG Issue: New start date time does not work with group rules
-                return false;
-            }
-
-            StartDateTime = dateTime;
-            return true;
+            return false;
         }
 
         public PlayState GetPlayState()
