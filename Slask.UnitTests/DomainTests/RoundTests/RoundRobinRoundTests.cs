@@ -135,7 +135,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests
                 PlayerReference playerReference = roundRobinRound.RegisterPlayerReference(playerName + index.ToString());
 
                 playerReference.Should().BeNull();
-                roundRobinRound.PlayerReferences.Should().HaveCount(0);
+                roundRobinRound.PlayerReferences.Should().BeEmpty();
             }
         }
 

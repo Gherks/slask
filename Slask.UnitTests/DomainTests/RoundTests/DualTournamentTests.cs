@@ -113,7 +113,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests
                 PlayerReference playerReference = dualTournamentRound.RegisterPlayerReference(playerName + index.ToString());
 
                 playerReference.Should().BeNull();
-                dualTournamentRound.PlayerReferences.Should().HaveCount(0);
+                dualTournamentRound.PlayerReferences.Should().BeEmpty();
             }
         }
 
