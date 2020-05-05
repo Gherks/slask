@@ -3,6 +3,7 @@ using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
+using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,20 +11,18 @@ using Xunit;
 
 namespace Slask.UnitTests.DomainTests.MatchTests.StartDateTimeTests
 {
-    public class RoundRobinStartDateTimeTests : IDisposable
+    public class RoundRobinStartDateTimeTests
     {
         private readonly Tournament tournament;
+        private readonly TournamentIssueReporter tournamentIssueReporter;
         private readonly RoundRobinRound roundRobinRound;
 
         public RoundRobinStartDateTimeTests()
         {
             tournament = Tournament.Create("GSL 2019");
+            tournamentIssueReporter = tournament.TournamentIssueReporter;
             roundRobinRound = tournament.AddRoundRobinRound("Round robin round", 3, 2) as RoundRobinRound;
-        }
-
-        public void Dispose()
-        {
-            SystemTimeMocker.Reset();
+            tournament.AddBracketRound("Bracket round", 3);
         }
 
         [Fact]
@@ -54,6 +53,8 @@ namespace Slask.UnitTests.DomainTests.MatchTests.StartDateTimeTests
             roundRobinGroup.Matches[3].StartDateTime.Should().Be(threeHoursLater);
             roundRobinGroup.Matches[4].StartDateTime.Should().Be(twelveHoursLater);
             roundRobinGroup.Matches[5].StartDateTime.Should().Be(eightHoursLater);
+
+            tournamentIssueReporter.Issues.Should().BeEmpty();
         }
 
         private RoundRobinGroup RegisterPlayers(List<string> playerNames)
