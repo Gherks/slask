@@ -117,7 +117,7 @@ namespace Slask.Domain
 
         public bool SetStartDateTime(DateTime dateTime)
         {
-            bool newDateTimeIsValid = MatchStartDateTimeValidator.ValidateStartDateTime(this, dateTime);
+            bool newDateTimeIsValid = MatchStartDateTimeValidator.Validate(this, dateTime);
 
             if (newDateTimeIsValid)
             {

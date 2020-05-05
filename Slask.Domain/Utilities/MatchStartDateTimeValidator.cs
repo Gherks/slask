@@ -6,7 +6,7 @@ namespace Slask.Domain.Utilities
 {
     public static class MatchStartDateTimeValidator
     {
-        public static bool ValidateStartDateTime(Match match, DateTime newStartDateTime)
+        public static bool Validate(Match match, DateTime newStartDateTime)
         {
             bool newStartDateTimeIsInThePast = !ConfirmNewStartDateTimeIsFutureDateTime(match, newStartDateTime);
 

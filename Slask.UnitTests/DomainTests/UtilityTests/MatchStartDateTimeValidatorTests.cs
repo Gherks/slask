@@ -37,7 +37,7 @@ namespace Slask.UnitTests.DomainTests.UtilityTests
             Match match = bracketGroup.Matches.First();
             DateTime oneHourInThePast = SystemTime.Now.AddSeconds(-1);
 
-            bool validationResult = MatchStartDateTimeValidator.ValidateStartDateTime(match, oneHourInThePast);
+            bool validationResult = MatchStartDateTimeValidator.Validate(match, oneHourInThePast);
 
             validationResult.Should().BeFalse();
             tournamentIssueReporter.Issues.Should().HaveCount(1);
@@ -65,7 +65,7 @@ namespace Slask.UnitTests.DomainTests.UtilityTests
             Match finalFromSecondRound = finalNodeFromSecondRound.Match;
             DateTime oneHourBeforeFinalFromFirstRound = finalFromFirstRound.StartDateTime.AddHours(-1);
 
-            bool validationResult = MatchStartDateTimeValidator.ValidateStartDateTime(finalFromSecondRound, oneHourBeforeFinalFromFirstRound);
+            bool validationResult = MatchStartDateTimeValidator.Validate(finalFromSecondRound, oneHourBeforeFinalFromFirstRound);
 
             validationResult.Should().BeTrue();
             tournamentIssueReporter.Issues.Should().HaveCount(1);
