@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Domain;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
@@ -61,32 +61,26 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         }
 
         [Fact]
-        public void CannotCreateRoundWithEvenOrZeroBestOfs()
+        public void CannotSetRoundBestOfToZeroOrEvenValue()
         {
+            RoundRobinRound round = RoundRobinRound.Create(tournament);
+
             for (int bestOf = 0; bestOf < 32; ++bestOf)
             {
-                RoundRobinRound round = RoundRobinRound.Create(tournament, bestOf: bestOf);
-                bool bestOfIsEven = bestOf % 2 == 0;
+                bool setResult = round.SetBestOf(bestOf);
 
+                bool bestOfIsEven = bestOf % 2 == 0;
                 if (bestOfIsEven)
                 {
+                    setResult.Should().BeFalse();
                     round.Should().BeNull();
                 }
                 else
                 {
-                    round.Should().NotBeNull();
+                    setResult.Should().BeTrue();
+                    round.Should().Be(bestOf - 1);
                 }
             }
-        }
-
-        [Fact]
-        public void CannotCreateRoundWithZeroOrLessAdvancingPlayers()
-        {
-            RoundRobinRound firstRound = RoundRobinRound.Create(tournament, advancingPerGroupCount: 0);
-            RoundRobinRound secondRound = RoundRobinRound.Create(tournament, advancingPerGroupCount: -1);
-
-            firstRound.Should().BeNull();
-            secondRound.Should().BeNull();
         }
 
         [Fact]
