@@ -134,7 +134,7 @@ namespace Slask.Domain.Rounds.Bases
 
                 Construct();
                 Tournament.FindIssues();
-                
+
                 return true;
             }
 
@@ -313,7 +313,7 @@ namespace Slask.Domain.Rounds.Bases
         {
             DateTime startTime;
 
-            if(IsFirstRound())
+            if (IsFirstRound())
             {
                 startTime = SystemTime.Now.AddDays(7);
             }
@@ -324,7 +324,7 @@ namespace Slask.Domain.Rounds.Bases
 
             foreach (GroupBase group in Groups)
             {
-                foreach(Match match in group.Matches)
+                foreach (Match match in group.Matches)
                 {
                     match.SetStartDateTime(startTime);
                     startTime = startTime.AddHours(1);
