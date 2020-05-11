@@ -34,6 +34,22 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         }
 
         [Fact]
+        public void AddingEnoughRoundsToUseAllSingleLetterRestartsLetteringWithTwoLetters()
+        {
+            for(int index = 0; index < 10; ++index)
+            {
+                tournament.AddBracketRound();
+                tournament.AddDualTournamentRound();
+                tournament.AddRoundRobinRound();
+            }
+
+            tournament.Rounds[26].Name.Should().Be("AA");
+            tournament.Rounds[27].Name.Should().Be("AB");
+            tournament.Rounds[28].Name.Should().Be("AC");
+            tournament.Rounds[29].Name.Should().Be("AD");
+        }
+
+        [Fact]
         public void CanRenameRound()
         {
             string newName = "New Round Name";
