@@ -25,7 +25,7 @@ namespace Slask.UnitTests.DomainTests.UtilityTests
         {
             tournament = Tournament.Create("GSL 2019");
             tournamentIssueReporter = tournament.TournamentIssueReporter;
-            bracketRound = tournament.AddBracketRound("Bracket round", 3) as BracketRound;
+            bracketRound = tournament.AddBracketRound() as BracketRound;
             bracketRound.RegisterPlayerReference(firstPlayerName);
             bracketRound.RegisterPlayerReference(secondPlayerName);
         }
@@ -48,7 +48,7 @@ namespace Slask.UnitTests.DomainTests.UtilityTests
         {
             List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
             bracketRound.SetPlayersPerGroupCount(4);
-            BracketRound secondBracketRound = tournament.AddBracketRound("Bracket round 2", 3, 2) as BracketRound;
+            BracketRound secondBracketRound = tournament.AddBracketRound() as BracketRound;
 
             foreach (string playerName in playerNames)
             {

@@ -8,27 +8,27 @@ using Xunit;
 
 namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
 {
-    public class DualTournamentRoundTests
+    public class RoundRobinRoundTests
     {
         private readonly Tournament tournament;
 
-        public DualTournamentRoundTests()
+        public RoundRobinRoundTests()
         {
             tournament = Tournament.Create("GSL 2019");
         }
 
         [Fact]
-        public void CanCreateDualTournamentRound()
+        public void CanCreateRoundRobinRound()
         {
-            DualTournamentRound round = DualTournamentRound.Create(tournament);
+            RoundRobinRound round = tournament.AddRoundRobinRound();
 
             round.Should().NotBeNull();
             round.Id.Should().NotBeEmpty();
             round.Name.Should().Be("Round A");
-            round.PlayersPerGroupCount.Should().Be(4);
+            round.PlayersPerGroupCount.Should().Be(2);
             round.BestOf.Should().Be(3);
-            round.AdvancingPerGroupCount.Should().Be(2);
-            round.Groups.Should().HaveCount(0);
+            round.AdvancingPerGroupCount.Should().Be(1);
+            round.Groups.Should().HaveCount(1);
             round.TournamentId.Should().Be(tournament.Id);
             round.Tournament.Should().Be(tournament);
         }

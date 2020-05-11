@@ -12,9 +12,11 @@ namespace Slask.Domain.Rounds
         {
         }
 
-        public static BracketRound Create(string name, int bestOf, int playersPerGroupCount, Tournament tournament)
+        public static BracketRound Create(Tournament tournament)
         {
-            if (!InitialValidationSucceeds(name, bestOf, playersPerGroupCount) || tournament == null)
+            bool givenTournamentIsInvalid = tournament == null;
+
+            if (givenTournamentIsInvalid)
             {
                 return null;
             }
@@ -22,30 +24,26 @@ namespace Slask.Domain.Rounds
             BracketRound round = new BracketRound
             {
                 Id = Guid.NewGuid(),
-                Name = name,
-                PlayersPerGroupCount = playersPerGroupCount,
-                BestOf = bestOf,
+                PlayersPerGroupCount = 2,
+                BestOf = 3,
                 AdvancingPerGroupCount = 1,
                 TournamentId = tournament.Id,
                 Tournament = tournament
             };
 
+            round.AssignDefaultName();
+
             return round;
+        }
+
+        public override bool SetAdvancingPerGroupCount(int count)
+        {
+            return false;
         }
 
         protected override GroupBase AddGroup()
         {
             return BracketGroup.Create(this);
-        }
-
-        protected static bool InitialValidationSucceeds(string name, int bestOf, int playersPerGroupCount)
-        {
-            bool nameIsNotEmpty = name.Length > 0;
-            bool bestOfIsNotEven = bestOf % 2 != 0;
-            bool bestOfIsGreaterThanZero = bestOf > 0;
-            bool playersPerGroupCountIsGreaterThanZero = playersPerGroupCount >= 2;
-
-            return nameIsNotEmpty && bestOfIsNotEven && bestOfIsGreaterThanZero && playersPerGroupCountIsGreaterThanZero;
         }
     }
 }

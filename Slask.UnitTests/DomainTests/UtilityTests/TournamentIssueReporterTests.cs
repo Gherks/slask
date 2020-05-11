@@ -22,7 +22,7 @@ namespace Slask.UnitTests.DomainTests.UtilityTests
         public TournamentIssueReporterTests()
         {
             tournament = Tournament.Create("GSL 2019");
-            round = tournament.AddBracketRound("Bracket round", 3);
+            round = tournament.AddBracketRound();
             round.RegisterPlayerReference("Maru");
             round.RegisterPlayerReference("Stork");
             group = round.Groups.First();

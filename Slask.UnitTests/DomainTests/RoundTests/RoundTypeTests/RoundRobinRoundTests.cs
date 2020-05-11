@@ -20,17 +20,17 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
         [Fact]
         public void CanCreateRoundRobinRound()
         {
-            RoundRobinRound roundRobinRound = RoundRobinRound.Create(tournament);
+            RoundRobinRound round = RoundRobinRound.Create(tournament);
 
-            roundRobinRound.Should().NotBeNull();
-            roundRobinRound.Id.Should().NotBeEmpty();
-            roundRobinRound.Name.Should().Be("Round A");
-            roundRobinRound.PlayersPerGroupCount.Should().Be(2);
-            roundRobinRound.BestOf.Should().Be(3);
-            roundRobinRound.AdvancingPerGroupCount.Should().Be(1);
-            roundRobinRound.Groups.Should().HaveCount(1);
-            roundRobinRound.TournamentId.Should().Be(tournament.Id);
-            roundRobinRound.Tournament.Should().Be(tournament);
+            round.Should().NotBeNull();
+            round.Id.Should().NotBeEmpty();
+            round.Name.Should().Be("Round A");
+            round.PlayersPerGroupCount.Should().Be(2);
+            round.BestOf.Should().Be(3);
+            round.AdvancingPerGroupCount.Should().Be(1);
+            round.Groups.Should().HaveCount(0);
+            round.TournamentId.Should().Be(tournament.Id);
+            round.Tournament.Should().Be(tournament);
         }
-    }
+	}
 }

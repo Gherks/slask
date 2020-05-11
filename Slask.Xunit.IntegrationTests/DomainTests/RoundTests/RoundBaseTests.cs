@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Slask.Domain;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
@@ -20,11 +20,11 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         [Fact]
         public void AddingSeveralRoundsYieldsRoundsWithExpectedNames()
         {
-            RoundRobinRound firstRound = RoundRobinRound.Create(tournament);
-            RoundRobinRound secondRound = RoundRobinRound.Create(tournament);
-            RoundRobinRound thirdRound = RoundRobinRound.Create(tournament);
-            RoundRobinRound fourthRound = RoundRobinRound.Create(tournament);
-            RoundRobinRound fifthRound = RoundRobinRound.Create(tournament);
+            RoundRobinRound firstRound = tournament.AddRoundRobinRound();
+            RoundRobinRound secondRound = tournament.AddRoundRobinRound();
+            RoundRobinRound thirdRound = tournament.AddRoundRobinRound();
+            RoundRobinRound fourthRound = tournament.AddRoundRobinRound();
+            RoundRobinRound fifthRound = tournament.AddRoundRobinRound();
 
             firstRound.Name.Should().Be("Round A");
             secondRound.Name.Should().Be("Round B");
@@ -38,17 +38,26 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         {
             string newName = "New Round Name";
 
-            RoundRobinRound round = RoundRobinRound.Create(tournament);
+            RoundRobinRound round = tournament.AddRoundRobinRound();
             round.RenameTo(newName);
 
             round.Name.Should().Be(newName);
         }
 
         [Fact]
+        public void CannotRenameRoundToEmptyname()
+        {
+            RoundRobinRound round = tournament.AddRoundRobinRound();
+            round.RenameTo("");
+
+            round.Name.Should().Be("Round A");
+        }
+
+        [Fact]
         public void CannotRenameRoundToTheSameAsOtherRound()
         {
-            RoundRobinRound firstRound = RoundRobinRound.Create(tournament);
-            RoundRobinRound secondRound = RoundRobinRound.Create(tournament);
+            RoundRobinRound firstRound = tournament.AddRoundRobinRound();
+            RoundRobinRound secondRound = tournament.AddRoundRobinRound();
 
             string newName = "New Round Name";
             string initialRoundName = secondRound.Name;
@@ -61,11 +70,23 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         }
 
         [Fact]
-        public void CannotSetRoundBestOfToZeroOrEvenValue()
+        public void CannotSetRoundBestOfToZero()
         {
-            RoundRobinRound round = RoundRobinRound.Create(tournament);
+            RoundRobinRound round = tournament.AddRoundRobinRound();
 
-            for (int bestOf = 0; bestOf < 32; ++bestOf)
+            bool setResult = round.SetBestOf(0);
+
+            setResult.Should().BeFalse();
+            round.BestOf.Should().Be(3);
+        }
+
+        [Fact]
+        public void CannotSetRoundBestOfToEvenValue()
+        {
+            RoundRobinRound round = tournament.AddRoundRobinRound();
+            round.SetBestOf(1);
+
+            for (int bestOf = 1; bestOf < 32; ++bestOf)
             {
                 bool setResult = round.SetBestOf(bestOf);
 
@@ -73,12 +94,12 @@ namespace Slask.UnitTests.DomainTests.RoundTests
                 if (bestOfIsEven)
                 {
                     setResult.Should().BeFalse();
-                    round.Should().BeNull();
+                    round.BestOf.Should().Be(bestOf - 1);
                 }
                 else
                 {
                     setResult.Should().BeTrue();
-                    round.Should().Be(bestOf - 1);
+                    round.BestOf.Should().Be(bestOf);
                 }
             }
         }
@@ -86,7 +107,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         [Fact]
         public void FetchingPreviousRoundFromFirstRoundYieldsNull()
         {
-            RoundRobinRound round = RoundRobinRound.Create(tournament);
+            RoundBase round = tournament.AddRoundRobinRound();
 
             RoundBase previousRound = round.GetPreviousRound();
 
@@ -96,8 +117,8 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         [Fact]
         public void FetchingPreviousRoundFromSecondRoundYieldsFirstRound()
         {
-            RoundRobinRound firstRound = RoundRobinRound.Create(tournament, name: "First round");
-            RoundRobinRound secondRound = RoundRobinRound.Create(tournament, name: "Second round");
+            RoundBase firstRound = tournament.AddRoundRobinRound();
+            RoundBase secondRound = tournament.AddRoundRobinRound();
 
             RoundBase previousRound = secondRound.GetPreviousRound();
 
@@ -109,7 +130,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         {
             string playerName = "Maru";
 
-            RoundRobinRound round = RoundRobinRound.Create(tournament);
+            RoundRobinRound round = tournament.AddRoundRobinRound();
 
             PlayerReference playerReference = round.RegisterPlayerReference(playerName);
 
@@ -125,11 +146,11 @@ namespace Slask.UnitTests.DomainTests.RoundTests
             string playerName = "Maru";
             int roundCount = 5;
 
-            RoundRobinRound firstRound = RoundRobinRound.Create(tournament);
+            RoundRobinRound firstRound = tournament.AddRoundRobinRound();
 
             for (int index = 1; index < roundCount; ++index)
             {
-                RoundRobinRound round = RoundRobinRound.Create(tournament);
+                RoundRobinRound round = tournament.AddRoundRobinRound();
                 PlayerReference playerReference = round.RegisterPlayerReference(playerName + index.ToString());
 
                 playerReference.Should().BeNull();

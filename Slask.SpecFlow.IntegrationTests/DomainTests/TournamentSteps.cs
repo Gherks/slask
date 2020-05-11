@@ -41,21 +41,34 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                 if (type.Length > 0)
                 {
                     type = GetRoundType(type);
+                    RoundBase round = null;
 
                     if (type == "BRACKET")
                     {
-                        createdRounds.Add(tournament.AddBracketRound(name, bestOf, playersPerGroupCount));
+                        round = tournament.AddBracketRound();
+
+                        round.RenameTo(name);
+                        round.SetBestOf(bestOf);
+                        (round as BracketRound).SetPlayersPerGroupCount(playersPerGroupCount);
                     }
                     else if (type == "DUALTOURNAMENT")
                     {
-                        createdRounds.Add(tournament.AddDualTournamentRound(name, bestOf));
+                        round = tournament.AddDualTournamentRound();
+
+                        round.RenameTo(name);
+                        round.SetBestOf(bestOf);
                     }
                     else if (type == "ROUNDROBIN")
                     {
-                        createdRounds.Add(tournament.AddRoundRobinRound(name, bestOf, advancingCount, playersPerGroupCount));
+                        round = tournament.AddRoundRobinRound();
+
+                        round.RenameTo(name);
+                        round.SetBestOf(bestOf);
+                        round.SetAdvancingPerGroupCount(advancingCount);
+                        (round as RoundRobinRound).SetPlayersPerGroupCount(playersPerGroupCount);
                     }
 
-                    RoundBase round = createdRounds.Last();
+                    createdRounds.Add(round);
                     bool addedValidRound = round != null;
 
                     if (addedValidRound)

@@ -1,4 +1,5 @@
 ﻿using Slask.Domain.Rounds.Bases;
+using System;
 
 namespace Slask.Domain.Rounds.RoundUtilities
 {
@@ -7,6 +8,7 @@ namespace Slask.Domain.Rounds.RoundUtilities
         public static void FindIssues(RoundBase round)
         {
             CheckWhetherRoundIsFilledUpToCapacityWithPlayers(round);
+            CheckWhetherAdvancingAmountIsEqualOrGreaterThanPlayersPerGroup(round);
 
             if (round.IsLastRound())
             {
@@ -35,6 +37,17 @@ namespace Slask.Domain.Rounds.RoundUtilities
                     description = "Round does not synergize with previous round. Advancing players from previous round will not fill the groups within the current round to capacity.";
                 }
 
+                round.Tournament.TournamentIssueReporter.Report(round, description);
+            }
+        }
+
+        private static void CheckWhetherAdvancingAmountIsEqualOrGreaterThanPlayersPerGroup(RoundBase round)
+        {
+            bool advancingCountIsEqualOrGreaterThanPlayersPerGroupCount = round.AdvancingPerGroupCount >= round.PlayersPerGroupCount;
+
+            if (advancingCountIsEqualOrGreaterThanPlayersPerGroupCount)
+            {
+                string description = "Round can't have advancing per group count equal or greather than players per group count.";
                 round.Tournament.TournamentIssueReporter.Report(round, description);
             }
         }

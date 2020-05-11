@@ -38,42 +38,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             fetchedRounds.Add(createdRounds[roundIndex].GetPreviousRound());
         }
 
-        [Then(@"created rounds in tournament should be valid with values:")]
-        public void ThenCreatedRoundInTournamentShouldBeValidWithValues(Table table)
-        {
-            if (table == null)
-            {
-                throw new ArgumentNullException(nameof(table));
-            }
-
-            for (int rowIndex = 0; rowIndex < table.Rows.Count; ++rowIndex)
-            {
-                TableRow row = table.Rows[rowIndex];
-                ParseRoundTable(row, out string roundType, out string name, out int bestOf, out int advancingCount, out int playersPerGroupCount);
-
-                RoundBase createdRound = createdRounds[rowIndex];
-                CheckRoundValidity(createdRound, name, bestOf);
-
-                if (createdRound is BracketRound bracketRound)
-                {
-                    roundType.Should().Be("Bracket");
-                    bracketRound.AdvancingPerGroupCount.Should().Be(1);
-                    bracketRound.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
-                }
-                else if (createdRound is DualTournamentRound dualTournamentRound)
-                {
-                    roundType.Should().Be("Dual tournament");
-                    dualTournamentRound.AdvancingPerGroupCount.Should().Be(2);
-                    dualTournamentRound.PlayersPerGroupCount.Should().Be(4);
-                }
-                else if (createdRound is RoundRobinRound roundRobinRound)
-                {
-                    roundType.Should().Be("Round robin");
-                    roundRobinRound.AdvancingPerGroupCount.Should().Be(advancingCount);
-                    roundRobinRound.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
-                }
-            }
-        }
 
         [Then(@"created round (.*) in tournament should be invalid")]
         public void ThenCreatedRoundInTournamentShouldBeInvalid(int roundIndex)
@@ -82,7 +46,40 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             round.Should().BeNull();
         }
 
-        [Then(@"fetched round (.*) in tournament should be valid with values:")]
+        [Then(@"created rounds in tournament (.*) should be valid with values")]
+        public void CreatedRoundsInTournamentShouldBeValidWithValues(int tournamentIndex, Table table)
+        {
+            if (table == null)
+            {
+                throw new ArgumentNullException(nameof(table));
+            }
+
+            Tournament tournament = createdTournaments[tournamentIndex];
+
+            for (int index = 0; index < table.Rows.Count; ++index)
+            {
+                ParseRoundTable(table.Rows[index], out string roundType, out string name, out int bestOf, out int advancingCount, out int playersPerGroupCount);
+
+                RoundBase round = tournament.Rounds[index];
+
+                if (round is BracketRound bracketRound)
+                {
+                    roundType.Should().Be("Bracket");
+                }
+                else if (round is DualTournamentRound dualTournamentRound)
+                {
+                    roundType.Should().Be("Dual tournament");
+                }
+                else if (round is RoundRobinRound roundRobinRound)
+                {
+                    roundType.Should().Be("Round robin");
+                }
+
+                CheckRoundValidity(round, name, bestOf, advancingCount, playersPerGroupCount);
+            }
+        }
+
+        [Then(@"fetched round (.*) in tournament should be valid with values")]
         public void ThenFetchedRoundInTournamentShouldBeValidWithValues(int roundIndex, Table table)
         {
             if (table == null)
@@ -93,26 +90,21 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             ParseRoundTable(table.Rows[0], out string roundType, out string name, out int bestOf, out int advancingCount, out int playersPerGroupCount);
 
             RoundBase fetchedRound = fetchedRounds[roundIndex];
-            CheckRoundValidity(fetchedRound, name, bestOf);
 
             if (fetchedRound is BracketRound bracketRound)
             {
                 roundType.Should().Be("Bracket");
-                bracketRound.AdvancingPerGroupCount.Should().Be(1);
-                bracketRound.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
             }
             else if (fetchedRound is DualTournamentRound dualTournamentRound)
             {
                 roundType.Should().Be("Dual tournament");
-                dualTournamentRound.AdvancingPerGroupCount.Should().Be(2);
-                dualTournamentRound.PlayersPerGroupCount.Should().Be(4);
             }
             else if (fetchedRound is RoundRobinRound roundRobinRound)
             {
                 roundType.Should().Be("Round robin");
-                roundRobinRound.AdvancingPerGroupCount.Should().Be(advancingCount);
-                roundRobinRound.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
             }
+
+            CheckRoundValidity(fetchedRound, name, bestOf, advancingCount, playersPerGroupCount);
         }
 
         [Then(@"fetched round (.*) in tournament should be invalid")]
@@ -121,7 +113,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             fetchedRounds[roundIndex].Should().BeNull();
         }
 
-        protected static void CheckRoundValidity(RoundBase round, string correctName, int bestOf)
+        protected static void CheckRoundValidity(RoundBase round, string correctName, int bestOf, int advancingCount, int playersPerGroupCount)
         {
             if (round == null)
             {
@@ -131,7 +123,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             round.Should().NotBeNull();
             round.Id.Should().NotBeEmpty();
             round.Name.Should().Be(correctName);
+            round.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
             round.BestOf.Should().Be(bestOf);
+            round.AdvancingPerGroupCount.Should().Be(advancingCount);
             round.Groups.Should().HaveCount(1);
             round.TournamentId.Should().NotBeEmpty();
             round.Tournament.Should().NotBeNull();

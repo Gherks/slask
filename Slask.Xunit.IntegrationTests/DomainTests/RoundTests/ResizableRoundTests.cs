@@ -17,13 +17,13 @@ namespace Slask.UnitTests.DomainTests.RoundTests
         }
 
         [Fact]
-        public void CanChangeGroupSize()
+         public void CanChangeGroupSize()
         {
-            RoundRobinRound roundRobinRound = RoundRobinRound.Create(tournament);
+            RoundRobinRound round = tournament.AddRoundRobinRound();
 
-            roundRobinRound.Groups.First().Matches.Should().HaveCount(1);
-            roundRobinRound.SetPlayersPerGroupCount(4);
-            roundRobinRound.Groups.First().Matches.Should().HaveCount(6);
+            round.Groups.First().Matches.Should().HaveCount(1);
+            round.SetPlayersPerGroupCount(4);
+            round.Groups.First().Matches.Should().HaveCount(6);
         }
     }
 }

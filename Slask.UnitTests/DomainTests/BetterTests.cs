@@ -23,7 +23,7 @@ namespace Slask.UnitTests.DomainTests
         {
             user = User.Create("Stålberto");
             tournament = Tournament.Create("GSL 2019");
-            bracketRound = tournament.AddBracketRound("Bracket round", 7) as BracketRound;
+            bracketRound = tournament.AddBracketRound() as BracketRound;
             bracketRound.RegisterPlayerReference("Maru");
             bracketRound.RegisterPlayerReference("Stork");
             bracketGroup = bracketRound.Groups.First() as BracketGroup;

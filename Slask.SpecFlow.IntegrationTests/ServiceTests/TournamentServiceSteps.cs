@@ -81,17 +81,12 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             Tournament tournament = GivenATournamentNamedHasBeenCreated(tournamentName);
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
-            RoundBase bracketRound = tournament.AddBracketRound("BracketRound", 3, playerNames.Count);
+            RoundBase bracketRound = tournament.AddBracketRound();
 
             foreach (string playerName in playerNames)
             {
                 createdPlayerReferences.Add(bracketRound.RegisterPlayerReference(playerName));
             }
-
-            //BracketGroup bracketGroup = (BracketGroup)bracketRound.AddGroup();
-
-            //createdRounds.Add(bracketRound);
-            //createdGroups.Add(bracketGroup);
 
             return tournament;
         }

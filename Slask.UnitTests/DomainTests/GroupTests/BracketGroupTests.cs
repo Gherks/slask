@@ -26,7 +26,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         public BracketGroupTests()
         {
             tournament = Tournament.Create("GSL 2019");
-            bracketRound = tournament.AddBracketRound("Bracket round", 3) as BracketRound;
+            bracketRound = tournament.AddBracketRound() as BracketRound;
         }
 
         [Fact]

@@ -20,7 +20,7 @@ namespace Slask.UnitTests.DomainTests
         public TournamentTests()
         {
             tournament = Tournament.Create("GSL 2019");
-            bracketRound = tournament.AddBracketRound("Bracket round", 3) as BracketRound;
+            bracketRound = tournament.AddBracketRound() as BracketRound;
 
             user = User.Create("Stålberto");
             better = tournament.AddBetter(user);
@@ -139,24 +139,6 @@ namespace Slask.UnitTests.DomainTests
         {
             tournament.Betters.Should().HaveCount(1);
             tournament.Betters.First().Should().Be(better);
-        }
-
-        [Fact]
-        public void TournamentDoesNotKeepRoundsThatFailedToBeCreated()
-        {
-            Tournament tournament = Tournament.Create("ASUS ROG 2012");
-
-            for (int bestOf = 0; bestOf <= 64; bestOf += 2)
-            {
-                RoundBase bracketRound = tournament.AddRoundRobinRound("", bestOf, 8);
-                RoundBase dualTournamentRound = tournament.AddDualTournamentRound("", bestOf);
-                RoundBase roundRobinRound = tournament.AddRoundRobinRound("", bestOf, 8);
-
-                bracketRound.Should().BeNull();
-                dualTournamentRound.Should().BeNull();
-                roundRobinRound.Should().BeNull();
-                tournament.Rounds.Should().BeEmpty();
-            }
         }
 
         [Fact]

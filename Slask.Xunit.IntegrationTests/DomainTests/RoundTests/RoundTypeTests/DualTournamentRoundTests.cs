@@ -20,7 +20,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
         [Fact]
         public void CanCreateDualTournamentRound()
         {
-            DualTournamentRound round = DualTournamentRound.Create(tournament);
+            DualTournamentRound round = tournament.AddDualTournamentRound();
 
             round.Should().NotBeNull();
             round.Id.Should().NotBeEmpty();
@@ -28,9 +28,21 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
             round.PlayersPerGroupCount.Should().Be(4);
             round.BestOf.Should().Be(3);
             round.AdvancingPerGroupCount.Should().Be(2);
-            round.Groups.Should().HaveCount(0);
+            round.Groups.Should().HaveCount(1);
             round.TournamentId.Should().Be(tournament.Id);
             round.Tournament.Should().Be(tournament);
+        }
+
+        [Fact]
+        public void AdvancingCountInDualTournamentRoundCannotBeAnythingOtherThanTwo()
+        {
+            DualTournamentRound round = tournament.AddDualTournamentRound();
+
+            for(int advancingPerGroupCount = 0; advancingPerGroupCount < 16; ++advancingPerGroupCount)
+            {
+                round.SetAdvancingPerGroupCount(advancingPerGroupCount);
+                round.AdvancingPerGroupCount.Should().Be(2);
+            }
         }
 	}
 }
