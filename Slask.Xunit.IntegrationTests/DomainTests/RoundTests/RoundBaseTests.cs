@@ -43,10 +43,10 @@ namespace Slask.UnitTests.DomainTests.RoundTests
                 tournament.AddRoundRobinRound();
             }
 
-            tournament.Rounds[26].Name.Should().Be("AA");
-            tournament.Rounds[27].Name.Should().Be("AB");
-            tournament.Rounds[28].Name.Should().Be("AC");
-            tournament.Rounds[29].Name.Should().Be("AD");
+            tournament.Rounds[26].Name.Should().Be("Round AA");
+            tournament.Rounds[27].Name.Should().Be("Round AB");
+            tournament.Rounds[28].Name.Should().Be("Round AC");
+            tournament.Rounds[29].Name.Should().Be("Round AD");
         }
 
         [Fact]
