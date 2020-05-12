@@ -1,117 +1,46 @@
-﻿using Slask.Domain;
+﻿using FluentAssertions;
+using Slask.Domain;
 using Slask.Domain.Groups;
+using Slask.Domain.Groups.GroupUtility;
+using Slask.Domain.Rounds;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Slask.UnitTests.DomainTests
 {
     public class PlayerSwitcherTests
     {
+        private readonly Tournament tournament;
+        private readonly BracketRound bracketRound;
+
         public PlayerSwitcherTests()
         {
-
+            tournament = Tournament.Create("GSL 2019");
+            bracketRound = tournament.AddBracketRound() as BracketRound;
         }
 
-        //[Fact]
-        //public void CanSwitchPlacesOnPlayerReferencesThatAreInSameMatch()
-        //{
-        //    RegisterFirstTwoPlayers();
+        [Fact]
+        public void CannotSwitchPlacesOnPlayerReferenceWhenAnyPlayerIsNull()
+        {
+            bracketRound.SetPlayersPerGroupCount(4);
+            PlayerReference maruPlayerReference = bracketRound.RegisterPlayerReference("Maru");
+            PlayerReference storkPlayerReference = bracketRound.RegisterPlayerReference("Stork");
+            PlayerReference taejaPlayerReference = bracketRound.RegisterPlayerReference("Taeja");
 
-        //    PlayerSwitcher.SwitchMatchesOn(bracketGroup.Matches.First().Player1, bracketGroup.Matches.First().Player2);
+            BracketGroup group = bracketRound.Groups.First() as BracketGroup;
 
-        //    bracketGroup.Matches.First().Player1.PlayerReference.Should().Be(secondPlayerReference);
-        //    bracketGroup.Matches.First().Player2.PlayerReference.Should().Be(firstPlayerReference);
-        //}
+            Match firstMatch = group.Matches[0];
+            Match secondMatch = group.Matches[1];
 
-        //[Fact]
-        //public void CanSwitchPlacesOnPlayerReferencesThatAreInSameGroup()
-        //{
-        //    BracketGroup group = bracketRound.AddGroup() as BracketGroup;
+            bool result = PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
 
-        //    PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
-        //    PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
-        //    PlayerReference thirdPlayerReference = group.AddNewPlayerReference("Taeja");
-        //    PlayerReference fourthPlayerReference = group.AddNewPlayerReference("Rain");
-
-        //    Match firstMatch = group.Matches[0];
-        //    Match secondMatch = group.Matches[1];
-
-        //    PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
-
-        //    firstMatch.Player1.PlayerReference.Should().Be(fourthPlayerReference);
-        //    firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
-        //    secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
-        //    secondMatch.Player2.PlayerReference.Should().Be(firstPlayerReference);
-        //}
-
-        //[Fact]
-        //public void CanSwitchPlacesOnPlayerReferencesThatAreInDifferentGroups()
-        //{
-        //    BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-
-        //    PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
-        //    PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
-        //    PlayerReference thirdPlayerReference = group.AddNewPlayerReference("Taeja");
-        //    PlayerReference fourthPlayerReference = group.AddNewPlayerReference("Rain");
-
-        //    Match firstMatch = group.Matches[0];
-        //    Match secondMatch = group.Matches[1];
-
-        //    PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
-
-        //    firstMatch.Player1.PlayerReference.Should().Be(fourthPlayerReference);
-        //    firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
-        //    secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
-        //    secondMatch.Player2.PlayerReference.Should().Be(firstPlayerReference);
-        //}
-
-        //[Fact]
-        //public void CannotSwitchPlacesOnPlayerReferenceWhenAnyPlayerIsNull()
-        //{
-        //    BracketGroup group = bracketRound.AddGroup() as BracketGroup;
-
-        //    PlayerReference firstPlayerReference = group.AddNewPlayerReference("Maru");
-        //    PlayerReference secondPlayerReference = group.AddNewPlayerReference("Stork");
-        //    PlayerReference thirdPlayerReference = group.AddNewPlayerReference("Taeja");
-        //    PlayerReference fourthPlayerReference = group.AddNewPlayerReference("Rain");
-
-        //    Match firstMatch = group.Matches[0];
-        //    Match secondMatch = group.Matches[1];
-        //    Match thirdMatch = group.Matches[2];
-
-        //    PlayerSwitcher.SwitchMatchesOn(thirdMatch.Player1, secondMatch.Player2);
-        //    PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, thirdMatch.Player2);
-
-        //    firstMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
-        //    firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
-        //    secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
-        //    secondMatch.Player2.PlayerReference.Should().Be(fourthPlayerReference);
-        //}
-
-
-        //[Fact]
-        //public void CannotSwitchPlacesOnAnyPlayerReferencesWhenAMatchInGroupHasBegun()
-        //{
-        //    PlayerReference thirdPlayerReference = bracketRound.RegisterPlayerReference("Taeja");
-        //    PlayerReference fourthPlayerReference = bracketRound.RegisterPlayerReference("Rain");
-
-        //    Match firstMatch = bracketGroup.Matches[0];
-        //    Match secondMatch = group.Matches[1];
-
-        //    SystemTimeMocker.SetOneSecondAfter(firstMatch.StartDateTime);
-
-        //    PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
-
-        //    firstMatch.Player1.PlayerReference.Should().Be(firstPlayerReference);
-        //    firstMatch.Player2.PlayerReference.Should().Be(secondPlayerReference);
-        //    secondMatch.Player1.PlayerReference.Should().Be(thirdPlayerReference);
-        //    secondMatch.Player2.PlayerReference.Should().Be(fourthPlayerReference);
-        //}
-
-
-        //[Fact]
-        //public void CannotSwitchPlacesOnAnyPlayerReferencesWithinRoundRobinGroup()
-        //{
+            result.Should().BeFalse();
+            firstMatch.Player1.PlayerReference.Should().Be(maruPlayerReference);
+            firstMatch.Player2.PlayerReference.Should().Be(storkPlayerReference);
+            secondMatch.Player1.PlayerReference.Should().Be(taejaPlayerReference);
+            secondMatch.Player2.Should().Be(null);
+        }
     }
 }
