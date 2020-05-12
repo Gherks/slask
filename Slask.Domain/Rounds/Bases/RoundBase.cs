@@ -334,19 +334,18 @@ namespace Slask.Domain.Rounds.Bases
         private string GetNextDefaultRoundLettering(int letterIndex)
         {
             const string lookup = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            int letterCount = lookup.Length;
 
-            string lettering = "";
-
-            int zCount = letterIndex / lookup.Length;
-            for (int index = 0; index < zCount; ++index)
+            if (letterIndex >= letterCount)
             {
-                lettering += "Z";
+                int endingIndex = letterIndex % letterCount;
+                int restIndex = (letterIndex - endingIndex) / letterCount;
+                return GetNextDefaultRoundLettering(restIndex - 1) + GetNextDefaultRoundLettering(endingIndex);
             }
-
-            int endingLetter = letterIndex % lookup.Length;
-            lettering += lookup[endingLetter];
-
-            return lettering.ToUpper();
+            else
+            {
+                return lookup[letterIndex].ToString();
+            }
         }
 
         private bool ConstructGroups()
