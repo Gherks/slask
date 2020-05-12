@@ -18,7 +18,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         public DualTournamentGroupTests()
         {
             tournament = Tournament.Create("GSL 2019");
-            dualTournamentRound = tournament.AddDualTournamentRound("Dual tournament round", 3) as DualTournamentRound;
+            dualTournamentRound = tournament.AddDualTournamentRound() as DualTournamentRound;
         }
 
         [Fact]

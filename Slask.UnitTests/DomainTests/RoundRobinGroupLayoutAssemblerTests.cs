@@ -18,7 +18,7 @@ namespace Slask.UnitTests.DomainTests
         public RoundRobinGroupLayoutAssemblerTests()
         {
             tournament = Tournament.Create("GSL 2019");
-            roundRobinRound = tournament.AddRoundRobinRound("Round robin round", 3, 2) as RoundRobinRound;
+            roundRobinRound = tournament.AddRoundRobinRound() as RoundRobinRound;
             roundRobinGroup = RoundRobinGroup.Create(roundRobinRound);
 
             playerReferences = new List<PlayerReference>();

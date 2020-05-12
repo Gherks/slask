@@ -43,6 +43,28 @@ Scenario: Tournament issue is reported when not enough players has been register
 		| Issue type |
 		| Round      |
 
+Scenario: Tournament issue is reported when round is set to have advancing per group count equal to player per group count
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
+			| Round robin | Round robin round | 3       | 2                         | 2                       |
+	When players "Maru, Stork" is registered to round 0
+	Then tournament 0 reports issues
+		| Issue type |
+		| Round      |
+		| Round      |
+
+Scenario: Tournament issue is reported when round is set to have advancing per group count greater than player per group count
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
+			| Round robin | Round robin round | 3       | 3                         | 2                       |
+	When players "Maru, Stork" is registered to round 0
+	Then tournament 0 reports issues
+		| Issue type |
+		| Round      |
+		| Round      |
+
 Scenario: Tournament issue validation is run when new round is added
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds

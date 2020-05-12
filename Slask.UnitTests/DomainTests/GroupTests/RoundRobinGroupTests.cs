@@ -19,7 +19,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
         public RoundRobinGroupTests()
         {
             tournament = Tournament.Create("GSL 2019");
-            roundRobinRound = tournament.AddRoundRobinRound("Round robin round", 3, 2) as RoundRobinRound;
+            roundRobinRound = tournament.AddRoundRobinRound() as RoundRobinRound;
         }
 
         [Fact]

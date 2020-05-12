@@ -27,13 +27,10 @@ namespace Slask.UnitTests.DomainTests.BetTests
             user = User.Create("Stålberto");
             tournament = Tournament.Create("GSL 2019");
             better = tournament.AddBetter(user);
-            round = tournament.AddBracketRound("Bracket round", 7) as BracketRound;
+            round = tournament.AddBracketRound() as BracketRound;
             round.RegisterPlayerReference("Maru");
             round.RegisterPlayerReference("Stork");
             group = round.Groups.First() as BracketGroup;
-            //group = round.AddGroup() as BracketGroup;
-            //group.AddNewPlayerReference("Maru");
-            //group.AddNewPlayerReference("Stork");
             firstMatch = group.Matches.First();
         }
 

@@ -23,7 +23,7 @@ namespace Slask.UnitTests.DomainTests.MatchTests
         public MatchTests()
         {
             tournament = Tournament.Create("GSL 2019");
-            bracketRound = tournament.AddBracketRound("Bracket round", 3) as BracketRound;
+            bracketRound = tournament.AddBracketRound() as BracketRound;
             bracketRound.RegisterPlayerReference(firstPlayerName);
             bracketRound.RegisterPlayerReference(secondPlayerName);
             bracketGroup = bracketRound.Groups.First() as BracketGroup;
@@ -47,7 +47,7 @@ namespace Slask.UnitTests.DomainTests.MatchTests
         public void MatchMustContainDifferentPlayers()
         {
             Tournament tournament = Tournament.Create("GSL 2019");
-            BracketRound bracketRound = tournament.AddBracketRound("Bracket round", 3) as BracketRound;
+            BracketRound bracketRound = tournament.AddBracketRound() as BracketRound;
             PlayerReference playerReference = bracketRound.RegisterPlayerReference(firstPlayerName);
 
             Match match = bracketRound.Groups.First().Matches.First();

@@ -21,8 +21,8 @@ namespace Slask.UnitTests.DomainTests.MatchTests.StartDateTimeTests
         {
             tournament = Tournament.Create("GSL 2019");
             tournamentIssueReporter = tournament.TournamentIssueReporter;
-            dualTournamentRound = tournament.AddDualTournamentRound("Dual tournament round", 3) as DualTournamentRound;
-            tournament.AddBracketRound("Bracket round", 3);
+            dualTournamentRound = tournament.AddDualTournamentRound() as DualTournamentRound;
+            tournament.AddBracketRound();
         }
 
         [Fact]

@@ -3,6 +3,7 @@ using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -10,31 +11,38 @@ namespace Slask.UnitTests.DomainTests.PlayerTests
 {
     public class PlayerInRoundRobinGroupTests
     {
-        private Tournament tournament;
-        private RoundRobinRound round;
-        private RoundRobinGroup group;
-        private PlayerReference playerReference;
-        private Match match;
+        List<string> playerNames = new List<string> { "Maru", "Stork", "Taeja", "Rain" };
+
+        private readonly Tournament tournament;
+        private readonly RoundRobinRound round;
+        private readonly RoundRobinGroup group;
+        private readonly Match match;
+        private readonly Player player;
 
         public PlayerInRoundRobinGroupTests()
         {
             tournament = Tournament.Create("GSL 2019");
-            round = tournament.AddRoundRobinRound("Bracket round", 7, 1) as RoundRobinRound;
-            playerReference = round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Stork");
+            round = tournament.AddRoundRobinRound() as RoundRobinRound;
+            round.SetBestOf(5);
+
+            foreach (string playerName in playerNames)
+            {
+                round.RegisterPlayerReference(playerName);
+            }
+
             group = round.Groups.First() as RoundRobinGroup;
             match = group.Matches.First();
+            player = match.Player1;
         }
 
         [Fact]
         public void CanCreatePlayer()
         {
-            match.Player1.Should().NotBeNull();
-            match.Player1.Id.Should().NotBeEmpty();
-            match.Player1.PlayerReference.Should().Be(playerReference);
-            match.Player1.Score.Should().Be(0);
-            match.Player1.MatchId.Should().Be(match.Id);
-            match.Player1.Match.Should().Be(match);
+            player.Should().NotBeNull();
+            player.Id.Should().NotBeEmpty();
+            player.Score.Should().Be(0);
+            player.MatchId.Should().Be(match.Id);
+            player.Match.Should().Be(match);
         }
 
         [Fact]
@@ -43,9 +51,9 @@ namespace Slask.UnitTests.DomainTests.PlayerTests
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             int score = 1;
 
-            match.Player1.IncreaseScore(score);
+            player.IncreaseScore(score);
 
-            match.Player1.Score.Should().Be(score);
+            player.Score.Should().Be(score);
         }
 
         [Fact]
@@ -53,10 +61,10 @@ namespace Slask.UnitTests.DomainTests.PlayerTests
         {
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
-            match.Player1.IncreaseScore(2);
-            match.Player1.DecreaseScore(1);
+            player.IncreaseScore(2);
+            player.DecreaseScore(1);
 
-            match.Player1.Score.Should().Be(1);
+            player.Score.Should().Be(1);
         }
 
         [Fact]
@@ -64,9 +72,9 @@ namespace Slask.UnitTests.DomainTests.PlayerTests
         {
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
-            match.Player1.DecreaseScore(1);
+            player.DecreaseScore(1);
 
-            match.Player1.Score.Should().Be(0);
+            player.Score.Should().Be(0);
         }
     }
 }

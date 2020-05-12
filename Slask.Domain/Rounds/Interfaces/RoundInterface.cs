@@ -18,10 +18,12 @@ namespace Slask.Domain.Rounds.Interfaces
         Guid TournamentId { get; }
         Tournament Tournament { get; }
 
+        bool RenameTo(string name);
         PlayerReference RegisterPlayerReference(string name);
         bool ExcludePlayerReference(string name);
         bool Construct();
         bool FillGroupsWithPlayerReferences();
+        bool SetBestOf(int bestOf);
         bool SetAdvancingPerGroupCount(int count);
         bool IsFirstRound();
         bool IsLastRound();

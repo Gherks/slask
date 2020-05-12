@@ -47,6 +47,23 @@ namespace Slask.Domain.Rounds.Bases
             return Math.Max(2, participants);
         }
 
+        public bool RenameTo(string name)
+        {
+            foreach (RoundBase roundBase in Tournament.Rounds)
+            {
+                bool newNameIsEmpty = name.Length == 0;
+                bool nameIsInUse = roundBase.Name.ToUpper() == name.ToUpper();
+
+                if (newNameIsEmpty || nameIsInUse)
+                {
+                    return false;
+                }
+            }
+
+            Name = name;
+            return true;
+        }
+
         public PlayerReference RegisterPlayerReference(string name)
         {
             bool roundIsFirstRound = IsFirstRound();
@@ -123,18 +140,14 @@ namespace Slask.Domain.Rounds.Bases
             return true;
         }
 
-        public bool SetAdvancingPerGroupCount(int count)
+        public bool SetBestOf(int bestOf)
         {
-            bool isFirstRound = IsFirstRound();
-            bool newCountIsLessThanPlayerCountPerGroup = count < PlayersPerGroupCount;
+            bool newBestOfIsUneven = bestOf % 2 != 0;
+            bool bestOfIsGreaterThanZero = bestOf > 0;
 
-            if (isFirstRound && newCountIsLessThanPlayerCountPerGroup)
+            if (newBestOfIsUneven && bestOfIsGreaterThanZero)
             {
-                AdvancingPerGroupCount = count;
-
-                Construct();
-                Tournament.FindIssues();
-                
+                BestOf = bestOf;
                 return true;
             }
 
@@ -270,10 +283,69 @@ namespace Slask.Domain.Rounds.Bases
             return lastGroupIsFinished ? PlayState.IsFinished : PlayState.IsPlaying;
         }
 
+        public virtual bool SetAdvancingPerGroupCount(int count)
+        {
+            bool tournamentHasNotBegun = GetPlayState() == PlayState.NotBegun;
+
+            if (tournamentHasNotBegun)
+            {
+                AdvancingPerGroupCount = count;
+
+                Construct();
+                Tournament.FindIssues();
+                return true;
+            }
+
+            return false;
+        }
+
+        protected bool AssignDefaultName()
+        {
+            string defaultName;
+
+            for (int index = 0; index < Tournament.Rounds.Count; ++index)
+            {
+                bool roundAlreadyAddedToTournament = Tournament.Rounds[index].Id == Id;
+
+                if (roundAlreadyAddedToTournament)
+                {
+                    --index;
+
+                    bool renameFailed = true;
+                    do
+                    {
+                        defaultName = "Round " + GetNextDefaultRoundLettering(++index);
+                        renameFailed = !RenameTo(defaultName);
+                    }
+                    while (renameFailed);
+                }
+            }
+
+            defaultName = "Round " + GetNextDefaultRoundLettering(Tournament.Rounds.Count);
+            return RenameTo(defaultName);
+        }
+
         protected virtual GroupBase AddGroup()
         {
             // LOG Error: Adding group using base, something went horribly wrong.
             throw new NotImplementedException();
+        }
+
+        private string GetNextDefaultRoundLettering(int letterIndex)
+        {
+            const string lookup = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            int letterCount = lookup.Length;
+
+            if (letterIndex >= letterCount)
+            {
+                int endingIndex = letterIndex % letterCount;
+                int restIndex = (letterIndex - endingIndex) / letterCount;
+                return GetNextDefaultRoundLettering(restIndex - 1) + GetNextDefaultRoundLettering(endingIndex);
+            }
+            else
+            {
+                return lookup[letterIndex].ToString();
+            }
         }
 
         private bool ConstructGroups()
@@ -313,7 +385,7 @@ namespace Slask.Domain.Rounds.Bases
         {
             DateTime startTime;
 
-            if(IsFirstRound())
+            if (IsFirstRound())
             {
                 startTime = SystemTime.Now.AddDays(7);
             }
@@ -324,7 +396,7 @@ namespace Slask.Domain.Rounds.Bases
 
             foreach (GroupBase group in Groups)
             {
-                foreach(Match match in group.Matches)
+                foreach (Match match in group.Matches)
                 {
                     match.SetStartDateTime(startTime);
                     startTime = startTime.AddHours(1);

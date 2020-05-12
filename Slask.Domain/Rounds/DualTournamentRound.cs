@@ -12,9 +12,11 @@ namespace Slask.Domain.Rounds
         {
         }
 
-        public static DualTournamentRound Create(string name, int bestOf, Tournament tournament)
+        public static DualTournamentRound Create(Tournament tournament)
         {
-            if (!InitialValidationSucceeds(name, bestOf) || tournament == null)
+            bool givenTournamentIsInvalid = tournament == null;
+
+            if (givenTournamentIsInvalid)
             {
                 return null;
             }
@@ -22,29 +24,26 @@ namespace Slask.Domain.Rounds
             DualTournamentRound round = new DualTournamentRound
             {
                 Id = Guid.NewGuid(),
-                Name = name,
                 PlayersPerGroupCount = 4,
-                BestOf = bestOf,
+                BestOf = 3,
                 AdvancingPerGroupCount = 2,
                 TournamentId = tournament.Id,
                 Tournament = tournament
             };
 
+            round.AssignDefaultName();
+
             return round;
+        }
+
+        public override bool SetAdvancingPerGroupCount(int count)
+        {
+            return false;
         }
 
         protected override GroupBase AddGroup()
         {
             return DualTournamentGroup.Create(this);
-        }
-
-        protected static bool InitialValidationSucceeds(string name, int bestOf)
-        {
-            bool nameIsNotEmpty = name.Length > 0;
-            bool bestOfIsNotEven = bestOf % 2 != 0;
-            bool bestOfIsGreaterThanZero = bestOf > 0;
-
-            return nameIsNotEmpty && bestOfIsNotEven && bestOfIsGreaterThanZero;
         }
     }
 }

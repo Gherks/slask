@@ -45,9 +45,9 @@ namespace Slask.Domain
             Name = name;
         }
 
-        public RoundBase AddBracketRound(string name, int bestOf, int playersPerGroupCount = 2)
+        public BracketRound AddBracketRound()
         {
-            RoundBase round = BracketRound.Create(name, bestOf, playersPerGroupCount, this);
+            BracketRound round = BracketRound.Create(this);
 
             if (round == null)
             {
@@ -58,9 +58,9 @@ namespace Slask.Domain
             return round;
         }
 
-        public RoundBase AddDualTournamentRound(string name, int bestOf)
+        public DualTournamentRound AddDualTournamentRound()
         {
-            RoundBase round = DualTournamentRound.Create(name, bestOf, this);
+            DualTournamentRound round = DualTournamentRound.Create(this);
 
             if (round == null)
             {
@@ -71,9 +71,9 @@ namespace Slask.Domain
             return round;
         }
 
-        public RoundBase AddRoundRobinRound(string name, int bestOf, int advancingPerGroupCount, int playersPerGroupCount = 2)
+        public RoundRobinRound AddRoundRobinRound()
         {
-            RoundBase round = RoundRobinRound.Create(name, bestOf, advancingPerGroupCount, playersPerGroupCount, this);
+            RoundRobinRound round = RoundRobinRound.Create(this);
 
             if (round == null)
             {
@@ -219,7 +219,7 @@ namespace Slask.Domain
                 {
                     bool stillContainsRounds = Rounds.Count > 0;
 
-                    if(stillContainsRounds)
+                    if (stillContainsRounds)
                     {
                         RoundBase firstRound = GetFirstRound();
 

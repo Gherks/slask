@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
 using Slask.Domain.Groups;
+using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
 using Slask.Persistence;
 using Slask.Persistence.Services;
@@ -73,7 +74,7 @@ namespace Slask.UnitTests.ServiceTests
         [Fact]
         public void CannotSaveTournamentWithIssues()
         {
-            tournament.AddDualTournamentRound("Bracket round", 3);
+            tournament.AddDualTournamentRound();
 
             bool saveResult = tournamentService.SaveAsync(tournament);
 
@@ -186,7 +187,7 @@ namespace Slask.UnitTests.ServiceTests
         {
             InitializeUsersAndBetters();
 
-            RoundBase round = tournament.AddRoundRobinRound("Round robin round", 3, 2);
+            RoundBase round = tournament.AddRoundRobinRound();
 
             List<PlayerReference> playerReferences = tournament.GetPlayerReferences();
 
@@ -269,7 +270,8 @@ namespace Slask.UnitTests.ServiceTests
         {
             List<string> playerNames = new List<string> { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
 
-            RoundBase round = tournament.AddRoundRobinRound("Round robin round", 3, 1, playerNames.Count);
+            RoundRobinRound round = tournament.AddRoundRobinRound();
+            round.SetPlayersPerGroupCount(playerNames.Count);
 
             foreach (string playerName in playerNames)
             {
