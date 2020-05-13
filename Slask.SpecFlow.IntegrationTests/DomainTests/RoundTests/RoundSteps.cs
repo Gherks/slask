@@ -1,19 +1,18 @@
-using FluentAssertions;
-using Slask.Common;
+﻿using FluentAssertions;
 using Slask.Domain;
-using Slask.Domain.Groups;
-using Slask.Domain.Groups.Bases;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
-using Slask.Domain.Utilities;
-using Slask.SpecFlow.IntegrationTests.ServiceTests;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using TechTalk.SpecFlow;
 
 namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 {
+    [Binding, Scope(Feature = "Round")]
+    public class RoundSteps : RoundStepDefinitions
+    {
+
+    }
+
     public class RoundStepDefinitions : TournamentStepDefinitions
     {
         [When(@"players per group count in round (.*) is set to (.*)")]
@@ -104,7 +103,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             }
         }
 
-        [Then(@"players per group count in round (.*) is set to (.*)")]
+        [Then(@"players per group count in round (.*) should be (.*)")]
         public void PlayersPerGroupCountInRoundIsSetTo(int roundIndex, int playersPerGroupCount)
         {
             RoundBase round = createdRounds[roundIndex];
@@ -112,7 +111,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             round.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
         }
 
-        [Then(@"best of in round (.*) is set to (.*)")]
+        [Then(@"best of in round (.*) should be (.*)")]
         public void BestOfInRoundIsSetTo(int roundIndex, int bestOf)
         {
             RoundBase round = createdRounds[roundIndex];
@@ -120,7 +119,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             round.BestOf.Should().Be(bestOf);
         }
 
-        [Then(@"advancing per group count in round (.*) is set to (.*)")]
+        [Then(@"advancing per group count in round (.*) should be (.*)")]
         public void AdvancingPerGroupCountInRoundIsSetTo(int roundIndex, int advancingPerGrouCount)
         {
             RoundBase round = createdRounds[roundIndex];
