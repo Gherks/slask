@@ -142,10 +142,11 @@ namespace Slask.Domain.Rounds.Bases
 
         public bool SetBestOf(int bestOf)
         {
+            bool tournamentHasNotBegun = GetPlayState() == PlayState.NotBegun;
             bool newBestOfIsUneven = bestOf % 2 != 0;
             bool bestOfIsGreaterThanZero = bestOf > 0;
 
-            if (newBestOfIsUneven && bestOfIsGreaterThanZero)
+            if (tournamentHasNotBegun && newBestOfIsUneven && bestOfIsGreaterThanZero)
             {
                 BestOf = bestOf;
                 return true;
