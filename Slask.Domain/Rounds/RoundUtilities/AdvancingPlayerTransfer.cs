@@ -6,47 +6,40 @@ using System.Collections.Generic;
 
 namespace Slask.Domain.Rounds
 {
-    public static class AdvancingPlayerTransfer
+    public class AdvancingPlayerTransfer
     {
-        public static bool TransferToNextRound(RoundBase round)
+        public List<PlayerReference> PlayerReferences { get; private set; }
+
+        public bool TransferToNextRound(RoundBase round)
         {
             bool roundHasFinished = round.GetPlayState() == PlayState.IsFinished;
 
             if (roundHasFinished)
             {
                 RoundBase nextRound = round.GetNextRound();
+                bool hasRoundToTransferTo = nextRound != null;
 
-                if (nextRound != null)
+                if (hasRoundToTransferTo)
                 {
-                    return DistributeAdvancingPlayerReferencesToNextRoundEvenly(round.GetAdvancingPlayerReferences(), nextRound);
+                    PlayerReferences = round.GetAdvancingPlayerReferences();
+                    bool hasPlayerReferencesToTransfer = PlayerReferences.Count > 0;
+
+                    if (hasPlayerReferencesToTransfer)
+                    {
+                        nextRound.ReceiveTransferedPlayerReferences(this);
+                        return true;
+                    }
+
+                    // LOG Error: Tried to transfer advancing player references to next round without any player references.
+                    return false;
                 }
 
+                // LOG Error: Tried to transfer advancing player references to nonexistent next round.
                 return false;
             }
 
             // LOG Error: Tried to transfer advancing player references to next round before current round is finished.
             return false;
-        }
-
-        private static bool DistributeAdvancingPlayerReferencesToNextRoundEvenly(List<PlayerReference> advancingPlayerReferences, RoundBase targetRound)
-        {
-            int playerReferencesPerGroupCount = advancingPlayerReferences.Count / targetRound.Groups.Count;
-            int playerReferenceIndex = 0;
-
-            foreach (GroupBase group in targetRound.Groups)
-            {
-                List<PlayerReference> playerReferences = new List<PlayerReference>();
-
-                for (int perGroupIndex = 0; perGroupIndex < playerReferencesPerGroupCount; ++perGroupIndex)
-                {
-                    playerReferences.Add(advancingPlayerReferences[playerReferenceIndex]);
-                    playerReferenceIndex++;
-                }
-
-                group.AddPlayerReferences(playerReferences);
-            }
-
-            return true;
         }
     }
 }
