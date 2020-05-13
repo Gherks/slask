@@ -104,7 +104,6 @@ Scenario: Tournament issue validation is run when players per group count has be
 		| Issue type |
 		| Round      |
 
-
 Scenario: Tournament issue validation is run when advancing players per group count has been changed
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds
