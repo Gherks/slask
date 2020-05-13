@@ -4,6 +4,7 @@ using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Slask.UnitTests.DomainTests.RoundTests
@@ -154,6 +155,8 @@ namespace Slask.UnitTests.DomainTests.RoundTests
             playerReference.Name.Should().Be(playerName);
             playerReference.TournamentId.Should().Be(round.TournamentId);
             playerReference.Tournament.Should().Be(round.Tournament);
+
+            round.PlayerReferences.First().Should().Be(playerReference);
         }
 
         [Fact]
@@ -172,6 +175,20 @@ namespace Slask.UnitTests.DomainTests.RoundTests
                 playerReference.Should().BeNull();
                 round.PlayerReferences.Should().BeEmpty();
             }
+        }
+
+        [Fact]
+        public void CanExcludePlayerReferencesFromGroupsWithinFirstRound()
+        {
+            string playerName = "Maru";
+
+            RoundRobinRound round = tournament.AddRoundRobinRound();
+
+            round.RegisterPlayerReference(playerName);
+            bool exclusionResult = round.ExcludePlayerReference(playerName);
+
+            exclusionResult.Should().BeTrue();
+            round.PlayerReferences.Should().BeEmpty();
         }
     }
 }
