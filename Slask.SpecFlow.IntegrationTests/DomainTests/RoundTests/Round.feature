@@ -2,6 +2,20 @@
 	Does a bunch of tests on Round
 
 @RoundTag
+Scenario: Can only exclude player references from groups within first round
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type | Round name      | Best of | Advancing per group count | Players per group count |
+			| Bracket    | Bracket round 1 | 3       | 1                         | 4                       |
+			| Bracket    | Bracket round 2 | 3       | 1                         | 2                       |
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And created groups within created tournament is played out and betted on
+			| Tournament index | Round index | Group index |
+			| 0                | 0           | 0           |
+			| 0                | 0           | 1           |
+	When players "Rain" is excluded from round 1
+	Then participating players in round 1 should be exactly "Rain, Thorzain"
+
 # Bracket tests
 Scenario: Cannot reconfigure players per group count in bracket round when it has started
 	Given a tournament named "GSL 2019" has been created

@@ -284,6 +284,27 @@ namespace Slask.Domain.Rounds.Bases
             return lastGroupIsFinished ? PlayState.IsFinished : PlayState.IsPlaying;
         }
 
+        public void ReceiveTransferedPlayerReferences(AdvancingPlayerTransfer advancingPlayerTransfer)
+        {
+            PlayerReferences = advancingPlayerTransfer.PlayerReferences;
+
+            int perGroupCount = PlayerReferences.Count / Groups.Count;
+            int playerReferenceIndex = 0;
+
+            foreach (GroupBase group in Groups)
+            {
+                List<PlayerReference> playerReferences = new List<PlayerReference>();
+
+                for (int perGroupIndex = 0; perGroupIndex < perGroupCount; ++perGroupIndex)
+                {
+                    playerReferences.Add(PlayerReferences[playerReferenceIndex]);
+                    playerReferenceIndex++;
+                }
+
+                group.AddPlayerReferences(playerReferences);
+            }
+        }
+
         public virtual bool SetAdvancingPerGroupCount(int count)
         {
             bool tournamentHasNotBegun = GetPlayState() == PlayState.NotBegun;

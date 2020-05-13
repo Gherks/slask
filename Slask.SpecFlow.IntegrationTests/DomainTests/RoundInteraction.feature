@@ -79,8 +79,6 @@ Scenario: A bracket round with a predecessor round robin round is set up using o
 		| 0           | Fifth         | Second        |
 		| 1           | Tenth         | Seventh       |
 
-#Scenario: Players that has switched match positions is kept when fetching tournament again
-
 ################################################################################################################
 
 @DualTournamentRoundInteractionTag

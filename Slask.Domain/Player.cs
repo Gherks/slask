@@ -56,7 +56,8 @@ namespace Slask.Domain
                 {
                     if (Match.Group.Round.GetPlayState() == PlayState.IsFinished)
                     {
-                        AdvancingPlayerTransfer.TransferToNextRound(Match.Group.Round);
+                        AdvancingPlayerTransfer advancingPlayerTransfer = new AdvancingPlayerTransfer();
+                        advancingPlayerTransfer.TransferToNextRound(Match.Group.Round);
                     }
                 }
             }
