@@ -97,7 +97,7 @@ namespace Slask.Domain.Groups
 
             BracketNode finalNode = BracketNodeSystem.FinalNode;
 
-            bool matchIsFinished = match.GetPlayState() == PlayState.IsFinished;
+            bool matchIsFinished = match.GetPlayState() == PlayState.Finished;
             bool matchIsNotFinal = match.Id != finalNode.Match.Id;
 
             if (matchIsFinished && matchIsNotFinal)

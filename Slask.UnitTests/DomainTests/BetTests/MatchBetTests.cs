@@ -85,7 +85,7 @@ namespace Slask.UnitTests.DomainTests.BetTests
         //}
 
         [Fact]
-        public void CannotCreateMatchBetForMatchThatIsPlaying()
+        public void CannotCreateMatchBetForMatchThatIsOngoing()
         {
             SystemTimeMocker.SetOneSecondAfter(firstMatch.StartDateTime);
 

@@ -224,25 +224,25 @@ namespace Slask.UnitTests.DomainTests.MatchTests
         }
 
         [Fact]
-        public void PlayStateIsEqualToIsPlayingWhenMatchHasStartedButNotFinished()
+        public void PlayStateIsEqualToOngoingWhenMatchHasStartedButNotFinished()
         {
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore() - 1);
 
             PlayState playState = match.GetPlayState();
 
-            playState.Should().Be(PlayState.IsPlaying);
+            playState.Should().Be(PlayState.Ongoing);
         }
 
         [Fact]
-        public void PlayStateIsEqualToIsFinishedWhenMatchHasAWinner()
+        public void PlayStateIsEqualToFinishedWhenMatchHasAWinner()
         {
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore());
 
             PlayState playState = match.GetPlayState();
 
-            playState.Should().Be(PlayState.IsFinished);
+            playState.Should().Be(PlayState.Finished);
         }
 
         [Fact]
@@ -284,7 +284,7 @@ namespace Slask.UnitTests.DomainTests.MatchTests
         }
 
         [Fact]
-        public void CannotGetWinningPlayerWhileMatchIsPlaying()
+        public void CannotGetWinningPlayerWhileMatchIsOngoing()
         {
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore() - 1);
@@ -295,7 +295,7 @@ namespace Slask.UnitTests.DomainTests.MatchTests
         }
 
         [Fact]
-        public void CannotGetLosingPlayerWhileMatchIsPlaying()
+        public void CannotGetLosingPlayerWhileMatchIsOngoing()
         {
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore() - 1);

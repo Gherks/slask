@@ -43,18 +43,18 @@ namespace Slask.Domain
         public void IncreaseScore(int value)
         {
             bool matchIsReady = Match.IsReady();
-            bool matchIsPlaying = Match.GetPlayState() == PlayState.IsPlaying;
+            bool matchIsOngoing = Match.GetPlayState() == PlayState.Ongoing;
 
-            if (matchIsReady && matchIsPlaying)
+            if (matchIsReady && matchIsOngoing)
             {
                 Score += value;
                 Match.Group.OnMatchScoreIncreased(Match);
 
-                bool groupJustFinished = Match.Group.GetPlayState() == PlayState.IsFinished;
+                bool groupJustFinished = Match.Group.GetPlayState() == PlayState.Finished;
 
                 if (groupJustFinished)
                 {
-                    if (Match.Group.Round.GetPlayState() == PlayState.IsFinished)
+                    if (Match.Group.Round.GetPlayState() == PlayState.Finished)
                     {
                         AdvancingPlayerTransfer advancingPlayerTransfer = new AdvancingPlayerTransfer();
                         advancingPlayerTransfer.TransferToNextRound(Match.Group.Round);
@@ -66,9 +66,9 @@ namespace Slask.Domain
         public void DecreaseScore(int value)
         {
             bool matchIsReady = Match.IsReady();
-            bool matchIsPlaying = Match.GetPlayState() == PlayState.IsPlaying;
+            bool matchIsOngoing = Match.GetPlayState() == PlayState.Ongoing;
 
-            if (matchIsReady && matchIsPlaying)
+            if (matchIsReady && matchIsOngoing)
             {
                 Score -= value;
                 Score = Math.Max(Score, 0);

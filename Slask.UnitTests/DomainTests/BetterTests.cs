@@ -87,7 +87,7 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
-        public void CannotPlaceMatchBetOnMatchThatIsPlaying()
+        public void CannotPlaceMatchBetOnMatchThatOngoing()
         {
             Better better = GivenABetterIsCreated();
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);

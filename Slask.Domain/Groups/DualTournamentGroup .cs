@@ -113,7 +113,7 @@ namespace Slask.Domain.Groups
 
             if (matchIsOneOfFirstPairMatches)
             {
-                return GetMatch1().GetPlayState() == PlayState.IsFinished && GetMatch2().GetPlayState() == PlayState.IsFinished;
+                return GetMatch1().GetPlayState() == PlayState.Finished && GetMatch2().GetPlayState() == PlayState.Finished;
             }
 
             return false;
@@ -125,7 +125,7 @@ namespace Slask.Domain.Groups
 
             if (matchIsOneOfSecondPairMatches)
             {
-                return GetWinnersMatch().GetPlayState() == PlayState.IsFinished && GetLosersMatch().GetPlayState() == PlayState.IsFinished;
+                return GetWinnersMatch().GetPlayState() == PlayState.Finished && GetLosersMatch().GetPlayState() == PlayState.Finished;
             }
 
             return false;
