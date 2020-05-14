@@ -139,26 +139,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             round.GetPlayState().Should().Be(playState);
         }
 
-        protected PlayState ParsePlayStateString(string playStateString)
-        {
-            playStateString = StringUtility.ToUpperNoSpaces(playStateString);
-
-            if (playStateString.Contains("NOTBEGUN", StringComparison.CurrentCulture))
-            {
-                return PlayState.NotBegun;
-            }
-            else if (playStateString.Contains("ISPLAYING", StringComparison.CurrentCulture))
-            {
-                return PlayState.IsPlaying;
-            }
-            else if (playStateString.Contains("ISFINISHED", StringComparison.CurrentCulture))
-            {
-                return PlayState.IsFinished;
-            }
-
-            throw new NotImplementedException();
-        }
-
         protected static void CheckRoundValidity(RoundBase round, string correctName, int bestOf, int advancingCount, int playersPerGroupCount)
         {
             if (round == null)

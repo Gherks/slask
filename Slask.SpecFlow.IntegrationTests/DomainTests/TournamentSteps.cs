@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups.Bases;
@@ -300,6 +300,26 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                     }
                 }
             }
+        }
+
+        protected PlayState ParsePlayStateString(string playStateString)
+        {
+            playStateString = StringUtility.ToUpperNoSpaces(playStateString);
+
+            if (playStateString.Contains("NOTBEGUN", StringComparison.CurrentCulture))
+            {
+                return PlayState.NotBegun;
+            }
+            else if (playStateString.Contains("ISPLAYING", StringComparison.CurrentCulture))
+            {
+                return PlayState.IsPlaying;
+            }
+            else if (playStateString.Contains("ISFINISHED", StringComparison.CurrentCulture))
+            {
+                return PlayState.IsFinished;
+            }
+
+            throw new NotImplementedException();
         }
 
         private void PlaceBetsOnAvailableMatchesInGroup(List<Better> betters, GroupBase group)
