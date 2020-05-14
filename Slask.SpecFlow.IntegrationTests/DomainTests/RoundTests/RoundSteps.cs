@@ -139,7 +139,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             round.GetPlayState().Should().Be(playState);
         }
 
-        private PlayState ParsePlayStateString(string playStateString)
+        protected PlayState ParsePlayStateString(string playStateString)
         {
             playStateString = StringUtility.ToUpperNoSpaces(playStateString);
 
