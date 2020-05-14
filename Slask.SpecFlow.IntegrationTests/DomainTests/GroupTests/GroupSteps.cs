@@ -36,9 +36,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
             foreach (TableRow row in table.Rows)
             {
-                ParseSoreAddedToMatchPlayer(row, out int createdGroupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
+                ParseSoreAddedToMatchPlayer(row, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
 
-                GroupBase group = createdGroups[createdGroupIndex];
+                GroupBase group = createdGroups[groupIndex];
                 Match match = group.Matches[matchIndex];
 
                 SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
@@ -142,9 +142,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
 
         [Then(@"participating players in group (.*) should be mapped accordingly")]
-        public void ThenParticipatingPlayersInCreatedGroupShouldBeMappedAccordingly(int createdGroupIndex, Table table)
+        public void ThenParticipatingPlayersInCreatedGroupShouldBeMappedAccordingly(int groupIndex, Table table)
         {
-            GroupBase group = createdGroups[createdGroupIndex];
+            GroupBase group = createdGroups[groupIndex];
 
             foreach (TableRow row in table.Rows)
             {
@@ -184,16 +184,16 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             group.Round.Should().NotBeNull();
         }
 
-        protected static void ParseSoreAddedToMatchPlayer(TableRow row, out int createdGroupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded)
+        protected static void ParseSoreAddedToMatchPlayer(TableRow row, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded)
         {
-            createdGroupIndex = 0;
+            groupIndex = 0;
             matchIndex = 0;
             scoringPlayer = "";
             scoreAdded = 0;
 
-            if (row.ContainsKey("Created group index"))
+            if (row.ContainsKey("Group index"))
             {
-                int.TryParse(row["Created group index"], out createdGroupIndex);
+                int.TryParse(row["Group index"], out groupIndex);
             }
 
             if (row.ContainsKey("Match index"))
