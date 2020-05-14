@@ -200,6 +200,15 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             tournament.Rounds.Should().HaveCount(roundCount);
         }
 
+        [Then(@"play state of tournament (.*) is set to ""(.*)""")]
+        public void ThenPlayStateOfTournamentIsSetTo(int tournamentIndex, string playStateString)
+        {
+            Tournament tournament = createdTournaments[tournamentIndex];
+
+            PlayState playState = ParsePlayStateString(playStateString);
+
+            tournament.GetPlayState().Should().Be(playState);
+        }
 
         protected static void ParseRoundTable(TableRow row, out string typeName, out string name, out int bestOf, out int advancingCount, out int playersPerGroupCount)
         {
@@ -300,6 +309,26 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                     }
                 }
             }
+        }
+
+        protected PlayState ParsePlayStateString(string playStateString)
+        {
+            playStateString = StringUtility.ToUpperNoSpaces(playStateString);
+
+            if (playStateString.Contains("NOTBEGUN", StringComparison.CurrentCulture))
+            {
+                return PlayState.NotBegun;
+            }
+            else if (playStateString.Contains("ISPLAYING", StringComparison.CurrentCulture))
+            {
+                return PlayState.IsPlaying;
+            }
+            else if (playStateString.Contains("ISFINISHED", StringComparison.CurrentCulture))
+            {
+                return PlayState.IsFinished;
+            }
+
+            throw new NotImplementedException();
         }
 
         private void PlaceBetsOnAvailableMatchesInGroup(List<Better> betters, GroupBase group)

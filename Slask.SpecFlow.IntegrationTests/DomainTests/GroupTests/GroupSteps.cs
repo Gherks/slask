@@ -36,9 +36,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
             foreach (TableRow row in table.Rows)
             {
-                ParseSoreAddedToMatchPlayer(row, out int createdGroupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
+                ParseSoreAddedToMatchPlayer(row, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
 
-                GroupBase group = createdGroups[createdGroupIndex];
+                GroupBase group = createdGroups[groupIndex];
                 Match match = group.Matches[matchIndex];
 
                 SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
@@ -52,18 +52,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
                 else
                 {
                     throw new Exception("Invalid player name in given match within given created group");
-                }
-            }
-        }
-
-        [Then(@"created rounds (.*) to (.*) should contain (.*) groups each")]
-        public void ThenCreatedRoundsToShouldContainGroupsEach(int roundStartIndex, int roundEndIndex, int groupCount)
-        {
-            for (int roundIndex = roundStartIndex; roundIndex < roundEndIndex; ++roundIndex)
-            {
-                for (int groupCounter = 0; groupCounter < groupCount; ++groupCounter)
-                {
-                    createdRounds[roundIndex].Groups.Should().HaveCount(groupCount);
                 }
             }
         }
@@ -142,9 +130,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 
 
         [Then(@"participating players in group (.*) should be mapped accordingly")]
-        public void ThenParticipatingPlayersInCreatedGroupShouldBeMappedAccordingly(int createdGroupIndex, Table table)
+        public void ThenParticipatingPlayersInCreatedGroupShouldBeMappedAccordingly(int groupIndex, Table table)
         {
-            GroupBase group = createdGroups[createdGroupIndex];
+            GroupBase group = createdGroups[groupIndex];
 
             foreach (TableRow row in table.Rows)
             {
@@ -184,16 +172,16 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             group.Round.Should().NotBeNull();
         }
 
-        protected static void ParseSoreAddedToMatchPlayer(TableRow row, out int createdGroupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded)
+        protected static void ParseSoreAddedToMatchPlayer(TableRow row, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded)
         {
-            createdGroupIndex = 0;
+            groupIndex = 0;
             matchIndex = 0;
             scoringPlayer = "";
             scoreAdded = 0;
 
-            if (row.ContainsKey("Created group index"))
+            if (row.ContainsKey("Group index"))
             {
-                int.TryParse(row["Created group index"], out createdGroupIndex);
+                int.TryParse(row["Group index"], out groupIndex);
             }
 
             if (row.ContainsKey("Match index"))
@@ -210,6 +198,16 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             {
                 int.TryParse(row["Added score"], out scoreAdded);
             }
+        }
+
+        [Then(@"play state of group (.*) is set to ""(.*)""")]
+        public void ThenPlayStateOfGroupIsSetTo(int groupIndex, string playStateString)
+        {
+            GroupBase group = createdGroups[groupIndex];
+
+            PlayState playState = ParsePlayStateString(playStateString);
+
+            group.GetPlayState().Should().Be(playState);
         }
 
         protected static void ParseBracketGroupMatchSetup(TableRow row, out int matchIndex, out string player1Name, out string player2Name)

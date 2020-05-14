@@ -42,7 +42,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
         [Then(@"match (.*) in created group (.*) should be in state ""(.*)""")]
         public void ThenCreatedMatchInCreatedGroupShouldBeInState(int matchIndex, int createdGroupIndex, string playStateString)
         {
-            PlayState playState = GetPlayStateFromString(playStateString);
+            PlayState playState = ParsePlayStateString(playStateString);
 
             GroupBase group = createdGroups[createdGroupIndex];
             Match match = group.Matches[matchIndex];
@@ -84,32 +84,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             Match match = group.Matches[matchIndex];
 
             match.GetLosingPlayer().Should().BeNull();
-        }
-
-
-        private PlayState GetPlayStateFromString(string playStateString)
-        {
-            if (playStateString == null)
-            {
-                throw new ArgumentNullException(nameof(playStateString));
-            }
-
-            if (playStateString == "NotBegun")
-            {
-                return PlayState.NotBegun;
-            }
-            else if(playStateString == "IsPlaying")
-            {
-                return PlayState.IsPlaying;
-            }
-            else if(playStateString == "IsFinished")
-            {
-                return PlayState.IsFinished;
-            }
-            else
-            {
-                throw new Exception("Invalid playStateString given, could not map it to existing play states");
-            }
         }
     }
 }
