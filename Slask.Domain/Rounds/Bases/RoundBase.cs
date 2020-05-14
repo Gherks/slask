@@ -241,7 +241,7 @@ namespace Slask.Domain.Rounds.Bases
 
         public List<PlayerReference> GetAdvancingPlayerReferences()
         {
-            if (GetPlayState() != PlayState.IsFinished)
+            if (GetPlayState() != PlayState.Finished)
             {
                 return null;
             }
@@ -251,7 +251,7 @@ namespace Slask.Domain.Rounds.Bases
 
         public bool PlayerReferenceIsAdvancingPlayer(PlayerReference playerReference)
         {
-            if (GetPlayState() != PlayState.IsFinished)
+            if (GetPlayState() != PlayState.Finished)
             {
                 return false;
             }
@@ -279,9 +279,9 @@ namespace Slask.Domain.Rounds.Bases
                 return PlayState.NotBegun;
             }
 
-            bool lastGroupIsFinished = Groups.Last().GetPlayState() == PlayState.IsFinished;
+            bool lastGroupIsFinished = Groups.Last().GetPlayState() == PlayState.Finished;
 
-            return lastGroupIsFinished ? PlayState.IsFinished : PlayState.IsPlaying;
+            return lastGroupIsFinished ? PlayState.Finished : PlayState.Ongoing;
         }
 
         public void ReceiveTransferedPlayerReferences(AdvancingPlayerTransfer advancingPlayerTransfer)

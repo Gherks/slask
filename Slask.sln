@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Domain", "Slask.Domai
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Application", "Slask.Application\Slask.Application.csproj", "{75AA3CE2-82F5-4FD3-A259-399BE230E57E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.UnitTests", "Slask.UnitTests\Slask.UnitTests.csproj", "{58170127-EE68-43EA-9FD4-5689166A10FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Xunit.UnitTests", "Slask.UnitTests\Slask.Xunit.UnitTests.csproj", "{58170127-EE68-43EA-9FD4-5689166A10FD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{90E4A13B-836A-4B08-943E-C53CF45C6C6D}"
 EndProject
@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Common", "Slask.Commo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.SpecFlow.IntegrationTests", "Slask.SpecFlow.IntegrationTests\Slask.SpecFlow.IntegrationTests.csproj", "{23CB9D94-C75C-410E-AB36-2803967FAEDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slask.Xunit.IntegrationTests", "Slask.Xunit.IntegrationTests\Slask.Xunit.IntegrationTests.csproj", "{8D0A40E2-5DF6-45EA-9A95-A3AA5CDF13EB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Xunit.IntegrationTests", "Slask.Xunit.IntegrationTests\Slask.Xunit.IntegrationTests.csproj", "{8D0A40E2-5DF6-45EA-9A95-A3AA5CDF13EB}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1539F032-4F1D-4B63-B5BA-036B488808CC} = {1539F032-4F1D-4B63-B5BA-036B488808CC}
 		{5457E045-6273-4894-8E8B-EA822B927279} = {5457E045-6273-4894-8E8B-EA822B927279}

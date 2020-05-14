@@ -157,7 +157,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                 RoundBase round = tournament.Rounds[roundIndex];
                 GroupBase group = round.Groups[groupIndex];
 
-                while (group.GetPlayState() != PlayState.IsFinished)
+                while (group.GetPlayState() != PlayState.Finished)
                 {
                     bool tournamentHasBetters = tournament.Betters.Count > 0;
                     if (tournamentHasBetters)
@@ -293,7 +293,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             foreach (Match match in group.Matches)
             {
                 bool matchShouldHaveStarted = match.StartDateTime < SystemTime.Now;
-                bool matchIsNotFinished = match.GetPlayState() != PlayState.IsFinished;
+                bool matchIsNotFinished = match.GetPlayState() != PlayState.Finished;
 
                 if (matchShouldHaveStarted && matchIsNotFinished)
                 {
@@ -319,13 +319,13 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             {
                 return PlayState.NotBegun;
             }
-            else if (playStateString.Contains("ISPLAYING", StringComparison.CurrentCulture))
+            else if (playStateString.Contains("ONGOING", StringComparison.CurrentCulture))
             {
-                return PlayState.IsPlaying;
+                return PlayState.Ongoing;
             }
-            else if (playStateString.Contains("ISFINISHED", StringComparison.CurrentCulture))
+            else if (playStateString.Contains("FINISHED", StringComparison.CurrentCulture))
             {
-                return PlayState.IsFinished;
+                return PlayState.Finished;
             }
 
             throw new NotImplementedException();

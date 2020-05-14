@@ -3,7 +3,7 @@
     public enum PlayState
     {
         NotBegun,
-        IsPlaying,
-        IsFinished
+        Ongoing,
+        Finished
     }
 }

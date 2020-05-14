@@ -46,7 +46,7 @@ Scenario: PlayState is set to NotBegun before any round has started
 	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
 	Then play state of tournament 0 is set to "NotBegun"
 	
-Scenario: PlayState is set to IsPlaying when at least one round has started but not all
+Scenario: PlayState is set to Ongoing when at least one round has started but not all
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds
 			| Round type | Round name      | Best of | Advancing per group count | Players per group count |
@@ -56,9 +56,9 @@ Scenario: PlayState is set to IsPlaying when at least one round has started but 
 	When created groups within created tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
-	Then play state of tournament 0 is set to "IsPlaying"
+	Then play state of tournament 0 is set to "Ongoing"
 
-Scenario: PlayState set to IsFinished when all rounds has finished
+Scenario: PlayState set to Finished when all rounds has finished
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds
 			| Round type | Round name      | Best of | Advancing per group count | Players per group count |
@@ -70,4 +70,4 @@ Scenario: PlayState set to IsFinished when all rounds has finished
 			| 0                | 0           | 0           |
 			| 0                | 0           | 1           |
 			| 0                | 1           | 0           |
-	Then play state of tournament 0 is set to "IsFinished"
+	Then play state of tournament 0 is set to "Finished"

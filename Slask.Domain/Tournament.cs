@@ -201,9 +201,9 @@ namespace Slask.Domain
                 return PlayState.NotBegun;
             }
 
-            bool lastRoundIsFinished = Rounds.Last().GetPlayState() == PlayState.IsFinished;
+            bool lastRoundIsFinished = Rounds.Last().GetPlayState() == PlayState.Finished;
 
-            return lastRoundIsFinished ? PlayState.IsFinished : PlayState.IsPlaying;
+            return lastRoundIsFinished ? PlayState.Finished : PlayState.Ongoing;
         }
 
         private void IntegrateRoundToTournament(RoundBase round)

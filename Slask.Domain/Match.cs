@@ -137,7 +137,7 @@ namespace Slask.Domain
                 return PlayState.NotBegun;
             }
 
-            return AnyPlayerHasWon() ? PlayState.IsFinished : PlayState.IsPlaying;
+            return AnyPlayerHasWon() ? PlayState.Finished : PlayState.Ongoing;
         }
 
         public Player GetWinningPlayer()
