@@ -192,6 +192,20 @@ namespace Slask.Domain
             return Rounds.First().PlayerReferences;
         }
 
+        public PlayState GetPlayState()
+        {
+            bool hasNotBegun = Rounds.First().GetPlayState() == PlayState.NotBegun;
+
+            if (hasNotBegun)
+            {
+                return PlayState.NotBegun;
+            }
+
+            bool lastRoundIsFinished = Rounds.Last().GetPlayState() == PlayState.IsFinished;
+
+            return lastRoundIsFinished ? PlayState.IsFinished : PlayState.IsPlaying;
+        }
+
         private void IntegrateRoundToTournament(RoundBase round)
         {
             Rounds.Add(round);
