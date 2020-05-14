@@ -1,16 +1,7 @@
-﻿Feature: Group
+Feature: Group
 	Does a bunch of tests on Groups
 
 @GroupTag
-Scenario: Rounds can create groups
-	Given a tournament named "GSL 2019" has been created
-		And created tournament 0 adds rounds
-			| Round type      | Round name            | Best of | Advancing per group count |
-			| Bracket         | Bracket round         | 3       | 1                         |
-			| Dual tournament | Dual tournament round | 3       | 1                         |
-			| Round robin     | Round robin round     | 3       | 1                         |
-	Then created rounds 0 to 2 should contain 1 groups each
-
 Scenario: Player reference is added to tournament when new player is added to group
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds

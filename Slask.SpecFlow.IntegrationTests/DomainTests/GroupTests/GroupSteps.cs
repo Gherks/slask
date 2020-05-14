@@ -56,18 +56,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             }
         }
 
-        [Then(@"created rounds (.*) to (.*) should contain (.*) groups each")]
-        public void ThenCreatedRoundsToShouldContainGroupsEach(int roundStartIndex, int roundEndIndex, int groupCount)
-        {
-            for (int roundIndex = roundStartIndex; roundIndex < roundEndIndex; ++roundIndex)
-            {
-                for (int groupCounter = 0; groupCounter < groupCount; ++groupCounter)
-                {
-                    createdRounds[roundIndex].Groups.Should().HaveCount(groupCount);
-                }
-            }
-        }
-
         [Then(@"group (.*) should be valid of type ""(.*)""")]
         public void ThenGroupShouldBeValidOfType(int groupIndex, string roundType)
         {
