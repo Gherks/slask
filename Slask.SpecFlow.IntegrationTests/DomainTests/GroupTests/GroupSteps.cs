@@ -200,6 +200,16 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             }
         }
 
+        [Then(@"play state of group (.*) is set to ""(.*)""")]
+        public void ThenPlayStateOfGroupIsSetTo(int groupIndex, string playStateString)
+        {
+            GroupBase group = createdGroups[groupIndex];
+
+            PlayState playState = ParsePlayStateString(playStateString);
+
+            group.GetPlayState().Should().Be(playState);
+        }
+
         protected static void ParseBracketGroupMatchSetup(TableRow row, out int matchIndex, out string player1Name, out string player2Name)
         {
             matchIndex = -1;
