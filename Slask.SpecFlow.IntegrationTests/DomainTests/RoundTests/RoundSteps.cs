@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
+using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
+using Slask.Domain.Utilities;
 using System;
 using TechTalk.SpecFlow;
 
@@ -125,6 +127,36 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             RoundBase round = createdRounds[roundIndex];
 
             round.AdvancingPerGroupCount.Should().Be(advancingPerGrouCount);
+        }
+
+        [Then(@"play state of round (.*) is set to ""(.*)""")]
+        public void ThenPlayStateOfRoundIsSetTo(int roundIndex, string playStateString)
+        {
+            RoundBase round = createdRounds[roundIndex];
+
+            PlayState playState = ParsePlayStateString(playStateString);
+
+            round.GetPlayState().Should().Be(playState);
+        }
+
+        private PlayState ParsePlayStateString(string playStateString)
+        {
+            playStateString = StringUtility.ToUpperNoSpaces(playStateString);
+
+            if (playStateString.Contains("NOTBEGUN", StringComparison.CurrentCulture))
+            {
+                return PlayState.NotBegun;
+            }
+            else if (playStateString.Contains("ISPLAYING", StringComparison.CurrentCulture))
+            {
+                return PlayState.IsPlaying;
+            }
+            else if (playStateString.Contains("ISFINISHED", StringComparison.CurrentCulture))
+            {
+                return PlayState.IsFinished;
+            }
+
+            throw new NotImplementedException();
         }
 
         protected static void CheckRoundValidity(RoundBase round, string correctName, int bestOf, int advancingCount, int playersPerGroupCount)
