@@ -1,9 +1,10 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
+using Slask.Domain.Utilities;
 using System;
 using System.Linq;
 using Xunit;
@@ -83,6 +84,37 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
             round.HasProblematicTie().Should().BeTrue();
         }
 
+        [Fact]
+        public void RoundIsOngoingUntilTieIsSolved()
+        {
+            round.SetPlayersPerGroupCount(3);
+            round.RegisterPlayerReference("Maru");
+            round.RegisterPlayerReference("Stork");
+            round.RegisterPlayerReference("Taeja");
+
+            foreach (Match match in round.Groups.First().Matches)
+            {
+                SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+                match.Player1.IncreaseScore(2);
+            }
+
+            round.GetPlayState().Should().Be(PlayState.Ongoing);
+        }
+
+        [Fact]
+        public void SolvingTieWhenThereIsNoTieDoesNothing()
+        {
+            round.SetPlayersPerGroupCount(3);
+            round.RegisterPlayerReference("Maru");
+            round.RegisterPlayerReference("Stork");
+            round.RegisterPlayerReference("Taeja");
+
+            Match match;
+
+            match = round.Groups.First().Matches[0];
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+            match.Player1.IncreaseScore(2);
+
             match = round.Groups.First().Matches[1];
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player2.IncreaseScore(2);
@@ -91,7 +123,8 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(2);
 
-            round.HasProblematicTie().Should().BeFalse();
+            // Do the test
+            1.Should().Be(2);
         }
     }
 }

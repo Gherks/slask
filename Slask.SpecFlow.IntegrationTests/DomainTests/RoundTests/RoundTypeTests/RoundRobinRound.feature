@@ -37,3 +37,37 @@ Scenario: Cannot reconfigure advancing count in round robin round when it has st
 			| 0                | 0           | 0           |
 	When advancing per group count in round 0 is set to 2
 	Then advancing per group count in round 0 should be 1
+
+Scenario: Does not transfer any players to next round when groups has problematic ties
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type  | Round name          | Best of | Advancing per group count | Players per group count |
+			| Round robin | Round robin round 1 | 3       | 1                         | 3                       |
+			| Round robin | Round robin round 2 | 3       | 1                         | 2                       |
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to round 0
+	When score is added to players in given matches in created groups
+		| Group index | Match index | Scoring player | Added score |
+		| 0           | 0           | Maru           | 2           |
+		| 0           | 1           | Taeja          | 2           |
+		| 0           | 2           | Stork          | 2           |
+		| 1           | 0           | Rain           | 2           |
+		| 1           | 1           | FanTaSy        | 2           |
+		| 1           | 2           | Bomber         | 2           |
+	Then advancing players in created group 0 is exactly ""
+		And group 0 has a problematic tie
+		And advancing players in created group 1 is exactly ""
+		And group 1 has a problematic tie
+
+Scenario: Can solve tie
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
+			| Round robin | Round robin round | 3       | 1                         | 3                       |
+		And players "Maru, Stork, Taeja" is registered to round 0
+		And score is added to players in given matches in created groups
+			| Group index | Match index | Scoring player | Added score |
+			| 0           | 0           | Maru           | 2           |
+			| 0           | 1           | Taeja          | 2           |
+			| 0           | 2           | Stork          | 2           |
+	When tie in group 0 is solved by choosing "Maru"
+	Then advancing players in created group 0 is exactly "Maru"
