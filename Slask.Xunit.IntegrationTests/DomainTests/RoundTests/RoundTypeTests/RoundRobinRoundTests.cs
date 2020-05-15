@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
@@ -42,6 +42,31 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
         }
 
         [Fact]
+        public void DoesNotFlagRoundAsProlematicTieWhenNoProblematicTieHappens()
+        {
+            round.SetPlayersPerGroupCount(3);
+            round.RegisterPlayerReference("Maru");
+            round.RegisterPlayerReference("Stork");
+            round.RegisterPlayerReference("Taeja");
+
+            Match match;
+
+            match = round.Groups.First().Matches[0];
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+            match.Player1.IncreaseScore(2);
+
+            match = round.Groups.First().Matches[1];
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+            match.Player2.IncreaseScore(2);
+
+            match = round.Groups.First().Matches[2];
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+            match.Player1.IncreaseScore(2);
+
+            round.HasProblematicTie().Should().BeFalse();
+        }
+
+        [Fact]
         public void CanDetectWhenRoundRobinRoundContainsProblematicTie()
         {
             round.SetPlayersPerGroupCount(3);
@@ -57,20 +82,6 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
 
             round.HasProblematicTie().Should().BeTrue();
         }
-
-        [Fact]
-        public void DoesNotFlagRoundAsProlematicTieWhenNoProblematicTieHappens()
-        {
-            round.SetPlayersPerGroupCount(3);
-            round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Stork");
-            round.RegisterPlayerReference("Taeja");
-
-            Match match;
-
-            match = round.Groups.First().Matches[0];
-            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-            match.Player1.IncreaseScore(2);
 
             match = round.Groups.First().Matches[1];
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
