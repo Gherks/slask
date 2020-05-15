@@ -1,8 +1,10 @@
-using Slask.Domain.Groups;
+﻿using Slask.Domain.Groups;
 using Slask.Domain.Groups.Bases;
 using Slask.Domain.Rounds.Bases;
+using Slask.Domain.Utilities;
 using Slask.Utilities.PlayerStandingsSolver;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Slask.Domain.Rounds
@@ -35,6 +37,28 @@ namespace Slask.Domain.Rounds
             round.AssignDefaultName();
 
             return round;
+        }
+
+        public bool HasProblematicTie()
+        {
+            bool isFinished = GetPlayState() == PlayState.Finished;
+
+            if (isFinished)
+            {
+                foreach (GroupBase group in Groups)
+                {
+                    List<PlayerStandingEntry> playerStandings = PlayerStandingsSolver.FetchFrom(group);
+
+                    PlayerStandingEntry playerJustAboveAdvancingThreshold = playerStandings[AdvancingPerGroupCount - 1];
+                    PlayerStandingEntry playerJustBelowAdvancingThreshold = playerStandings[AdvancingPerGroupCount];
+
+                    bool hasProblematicTieInGroup = playerJustAboveAdvancingThreshold.Wins == playerJustBelowAdvancingThreshold.Wins;
+
+                    return hasProblematicTieInGroup;
+                }
+            }
+
+            return false;
         }
 
         protected override GroupBase AddGroup()
