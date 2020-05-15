@@ -1,4 +1,6 @@
-﻿namespace Slask.Domain.Groups.GroupUtility
+﻿using Slask.Domain;
+
+namespace Slask.Utilities.PlayerStandingsSolver
 {
     public class PlayerStandingEntry
     {

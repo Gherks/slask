@@ -1,11 +1,12 @@
-﻿using Slask.Domain.Groups.Bases;
-using Slask.Domain.Rounds.Bases;
-using Slask.Domain.Utilities;
+﻿
+
+using Slask.Domain;
+using Slask.Domain.Groups.Bases;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Slask.Domain.Groups.GroupUtility
+namespace Slask.Utilities.PlayerStandingsSolver
 {
     public static class PlayerStandingsSolver
     {
