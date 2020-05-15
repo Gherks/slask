@@ -32,6 +32,10 @@ namespace Slask.Domain.Groups
                 Round = round
             };
         }
+        public void SolveTieByChoosing(List<PlayerReference> playerReferences)
+        {
+            throw new NotImplementedException();
+        }
 
         public override bool NewDateTimeIsValid(Match match, DateTime dateTime)
         {
