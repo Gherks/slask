@@ -35,8 +35,14 @@ namespace Slask.Utilities.PlayerStandingsSolver
         {
             foreach (Match match in group.Matches)
             {
-                PlayerReference winner = match.GetWinningPlayer().PlayerReference;
-                PlayerStandingEntry playerStandingEntry = playerStandings.Find(player => player.PlayerReference.Name == winner.Name);
+                Player winner = match.GetWinningPlayer();
+
+                if (winner == null)
+                {
+                    continue;
+                }
+
+                PlayerStandingEntry playerStandingEntry = playerStandings.Find(player => player.PlayerReference.Name == winner.PlayerReference.Name);
 
                 if (playerStandingEntry == null)
                 {
