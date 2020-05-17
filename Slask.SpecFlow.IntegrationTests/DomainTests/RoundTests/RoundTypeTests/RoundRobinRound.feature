@@ -38,6 +38,23 @@ Scenario: Cannot reconfigure advancing count in round robin round when it has st
 	When advancing per group count in round 0 is set to 2
 	Then advancing per group count in round 0 should be 1
 
+Scenario: PlayState is set to Ongoing when round has finished with a problematic tie
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type  | Round name          | Best of | Advancing per group count | Players per group count |
+			| Round robin | Round robin round 1 | 3       | 1                         | 3                       |
+			| Round robin | Round robin round 2 | 3       | 1                         | 2                       |
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to round 0
+		And created groups within created tournament is played out and betted on
+			| Tournament index | Round index | Group index |
+			| 0                | 0           | 0           |
+	When score is added to players in given matches in created groups
+		| Group index | Match index | Scoring player | Added score |
+		| 1           | 0           | Rain           | 2           |
+		| 1           | 1           | FanTaSy        | 2           |
+		| 1           | 2           | Bomber         | 2           |
+	Then play state of round 0 is set to "Ongoing"
+
 Scenario: Does not transfer any players to next round when groups has problematic ties
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds
