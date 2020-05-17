@@ -2,8 +2,10 @@
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
+using Slask.Domain.Groups.Bases;
 using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.Bases;
 using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
@@ -18,14 +20,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
 
     public class RoundRobinRoundStepDefinitions : RoundStepDefinitions
     {
-        [Then(@"group (.*) has a problematic tie")]
-        public void ThenGroupHasAProblematicTie(int roundIndex)
-        {
-            RoundRobinRound round = createdRounds[roundIndex] as RoundRobinRound;
-
-            round.HasProblematicTie().Should().BeTrue();
-        }
-
         [When(@"tie in group (.*) is solved by choosing ""(.*)""")]
         public void WhenTieInGroupIsSolvedByChoosing(int groupIndex, string commaSeparatedPlayerNames)
         {
@@ -42,17 +36,23 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
                     
                     if(playerFound)
                     {
-                        playerReferences.Add(player.PlayerReference);
+                        group.SolveTieByChoosing(player.PlayerReference.Name);
                         break;
                     }
                 }
             }
 
-            group.SolveTieByChoosing(playerReferences);
-
             List<PlayerReference> advancingPlayerReferences = AdvancingPlayersSolver.FetchFrom(group);
 
             advancingPlayerReferences.Should().BeEquivalentTo(playerReferences);
+        }
+
+        [Then(@"round (.*) has (.*) problematic tie\(s\)")]
+        public void ThenRoundHasProblematicTieS(int roundIndex, int problematicTieCount)
+        {
+            RoundBase round = createdRounds[roundIndex];
+
+            round.HasProblematicTie().Should().BeTrue();
         }
     }
 }

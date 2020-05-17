@@ -70,10 +70,9 @@ Scenario: Does not transfer any players to next round when groups has problemati
 		| 1           | 0           | Rain           | 2           |
 		| 1           | 1           | FanTaSy        | 2           |
 		| 1           | 2           | Bomber         | 2           |
-	Then advancing players in created group 0 is exactly ""
-		And group 0 has a problematic tie
+	Then round 0 has 2 problematic tie(s)
+		And advancing players in created group 0 is exactly ""
 		And advancing players in created group 1 is exactly ""
-		And group 1 has a problematic tie
 
 Scenario: Can solve tie
 	Given a tournament named "GSL 2019" has been created
