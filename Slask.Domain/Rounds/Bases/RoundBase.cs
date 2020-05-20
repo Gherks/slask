@@ -2,6 +2,7 @@
 using Slask.Domain.Groups;
 using Slask.Domain.Groups.Bases;
 using Slask.Domain.Groups.GroupUtility;
+using Slask.Domain.Procedure;
 using Slask.Domain.Rounds.Interfaces;
 using Slask.Domain.Utilities;
 using System;
@@ -19,6 +20,8 @@ namespace Slask.Domain.Rounds.Bases
             Groups = new List<GroupBase>();
             PlayerReferences = new List<PlayerReference>();
         }
+
+        private PlayersPerGroupCountProcedure _playersPerGroupCountProcedure;
 
         public Guid Id { get; protected set; }
         public string Name { get; protected set; }
@@ -305,6 +308,19 @@ namespace Slask.Domain.Rounds.Bases
             }
         }
 
+        public bool SetPlayersPerGroupCount(int count)
+        {
+            if (_playersPerGroupCountProcedure.NewValueValid(count, out int newValue, this))
+            {
+                PlayersPerGroupCount = newValue;
+                _playersPerGroupCountProcedure.ApplyPostAssignmentOperations(this);
+
+                return true;
+            }
+
+            return false;
+        }
+
         public virtual bool SetAdvancingPerGroupCount(int count)
         {
             bool tournamentHasNotBegun = GetPlayState() == PlayState.NotBegun;
@@ -345,6 +361,11 @@ namespace Slask.Domain.Rounds.Bases
 
             defaultName = "Round " + GetNextDefaultRoundLettering(Tournament.Rounds.Count);
             return RenameTo(defaultName);
+        }
+
+        protected void AssignProcedures(PlayersPerGroupCountProcedure playersPerGroupCountProcedure)
+        {
+            _playersPerGroupCountProcedure = playersPerGroupCountProcedure;
         }
 
         protected virtual GroupBase AddGroup()

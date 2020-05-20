@@ -1,12 +1,13 @@
 ﻿using Slask.Domain.Groups;
 using Slask.Domain.Groups.Bases;
+using Slask.Domain.Procedure;
 using Slask.Domain.Rounds.Bases;
 using System;
 using System.Linq;
 
 namespace Slask.Domain.Rounds
 {
-    public class BracketRound : ResizableRound
+    public class BracketRound : RoundBase
     {
         private BracketRound()
         {
@@ -32,6 +33,7 @@ namespace Slask.Domain.Rounds
             };
 
             round.AssignDefaultName();
+            round.AssignProcedures(new MutablePlayersPerGroupCountProcedure());
 
             return round;
         }
