@@ -2,6 +2,7 @@
 {
     public interface ProcedureInterface<Type, ParentType>
     {
-        bool Set(Type inValue, out Type outValue, ParentType parent);
+        bool NewValueValid(Type inValue, out Type outValue, ParentType parent);
+        void ApplyPostAssignmentOperations(ParentType parent);
     }
 }
