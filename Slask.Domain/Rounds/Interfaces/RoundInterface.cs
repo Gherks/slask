@@ -23,6 +23,7 @@ namespace Slask.Domain.Rounds.Interfaces
         bool ExcludePlayerReference(string name);
         bool Construct();
         bool FillGroupsWithPlayerReferences();
+        bool SetPlayersPerGroupCount(int count);
         bool SetBestOf(int bestOf);
         bool SetAdvancingPerGroupCount(int count);
         bool IsFirstRound();
