@@ -20,7 +20,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
         [When(@"players per group count in round (.*) is set to (.*)")]
         public void WhenPlayersPerGroupCountInRoundIsSetTo(int roundIndex, int playersPerGroupCount)
         {
-            ResizableRound round = createdRounds[roundIndex] as ResizableRound;
+            RoundBase round = createdRounds[roundIndex];
 
             round.SetPlayersPerGroupCount(playersPerGroupCount);
         }

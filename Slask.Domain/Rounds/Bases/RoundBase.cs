@@ -2,6 +2,8 @@
 using Slask.Domain.Groups;
 using Slask.Domain.Groups.Bases;
 using Slask.Domain.Groups.GroupUtility;
+using Slask.Domain.Procedures.AdvancingPerGroupCount;
+using Slask.Domain.Procedures.PlayersPerGroupCount;
 using Slask.Domain.Rounds.Interfaces;
 using Slask.Domain.Utilities;
 using System;
@@ -19,6 +21,9 @@ namespace Slask.Domain.Rounds.Bases
             Groups = new List<GroupBase>();
             PlayerReferences = new List<PlayerReference>();
         }
+
+        private PlayersPerGroupCountProcedure _playersPerGroupCountProcedure;
+        private AdvancingPerGroupCountProcedure _advancingPerGroupCountProcedure;
 
         public Guid Id { get; protected set; }
         public string Name { get; protected set; }
@@ -305,16 +310,26 @@ namespace Slask.Domain.Rounds.Bases
             }
         }
 
-        public virtual bool SetAdvancingPerGroupCount(int count)
+        public bool SetPlayersPerGroupCount(int count)
         {
-            bool tournamentHasNotBegun = GetPlayState() == PlayState.NotBegun;
-
-            if (tournamentHasNotBegun)
+            if (_playersPerGroupCountProcedure.NewValueValid(count, out int newValue, this))
             {
-                AdvancingPerGroupCount = count;
+                PlayersPerGroupCount = newValue;
+                _playersPerGroupCountProcedure.ApplyPostAssignmentOperations(this);
 
-                Construct();
-                Tournament.FindIssues();
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetAdvancingPerGroupCount(int count)
+        {
+            if (_advancingPerGroupCountProcedure.NewValueValid(count, out int newValue, this))
+            {
+                AdvancingPerGroupCount = newValue;
+                _advancingPerGroupCountProcedure.ApplyPostAssignmentOperations(this);
+
                 return true;
             }
 
@@ -345,6 +360,12 @@ namespace Slask.Domain.Rounds.Bases
 
             defaultName = "Round " + GetNextDefaultRoundLettering(Tournament.Rounds.Count);
             return RenameTo(defaultName);
+        }
+
+        protected void AssignProcedures(PlayersPerGroupCountProcedure playersPerGroupCountProcedure, AdvancingPerGroupCountProcedure advancingPerGroupCountProcedure)
+        {
+            _playersPerGroupCountProcedure = playersPerGroupCountProcedure;
+            _advancingPerGroupCountProcedure = advancingPerGroupCountProcedure;
         }
 
         protected virtual GroupBase AddGroup()

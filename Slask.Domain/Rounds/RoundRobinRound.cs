@@ -1,12 +1,14 @@
 ﻿using Slask.Domain.Groups;
 using Slask.Domain.Groups.Bases;
+using Slask.Domain.Procedures.AdvancingPerGroupCount;
+using Slask.Domain.Procedures.PlayersPerGroupCount;
 using Slask.Domain.Rounds.Bases;
 using System;
 using System.Linq;
 
 namespace Slask.Domain.Rounds
 {
-    public class RoundRobinRound : ResizableRound
+    public class RoundRobinRound : RoundBase
     {
         private RoundRobinRound()
         {
@@ -32,6 +34,7 @@ namespace Slask.Domain.Rounds
             };
 
             round.AssignDefaultName();
+            round.AssignProcedures(new MutablePlayersPerGroupCountProcedure(), new MutableAdvancingPerGroupCountProcedure());
 
             return round;
         }
