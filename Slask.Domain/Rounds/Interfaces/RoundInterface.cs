@@ -9,12 +9,12 @@ namespace Slask.Domain.Rounds.Interfaces
     public interface RoundInterface
     {
         Guid Id { get; }
-        int AdvancingPerGroupCount { get; }
-        int BestOf { get; }
-        List<GroupBase> Groups { get; }
         string Name { get; }
-        List<PlayerReference> PlayerReferences { get; }
         int PlayersPerGroupCount { get; }
+        int BestOf { get; }
+        int AdvancingPerGroupCount { get; }
+        List<GroupBase> Groups { get; }
+        List<PlayerReference> PlayerReferences { get; }
         Guid TournamentId { get; }
         Tournament Tournament { get; }
 
