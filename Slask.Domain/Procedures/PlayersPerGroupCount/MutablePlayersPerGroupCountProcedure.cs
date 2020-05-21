@@ -1,10 +1,10 @@
-using Slask.Domain.Rounds.Bases;
+﻿using Slask.Domain.Rounds.Bases;
 using Slask.Domain.Utilities;
 using System;
 
 namespace Slask.Domain.Procedures.PlayersPerGroupCount
 {
-    class MutablePlayersPerGroupCountProcedure : PlayersPerGroupCountProcedure
+    public class MutablePlayersPerGroupCountProcedure : PlayersPerGroupCountProcedure
     {
         public override bool NewValueValid(int inValue, out int outValue, RoundBase parent)
         {
