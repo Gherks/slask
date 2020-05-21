@@ -1,4 +1,4 @@
-using Slask.Domain.Groups;
+﻿using Slask.Domain.Groups;
 using Slask.Domain.Groups.Bases;
 using Slask.Domain.Procedures.AdvancingPerGroupCount;
 using Slask.Domain.Procedures.PlayersPerGroupCount;
@@ -34,14 +34,9 @@ namespace Slask.Domain.Rounds
             };
 
             round.AssignDefaultName();
-            round.AssignProcedures(new ImmutablePlayersPerGroupCountProcedure());
+            round.AssignProcedures(new ImmutablePlayersPerGroupCountProcedure(), new ImmutableAdvancingPerGroupCountProcedure());
 
             return round;
-        }
-
-        public override bool SetAdvancingPerGroupCount(int count)
-        {
-            return false;
         }
 
         protected override GroupBase AddGroup()

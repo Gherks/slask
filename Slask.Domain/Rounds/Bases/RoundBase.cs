@@ -1,4 +1,4 @@
-using Slask.Common;
+﻿using Slask.Common;
 using Slask.Domain.Groups;
 using Slask.Domain.Groups.Bases;
 using Slask.Domain.Groups.GroupUtility;
@@ -23,6 +23,7 @@ namespace Slask.Domain.Rounds.Bases
         }
 
         private PlayersPerGroupCountProcedure _playersPerGroupCountProcedure;
+        private AdvancingPerGroupCountProcedure _advancingPerGroupCountProcedure;
 
         public Guid Id { get; protected set; }
         public string Name { get; protected set; }
@@ -322,16 +323,13 @@ namespace Slask.Domain.Rounds.Bases
             return false;
         }
 
-        public virtual bool SetAdvancingPerGroupCount(int count)
+        public bool SetAdvancingPerGroupCount(int count)
         {
-            bool tournamentHasNotBegun = GetPlayState() == PlayState.NotBegun;
-
-            if (tournamentHasNotBegun)
+            if (_advancingPerGroupCountProcedure.NewValueValid(count, out int newValue, this))
             {
-                AdvancingPerGroupCount = count;
+                AdvancingPerGroupCount = newValue;
+                _advancingPerGroupCountProcedure.ApplyPostAssignmentOperations(this);
 
-                Construct();
-                Tournament.FindIssues();
                 return true;
             }
 
@@ -364,9 +362,10 @@ namespace Slask.Domain.Rounds.Bases
             return RenameTo(defaultName);
         }
 
-        protected void AssignProcedures(PlayersPerGroupCountProcedure playersPerGroupCountProcedure)
+        protected void AssignProcedures(PlayersPerGroupCountProcedure playersPerGroupCountProcedure, AdvancingPerGroupCountProcedure advancingPerGroupCountProcedure)
         {
             _playersPerGroupCountProcedure = playersPerGroupCountProcedure;
+            _advancingPerGroupCountProcedure = advancingPerGroupCountProcedure;
         }
 
         protected virtual GroupBase AddGroup()

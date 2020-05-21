@@ -1,4 +1,4 @@
-using Slask.Domain.Groups;
+﻿using Slask.Domain.Groups;
 using Slask.Domain.Groups.Bases;
 using Slask.Domain.Procedures.AdvancingPerGroupCount;
 using Slask.Domain.Procedures.PlayersPerGroupCount;
@@ -34,7 +34,7 @@ namespace Slask.Domain.Rounds
             };
 
             round.AssignDefaultName();
-            round.AssignProcedures(new MutablePlayersPerGroupCountProcedure());
+            round.AssignProcedures(new MutablePlayersPerGroupCountProcedure(), new MutableAdvancingPerGroupCountProcedure());
 
             return round;
         }
