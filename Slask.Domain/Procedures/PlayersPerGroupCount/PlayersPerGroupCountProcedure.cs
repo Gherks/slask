@@ -1,6 +1,6 @@
 ﻿using Slask.Domain.Rounds.Bases;
 
-namespace Slask.Domain.Procedure
+namespace Slask.Domain.Procedures.PlayersPerGroupCount
 {
     public abstract class PlayersPerGroupCountProcedure : ProcedureInterface<int, RoundBase>
     {

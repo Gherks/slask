@@ -1,8 +1,8 @@
-﻿using Slask.Domain.Rounds.Bases;
+using Slask.Domain.Rounds.Bases;
 using Slask.Domain.Utilities;
 using System;
 
-namespace Slask.Domain.Procedure
+namespace Slask.Domain.Procedures.PlayersPerGroupCount
 {
     class MutablePlayersPerGroupCountProcedure : PlayersPerGroupCountProcedure
     {

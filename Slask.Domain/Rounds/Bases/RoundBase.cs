@@ -1,8 +1,9 @@
-﻿using Slask.Common;
+using Slask.Common;
 using Slask.Domain.Groups;
 using Slask.Domain.Groups.Bases;
 using Slask.Domain.Groups.GroupUtility;
-using Slask.Domain.Procedure;
+using Slask.Domain.Procedures.AdvancingPerGroupCount;
+using Slask.Domain.Procedures.PlayersPerGroupCount;
 using Slask.Domain.Rounds.Interfaces;
 using Slask.Domain.Utilities;
 using System;

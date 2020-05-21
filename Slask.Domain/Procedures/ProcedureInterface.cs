@@ -1,4 +1,4 @@
-﻿namespace Slask.Domain.Procedure
+﻿namespace Slask.Domain.Procedures
 {
     public interface ProcedureInterface<Type, ParentType>
     {
