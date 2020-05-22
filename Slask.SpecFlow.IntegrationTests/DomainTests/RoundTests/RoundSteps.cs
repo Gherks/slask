@@ -2,10 +2,13 @@
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups.Bases;
+using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
 using Slask.Domain.Utilities;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using TechTalk.SpecFlow;
 
 namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
@@ -171,6 +174,21 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             round.GetPlayState().Should().Be(playState);
         }
 
+        [Then(@"advancing players in created group (.*) is exactly ""(.*)""")]
+        public void ThenWinningPlayersInGroupIs(int groupIndex, string commaSeparatedPlayerNames)
+        {
+            GroupBase group = createdGroups[groupIndex];
+            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+
+            List<PlayerReference> playerReferences = AdvancingPlayersSolver.FetchFrom(group);
+
+            playerReferences.Should().HaveCount(playerNames.Count);
+
+            foreach (string playerName in playerNames)
+            {
+                playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+            }
+        }
         protected static void CheckRoundValidity(RoundBase round, string correctName, int bestOf, int advancingCount, int playersPerGroupCount)
         {
             if (round == null)

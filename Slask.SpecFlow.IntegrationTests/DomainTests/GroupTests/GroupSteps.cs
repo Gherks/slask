@@ -80,24 +80,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             }
         }
 
-
-        [Then(@"advancing players in created group (.*) is exactly ""(.*)""")]
-        public void ThenWinningPlayersInGroupIs(int groupIndex, string commaSeparatedPlayerNames)
-        {
-            GroupBase group = createdGroups[groupIndex];
-            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
-
-            List<PlayerReference> playerReferences = AdvancingPlayersSolver.FetchFrom(group);
-
-            playerReferences.Should().HaveCount(playerNames.Count);
-
-            foreach (string playerName in playerNames)
-            {
-                playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
-            }
-        }
-
-
         [Then(@"participating players in group (.*) should be mapped accordingly")]
         public void ThenParticipatingPlayersInCreatedGroupShouldBeMappedAccordingly(int groupIndex, Table table)
         {
