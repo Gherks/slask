@@ -60,7 +60,7 @@ Scenario: Round robin progression with five players goes as expected
 	When created groups within created tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
-	Then advancing players in created group 0 is exactly "Fifth, Third, Second"
+	Then advancing players in created group 0 is exactly "Fifth, First, Fourth"
 		And participating players in group 0 should be mapped accordingly
 			| Match index | Player 1 name | Player 2 name |
 			| 0           | First         | Fourth        |

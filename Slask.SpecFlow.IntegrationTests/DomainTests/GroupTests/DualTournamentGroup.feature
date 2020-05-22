@@ -51,11 +51,11 @@ Scenario: Dual tournament progression goes as expected
 	When created groups within created tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
-	Then advancing players in created group 0 is exactly "Fourth, First"
+	Then advancing players in created group 0 is exactly "First, Fourth"
 		And participating players in group 0 should be mapped accordingly
 			| Match index | Player 1 name | Player 2 name |
 			| 0           | First         | Second        |
 			| 1           | Third         | Fourth        |
 			| 2           | First         | Fourth        |
 			| 3           | Second        | Third         |
-			| 4           | First         | Third         |
+			| 4           | Fourth        | Second        |

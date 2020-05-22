@@ -21,8 +21,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
     public class TournamentStepDefinitions : TournamentServiceStepDefinitions
     {
-        private Random randomizer;
-
         [Given(@"created tournament (.*) adds rounds")]
         [When(@"created tournament (.*) adds rounds")]
         public void GivenCreatedTournamentAddsRounds(int tournamentIndex, Table table)
@@ -151,8 +149,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                 }
 
                 SystemTimeMocker.Reset();
-                randomizer = new Random(133742069);
-
                 Tournament tournament = createdTournaments[tournamentIndex];
                 RoundBase round = tournament.Rounds[roundIndex];
                 GroupBase group = round.Groups[groupIndex];
@@ -297,7 +293,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
                 if (matchShouldHaveStarted && matchIsNotFinished)
                 {
-                    bool increasePlayer1Score = randomizer.Next(2) == 0;
+                    // Give points to player with name that precedes the other
+                    bool increasePlayer1Score = match.Player1.Name.CompareTo(match.Player2.Name) <= 0;
 
                     if (increasePlayer1Score)
                     {
