@@ -26,6 +26,7 @@ namespace Slask.Domain.Rounds.Interfaces
         bool SetPlayersPerGroupCount(int count);
         bool SetBestOf(int bestOf);
         bool SetAdvancingPerGroupCount(int count);
+        bool HasProblematicTie();
         bool IsFirstRound();
         bool IsLastRound();
         Match GetFirstMatch();
