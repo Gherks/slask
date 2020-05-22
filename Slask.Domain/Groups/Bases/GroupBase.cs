@@ -2,6 +2,7 @@ using Slask.Domain.Bets;
 using Slask.Domain.Groups.Interfaces;
 using Slask.Domain.Rounds.Bases;
 using Slask.Domain.Utilities;
+using Slask.Utilities.PlayerStandingsSolver;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,6 +16,7 @@ namespace Slask.Domain.Groups.Bases
         {
             Matches = new List<Match>();
             PlayerReferences = new List<PlayerReference>();
+            ChoosenTyingPlayers = new List<PlayerReference>();
         }
 
         public Guid Id { get; protected set; }
@@ -24,6 +26,9 @@ namespace Slask.Domain.Groups.Bases
 
         [NotMapped]
         public List<PlayerReference> PlayerReferences { get; private set; }
+
+        [NotMapped]
+        public List<PlayerReference> ChoosenTyingPlayers { get; private set; }
 
         public bool AddPlayerReferences(List<PlayerReference> playerReferences)
         {
@@ -75,6 +80,38 @@ namespace Slask.Domain.Groups.Bases
             return true;
         }
 
+        public bool HasProblematicTie()
+        {
+            bool groupHasProblematicTie = FindProblematiclyTyingPlayers().Count > 0;
+
+            return groupHasProblematicTie;
+        }
+
+        public bool SolveTieByChoosing(string playerName)
+        {
+            List<PlayerReference> tyingPlayers = FindProblematiclyTyingPlayers();
+            bool hasTyingPlayers = tyingPlayers.Count > 0;
+
+            if (hasTyingPlayers)
+            {
+                foreach (PlayerReference playerReference in tyingPlayers)
+                {
+                    if(playerReference.Name == playerName)
+                    {
+                        bool haveNotChosePlayerAlready = !ChoosenTyingPlayers.Contains(playerReference);
+
+                        if (haveNotChosePlayerAlready)
+                        {
+                            ChoosenTyingPlayers.Add(playerReference);
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public virtual void OnMatchScoreIncreased(Match match)
         {
         }
@@ -108,6 +145,32 @@ namespace Slask.Domain.Groups.Bases
                     }
                 }
             }
+        }
+
+        private List<PlayerReference> FindProblematiclyTyingPlayers()
+        {
+            List<PlayerReference> problematicPlayers = new List<PlayerReference>();
+
+            List<PlayerStandingEntry> playerStandings = PlayerStandingsSolver.FetchFrom(this);
+
+            for (int index = Round.AdvancingPerGroupCount; index < playerStandings.Count; ++index)
+            {
+                PlayerStandingEntry previousPlayer = playerStandings[Round.AdvancingPerGroupCount - 1];
+                PlayerStandingEntry currentPlayer = playerStandings[Round.AdvancingPerGroupCount];
+
+                bool playersPartOfProblematicTie = previousPlayer.Wins == currentPlayer.Wins;
+
+                if (playersPartOfProblematicTie)
+                {
+                    problematicPlayers.Add(currentPlayer.PlayerReference);
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return problematicPlayers;
         }
     }
 }
