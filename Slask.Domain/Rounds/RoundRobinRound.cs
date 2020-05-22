@@ -42,28 +42,6 @@ namespace Slask.Domain.Rounds
             return round;
         }
 
-        public bool HasProblematicTie()
-        {
-            bool isFinished = GetPlayState() == PlayState.Finished;
-
-            if (isFinished)
-            {
-                foreach (GroupBase group in Groups)
-                {
-                    List<PlayerStandingEntry> playerStandings = PlayerStandingsSolver.FetchFrom(group);
-
-                    PlayerStandingEntry playerJustAboveAdvancingThreshold = playerStandings[AdvancingPerGroupCount - 1];
-                    PlayerStandingEntry playerJustBelowAdvancingThreshold = playerStandings[AdvancingPerGroupCount];
-
-                    bool hasProblematicTieInGroup = playerJustAboveAdvancingThreshold.Wins == playerJustBelowAdvancingThreshold.Wins;
-
-                    return hasProblematicTieInGroup;
-                }
-            }
-
-            return false;
-        }
-
         protected override GroupBase AddGroup()
         {
             return RoundRobinGroup.Create(this);
