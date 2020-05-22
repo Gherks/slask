@@ -123,8 +123,10 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(2);
 
-            // Do the test
-            1.Should().Be(2);
+            round.Groups.First().SolveTieByChoosing("Maru");
+
+            round.HasProblematicTie().Should().BeFalse();
+            round.Groups.First().ChoosenTyingPlayers.Should().BeEmpty();
         }
     }
 }
