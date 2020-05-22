@@ -61,8 +61,9 @@ namespace Slask.Domain.Groups.Bases
             }
 
             bool lastMatchIsFinished = Matches.Last().GetWinningPlayer() != null;
+            bool hasNoProblematicTie = !HasProblematicTie();
 
-            return lastMatchIsFinished ? PlayState.Finished : PlayState.Ongoing;
+            return (lastMatchIsFinished && hasNoProblematicTie) ? PlayState.Finished : PlayState.Ongoing;
         }
 
         public virtual bool ConstructGroupLayout(int playersPerGroupCount)
