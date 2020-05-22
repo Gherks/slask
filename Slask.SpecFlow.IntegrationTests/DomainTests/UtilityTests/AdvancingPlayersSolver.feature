@@ -11,7 +11,7 @@ Scenario: Can fetch advancing players from finished round
 	When created groups within created tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
-	Then advancing players from round 0 should be "Taeja, Rain, FanTaSy, Thorzain, Maru"
+	Then advancing players from round 0 should be "Bomber, FanTaSy, Maru, Rain, Stephano"
 
 Scenario: Can fetch advancing players from finished group
 	Given a tournament named "GSL 2019" has been created
@@ -22,7 +22,7 @@ Scenario: Can fetch advancing players from finished group
 	When created groups within created tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
-	Then advancing players from group 0 should be "Rain, Maru"
+	Then advancing players from group 0 should be "Maru, Rain"
 
 Scenario: Cannot fetch advancing players from round that is unfinished
 	Given a tournament named "GSL 2019" has been created

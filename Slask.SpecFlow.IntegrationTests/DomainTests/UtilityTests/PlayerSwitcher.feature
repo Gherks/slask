@@ -109,7 +109,7 @@ Scenario: Cannot switch player that resides in a bracket group with player in di
 		And participating players in group 2 should be mapped accordingly
 			| Match index | Player 1 name | Player 2 name |
 			| 0           | Maru          | Rain          |
-			| 1           | Bomber        | Thorzain      |
+			| 1           | Bomber        | FanTaSy       |
 
 Scenario: Cannot switch player that resides in a dual tournament group with player in different round
 	Given a tournament named "GSL 2019" has been created
@@ -139,7 +139,7 @@ Scenario: Cannot switch player that resides in a dual tournament group with play
 			| 0           | Stephano      | Thorzain      |
 		And participating players in group 4 should be mapped accordingly
 			| Match index | Player 1 name | Player 2 name |
-			| 0           | Maru          | Taeja         |
+			| 0           | Maru          | Rain          |
 			| 1           | Bomber        | Stephano      |
 
 Scenario: Cannot switch player that resides in a round robin group with player in different round
@@ -164,7 +164,7 @@ Scenario: Cannot switch player that resides in a round robin group with player i
 			| 1           | Stephano      | Thorzain      |
 		And participating players in group 2 should be mapped accordingly
 			| Match index | Player 1 name | Player 2 name |
-			| 0           | Rain          | Thorzain      |
+			| 0           | Maru          | Bomber        |
 
 Scenario: Cannot switch player with other player in same bracket group that has started
 	Given a tournament named "GSL 2019" has been created
