@@ -102,10 +102,10 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             }
 
             group.HasProblematicTie().Should().BeTrue();
-            group.SolveTieByChoosing("Maru").BeTrue();
+            group.SolveTieByChoosing("Maru").Should().BeTrue();
 
             group.HasProblematicTie().Should().BeTrue();
-            group.SolveTieByChoosing("Stork").BeTrue();
+            group.SolveTieByChoosing("Stork").Should().BeTrue();
 
             group.HasProblematicTie().Should().BeFalse();
         }
@@ -134,7 +134,7 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             match.Player1.IncreaseScore(2);
 
             group.HasProblematicTie().Should().BeFalse();
-            group.SolveTieByChoosing("Maru").BeFalse();
+            group.SolveTieByChoosing("Maru").Should().BeFalse();
         }
     }
 }
