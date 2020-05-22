@@ -146,7 +146,7 @@ Scenario: Bracket progression goes as expected
 		And created groups within created tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
-	Then advancing players in created group 0 is exactly "Sixth"
+	Then advancing players in created group 0 is exactly "Eighth"
 		And participating players in group 0 should be mapped accordingly
 			| Match index | Player 1 name | Player 2 name |
 			| 0           | First         | Second        |
@@ -154,5 +154,5 @@ Scenario: Bracket progression goes as expected
 			| 2           | Fifth         | Sixth         |
 			| 3           | Seventh       | Eighth        |
 			| 4           | First         | Fourth        |
-			| 5           | Sixth         | Eighth        |
-			| 6           | First         | Sixth         |
+			| 5           | Fifth         | Eighth        |
+			| 6           | First         | Eighth        |

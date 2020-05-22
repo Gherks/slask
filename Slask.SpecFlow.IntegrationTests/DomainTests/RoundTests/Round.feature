@@ -14,7 +14,7 @@ Scenario: Can only exclude player references from groups within first round
 			| 0                | 0           | 0           |
 			| 0                | 0           | 1           |
 	When players "Rain" is excluded from round 1
-	Then participating players in round 1 should be exactly "Rain, Thorzain"
+	Then participating players in round 1 should be exactly "Maru, Bomber"
 
 Scenario: PlayState is set to NotBegun before any group has started
 	Given a tournament named "GSL 2019" has been created

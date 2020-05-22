@@ -12,7 +12,7 @@ Scenario: Can fetch all winning players in a bracket round that contains several
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 			| 0                | 0           | 1           |
-	Then fetched advancing players in created round 0 should be exactly "Fourth, Eighth"
+	Then fetched advancing players in created round 0 should be exactly "First, Eighth"
 
 @BracketRoundInteractionTag
 Scenario: Cannot fetch winning players from bracket group in a bracket round that has not played out
@@ -42,8 +42,8 @@ Scenario: A bracket round with a predecessor bracket round is set up using only 
 		| 0                | 0           | 3           |
 	Then participating players in group 4 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
-		| 0           | Fourth        | Eighth        |
-		| 1           | Twelfth       | Sixteenth     |
+		| 0           | First         | Eighth        |
+		| 1           | Eleventh      | Fifteenth     |
 
 @BracketRoundInteractionTag
 Scenario: A bracket round with a predecessor dual tournament round is set up using only winners of that predecessor round
@@ -76,8 +76,8 @@ Scenario: A bracket round with a predecessor round robin round is set up using o
 		| 0                | 0           | 1           |
 	Then participating players in group 2 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
-		| 0           | Fifth         | Second        |
-		| 1           | Tenth         | Seventh       |
+		| 0           | Fifth         | First         |
+		| 1           | Eighth        | Ninth         |
 
 ################################################################################################################
 
@@ -122,8 +122,8 @@ Scenario: A dual tournament round with a predecessor bracket round is set up usi
 		| 0                | 0           | 3           |
 	Then participating players in group 4 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
-		| 0           | Fourth        | Eighth        |
-		| 1           | Twelfth       | Sixteenth     |
+		| 0           | First         | Eighth        |
+		| 1           | Eleventh      | Fifteenth     |
 
 @DualTournamentRoundInteractionTag
 Scenario: A dual tournament round with a predecessor dual tournament round is set up using only winners of that predecessor round
@@ -156,8 +156,8 @@ Scenario: A dual tournament round with a predecessor round robin round is set up
 		| 0                | 0           | 1           |
 	Then participating players in group 2 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
-		| 0           | Fifth         | Second        |
-		| 1           | Tenth         | Seventh       |
+		| 0           | Fifth         | First         |
+		| 1           | Eighth        | Ninth         |
 
 ################################################################################################################
 
@@ -202,12 +202,12 @@ Scenario: A round robin round with a predecessor bracket round is set up using o
 		| 0                | 0           | 3           |
 	Then participating players in group 4 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
-		| 0           | Fourth        | Twelfth       |
-		| 1           | Eighth        | Sixteenth     |
-		| 2           | Fourth        | Sixteenth     |
-		| 3           | Twelfth       | Eighth        |
-		| 4           | Fourth        | Eighth        |
-		| 5           | Sixteenth     | Twelfth       |
+		| 0           | First         | Eleventh      |
+		| 1           | Eighth        | Fifteenth     |
+		| 2           | First         | Fifteenth     |
+		| 3           | Eleventh      | Eighth        |
+		| 4           | First         | Eighth        |
+		| 5           | Fifteenth     | Eleventh      |
 
 @RoundRobinRoundInteractionTag
 Scenario: A round robin round with a predecessor dual tournament round is set up using only winners of that predecessor round
@@ -244,9 +244,9 @@ Scenario: A round robin round with a predecessor round robin round is set up usi
 		| 0                | 0           | 1           |
 	Then participating players in group 2 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
-		| 0           | Fifth         | Tenth         |
-		| 1           | Second        | Seventh       |
-		| 2           | Fifth         | Seventh       |
-		| 3           | Tenth         | Second        |
-		| 4           | Fifth         | Second        |
-		| 5           | Seventh       | Tenth         |
+		| 0           | Fifth         | Eighth        |
+		| 1           | First         | Ninth         |
+		| 2           | Fifth         | Ninth         |
+		| 3           | Eighth        | First         |
+		| 4           | Fifth         | First         |
+		| 5           | Ninth         | Eighth        |
