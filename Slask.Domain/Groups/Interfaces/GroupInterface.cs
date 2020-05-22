@@ -17,6 +17,8 @@ namespace Slask.Domain.Groups.Interfaces
         bool ConstructGroupLayout(int playersPerGroupCount);
         bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences);
         bool NewDateTimeIsValid(Match match, DateTime dateTime);
+        bool HasProblematicTie();
+        bool SolveTieByChoosing(string playerName);
         void OnMatchScoreDecreased(Match match);
         void OnMatchScoreIncreased(Match match);
     }
