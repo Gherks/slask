@@ -64,7 +64,7 @@ namespace Slask.UnitTests.DomainTests.PlayerTests
         }
 
         [Fact]
-        public void CanDecrementPlayerScore()
+        public void CanDecreasePlayerScore()
         {
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 

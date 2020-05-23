@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
@@ -60,7 +60,7 @@ namespace Slask.UnitTests.DomainTests.PlayerTests
         }
 
         [Fact]
-        public void CanDecrementPlayerScore()
+        public void CanDecreasePlayerScore()
         {
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
