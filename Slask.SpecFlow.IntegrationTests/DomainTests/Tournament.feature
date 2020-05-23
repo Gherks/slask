@@ -1,17 +1,17 @@
-Feature: Tournament
+﻿Feature: Tournament
 	Does a bunch of tests on a tournament as a whole
 
 @TournamentTag
 Scenario: Cannot register new players references when tournament has begun
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
 		And created tournament 0 adds rounds
-			| Round type | Round name    | Best of | 
-			| Bracket    | Bracket round | 3       | 
+			| Round type | Round name    | Best of | Advancing per group count | Players per group count |
+			| Bracket    | Bracket round | 3       | 1                         | 4                       |
 		And players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0 
 		And created groups within created tournament is played out and betted on 
 			| Tournament index | Round index | Group index | 
 			| 0                | 0           | 0           | 
-		And players "FailedRegistration" is registered to round 0 
+	When players "FailedRegistration" is registered to round 0 
 	Then created tournament 0 should contain exactly these player references with names: "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth"
 
 Scenario: Cannot add new rounds when tournament has begun

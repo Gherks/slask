@@ -44,27 +44,27 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                     if (type == "BRACKET")
                     {
                         round = tournament.AddBracketRound();
-
-                        round.RenameTo(name);
-                        round.SetBestOf(bestOf);
-                        (round as BracketRound).SetPlayersPerGroupCount(playersPerGroupCount);
                     }
                     else if (type == "DUALTOURNAMENT")
                     {
                         round = tournament.AddDualTournamentRound();
-
-                        round.RenameTo(name);
-                        round.SetBestOf(bestOf);
                     }
                     else if (type == "ROUNDROBIN")
                     {
                         round = tournament.AddRoundRobinRound();
-
-                        round.RenameTo(name);
-                        round.SetBestOf(bestOf);
-                        round.SetAdvancingPerGroupCount(advancingCount);
-                        (round as RoundRobinRound).SetPlayersPerGroupCount(playersPerGroupCount);
                     }
+
+                    bool couldNotCreateRound = round == null;
+
+                    if (couldNotCreateRound)
+                    {
+                        return;
+                    }
+
+                    round.RenameTo(name);
+                    round.SetBestOf(bestOf);
+                    round.SetAdvancingPerGroupCount(advancingCount);
+                    round.SetPlayersPerGroupCount(playersPerGroupCount);
 
                     createdRounds.Add(round);
                     bool addedValidRound = round != null;
@@ -183,7 +183,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
             round.PlayerReferences.Should().HaveCount(playerNames.Count);
 
-            for(int index = 0; index < round.PlayerReferences.Count; ++index)
+            for (int index = 0; index < round.PlayerReferences.Count; ++index)
             {
                 round.PlayerReferences[index].Name.Should().Be(playerNames[index]);
             }
