@@ -41,9 +41,7 @@ Scenario: Cannot remove rounds when tournament has begun
 			| Tournament index | Round index | Group index | 
 			| 0                | 0           | 0           | 
 	When tournament 0 removes round 0
-		| Round type | Round name      | Best of | Advancing per group count | Players per group count |
-		| Bracket    | Bracket round 3 | 3       | 1                         | 2                       |
-	Then tournament 0 contains 2 rounds
+	Then tournament 0 contains 3 rounds
 
 Scenario: Cannot exclude players references when tournament has begun
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
