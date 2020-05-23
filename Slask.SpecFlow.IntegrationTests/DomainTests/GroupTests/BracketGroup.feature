@@ -34,7 +34,7 @@ Scenario: Creates proper bracket layout upon group creation
 	#  Match 1
 	# | 1 vs 2 |
 	#
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 8                       |
@@ -54,7 +54,7 @@ Scenario: When bracket has five participants the first match should contain two 
 	#				 Match 2
 	#				| 3 vs 4 |
 	#
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 5                       |
@@ -79,7 +79,7 @@ Scenario: When bracket has seven participants the third match should contain two
 	#  Match 1		 Match 4
 	# | 1 vs 2 |	| 7 vs - |
 	#
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 7                       |
@@ -108,7 +108,7 @@ Scenario: When bracket has nine participants the first match should contain two 
 	#				 Match 2
 	#				| 3 vs 4 |
 	#
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 9                       |
@@ -138,7 +138,7 @@ Scenario: Bracket progression goes as expected
 	#  Match 1
 	# | 1 vs 2 |
 	#
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 8                       |

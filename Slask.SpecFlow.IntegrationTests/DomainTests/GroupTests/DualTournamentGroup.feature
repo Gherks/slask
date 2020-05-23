@@ -25,7 +25,7 @@ Scenario: Creates proper dual tournament layout upon group creation
 	#  Match 2		 Losers
 	# | 3 vs 4 |	| - vs - |
 	#
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
 			| Round type      | Round name            | Best of |
 			| Dual tournament | Dual tournament round | 3       |
@@ -43,7 +43,7 @@ Scenario: Dual tournament progression goes as expected
 	#  Match 2		 Losers
 	# | 3 vs 4 |	| 2 vs 3 |
 	#
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
 			| Round type      | Round name            | Best of |
 			| Dual tournament | Dual tournament round | 3       |

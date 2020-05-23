@@ -54,8 +54,8 @@ namespace Slask.SpecFlow.IntegrationTests.ServiceTests
             return createdTournaments.Last();
         }
 
-        [Given(@"a tournament named ""(.*)"" with users ""(.*)"" added to it")]
-        [When(@"a tournament named ""(.*)"" with users ""(.*)"" added to it")]
+        [Given(@"a tournament named ""(.*)"" has been created with users ""(.*)"" added to it")]
+        [When(@"a tournament named ""(.*)"" has been created with users ""(.*)"" added to it")]
         public Tournament GivenATournamentNamedWithUsersAddedToIt(string tournamentName, string commaSeparatedUserNames)
         {
             List<string> userNames = StringUtility.ToStringList(commaSeparatedUserNames, ",");

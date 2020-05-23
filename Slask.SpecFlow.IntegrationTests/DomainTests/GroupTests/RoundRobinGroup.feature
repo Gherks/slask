@@ -33,7 +33,7 @@ Scenario: Creates proper round robin layout upon group creation
 		| 5           | Fourth        | Third         |
 
 Scenario: Round robin progression with four players goes as expected
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
 			| Round type             | Round name        | Best of | Advancing per group count | Players per group count |
 			| Round robin tournament | Round robin round | 3       | 2                         | 4                       |
@@ -52,7 +52,7 @@ Scenario: Round robin progression with four players goes as expected
 			| 5           | Fourth        | Third         |
 
 Scenario: Round robin progression with five players goes as expected
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
 		And created tournament 0 adds rounds
 			| Round type             | Round name        | Best of | Advancing per group count | Players per group count |
 			| Round robin tournament | Round robin round | 3       | 3                         | 5                       |

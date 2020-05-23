@@ -52,17 +52,17 @@ Scenario: Can add user to tournament with user service
 	Then created tournament 0 should contain valid betters with names: "Stålberto"
 
 Scenario: Can only add user to tournament once
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
 	When users "Stålberto" is added to created tournament "GSL 2019"
 	Then better count in created tournament 0 should be 3
 
 Scenario: Can fetch all betters in tournament by tournament id
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
 	When fetching betters from created tournament 0 by tournament id
 	Then created tournament 0 should contain valid betters with names: "Stålberto, Bönis, Guggelito"
 
 Scenario: Can fetch all betters in tournament by tournament name
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
 	When fetching betters from tournament by tournament name: "GSL 2019"
 	Then created tournament 0 should contain valid betters with names: "Stålberto, Bönis, Guggelito"
 
