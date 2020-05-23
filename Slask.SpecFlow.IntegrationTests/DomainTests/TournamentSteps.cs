@@ -170,7 +170,12 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                         }
                     }
 
-                    PlayAvailableMatches(group);
+                    bool playedMatchesSuccessfully = PlayAvailableMatches(group);
+
+                    if (!playedMatchesSuccessfully)
+                    {
+                        break;
+                    }
                 }
             }
         }
@@ -284,7 +289,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             }
         }
 
-        protected void PlayAvailableMatches(GroupBase group)
+        protected bool PlayAvailableMatches(GroupBase group)
         {
             int winningScore = (int)Math.Ceiling(group.Round.BestOf / 2.0);
 
@@ -297,17 +302,25 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                 {
                     // Give points to player with name that precedes the other alphabetically
                     bool increasePlayer1Score = match.Player1.Name.CompareTo(match.Player2.Name) <= 0;
+                    bool scoreIncreased;
 
                     if (increasePlayer1Score)
                     {
-                        match.Player1.IncreaseScore(winningScore);
+                        scoreIncreased = match.Player1.IncreaseScore(winningScore);
                     }
                     else
                     {
-                        match.Player2.IncreaseScore(winningScore);
+                        scoreIncreased = match.Player2.IncreaseScore(winningScore);
+                    }
+
+                    if (!scoreIncreased)
+                    {
+                        return false;
                     }
                 }
             }
+
+            return true;
         }
 
         protected PlayState ParsePlayStateString(string playStateString)
