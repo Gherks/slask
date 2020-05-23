@@ -54,8 +54,14 @@ namespace Slask.Domain
                 return null;
             }
 
-            IntegrateRoundToTournament(round);
-            return round;
+            bool roundWasIntegrated = IntegrateRoundToTournament(round);
+
+            if (roundWasIntegrated)
+            {
+                return round;
+            }
+
+            return null;
         }
 
         public DualTournamentRound AddDualTournamentRound()
@@ -67,8 +73,14 @@ namespace Slask.Domain
                 return null;
             }
 
-            IntegrateRoundToTournament(round);
-            return round;
+            bool roundWasIntegrated = IntegrateRoundToTournament(round);
+
+            if (roundWasIntegrated)
+            {
+                return round;
+            }
+
+            return null;
         }
 
         public RoundRobinRound AddRoundRobinRound()
@@ -80,8 +92,14 @@ namespace Slask.Domain
                 return null;
             }
 
-            IntegrateRoundToTournament(round);
-            return round;
+            bool roundWasIntegrated = IntegrateRoundToTournament(round);
+
+            if (roundWasIntegrated)
+            {
+                return round;
+            }
+
+            return null;
         }
 
         public bool RemoveRound(RoundBase round)
@@ -206,11 +224,32 @@ namespace Slask.Domain
             return lastRoundIsFinished ? PlayState.Finished : PlayState.Ongoing;
         }
 
-        private void IntegrateRoundToTournament(RoundBase round)
+        private bool IntegrateRoundToTournament(RoundBase round)
         {
-            Rounds.Add(round);
-            round.Construct();
-            FindIssues();
+            if (CanAddNewRound())
+            {
+                Rounds.Add(round);
+                round.Construct();
+                FindIssues();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool CanAddNewRound()
+        {
+            bool tournamentHasNoRounds = Rounds.Count == 0;
+
+            if (tournamentHasNoRounds)
+            {
+                return true;
+            }
+
+            bool tournamentHasNotBegun = Rounds.First().GetPlayState() == PlayState.NotBegun;
+
+            return tournamentHasNotBegun;
         }
 
         private bool ManageRoundRemoval(RoundBase round)

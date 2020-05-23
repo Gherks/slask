@@ -4,11 +4,11 @@
 @RoundRobinRoundTag
 Scenario: Cannot reconfigure players per group count in round robin round when it has started
 	Given a tournament named "GSL 2019" has been created
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
 			| Round robin | Round robin round | 3       | 1                         | 4                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
-		And created groups within created tournament is played out and betted on
+		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 	When players per group count in round 0 is set to 5
@@ -16,11 +16,11 @@ Scenario: Cannot reconfigure players per group count in round robin round when i
 
 Scenario: Cannot reconfigure best of in round robin round when it has started
 	Given a tournament named "GSL 2019" has been created
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
 			| Round robin | Round robin round | 3       | 1                         | 4                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
-		And created groups within created tournament is played out and betted on
+		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 	When best of in round 0 is set to 5
@@ -28,11 +28,11 @@ Scenario: Cannot reconfigure best of in round robin round when it has started
 
 Scenario: Cannot reconfigure advancing count in round robin round when it has started
 	Given a tournament named "GSL 2019" has been created
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
 			| Round robin | Round robin round | 3       | 1                         | 4                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
-		And created groups within created tournament is played out and betted on
+		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 	When advancing per group count in round 0 is set to 2
@@ -40,12 +40,12 @@ Scenario: Cannot reconfigure advancing count in round robin round when it has st
 
 Scenario: PlayState is set to Ongoing when round has finished with a problematic tie
 	Given a tournament named "GSL 2019" has been created
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type  | Round name          | Best of | Advancing per group count | Players per group count |
 			| Round robin | Round robin round 1 | 3       | 1                         | 3                       |
 			| Round robin | Round robin round 2 | 3       | 1                         | 2                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to round 0
-		And created groups within created tournament is played out and betted on
+		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 	When score is added to players in given matches in created groups
@@ -57,7 +57,7 @@ Scenario: PlayState is set to Ongoing when round has finished with a problematic
 
 Scenario: Can detect several groups with problematic ties
 	Given a tournament named "GSL 2019" has been created
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type  | Round name          | Best of | Advancing per group count | Players per group count |
 			| Round robin | Round robin round 1 | 3       | 1                         | 3                       |
 			| Round robin | Round robin round 2 | 3       | 1                         | 2                       |
@@ -74,7 +74,7 @@ Scenario: Can detect several groups with problematic ties
 
 Scenario: Does not transfer any players to next round when group has problematic ties
 	Given a tournament named "GSL 2019" has been created
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type  | Round name          | Best of | Advancing per group count | Players per group count |
 			| Round robin | Round robin round 1 | 3       | 1                         | 3                       |
 			| Round robin | Round robin round 2 | 3       | 1                         | 2                       |
@@ -84,14 +84,14 @@ Scenario: Does not transfer any players to next round when group has problematic
 		| 0           | 0           | Maru           | 2           |
 		| 0           | 1           | Taeja          | 2           |
 		| 0           | 2           | Stork          | 2           |
-		And created groups within created tournament is played out and betted on
+		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 1           |
 	Then advancing players in created group 0 is exactly ""
 
  Scenario: Can solve tie
 	Given a tournament named "GSL 2019" has been created
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
 			| Round robin | Round robin round | 3       | 2                         | 3                       |
 			| Bracket     | Bracket round     | 3       | 1                         | 2                       |

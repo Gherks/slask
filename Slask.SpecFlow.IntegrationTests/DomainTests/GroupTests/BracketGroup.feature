@@ -4,14 +4,14 @@
 @BracketGroupTag
 Scenario: Adding group to bracket round creates bracket group
 	Given a tournament named "GSL 2019" has been created
-	When created tournament 0 adds rounds
+	When tournament 0 adds rounds
 		| Round type | Round name    | Best of |
 		| Bracket    | Bracket round | 3       |
 	Then group 0 should be valid of type "Bracket"
 
 Scenario: Start time in matches in bracket group is spaced with one hour upon creation
 	Given a tournament named "GSL 2019" has been created
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 8                       |
 	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
@@ -34,8 +34,8 @@ Scenario: Creates proper bracket layout upon group creation
 	#  Match 1
 	# | 1 vs 2 |
 	#
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
-		And created tournament 0 adds rounds
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
+		And tournament 0 adds rounds
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 8                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
@@ -54,8 +54,8 @@ Scenario: When bracket has five participants the first match should contain two 
 	#				 Match 2
 	#				| 3 vs 4 |
 	#
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
-		And created tournament 0 adds rounds
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
+		And tournament 0 adds rounds
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 5                       |
 	When players "First, Second, Third, Fourth, Fifth" is registered to round 0
@@ -79,8 +79,8 @@ Scenario: When bracket has seven participants the third match should contain two
 	#  Match 1		 Match 4
 	# | 1 vs 2 |	| 7 vs - |
 	#
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
-		And created tournament 0 adds rounds
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
+		And tournament 0 adds rounds
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 7                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh" is registered to round 0
@@ -108,8 +108,8 @@ Scenario: When bracket has nine participants the first match should contain two 
 	#				 Match 2
 	#				| 3 vs 4 |
 	#
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
-		And created tournament 0 adds rounds
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
+		And tournament 0 adds rounds
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 9                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth" is registered to round 0
@@ -138,12 +138,12 @@ Scenario: Bracket progression goes as expected
 	#  Match 1
 	# | 1 vs 2 |
 	#
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
-		And created tournament 0 adds rounds
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
+		And tournament 0 adds rounds
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 8                       |
 		And players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
-		And created groups within created tournament is played out and betted on
+		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 	Then advancing players in created group 0 is exactly "Eighth"

@@ -4,14 +4,14 @@
 @DualTournamentGroupTag
 Scenario: Adding group to dual tournament round creates bracket group
 	Given a tournament named "GSL 2019" has been created
-	When created tournament 0 adds rounds
+	When tournament 0 adds rounds
 		| Round type      | Round name            | Best of |
 		| Dual tournament | Dual tournament round | 3       |
 	Then group 0 should be valid of type "Dual tournament"
 
 Scenario: Start time in matches in dual tournament group is spaced with one hour upon creation
 	Given a tournament named "GSL 2019" has been created
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type      | Round name            | Best of |
 			| Dual tournament | Dual tournament round | 3       |
 	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
@@ -25,8 +25,8 @@ Scenario: Creates proper dual tournament layout upon group creation
 	#  Match 2		 Losers
 	# | 3 vs 4 |	| - vs - |
 	#
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
-		And created tournament 0 adds rounds
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
+		And tournament 0 adds rounds
 			| Round type      | Round name            | Best of |
 			| Dual tournament | Dual tournament round | 3       |
 	When players "First, Second, Third, Fourth" is registered to round 0
@@ -43,12 +43,12 @@ Scenario: Dual tournament progression goes as expected
 	#  Match 2		 Losers
 	# | 3 vs 4 |	| 2 vs 3 |
 	#
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
-		And created tournament 0 adds rounds
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
+		And tournament 0 adds rounds
 			| Round type      | Round name            | Best of |
 			| Dual tournament | Dual tournament round | 3       |
 		And players "First, Second, Third, Fourth" is registered to round 0
-	When created groups within created tournament is played out and betted on
+	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 	Then advancing players in created group 0 is exactly "First, Fourth"

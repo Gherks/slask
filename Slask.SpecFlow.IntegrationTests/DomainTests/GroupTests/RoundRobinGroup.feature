@@ -4,14 +4,14 @@ Feature: RoundRobinGroup
 @RoundRobinGroupTag
 Scenario: Adding group to round robin round creates round robin group
 	Given a tournament named "GSL 2019" has been created
-	When created tournament 0 adds rounds
+	When tournament 0 adds rounds
 		| Round type  | Round name        | Best of | Advancing per group count |
 		| Round robin | Round robin round | 3       | 1                         |
 	Then group 0 should be valid of type "Round robin"
 
 Scenario: Start time in matches in round robin groups is spaced with one hour upon creation
 	Given a tournament named "GSL 2019" has been created
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
 			| Round robin | Round robin round | 3       | 1                         | 8                       |
 	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
@@ -19,7 +19,7 @@ Scenario: Start time in matches in round robin groups is spaced with one hour up
 
 Scenario: Creates proper round robin layout upon group creation
 	Given a tournament named "GSL 2019" has been created
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type      | Round name            | Best of | Players per group count |
 			| Round robin     | Round robin round     | 3       | 4                       |
 	When players "First, Second, Third, Fourth" is registered to round 0
@@ -33,12 +33,12 @@ Scenario: Creates proper round robin layout upon group creation
 		| 5           | Fourth        | Third         |
 
 Scenario: Round robin progression with four players goes as expected
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
-		And created tournament 0 adds rounds
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
+		And tournament 0 adds rounds
 			| Round type             | Round name        | Best of | Advancing per group count | Players per group count |
 			| Round robin tournament | Round robin round | 3       | 2                         | 4                       |
 	When players "First, Second, Third, Fourth" is registered to round 0
-		And created groups within created tournament is played out and betted on
+		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 	Then advancing players in created group 0 is exactly "Fourth, First"
@@ -52,12 +52,12 @@ Scenario: Round robin progression with four players goes as expected
 			| 5           | Fourth        | Third         |
 
 Scenario: Round robin progression with five players goes as expected
-	Given a tournament named "GSL 2019" with users "Stålberto, Bönis, Guggelito" added to it
-		And created tournament 0 adds rounds
+	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
+		And tournament 0 adds rounds
 			| Round type             | Round name        | Best of | Advancing per group count | Players per group count |
 			| Round robin tournament | Round robin round | 3       | 3                         | 5                       |
 	When players "First, Second, Third, Fourth, Fifth" is registered to round 0
-	When created groups within created tournament is played out and betted on
+	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 	Then advancing players in created group 0 is exactly "Fifth, First, Fourth"
@@ -76,12 +76,12 @@ Scenario: Round robin progression with five players goes as expected
 
 Scenario: PlayState is set to Ongoing when group has finished with a problematic tie
 	Given a tournament named "GSL 2019" has been created
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type  | Round name          | Best of | Advancing per group count | Players per group count |
 			| Round robin | Round robin round 1 | 3       | 1                         | 3                       |
 			| Round robin | Round robin round 2 | 3       | 1                         | 2                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to round 0
-		And created groups within created tournament is played out and betted on
+		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 	When score is added to players in given matches in created groups

@@ -21,13 +21,13 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
     public class TournamentStepDefinitions : TournamentServiceStepDefinitions
     {
-        [Given(@"created tournament (.*) adds rounds")]
-        [When(@"created tournament (.*) adds rounds")]
-        public void GivenCreatedTournamentAddsRounds(int tournamentIndex, Table table)
+        [Given(@"tournament (.*) adds rounds")]
+        [When(@"tournament (.*) adds rounds")]
+        public void GivenTournamentAddsRounds(int tournamentIndex, Table table)
         {
             if (createdTournaments.Count <= tournamentIndex)
             {
-                throw new IndexOutOfRangeException("Given created tournament index is out of bounds");
+                throw new IndexOutOfRangeException("Given tournament index is out of bounds");
             }
 
             Tournament tournament = createdTournaments[tournamentIndex];
@@ -44,27 +44,27 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                     if (type == "BRACKET")
                     {
                         round = tournament.AddBracketRound();
-
-                        round.RenameTo(name);
-                        round.SetBestOf(bestOf);
-                        (round as BracketRound).SetPlayersPerGroupCount(playersPerGroupCount);
                     }
                     else if (type == "DUALTOURNAMENT")
                     {
                         round = tournament.AddDualTournamentRound();
-
-                        round.RenameTo(name);
-                        round.SetBestOf(bestOf);
                     }
                     else if (type == "ROUNDROBIN")
                     {
                         round = tournament.AddRoundRobinRound();
-
-                        round.RenameTo(name);
-                        round.SetBestOf(bestOf);
-                        round.SetAdvancingPerGroupCount(advancingCount);
-                        (round as RoundRobinRound).SetPlayersPerGroupCount(playersPerGroupCount);
                     }
+
+                    bool couldNotCreateRound = round == null;
+
+                    if (couldNotCreateRound)
+                    {
+                        return;
+                    }
+
+                    round.RenameTo(name);
+                    round.SetBestOf(bestOf);
+                    round.SetAdvancingPerGroupCount(advancingCount);
+                    round.SetPlayersPerGroupCount(playersPerGroupCount);
 
                     createdRounds.Add(round);
                     bool addedValidRound = round != null;
@@ -77,9 +77,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             }
         }
 
-        [Given(@"round (.*) is removed from tournament (.*)")]
-        [When(@"round (.*) is removed from tournament (.*)")]
-        public void WhenRoundIsRemovedFromTournament(int roundIndex, int tournamentIndex)
+        [Given(@"tournament (.*) removes round (.*)")]
+        [When(@"tournament (.*) removes round (.*)")]
+        public void WhenRoundIsRemovedFromTournament(int tournamentIndex, int roundIndex)
         {
             RoundBase round = createdRounds[roundIndex];
             Tournament tournament = createdTournaments[tournamentIndex];
@@ -90,10 +90,10 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             createdRounds.AddRange(tournament.Rounds);
         }
 
-
         [Given(@"players ""(.*)"" is registered to round (.*)")]
         [When(@"players ""(.*)"" is registered to round (.*)")]
-        public void GivenPlayersIsRegisteredToTournament(string commaSeparatedPlayerNames, int roundIndex)
+        [Then(@"players ""(.*)"" is registered to round (.*)")]
+        public void GivenPlayersIsRegisteredToRound(string commaSeparatedPlayerNames, int roundIndex)
         {
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
             RoundBase round = createdRounds[roundIndex];
@@ -126,9 +126,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             }
         }
 
-        [Given(@"created groups within created tournament is played out and betted on")]
-        [When(@"created groups within created tournament is played out and betted on")]
-        public void GivenCreatedGroupsWithinCreatedTournamentIsPlayedOutAndBettedOn(Table table)
+        [Given(@"groups within tournament is played out and betted on")]
+        [When(@"groups within tournament is played out and betted on")]
+        public void GivenGroupsWithinTournamentIsPlayedOutAndBettedOn(Table table)
         {
             if (table == null)
             {
@@ -175,25 +175,27 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             }
         }
 
+        [Given(@"tournament (.*) contains (.*) rounds")]
+        [When(@"tournament (.*) contains (.*) rounds")]
+        [Then(@"tournament (.*) contains (.*) rounds")]
+        public void ThenTournamentContainsRounds(int tournamentIndex, int roundCount)
+        {
+            Tournament tournament = createdTournaments[tournamentIndex];
+            tournament.Rounds.Should().HaveCount(roundCount);
+        }
+
         [Then(@"participating players in round (.*) should be exactly ""(.*)""")]
-        public void ThenParticipatingPlayersInCreatedGroupShouldBeMappedAccordingly(int roundIndex, string commaSeparatedPlayerNames)
+        public void ThenParticipatingPlayersInRoundShouldBeExactly(int roundIndex, string commaSeparatedPlayerNames)
         {
             RoundBase round = createdRounds[roundIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
             round.PlayerReferences.Should().HaveCount(playerNames.Count);
 
-            for(int index = 0; index < round.PlayerReferences.Count; ++index)
+            for (int index = 0; index < round.PlayerReferences.Count; ++index)
             {
                 round.PlayerReferences[index].Name.Should().Be(playerNames[index]);
             }
-        }
-
-        [Then(@"tournament (.*) contains (.*) rounds")]
-        public void ThenTournamentContainsRounds(int tournamentIndex, int roundCount)
-        {
-            Tournament tournament = createdTournaments[tournamentIndex];
-            tournament.Rounds.Should().HaveCount(roundCount);
         }
 
         [Then(@"play state of tournament (.*) is set to ""(.*)""")]
