@@ -90,10 +90,10 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             createdRounds.AddRange(tournament.Rounds);
         }
 
-
         [Given(@"players ""(.*)"" is registered to round (.*)")]
         [When(@"players ""(.*)"" is registered to round (.*)")]
-        public void GivenPlayersIsRegisteredToTournament(string commaSeparatedPlayerNames, int roundIndex)
+        [Then(@"players ""(.*)"" is registered to round (.*)")]
+        public void GivenPlayersIsRegisteredToRound(string commaSeparatedPlayerNames, int roundIndex)
         {
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
             RoundBase round = createdRounds[roundIndex];
@@ -175,6 +175,15 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             }
         }
 
+        [Given(@"tournament (.*) contains (.*) rounds")]
+        [When(@"tournament (.*) contains (.*) rounds")]
+        [Then(@"tournament (.*) contains (.*) rounds")]
+        public void ThenTournamentContainsRounds(int tournamentIndex, int roundCount)
+        {
+            Tournament tournament = createdTournaments[tournamentIndex];
+            tournament.Rounds.Should().HaveCount(roundCount);
+        }
+
         [Then(@"participating players in round (.*) should be exactly ""(.*)""")]
         public void ThenParticipatingPlayersInRoundShouldBeExactly(int roundIndex, string commaSeparatedPlayerNames)
         {
@@ -187,13 +196,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             {
                 round.PlayerReferences[index].Name.Should().Be(playerNames[index]);
             }
-        }
-
-        [Then(@"tournament (.*) contains (.*) rounds")]
-        public void ThenTournamentContainsRounds(int tournamentIndex, int roundCount)
-        {
-            Tournament tournament = createdTournaments[tournamentIndex];
-            tournament.Rounds.Should().HaveCount(roundCount);
         }
 
         [Then(@"play state of tournament (.*) is set to ""(.*)""")]
