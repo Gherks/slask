@@ -11,7 +11,7 @@ namespace Slask.UnitTests.DomainTests.PlayerTests
 {
     public class PlayerInBracketGroupTests
     {
-        List<string> playerNames = new List<string>{ "Maru", "Stork", "Taeja", "Rain" };
+        private readonly List<string> playerNames = new List<string> { "Maru", "Stork", "Taeja", "Rain" };
 
         private readonly Tournament tournament;
         private readonly BracketRound round;
@@ -78,6 +78,35 @@ namespace Slask.UnitTests.DomainTests.PlayerTests
             player.DecreaseScore(1).Should().BeTrue();
 
             player.Score.Should().Be(0);
+        }
+
+        [Fact]
+        public void CannotIncreasePlayerScoreWhenTournamentHasIssues()
+        {
+            TurnTournamentInvalid();
+
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+
+            player.IncreaseScore(1).Should().BeFalse();
+
+            player.Score.Should().Be(0);
+        }
+
+        [Fact]
+        public void CannotDecreasePlayerScoreWhenTournamentHasIssues()
+        {
+            TurnTournamentInvalid();
+
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+
+            player.DecreaseScore(1).Should().BeFalse();
+
+            player.Score.Should().Be(0);
+        }
+
+        private void TurnTournamentInvalid()
+        {
+            tournament.AddDualTournamentRound();
         }
     }
 }
