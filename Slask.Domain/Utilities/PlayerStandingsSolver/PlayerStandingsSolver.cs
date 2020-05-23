@@ -1,11 +1,12 @@
-﻿using Slask.Domain.Groups.Bases;
-using Slask.Domain.Rounds.Bases;
-using Slask.Domain.Utilities;
+﻿
+
+using Slask.Domain;
+using Slask.Domain.Groups.Bases;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Slask.Domain.Groups.GroupUtility
+namespace Slask.Utilities.PlayerStandingsSolver
 {
     public static class PlayerStandingsSolver
     {
@@ -34,8 +35,14 @@ namespace Slask.Domain.Groups.GroupUtility
         {
             foreach (Match match in group.Matches)
             {
-                PlayerReference winner = match.GetWinningPlayer().PlayerReference;
-                PlayerStandingEntry playerStandingEntry = playerStandings.Find(player => player.PlayerReference.Name == winner.Name);
+                Player winner = match.GetWinningPlayer();
+
+                if (winner == null)
+                {
+                    continue;
+                }
+
+                PlayerStandingEntry playerStandingEntry = playerStandings.Find(player => player.PlayerReference.Name == winner.PlayerReference.Name);
 
                 if (playerStandingEntry == null)
                 {

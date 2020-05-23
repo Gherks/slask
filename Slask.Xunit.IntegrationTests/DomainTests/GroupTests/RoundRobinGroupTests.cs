@@ -2,44 +2,25 @@
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
+using Slask.Domain.Groups.Bases;
 using Slask.Domain.Rounds;
-using Slask.Domain.Rounds.Bases;
 using Slask.Domain.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
+namespace Slask.UnitTests.DomainTests.GroupTests
 {
-    public class RoundRobinRoundTests : IDisposable
+    public class RoundRobinGroupTests
     {
         private readonly Tournament tournament;
         private readonly RoundRobinRound round;
 
-        public RoundRobinRoundTests()
+        public RoundRobinGroupTests()
         {
             tournament = Tournament.Create("GSL 2019");
-            round = tournament.AddRoundRobinRound();
-        }
-
-        public void Dispose()
-        {
-            SystemTimeMocker.Reset();
-        }
-
-        [Fact]
-        public void CanCreateRoundRobinRound()
-        {
-            round.Should().NotBeNull();
-            round.Id.Should().NotBeEmpty();
-            round.Name.Should().Be("Round A");
-            round.PlayersPerGroupCount.Should().Be(2);
-            round.BestOf.Should().Be(3);
-            round.AdvancingPerGroupCount.Should().Be(1);
-            round.Groups.Should().HaveCount(1);
-            round.TournamentId.Should().Be(tournament.Id);
-            round.Tournament.Should().Be(tournament);
-            round.HasProblematicTie().Should().BeFalse();
+            round = tournament.AddRoundRobinRound() as RoundRobinRound;
         }
 
         [Fact]
@@ -50,6 +31,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
             round.RegisterPlayerReference("Stork");
             round.RegisterPlayerReference("Taeja");
 
+            GroupBase group = round.Groups.First();
             Match match;
 
             match = round.Groups.First().Matches[0];
@@ -64,7 +46,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(2);
 
-            round.HasProblematicTie().Should().BeFalse();
+            group.HasProblematicTie().Should().BeFalse();
         }
 
         [Fact]
@@ -74,6 +56,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
             round.RegisterPlayerReference("Maru");
             round.RegisterPlayerReference("Stork");
             round.RegisterPlayerReference("Taeja");
+            GroupBase group = round.Groups.First();
 
             foreach (Match match in round.Groups.First().Matches)
             {
@@ -81,7 +64,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
                 match.Player1.IncreaseScore(2);
             }
 
-            round.HasProblematicTie().Should().BeTrue();
+            group.HasProblematicTie().Should().BeTrue();
         }
 
         [Fact]
@@ -91,6 +74,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
             round.RegisterPlayerReference("Maru");
             round.RegisterPlayerReference("Stork");
             round.RegisterPlayerReference("Taeja");
+            GroupBase group = round.Groups.First();
 
             foreach (Match match in round.Groups.First().Matches)
             {
@@ -98,7 +82,41 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
                 match.Player1.IncreaseScore(2);
             }
 
-            round.GetPlayState().Should().Be(PlayState.Ongoing);
+            group.GetPlayState().Should().Be(PlayState.Ongoing);
+        }
+
+        [Fact]
+        public void CanSolveTie()
+        {
+            round.SetPlayersPerGroupCount(3);
+            round.SetAdvancingPerGroupCount(2);
+            round.RegisterPlayerReference("Maru");
+            round.RegisterPlayerReference("Stork");
+            round.RegisterPlayerReference("Taeja");
+
+            BracketRound bracketRound = tournament.AddBracketRound();
+
+            GroupBase group = round.Groups.First();
+
+            foreach (Match match in round.Groups.First().Matches)
+            {
+                SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+                match.Player1.IncreaseScore(2);
+            }
+
+            group.HasProblematicTie().Should().BeTrue();
+            group.HasSolvedTie().Should().BeFalse();
+            group.SolveTieByChoosing("Taeja").Should().BeFalse();
+
+            group.HasProblematicTie().Should().BeTrue();
+            group.HasSolvedTie().Should().BeFalse();
+            group.SolveTieByChoosing("Stork").Should().BeTrue();
+
+            group.HasProblematicTie().Should().BeTrue();
+            group.HasSolvedTie().Should().BeTrue();
+
+            bracketRound.Groups.First().Matches[0].Player1.Name.Should().Be("Taeja");
+            bracketRound.Groups.First().Matches[0].Player2.Name.Should().Be("Stork");
         }
 
         [Fact]
@@ -109,6 +127,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
             round.RegisterPlayerReference("Stork");
             round.RegisterPlayerReference("Taeja");
 
+            GroupBase group = round.Groups.First();
             Match match;
 
             match = round.Groups.First().Matches[0];
@@ -123,10 +142,8 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(2);
 
-            round.Groups.First().SolveTieByChoosing("Maru");
-
-            round.HasProblematicTie().Should().BeFalse();
-            round.Groups.First().ChoosenTyingPlayerEntries.Should().BeEmpty();
+            group.HasProblematicTie().Should().BeFalse();
+            group.SolveTieByChoosing("Maru").Should().BeFalse();
         }
     }
 }

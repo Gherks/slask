@@ -18,6 +18,7 @@ namespace Slask.Domain.Rounds.Interfaces
         Guid TournamentId { get; }
         Tournament Tournament { get; }
 
+        int GetExpectedParticipantCount();
         bool RenameTo(string name);
         PlayerReference RegisterPlayerReference(string name);
         bool ExcludePlayerReference(string name);
@@ -26,6 +27,7 @@ namespace Slask.Domain.Rounds.Interfaces
         bool SetPlayersPerGroupCount(int count);
         bool SetBestOf(int bestOf);
         bool SetAdvancingPerGroupCount(int count);
+        bool HasProblematicTie();
         bool IsFirstRound();
         bool IsLastRound();
         Match GetFirstMatch();
@@ -35,5 +37,6 @@ namespace Slask.Domain.Rounds.Interfaces
         RoundBase GetPreviousRound();
         PlayState GetPlayState();
         bool PlayerReferenceIsAdvancingPlayer(PlayerReference playerReference);
+        void ReceiveTransferedPlayerReferences(AdvancingPlayerTransfer advancingPlayerTransfer);
     }
 }

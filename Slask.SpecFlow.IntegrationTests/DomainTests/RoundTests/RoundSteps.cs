@@ -1,10 +1,14 @@
 ﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
+using Slask.Domain.Groups.Bases;
+using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
 using Slask.Domain.Utilities;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using TechTalk.SpecFlow;
 
 namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
@@ -17,6 +21,37 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 
     public class RoundStepDefinitions : TournamentStepDefinitions
     {
+        [Given(@"score is added to players in given matches in created groups")]
+        [When(@"score is added to players in given matches in created groups")]
+        public void WhenScoreIsAddedToPlayersInGivenMatchesInCreatedGroups(Table table)
+        {
+            if (table == null)
+            {
+                throw new ArgumentNullException(nameof(table));
+            }
+
+            foreach (TableRow row in table.Rows)
+            {
+                ParseSoreAddedToMatchPlayer(row, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
+
+                GroupBase group = createdGroups[groupIndex];
+                Match match = group.Matches[matchIndex];
+
+                SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+
+                Player player = match.FindPlayer(scoringPlayer);
+
+                if (player != null)
+                {
+                    player.IncreaseScore(scoreAdded);
+                }
+                else
+                {
+                    throw new Exception("Invalid player name in given match within given created group");
+                }
+            }
+        }
+
         [When(@"players per group count in round (.*) is set to (.*)")]
         public void WhenPlayersPerGroupCountInRoundIsSetTo(int roundIndex, int playersPerGroupCount)
         {
@@ -139,6 +174,21 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             round.GetPlayState().Should().Be(playState);
         }
 
+        [Then(@"advancing players in created group (.*) is exactly ""(.*)""")]
+        public void ThenWinningPlayersInGroupIs(int groupIndex, string commaSeparatedPlayerNames)
+        {
+            GroupBase group = createdGroups[groupIndex];
+            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+
+            List<PlayerReference> playerReferences = AdvancingPlayersSolver.FetchFrom(group);
+
+            playerReferences.Should().HaveCount(playerNames.Count);
+
+            foreach (string playerName in playerNames)
+            {
+                playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+            }
+        }
         protected static void CheckRoundValidity(RoundBase round, string correctName, int bestOf, int advancingCount, int playersPerGroupCount)
         {
             if (round == null)
@@ -155,6 +205,33 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             round.Groups.Should().HaveCount(1);
             round.TournamentId.Should().NotBeEmpty();
             round.Tournament.Should().NotBeNull();
+        }
+        protected static void ParseSoreAddedToMatchPlayer(TableRow row, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded)
+        {
+            groupIndex = 0;
+            matchIndex = 0;
+            scoringPlayer = "";
+            scoreAdded = 0;
+
+            if (row.ContainsKey("Group index"))
+            {
+                int.TryParse(row["Group index"], out groupIndex);
+            }
+
+            if (row.ContainsKey("Match index"))
+            {
+                int.TryParse(row["Match index"], out matchIndex);
+            }
+
+            if (row.ContainsKey("Scoring player"))
+            {
+                scoringPlayer = row["Scoring player"];
+            }
+
+            if (row.ContainsKey("Added score"))
+            {
+                int.TryParse(row["Added score"], out scoreAdded);
+            }
         }
     }
 }
