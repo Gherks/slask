@@ -48,7 +48,7 @@ Scenario: PlayState is set to Ongoing when round has finished with a problematic
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
-	When score is added to players in given matches in created groups
+	When score is added to players in given matches in groups
 		| Group index | Match index | Scoring player | Added score |
 		| 1           | 0           | Rain           | 2           |
 		| 1           | 1           | FanTaSy        | 2           |
@@ -62,7 +62,7 @@ Scenario: Can detect several groups with problematic ties
 			| Round robin | Round robin round 1 | 3       | 1                         | 3                       |
 			| Round robin | Round robin round 2 | 3       | 1                         | 2                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to round 0
-	When score is added to players in given matches in created groups
+	When score is added to players in given matches in groups
 		| Group index | Match index | Scoring player | Added score |
 		| 0           | 0           | Maru           | 2           |
 		| 0           | 1           | Taeja          | 2           |
@@ -79,7 +79,7 @@ Scenario: Does not transfer any players to next round when group has problematic
 			| Round robin | Round robin round 1 | 3       | 1                         | 3                       |
 			| Round robin | Round robin round 2 | 3       | 1                         | 2                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to round 0
-	When score is added to players in given matches in created groups
+	When score is added to players in given matches in groups
 		| Group index | Match index | Scoring player | Added score |
 		| 0           | 0           | Maru           | 2           |
 		| 0           | 1           | Taeja          | 2           |
@@ -87,7 +87,7 @@ Scenario: Does not transfer any players to next round when group has problematic
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 1           |
-	Then advancing players in created group 0 is exactly ""
+	Then advancing players in group 0 is exactly ""
 
  Scenario: Can solve tie
 	Given a tournament named "GSL 2019" has been created
@@ -96,11 +96,11 @@ Scenario: Does not transfer any players to next round when group has problematic
 			| Round robin | Round robin round | 3       | 2                         | 3                       |
 			| Bracket     | Bracket round     | 3       | 1                         | 2                       |
 		And players "Maru, Stork, Taeja" is registered to round 0
-		And score is added to players in given matches in created groups
+		And score is added to players in given matches in groups
 			| Group index | Match index | Scoring player | Added score |
 			| 0           | 0           | Maru           | 2           |
 			| 0           | 1           | Taeja          | 2           |
 			| 0           | 2           | Stork          | 2           |
 	When tie in group 0 is solved by choosing "Stork"
 		And tie in group 0 is solved by choosing "Taeja"
-	Then advancing players in created group 0 is exactly "Stork, Taeja"
+	Then advancing players in group 0 is exactly "Stork, Taeja"

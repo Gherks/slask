@@ -12,7 +12,7 @@ Scenario: Can fetch all winning players in a bracket round that contains several
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 			| 0                | 0           | 1           |
-	Then fetched advancing players in created round 0 should be exactly "First, Eighth"
+	Then fetched advancing players in round 0 should be exactly "First, Eighth"
 
 @BracketRoundInteractionTag
 Scenario: Cannot fetch winning players from bracket group in a bracket round that has not played out
@@ -24,7 +24,7 @@ Scenario: Cannot fetch winning players from bracket group in a bracket round tha
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
-	Then fetched advancing players in created round 0 should yield null
+	Then fetched advancing players in round 0 should yield null
 
 @BracketRoundInteractionTag
 Scenario: A bracket round with a predecessor bracket round is set up using only winners of that predecessor round
@@ -92,7 +92,7 @@ Scenario: Can fetch all winning players in a dual tournament round that contains
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 			| 0                | 0           | 1           |
-	Then fetched advancing players in created round 0 should be exactly "Fourth, First, Eighth, Fifth"
+	Then fetched advancing players in round 0 should be exactly "Fourth, First, Eighth, Fifth"
 
 @DualTournamentRoundInteractionTag
 Scenario: Cannot fetch winning players from dual tournament group in a dual tournament round that has not played out
@@ -104,7 +104,7 @@ Scenario: Cannot fetch winning players from dual tournament group in a dual tour
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
-	Then fetched advancing players in created round 0 should yield null
+	Then fetched advancing players in round 0 should yield null
 
 @DualTournamentRoundInteractionTag
 Scenario: A dual tournament round with a predecessor bracket round is set up using only winners of that predecessor round
@@ -172,7 +172,7 @@ Scenario: Can fetch all winning players in a round robin round that contains sev
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 			| 0                | 0           | 1           |
-	Then fetched advancing players in created round 0 should be exactly "Fourth, First, Eighth, Fifth"
+	Then fetched advancing players in round 0 should be exactly "Fourth, First, Eighth, Fifth"
 
 @RoundRobinRoundInteractionTag
 Scenario: Cannot fetch winning players from round robin group in a round robin round that has not played out
@@ -185,7 +185,7 @@ Scenario: Cannot fetch winning players from round robin group in a round robin r
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
-	Then fetched advancing players in created round 0 should yield null
+	Then fetched advancing players in round 0 should yield null
 
 @RoundRobinRoundInteractionTag
 Scenario: A round robin round with a predecessor bracket round is set up using only winners of that predecessor round

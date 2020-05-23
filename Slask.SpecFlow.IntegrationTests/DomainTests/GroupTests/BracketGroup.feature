@@ -15,7 +15,7 @@ Scenario: Start time in matches in bracket group is spaced with one hour upon cr
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 8                       |
 	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
-	Then minutes between matches in created group 0 should be 60
+	Then minutes between matches in group 0 should be 60
 
 Scenario: Creates proper bracket layout upon group creation
 	#
@@ -146,7 +146,7 @@ Scenario: Bracket progression goes as expected
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
-	Then advancing players in created group 0 is exactly "Eighth"
+	Then advancing players in group 0 is exactly "Eighth"
 		And participating players in group 0 should be mapped accordingly
 			| Match index | Player 1 name | Player 2 name |
 			| 0           | First         | Second        |

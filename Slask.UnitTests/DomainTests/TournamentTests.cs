@@ -75,11 +75,11 @@ namespace Slask.UnitTests.DomainTests
         }
 
         [Fact]
-        public void CanGetPlayerInTournamentByPlayerNameNoMatterLetterCasing()
+        public void CanGetPlayerInTournamentByPlayerName()
         {
             PlayerReference playerReference = bracketRound.RegisterPlayerReference("Maru");
 
-            PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByPlayerName(playerReference.Name.ToLower());
+            PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByPlayerName(playerReference.Name);
 
             fetchedPlayerReference.Should().NotBeNull();
             fetchedPlayerReference.Id.Should().Be(playerReference.Id);
