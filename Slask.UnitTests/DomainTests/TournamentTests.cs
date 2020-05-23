@@ -200,5 +200,25 @@ namespace Slask.UnitTests.DomainTests
             playerReferences = tournament.GetPlayerReferences();
             playerReferences.Should().BeEmpty();
         }
+
+        [Fact]
+        public void CanFetchFirstRound()
+        {
+            tournament.AddBracketRound();
+            tournament.AddDualTournamentRound();
+            tournament.AddRoundRobinRound();
+
+            tournament.GetFirstRound().Should().Be(bracketRound);
+        }
+
+        [Fact]
+        public void CanFetchLastRound()
+        {
+            tournament.AddBracketRound();
+            tournament.AddDualTournamentRound();
+            RoundRobinRound lastRound = tournament.AddRoundRobinRound();
+
+            tournament.GetLastRound().Should().Be(lastRound);
+        }
     }
 }
