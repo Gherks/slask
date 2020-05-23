@@ -29,6 +29,22 @@ Scenario: Cannot add new rounds when tournament has begun
 		| Bracket    | Bracket round 3 | 3       | 1                         | 2                       |
 	Then tournament 0 contains 2 rounds
 
+Scenario: Cannot remove rounds when tournament has begun
+	Given a tournament named "GSL 2019" has been created
+		And created tournament 0 adds rounds
+			| Round type | Round name      | Best of | Advancing per group count | Players per group count |
+			| Bracket    | Bracket round 1 | 3       | 2                         | 4                       |
+			| Bracket    | Bracket round 2 | 3       | 2                         | 4                       |
+			| Bracket    | Bracket round 3 | 3       | 1                         | 2                       |
+		And players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0 
+		And created groups within created tournament is played out and betted on 
+			| Tournament index | Round index | Group index | 
+			| 0                | 0           | 0           | 
+	When tournament 0 removes round 0
+		| Round type | Round name      | Best of | Advancing per group count | Players per group count |
+		| Bracket    | Bracket round 3 | 3       | 1                         | 2                       |
+	Then tournament 0 contains 2 rounds
+
 Scenario: Cannot exclude players references when tournament has begun
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
 		And created tournament 0 adds rounds
