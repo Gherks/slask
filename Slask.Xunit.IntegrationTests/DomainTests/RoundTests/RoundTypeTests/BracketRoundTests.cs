@@ -6,7 +6,7 @@ using Slask.Domain.Rounds.Bases;
 using System.Linq;
 using Xunit;
 
-namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
+namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
 {
     public class BracketRoundTests
     {
