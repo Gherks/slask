@@ -40,12 +40,9 @@ namespace Slask.Domain
             };
         }
 
-        public void IncreaseScore(int value)
+        public bool IncreaseScore(int value)
         {
-            bool matchIsReady = Match.IsReady();
-            bool matchIsOngoing = Match.GetPlayState() == PlayState.Ongoing;
-
-            if (matchIsReady && matchIsOngoing)
+            if (CanChangeScore())
             {
                 Score += value;
                 Match.Group.OnMatchScoreIncreased(Match);
@@ -60,19 +57,32 @@ namespace Slask.Domain
                         advancingPlayerTransfer.TransferToNextRound(Match.Group.Round);
                     }
                 }
+
+                return true;
             }
+
+            return false;
         }
 
-        public void DecreaseScore(int value)
+        public bool DecreaseScore(int value)
         {
-            bool matchIsReady = Match.IsReady();
-            bool matchIsOngoing = Match.GetPlayState() == PlayState.Ongoing;
-
-            if (matchIsReady && matchIsOngoing)
+            if (CanChangeScore())
             {
                 Score -= value;
                 Score = Math.Max(Score, 0);
+                return true;
             }
+
+            return false;
+        }
+
+        private bool CanChangeScore()
+        {
+            bool matchIsReady = Match.IsReady();
+            bool matchIsOngoing = Match.GetPlayState() == PlayState.Ongoing;
+            bool tournamentHasNoIssues = !Match.Group.Round.Tournament.HasIssues();
+
+            return matchIsReady && matchIsOngoing && tournamentHasNoIssues;
         }
     }
 }
