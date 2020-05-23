@@ -277,17 +277,34 @@ namespace Slask.Domain.Rounds.Bases
 
         public PlayState GetPlayState()
         {
-            bool hasNotBegun = Groups.First().GetPlayState() == PlayState.NotBegun;
+            bool noGroupHasBegun = AllGroupsPlayStatesAre(PlayState.NotBegun);
 
-            if (hasNotBegun)
+            if (noGroupHasBegun)
             {
                 return PlayState.NotBegun;
             }
 
-            bool lastGroupIsFinished = Groups.Last().GetPlayState() == PlayState.Finished;
-            bool hasNoProblematicTieInAnyGroup = !HasProblematicTie();
+            bool allGroupsHasFinished = AllGroupsPlayStatesAre(PlayState.Finished);
 
-            return (lastGroupIsFinished && hasNoProblematicTieInAnyGroup) ? PlayState.Finished : PlayState.Ongoing;
+            if (allGroupsHasFinished)
+            {
+                return PlayState.Finished;
+            }
+
+            return PlayState.Ongoing;
+        }
+
+        private bool AllGroupsPlayStatesAre(PlayState playState)
+        {
+            foreach (GroupBase group in Groups)
+            {
+                if (group.GetPlayState() != playState)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public void ReceiveTransferedPlayerReferences(AdvancingPlayerTransfer advancingPlayerTransfer)
@@ -341,10 +358,10 @@ namespace Slask.Domain.Rounds.Bases
         {
             foreach (GroupBase group in Groups)
             {
-                bool groupIsFinished = group.GetPlayState() == PlayState.Finished;
                 bool groupHasProblematicTie = group.HasProblematicTie();
+                bool groupHasNotSolvedTie = !group.HasSolvedTie();
 
-                if (groupIsFinished && groupHasProblematicTie)
+                if (groupHasProblematicTie && groupHasNotSolvedTie)
                 {
                     return true;
                 }
