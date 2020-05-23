@@ -9,7 +9,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
+namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
 {
     public class RoundRobinRoundTests : IDisposable
     {

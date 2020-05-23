@@ -6,7 +6,7 @@ using Slask.Domain.Rounds.Bases;
 using System.Linq;
 using Xunit;
 
-namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
+namespace Slask.Xunit.UnitTests.DomainTests.RoundTests.RoundTypeTests
 {
     public class BracketRoundTests
     {
@@ -20,7 +20,7 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
         [Fact]
         public void CanCreateBracketRound()
         {
-            BracketRound round = tournament.AddBracketRound();
+            BracketRound round = BracketRound.Create(tournament);
 
             round.Should().NotBeNull();
             round.Id.Should().NotBeEmpty();
@@ -28,21 +28,9 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
             round.PlayersPerGroupCount.Should().Be(2);
             round.BestOf.Should().Be(3);
             round.AdvancingPerGroupCount.Should().Be(1);
-            round.Groups.Should().HaveCount(1);
+            round.Groups.Should().HaveCount(0);
             round.TournamentId.Should().Be(tournament.Id);
             round.Tournament.Should().Be(tournament);
-        }
-
-        [Fact]
-        public void AdvancingCountInBracketRoundsCannotBeAnythingOtherThanOne()
-        {
-            BracketRound round = tournament.AddBracketRound();
-
-            for (int advancingPerGroupCount = 0; advancingPerGroupCount < 16; ++advancingPerGroupCount)
-            {
-                round.SetAdvancingPerGroupCount(advancingPerGroupCount);
-                round.AdvancingPerGroupCount.Should().Be(1);
-            }
         }
 	}
 }

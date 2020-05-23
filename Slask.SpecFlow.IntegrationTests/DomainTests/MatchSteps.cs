@@ -27,13 +27,22 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                             "Round type",
                             "Round name",
                             "Best of",
-                            "Advancing count"});
+                            "Advancing per group count",
+                            "Players per group count"});
 
             roundTable.AddRow(new string[] {
                             "Round robin",
-                            "Round robin round",
+                            "Round 1",
                             "3",
-                            "3"});
+                            "3",
+                            "4"});
+
+            roundTable.AddRow(new string[] {
+                            "Bracket",
+                            "Round 2",
+                            "3",
+                            "1",
+                            "6"});
 
             GivenTournamentAddsRounds(0, roundTable);
             GivenPlayersIsRegisteredToRound("First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth", 0);

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Slask.UnitTests.DomainTests.RoundTests
+namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests
 {
     public class ResizableRoundTests
     {

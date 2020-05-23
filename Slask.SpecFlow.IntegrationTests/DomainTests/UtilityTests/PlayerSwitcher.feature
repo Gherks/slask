@@ -89,9 +89,9 @@ Scenario: Cannot switch player with other player that resides in different group
 Scenario: Cannot switch player that resides in a bracket group with player in different round
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type      | Round name | Best of | Players per group count |
-			| Dual Tournament | Round 1    | 3       | 4                       |
-			| Bracket         | Round 2    | 3       | 4                       |
+			| Round type      | Round name | Best of | Advancing per group count | Players per group count |
+			| Dual Tournament | Round 1    | 3       | 2                         | 4                       |
+			| Bracket         | Round 2    | 3       | 1                         | 4                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
@@ -114,9 +114,9 @@ Scenario: Cannot switch player that resides in a bracket group with player in di
 Scenario: Cannot switch player that resides in a dual tournament group with player in different round
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type      | Round name | Best of | Players per group count |
-			| Bracket         | Round 1    | 3       | 2                       |
-			| Dual tournament | Round 2    | 3       | 4                       |
+			| Round type | Round name | Best of | Advancing per group count | Players per group count |
+			| Bracket    | Round 1    | 3       | 1                         | 2                       |
+			| Bracket    | Round 2    | 3       | 1                         | 4                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
