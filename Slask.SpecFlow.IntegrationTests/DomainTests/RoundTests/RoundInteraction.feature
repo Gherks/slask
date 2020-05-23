@@ -4,11 +4,11 @@
 @BracketRoundInteractionTag
 Scenario: Can fetch all winning players in a bracket round that contains several bracket groups
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 4                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
-		And created groups within created tournament is played out and betted on
+		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 			| 0                | 0           | 1           |
@@ -17,11 +17,11 @@ Scenario: Can fetch all winning players in a bracket round that contains several
 @BracketRoundInteractionTag
 Scenario: Cannot fetch winning players from bracket group in a bracket round that has not played out
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type | Round name    | Best of | Players per group count |
 			| Bracket    | Bracket round | 3       | 4                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
-		And created groups within created tournament is played out and betted on
+		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 	Then fetched advancing players in created round 0 should yield null
@@ -29,12 +29,12 @@ Scenario: Cannot fetch winning players from bracket group in a bracket round tha
 @BracketRoundInteractionTag
 Scenario: A bracket round with a predecessor bracket round is set up using only winners of that predecessor round
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type | Round name      | Best of | Advancing per group count | Players per group count |
 			| Bracket    | Bracket round 1 | 3       | 1                         | 4                       |
 			| Bracket    | Bracket round 2 | 3       | 1                         | 4                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth, Eleventh, Twelfth, Thirteenth, Fourteenth, Fifteenth, Sixteenth" is registered to round 0
-	When created groups within created tournament is played out and betted on
+	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 		| 0                | 0           | 1           |
@@ -48,12 +48,12 @@ Scenario: A bracket round with a predecessor bracket round is set up using only 
 @BracketRoundInteractionTag
 Scenario: A bracket round with a predecessor dual tournament round is set up using only winners of that predecessor round
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type      | Round name            | Best of | Players per group count |
 			| Dual tournament | Dual tournament round | 3       | 4                       |
 			| Bracket         | Bracket round         | 3       | 4                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
-	When created groups within created tournament is played out and betted on
+	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 		| 0                | 0           | 1           |
@@ -65,12 +65,12 @@ Scenario: A bracket round with a predecessor dual tournament round is set up usi
 @BracketRoundInteractionTag
 Scenario: A bracket round with a predecessor round robin round is set up using only winners of that predecessor round
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
 			| Round robin | Round robin round | 3       | 2                         | 5                       |
 			| Bracket     | Bracket round     | 3       | 1                         | 4                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth" is registered to round 0
-	When created groups within created tournament is played out and betted on
+	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 		| 0                | 0           | 1           |
@@ -84,11 +84,11 @@ Scenario: A bracket round with a predecessor round robin round is set up using o
 @DualTournamentRoundInteractionTag
 Scenario: Can fetch all winning players in a dual tournament round that contains several dual tournament groups
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type      | Round name            | Best of | Players per group count | Players per group count |
 			| Dual tournament | Dual tournament round | 3       | 4                       | 4                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
-		And created groups within created tournament is played out and betted on
+		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 			| 0                | 0           | 1           |
@@ -97,11 +97,11 @@ Scenario: Can fetch all winning players in a dual tournament round that contains
 @DualTournamentRoundInteractionTag
 Scenario: Cannot fetch winning players from dual tournament group in a dual tournament round that has not played out
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type      | Round name            | Best of | Players per group count |
 			| Dual tournament | Dual tournament round | 3       | 4                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
-		And created groups within created tournament is played out and betted on
+		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 	Then fetched advancing players in created round 0 should yield null
@@ -109,12 +109,12 @@ Scenario: Cannot fetch winning players from dual tournament group in a dual tour
 @DualTournamentRoundInteractionTag
 Scenario: A dual tournament round with a predecessor bracket round is set up using only winners of that predecessor round
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type      | Round name            | Best of | Advancing per group count | Players per group count |
 			| Bracket         | Bracket round         | 3       | 1                         | 4                       |
 			| Dual tournament | Dual tournament round | 3       | 1                         | 4                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth, Eleventh, Twelfth, Thirteenth, Fourteenth, Fifteenth, Sixteenth" is registered to round 0
-	When created groups within created tournament is played out and betted on
+	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 		| 0                | 0           | 1           |
@@ -128,12 +128,12 @@ Scenario: A dual tournament round with a predecessor bracket round is set up usi
 @DualTournamentRoundInteractionTag
 Scenario: A dual tournament round with a predecessor dual tournament round is set up using only winners of that predecessor round
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type      | Round name              | Best of | Players per group count |
 			| Dual tournament | Dual tournament round 1 | 3       | 4                       |
 			| Dual tournament | Dual tournament round 2 | 3       | 4                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
-	When created groups within created tournament is played out and betted on
+	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 		| 0                | 0           | 1           |
@@ -145,12 +145,12 @@ Scenario: A dual tournament round with a predecessor dual tournament round is se
 @DualTournamentRoundInteractionTag
 Scenario: A dual tournament round with a predecessor round robin round is set up using only winners of that predecessor round
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type      | Round name            | Best of | Advancing per group count | Players per group count |
 			| Round robin     | Round robin round     | 3       | 2                         | 5                       |
 			| Dual tournament | Dual tournament round | 3       | 1                         | 4                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth" is registered to round 0
-	When created groups within created tournament is played out and betted on
+	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 		| 0                | 0           | 1           |
@@ -164,11 +164,11 @@ Scenario: A dual tournament round with a predecessor round robin round is set up
 @RoundRobinRoundInteractionTag
 Scenario: Can fetch all winning players in a round robin round that contains several round robin groups
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
 			| Round robin | Round robin round | 3       | 2                         | 4                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
-		And created groups within created tournament is played out and betted on
+		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 			| 0                | 0           | 1           |
@@ -177,12 +177,12 @@ Scenario: Can fetch all winning players in a round robin round that contains sev
 @RoundRobinRoundInteractionTag
 Scenario: Cannot fetch winning players from round robin group in a round robin round that has not played out
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
 			| Round robin | Round robin round | 3       | 1                         | 2                       |
 			| Round robin | Round robin round | 3       | 1                         | 4                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
-		And created groups within created tournament is played out and betted on
+		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 	Then fetched advancing players in created round 0 should yield null
@@ -190,12 +190,12 @@ Scenario: Cannot fetch winning players from round robin group in a round robin r
 @RoundRobinRoundInteractionTag
 Scenario: A round robin round with a predecessor bracket round is set up using only winners of that predecessor round
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
 			| Bracket     | Bracket round     | 3       | 1                         | 4                       |
 			| Round robin | Round robin round | 3       | 1                         | 4                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth, Eleventh, Twelfth, Thirteenth, Fourteenth, Fifteenth, Sixteenth" is registered to round 0
-	When created groups within created tournament is played out and betted on
+	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 		| 0                | 0           | 1           |
@@ -213,12 +213,12 @@ Scenario: A round robin round with a predecessor bracket round is set up using o
 @RoundRobinRoundInteractionTag
 Scenario: A round robin round with a predecessor dual tournament round is set up using only winners of that predecessor round
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type      | Round name            | Best of | Advancing per group count | Players per group count |
 			| Dual tournament | Dual tournament round | 3       | 2                         | 4                       |
 			| Round robin     | Round robin round     | 3       | 1                         | 4                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
-	When created groups within created tournament is played out and betted on
+	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 		| 0                | 0           | 1           |
@@ -234,12 +234,12 @@ Scenario: A round robin round with a predecessor dual tournament round is set up
 @RoundRobinRoundInteractionTag
 Scenario: A round robin round with a predecessor round robin round is set up using only winners of that predecessor round
 	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
-		And created tournament 0 adds rounds
+		And tournament 0 adds rounds
 			| Round type  | Round name          | Best of | Advancing per group count | Players per group count |
 			| Round robin | Round robin round 1 | 3       | 2                         | 5                       |
 			| Round robin | Round robin round 2 | 3       | 1                         | 4                       |
 	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth" is registered to round 0
-	When created groups within created tournament is played out and betted on
+	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 		| 0                | 0           | 1           |

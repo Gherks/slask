@@ -21,13 +21,13 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
     public class TournamentStepDefinitions : TournamentServiceStepDefinitions
     {
-        [Given(@"created tournament (.*) adds rounds")]
-        [When(@"created tournament (.*) adds rounds")]
-        public void GivenCreatedTournamentAddsRounds(int tournamentIndex, Table table)
+        [Given(@"tournament (.*) adds rounds")]
+        [When(@"tournament (.*) adds rounds")]
+        public void GivenTournamentAddsRounds(int tournamentIndex, Table table)
         {
             if (createdTournaments.Count <= tournamentIndex)
             {
-                throw new IndexOutOfRangeException("Given created tournament index is out of bounds");
+                throw new IndexOutOfRangeException("Given tournament index is out of bounds");
             }
 
             Tournament tournament = createdTournaments[tournamentIndex];
@@ -77,9 +77,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             }
         }
 
-        [Given(@"round (.*) is removed from tournament (.*)")]
-        [When(@"round (.*) is removed from tournament (.*)")]
-        public void WhenRoundIsRemovedFromTournament(int roundIndex, int tournamentIndex)
+        [Given(@"tournament (.*) removes round (.*)")]
+        [When(@"tournament (.*) removes round (.*)")]
+        public void WhenRoundIsRemovedFromTournament(int tournamentIndex, int roundIndex)
         {
             RoundBase round = createdRounds[roundIndex];
             Tournament tournament = createdTournaments[tournamentIndex];
@@ -126,9 +126,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             }
         }
 
-        [Given(@"created groups within created tournament is played out and betted on")]
-        [When(@"created groups within created tournament is played out and betted on")]
-        public void GivenCreatedGroupsWithinCreatedTournamentIsPlayedOutAndBettedOn(Table table)
+        [Given(@"groups within tournament is played out and betted on")]
+        [When(@"groups within tournament is played out and betted on")]
+        public void GivenGroupsWithinTournamentIsPlayedOutAndBettedOn(Table table)
         {
             if (table == null)
             {
@@ -176,7 +176,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
         }
 
         [Then(@"participating players in round (.*) should be exactly ""(.*)""")]
-        public void ThenParticipatingPlayersInCreatedGroupShouldBeMappedAccordingly(int roundIndex, string commaSeparatedPlayerNames)
+        public void ThenParticipatingPlayersInRoundShouldBeExactly(int roundIndex, string commaSeparatedPlayerNames)
         {
             RoundBase round = createdRounds[roundIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");

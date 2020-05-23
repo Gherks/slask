@@ -15,14 +15,14 @@ Scenario: Match returns Ongoing state when it has started but not finished
 
 Scenario: Match returns Finished state when match is played out
 	Given a round robin tournament with users and players has been created
-	When created groups within created tournament is played out and betted on
+	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
 	Then match 0 in created group 0 should be in state "Finished"
 
 Scenario: Can return winning and losing players when match is finished
 	Given a round robin tournament with users and players has been created
-		And created groups within created tournament is played out and betted on
+		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 	Then winning player can be fetched from match 0 in created group 0
