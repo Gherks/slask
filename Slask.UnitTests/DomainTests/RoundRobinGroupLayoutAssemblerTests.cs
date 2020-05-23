@@ -6,7 +6,7 @@ using Slask.Domain.Rounds;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Slask.UnitTests.DomainTests
+namespace Slask.Xunit.UnitTests.DomainTests
 {
     public class RoundRobinGroupLayoutAssemblerTests
     {

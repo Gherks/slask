@@ -11,7 +11,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace Slask.UnitTests.DomainTests.BetTests
+namespace Slask.Xunit.UnitTests.DomainTests.BetTests
 {
     public class MatchBetTests
     {

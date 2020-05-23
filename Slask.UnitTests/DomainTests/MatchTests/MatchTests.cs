@@ -8,7 +8,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace Slask.UnitTests.DomainTests.MatchTests
+namespace Slask.Xunit.UnitTests.DomainTests.MatchTests
 {
     public class MatchTests
     {

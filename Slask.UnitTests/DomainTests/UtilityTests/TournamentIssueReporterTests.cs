@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Slask.UnitTests.DomainTests.UtilityTests
+namespace Slask.Xunit.UnitTests.DomainTests.UtilityTests
 {
     public class TournamentIssueReporterTests
     {

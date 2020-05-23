@@ -2,7 +2,7 @@ using FluentAssertions;
 using Slask.Domain;
 using Xunit;
 
-namespace Slask.UnitTests.DomainTests
+namespace Slask.Xunit.UnitTests.DomainTests
 {
     public class UserTests
     {
