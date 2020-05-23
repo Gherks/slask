@@ -69,7 +69,7 @@ namespace Slask.Domain.Rounds.RoundUtilities
 
             if (lastRoundHasSeveralAdvancingPlayers)
             {
-                string description = "Last round should have more than one player that advances. This value will be set to zero for this round when this tournament is created.";
+                string description = "Last round should not have more than one player that advances.";
                 round.Tournament.TournamentIssueReporter.Report(round, description);
             }
         }
