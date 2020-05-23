@@ -293,7 +293,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
                 if (matchShouldHaveStarted && matchIsNotFinished)
                 {
-                    // Give points to player with name that precedes the other
+                    // Give points to player with name that precedes the other alphabetically
                     bool increasePlayer1Score = match.Player1.Name.CompareTo(match.Player2.Name) <= 0;
 
                     if (increasePlayer1Score)
