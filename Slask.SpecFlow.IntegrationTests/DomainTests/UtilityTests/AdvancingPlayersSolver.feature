@@ -7,6 +7,7 @@ Scenario: Can fetch advancing players from finished round
 		And tournament 0 adds rounds
 			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
 			| Round robin | Round robin round | 3       | 5                         | 8                       |
+			| Bracket     | Bracket round     | 3       | 1                         | 5                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
@@ -18,6 +19,7 @@ Scenario: Can fetch advancing players from finished group
 		And tournament 0 adds rounds
 			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
 			| Round robin | Round robin round | 3       | 2                         | 4                       |
+			| Bracket     | Bracket round     | 3       | 1                         | 4                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |

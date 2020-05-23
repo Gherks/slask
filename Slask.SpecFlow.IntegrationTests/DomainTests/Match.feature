@@ -22,9 +22,9 @@ Scenario: Match returns Finished state when match is played out
 
 Scenario: Can return winning and losing players when match is finished
 	Given a round robin tournament with users and players has been created
-		And groups within tournament is played out and betted on
-			| Tournament index | Round index | Group index |
-			| 0                | 0           | 0           |
+	When groups within tournament is played out and betted on
+		| Tournament index | Round index | Group index |
+		| 0                | 0           | 0           |
 	Then winning player can be fetched from match 0 in group 0
 		And losing player can be fetched from match 0 in group 0
 
