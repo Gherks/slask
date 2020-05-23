@@ -1,5 +1,6 @@
 using Slask.Domain.Bets;
 using Slask.Domain.Groups.Interfaces;
+using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
 using Slask.Domain.Utilities;
 using Slask.Utilities.PlayerStandingsSolver;
@@ -16,7 +17,7 @@ namespace Slask.Domain.Groups.Bases
         {
             Matches = new List<Match>();
             PlayerReferences = new List<PlayerReference>();
-            ChoosenTyingPlayers = new List<PlayerReference>();
+            ChoosenTyingPlayerEntries = new List<PlayerStandingEntry>();
         }
 
         public Guid Id { get; protected set; }
@@ -28,7 +29,7 @@ namespace Slask.Domain.Groups.Bases
         public List<PlayerReference> PlayerReferences { get; private set; }
 
         [NotMapped]
-        public List<PlayerReference> ChoosenTyingPlayers { get; private set; }
+        public List<PlayerStandingEntry> ChoosenTyingPlayerEntries { get; private set; }
 
         public bool AddPlayerReferences(List<PlayerReference> playerReferences)
         {
@@ -53,17 +54,48 @@ namespace Slask.Domain.Groups.Bases
 
         public PlayState GetPlayState()
         {
-            bool hasNotBegun = Matches.First().GetPlayState() == PlayState.NotBegun;
+            bool noGroupHasBegun = AllMatchesPlayStatesAre(PlayState.NotBegun);
 
-            if (hasNotBegun)
+            if (noGroupHasBegun)
             {
                 return PlayState.NotBegun;
             }
 
-            bool lastMatchIsFinished = Matches.Last().GetWinningPlayer() != null;
-            bool hasNoProblematicTie = !HasProblematicTie();
+            bool allMatchesHasFinished = AllMatchesPlayStatesAre(PlayState.Finished);
 
-            return (lastMatchIsFinished && hasNoProblematicTie) ? PlayState.Finished : PlayState.Ongoing;
+            if (allMatchesHasFinished)
+            {
+                if (HasProblematicTie())
+                {
+                    if (HasSolvedTie())
+                    {
+                        return PlayState.Finished;
+                    }
+                    else
+                    {
+                        return PlayState.Ongoing;
+                    }
+                }
+                else
+                {
+                    return PlayState.Finished;
+                }
+            }
+
+            return PlayState.Ongoing;
+        }
+
+        private bool AllMatchesPlayStatesAre(PlayState playState)
+        {
+            foreach (Match match in Matches)
+            {
+                if (match.GetPlayState() != playState)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public virtual bool ConstructGroupLayout(int playersPerGroupCount)
@@ -83,31 +115,87 @@ namespace Slask.Domain.Groups.Bases
 
         public bool HasProblematicTie()
         {
-            bool groupHasProblematicTie = FindProblematiclyTyingPlayers().Count > 0;
+            return FindProblematiclyTyingPlayers().Count > 0;
+        }
 
-            return groupHasProblematicTie;
+        public List<PlayerStandingEntry> FindProblematiclyTyingPlayers()
+        {
+            bool notAllMatchesHasBeenPlayed = !AllMatchesPlayStatesAre(PlayState.Finished);
+
+            if (notAllMatchesHasBeenPlayed)
+            {
+                return new List<PlayerStandingEntry>();
+            }
+
+            List<PlayerStandingEntry> problematicPlayers = new List<PlayerStandingEntry>();
+            List<PlayerStandingEntry> playerStandings = PlayerStandingsSolver.FetchFrom(this);
+
+            PlayerStandingEntry aboveThresholdPlayer = playerStandings[Round.AdvancingPerGroupCount - 1];
+            PlayerStandingEntry belowThresholdPlayer = playerStandings[Round.AdvancingPerGroupCount];
+
+            bool playersPartOfProblematicTie = aboveThresholdPlayer.Wins == belowThresholdPlayer.Wins;
+
+            if (playersPartOfProblematicTie)
+            {
+                foreach (PlayerStandingEntry entry in playerStandings)
+                {
+                    bool isPartOfTie = entry.Wins == aboveThresholdPlayer.Wins;
+
+                    if (isPartOfTie)
+                    {
+                        problematicPlayers.Add(entry);
+                    }
+                }
+            }
+
+            return problematicPlayers;
         }
 
         public bool SolveTieByChoosing(string playerName)
         {
-            List<PlayerReference> tyingPlayers = FindProblematiclyTyingPlayers();
+            List<PlayerStandingEntry> tyingPlayers = FindProblematiclyTyingPlayers();
             bool hasTyingPlayers = tyingPlayers.Count > 0;
 
             if (hasTyingPlayers)
             {
-                foreach (PlayerReference playerReference in tyingPlayers)
-                {
-                    if(playerReference.Name == playerName)
-                    {
-                        bool haveNotChosePlayerAlready = !ChoosenTyingPlayers.Contains(playerReference);
+                bool playerChosen = ChooseTyingPlayer(playerName);
+                bool tieSolved = HasSolvedTie();
 
-                        if (haveNotChosePlayerAlready)
-                        {
-                            ChoosenTyingPlayers.Add(playerReference);
-                            return true;
-                        }
+                if (playerChosen && tieSolved)
+                {
+                    AdvancingPlayerTransfer advancingPlayerTransfer = new AdvancingPlayerTransfer();
+                    advancingPlayerTransfer.TransferToNextRound(Round);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public bool HasSolvedTie()
+        {
+            bool hasPlayersChosenForSolvingTie = ChoosenTyingPlayerEntries.Count > 0;
+
+            if (hasPlayersChosenForSolvingTie)
+            {
+                List<PlayerStandingEntry> playerStandings = FindProblematiclyTyingPlayers();
+                int tyingScore = playerStandings.First().Wins;
+
+                playerStandings = PlayerStandingsSolver.FetchFrom(this);
+
+                int clearWinners = 0;
+
+                foreach (PlayerStandingEntry entry in playerStandings)
+                {
+                    if (entry.Wins > tyingScore)
+                    {
+                        clearWinners += 1;
                     }
                 }
+
+                bool hasEnoughToTransferToNextRound = (clearWinners + ChoosenTyingPlayerEntries.Count) == Round.AdvancingPerGroupCount;
+
+                return hasEnoughToTransferToNextRound;
             }
 
             return false;
@@ -148,30 +236,25 @@ namespace Slask.Domain.Groups.Bases
             }
         }
 
-        private List<PlayerReference> FindProblematiclyTyingPlayers()
+        private bool ChooseTyingPlayer(string playerName)
         {
-            List<PlayerReference> problematicPlayers = new List<PlayerReference>();
+            List<PlayerStandingEntry> tyingPlayers = FindProblematiclyTyingPlayers();
 
-            List<PlayerStandingEntry> playerStandings = PlayerStandingsSolver.FetchFrom(this);
-
-            for (int index = Round.AdvancingPerGroupCount; index < playerStandings.Count; ++index)
+            foreach (PlayerStandingEntry entry in tyingPlayers)
             {
-                PlayerStandingEntry previousPlayer = playerStandings[Round.AdvancingPerGroupCount - 1];
-                PlayerStandingEntry currentPlayer = playerStandings[Round.AdvancingPerGroupCount];
-
-                bool playersPartOfProblematicTie = previousPlayer.Wins == currentPlayer.Wins;
-
-                if (playersPartOfProblematicTie)
+                if (entry.PlayerReference.Name == playerName)
                 {
-                    problematicPlayers.Add(currentPlayer.PlayerReference);
-                }
-                else
-                {
-                    break;
+                    bool haveNotChosePlayerAlready = !ChoosenTyingPlayerEntries.Contains(entry);
+
+                    if (haveNotChosePlayerAlready)
+                    {
+                        ChoosenTyingPlayerEntries.Add(entry);
+                        return true;
+                    }
                 }
             }
 
-            return problematicPlayers;
+            return false;
         }
     }
 }
