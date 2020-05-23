@@ -41,10 +41,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
                     }
                 }
             }
-
-            List<PlayerReference> advancingPlayerReferences = AdvancingPlayersSolver.FetchFrom(group);
-
-            advancingPlayerReferences.Should().BeEquivalentTo(playerReferences);
         }
 
         [Then(@"round (.*) has (.*) problematic tie\(s\)")]

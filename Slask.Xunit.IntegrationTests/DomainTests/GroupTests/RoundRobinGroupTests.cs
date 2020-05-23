@@ -93,6 +93,9 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             round.RegisterPlayerReference("Maru");
             round.RegisterPlayerReference("Stork");
             round.RegisterPlayerReference("Taeja");
+
+            BracketRound bracketRound = tournament.AddBracketRound();
+
             GroupBase group = round.Groups.First();
 
             foreach (Match match in round.Groups.First().Matches)
@@ -102,12 +105,18 @@ namespace Slask.UnitTests.DomainTests.GroupTests
             }
 
             group.HasProblematicTie().Should().BeTrue();
-            group.SolveTieByChoosing("Maru").Should().BeTrue();
+            group.HasSolvedTie().Should().BeFalse();
+            group.SolveTieByChoosing("Taeja").Should().BeFalse();
 
             group.HasProblematicTie().Should().BeTrue();
+            group.HasSolvedTie().Should().BeFalse();
             group.SolveTieByChoosing("Stork").Should().BeTrue();
 
-            group.HasProblematicTie().Should().BeFalse();
+            group.HasProblematicTie().Should().BeTrue();
+            group.HasSolvedTie().Should().BeTrue();
+
+            bracketRound.Groups.First().Matches[0].Player1.Name.Should().Be("Taeja");
+            bracketRound.Groups.First().Matches[0].Player2.Name.Should().Be("Stork");
         }
 
         [Fact]

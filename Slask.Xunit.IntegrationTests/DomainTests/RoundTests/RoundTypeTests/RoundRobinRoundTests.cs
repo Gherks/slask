@@ -126,7 +126,7 @@ namespace Slask.UnitTests.DomainTests.RoundTests.RoundTypeTests
             round.Groups.First().SolveTieByChoosing("Maru");
 
             round.HasProblematicTie().Should().BeFalse();
-            round.Groups.First().ChoosenTyingPlayers.Should().BeEmpty();
+            round.Groups.First().ChoosenTyingPlayerEntries.Should().BeEmpty();
         }
     }
 }

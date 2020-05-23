@@ -89,16 +89,18 @@ Scenario: Does not transfer any players to next round when group has problematic
 			| 0                | 0           | 1           |
 	Then advancing players in created group 0 is exactly ""
 
-Scenario: Can solve tie
+ Scenario: Can solve tie
 	Given a tournament named "GSL 2019" has been created
 		And created tournament 0 adds rounds
 			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
-			| Round robin | Round robin round | 3       | 1                         | 3                       |
+			| Round robin | Round robin round | 3       | 2                         | 3                       |
+			| Bracket     | Bracket round     | 3       | 1                         | 2                       |
 		And players "Maru, Stork, Taeja" is registered to round 0
 		And score is added to players in given matches in created groups
 			| Group index | Match index | Scoring player | Added score |
 			| 0           | 0           | Maru           | 2           |
 			| 0           | 1           | Taeja          | 2           |
 			| 0           | 2           | Stork          | 2           |
-	When tie in group 0 is solved by choosing "Maru"
-	Then advancing players in created group 0 is exactly "Maru"
+	When tie in group 0 is solved by choosing "Stork"
+		And tie in group 0 is solved by choosing "Taeja"
+	Then advancing players in created group 0 is exactly "Stork, Taeja"
