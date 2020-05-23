@@ -56,17 +56,41 @@ Scenario: Existing player references are moved to next round if first round is s
 	Then players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
 		And tournament 0 contains 2 rounds
 
-Scenario: Cannot exclude players references when tournament has begun
-	Given a tournament named "GSL 2019" has been created with users "Stålberto" added to it
+Scenario: Can exclude players within first round
+	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type | Round name    | Best of | 
-			| Bracket    | Bracket round | 3       | 
-		And players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0 
-		And groups within tournament is played out and betted on 
-			| Tournament index | Round index | Group index | 
-			| 0                | 0           | 0           | 
-		And players "First" is excluded from round 0 
-	Then tournament 0 should contain exactly these player references with names: "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth"
+			| Round type | Round name    | Best of | Advancing per group count | Players per group count |
+			| Bracket    | Bracket round | 3       | 1                         | 4                       |
+		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+	When players "Maru" is excluded from round 0
+	Then participating players in round 0 should be exactly "Stork, Taeja, Rain"
+
+Scenario: Cannot exclude players within rounds other than first round
+	Given a tournament named "GSL 2019" has been created
+		And tournament 0 adds rounds
+			| Round type | Round name      | Best of | Advancing per group count | Players per group count |
+			| Bracket    | Bracket round 1 | 3       | 1                         | 2                       |
+			| Bracket    | Bracket round 2 | 3       | 1                         | 2                       |
+		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+		And groups within tournament is played out and betted on
+			| Tournament index | Round index | Group index |
+			| 0                | 0           | 0           |
+			| 0                | 0           | 1           |
+	When players "Maru" is excluded from round 1
+	Then participating players in round 1 should be exactly "Maru, Rain"
+
+Scenario: Cannot exclude players references when tournament has begun
+	Given a tournament named "GSL 2019" has been created
+		And tournament 0 adds rounds
+			| Round type | Round name      | Best of | Advancing per group count | Players per group count |
+			| Bracket    | Bracket round 1 | 3       | 1                         | 2                       |
+			| Bracket    | Bracket round 2 | 3       | 1                         | 2                       |
+		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+		And groups within tournament is played out and betted on
+			| Tournament index | Round index | Group index |
+			| 0                | 0           | 0           |
+	When players "Maru" is excluded from round 0
+	Then participating players in round 0 should be exactly "Maru, Stork, Taeja, Rain"
 
 Scenario: When first round is removed the existing player references are transfered to the new first round
 	Given a tournament named "GSL 2019" has been created
