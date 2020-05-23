@@ -22,8 +22,10 @@ namespace Slask.UnitTests.DomainTests.PlayerTests
         public PlayerInRoundRobinGroupTests()
         {
             tournament = Tournament.Create("GSL 2019");
-            round = tournament.AddRoundRobinRound() as RoundRobinRound;
+            round = tournament.AddRoundRobinRound();
             round.SetBestOf(5);
+            round.SetAdvancingPerGroupCount(1);
+            round.SetPlayersPerGroupCount(4);
 
             foreach (string playerName in playerNames)
             {

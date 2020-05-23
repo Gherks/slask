@@ -22,10 +22,12 @@ namespace Slask.UnitTests.DomainTests.PlayerTests
         public PlayerInBracketGroupTests()
         {
             tournament = Tournament.Create("GSL 2019");
-            round = tournament.AddBracketRound() as BracketRound;
+            round = tournament.AddBracketRound();
             round.SetBestOf(5);
+            round.SetAdvancingPerGroupCount(1);
+            round.SetPlayersPerGroupCount(4);
 
-            foreach(string playerName in playerNames)
+            foreach (string playerName in playerNames)
             {
                 round.RegisterPlayerReference(playerName);
             }

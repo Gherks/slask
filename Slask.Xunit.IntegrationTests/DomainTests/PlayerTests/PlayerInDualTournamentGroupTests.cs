@@ -22,8 +22,13 @@ namespace Slask.UnitTests.DomainTests.PlayerTests
         public PlayerInDualTournamentGroupTests()
         {
             tournament = Tournament.Create("GSL 2019");
-            round = tournament.AddDualTournamentRound() as DualTournamentRound;
+            round = tournament.AddDualTournamentRound();
             round.SetBestOf(5);
+            round.SetAdvancingPerGroupCount(2);
+            round.SetPlayersPerGroupCount(4);
+
+            // Needed for the tournament flow to make sense, tournament cannot end with a dual tournament group
+            tournament.AddBracketRound();
 
             foreach (string playerName in playerNames)
             {
