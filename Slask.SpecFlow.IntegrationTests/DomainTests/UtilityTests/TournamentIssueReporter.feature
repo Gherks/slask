@@ -146,3 +146,15 @@ Scenario: Tournament issue validation is run when player has been excluded
 	Then tournament 0 reports issues
 		| Issue type |
 		| Round      |
+
+Scenario: Issues prevents tournament from starting when present
+	Given a tournament named "GSL 2019" has been created
+		And tournament 0 adds rounds
+			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
+			| Round robin | Round robin round | 3       | 2                         | 4                       |
+			| Round robin | Round robin round | 3       | 2                         | 4                       |
+		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+	When groups within tournament is played out and betted on
+			| Tournament index | Round index | Group index |
+			| 0                | 0           | 0           |
+	Then advancing players from round 0 should be ""
