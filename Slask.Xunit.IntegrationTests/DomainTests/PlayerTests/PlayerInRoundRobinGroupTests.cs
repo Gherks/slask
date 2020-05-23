@@ -53,7 +53,7 @@ namespace Slask.UnitTests.DomainTests.PlayerTests
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             int score = 1;
 
-            player.IncreaseScore(score);
+            player.IncreaseScore(score).Should().BeTrue();
 
             player.Score.Should().Be(score);
         }
@@ -63,8 +63,8 @@ namespace Slask.UnitTests.DomainTests.PlayerTests
         {
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
-            player.IncreaseScore(2);
-            player.DecreaseScore(1);
+            player.IncreaseScore(2).Should().BeTrue();
+            player.DecreaseScore(1).Should().BeTrue();
 
             player.Score.Should().Be(1);
         }
@@ -74,7 +74,7 @@ namespace Slask.UnitTests.DomainTests.PlayerTests
         {
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
-            player.DecreaseScore(1);
+            player.DecreaseScore(1).Should().BeTrue();
 
             player.Score.Should().Be(0);
         }
