@@ -4,6 +4,7 @@ using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Groups.Bases;
 using Slask.Domain.Groups.GroupUtility;
+using Slask.Domain.Rounds.Bases;
 using Slask.Domain.Utilities;
 using Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests;
 using System;
@@ -113,16 +114,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             }
         }
 
-        protected static void CheckGroupValidity<GroupType>(GroupBase group)
-        {
-            group.Should().NotBeNull();
-            group.Should().BeOfType<GroupType>();
-            group.Id.Should().NotBeEmpty();
-            group.Matches.Should().NotBeEmpty();
-            group.RoundId.Should().NotBeEmpty();
-            group.Round.Should().NotBeNull();
-        }
-
         [Then(@"play state of group (.*) is set to ""(.*)""")]
         public void ThenPlayStateOfGroupIsSetTo(int groupIndex, string playStateString)
         {
@@ -131,6 +122,48 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             PlayState playState = ParsePlayStateString(playStateString);
 
             group.GetPlayState().Should().Be(playState);
+        }
+
+        [Then(@"advancing players from round (.*) should be ""(.*)""")]
+        public void ThenAdvancingPlayersFromRoundFromFirstToLastShouldBe(int roundIndex, string commaSeparatedPlayerNames)
+        {
+            RoundBase round = createdRounds[roundIndex];
+            List<string> expectedPlayerNameOrder = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+
+            List<PlayerReference> playerStandings = AdvancingPlayersSolver.FetchFrom(round);
+
+            playerStandings.Should().HaveCount(expectedPlayerNameOrder.Count);
+
+            for (int index = 0; index < playerStandings.Count; ++index)
+            {
+                playerStandings[index].Name.Should().Be(expectedPlayerNameOrder[index]);
+            }
+        }
+
+        [Then(@"advancing players from group (.*) should be ""(.*)""")]
+        public void ThenAdvancingPlayersFromGroupFromFirstToLastShouldBe(int groupIndex, string commaSeparatedPlayerNames)
+        {
+            GroupBase group = createdGroups[groupIndex];
+            List<string> expectedPlayerNameOrder = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+
+            List<PlayerReference> playerStandings = AdvancingPlayersSolver.FetchFrom(group);
+
+            playerStandings.Should().HaveCount(expectedPlayerNameOrder.Count);
+
+            for (int index = 0; index < playerStandings.Count; ++index)
+            {
+                playerStandings[index].Name.Should().Be(expectedPlayerNameOrder[index]);
+            }
+        }
+
+        protected static void CheckGroupValidity<GroupType>(GroupBase group)
+        {
+            group.Should().NotBeNull();
+            group.Should().BeOfType<GroupType>();
+            group.Id.Should().NotBeEmpty();
+            group.Matches.Should().NotBeEmpty();
+            group.RoundId.Should().NotBeEmpty();
+            group.Round.Should().NotBeNull();
         }
 
         protected static void ParseBracketGroupMatchSetup(TableRow row, out int matchIndex, out string player1Name, out string player2Name)
