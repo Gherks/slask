@@ -29,23 +29,49 @@ namespace Slask.Domain.Groups.GroupUtility
             if (group.GetPlayState() == PlayState.Finished)
             {
                 List<PlayerStandingEntry> playerStandings = PlayerStandingsSolver.FetchFrom(group);
+                playerStandings = FilterAdvancingPlayers(group, playerStandings);
 
-                return FilterAdvancingPlayers(group, playerStandings);
+                if (group.HasProblematicTie())
+                {
+                    playerStandings = FilterTyingPlayers(group, playerStandings);
+                    playerStandings.AddRange(group.ChoosenTyingPlayerEntries);
+                }
+
+                List<PlayerReference> advancingPlayers = new List<PlayerReference>();
+
+                foreach (PlayerStandingEntry entry in playerStandings)
+                {
+                    advancingPlayers.Add(entry.PlayerReference);
+                }
+
+                return advancingPlayers;
             }
 
             return new List<PlayerReference>();
         }
 
-        private static List<PlayerReference> FilterAdvancingPlayers(GroupBase group, List<PlayerStandingEntry> playerStandings)
+        private static List<PlayerStandingEntry> FilterAdvancingPlayers(GroupBase group, List<PlayerStandingEntry> playerStandings)
         {
-            List<PlayerReference> advancingPlayers = new List<PlayerReference>();
+            List<PlayerStandingEntry> nonFilteredPlayers = new List<PlayerStandingEntry>();
 
             for (int index = 0; index < group.Round.AdvancingPerGroupCount; ++index)
             {
-                advancingPlayers.Add(playerStandings[index].PlayerReference);
+                nonFilteredPlayers.Add(playerStandings[index]);
             }
 
-            return advancingPlayers;
+            return nonFilteredPlayers;
+        }
+
+        private static List<PlayerStandingEntry> FilterTyingPlayers(GroupBase group, List<PlayerStandingEntry> playerStandings)
+        {
+            List<PlayerStandingEntry> nonFilteredPlayers = new List<PlayerStandingEntry>();
+
+            foreach(PlayerStandingEntry entry in group.FindProblematiclyTyingPlayers())
+            {
+                nonFilteredPlayers.Remove(entry);
+            }
+
+            return nonFilteredPlayers;
         }
     }
 }
