@@ -10,18 +10,18 @@ namespace Slask.Domain.Rounds
     {
         public List<PlayerReference> PlayerReferences { get; private set; }
 
-        public bool TransferToNextRound(RoundBase round)
+        public bool TransferToNextRound(RoundBase currentRound)
         {
-            bool roundHasFinished = round.GetPlayState() == PlayState.Finished;
+            bool roundHasFinished = currentRound.GetPlayState() == PlayState.Finished;
 
             if (roundHasFinished)
             {
-                RoundBase nextRound = round.GetNextRound();
+                RoundBase nextRound = currentRound.GetNextRound();
                 bool hasRoundToTransferTo = nextRound != null;
 
                 if (hasRoundToTransferTo)
                 {
-                    PlayerReferences = round.GetAdvancingPlayerReferences();
+                    PlayerReferences = currentRound.GetAdvancingPlayerReferences();
                     bool hasPlayerReferencesToTransfer = PlayerReferences.Count > 0;
 
                     if (hasPlayerReferencesToTransfer)
