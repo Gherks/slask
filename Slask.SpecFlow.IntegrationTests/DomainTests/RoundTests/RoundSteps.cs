@@ -21,9 +21,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 
     public class RoundStepDefinitions : TournamentStepDefinitions
     {
-        [Given(@"score is added to players in given matches in created groups")]
-        [When(@"score is added to players in given matches in created groups")]
-        public void WhenScoreIsAddedToPlayersInGivenMatchesInCreatedGroups(Table table)
+        [Given(@"score is added to players in given matches in groups")]
+        [When(@"score is added to players in given matches in groups")]
+        public void GivenScoreIsAddedToPlayersInGivenMatchesInGroups(Table table)
         {
             if (table == null)
             {
@@ -47,7 +47,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
                 }
                 else
                 {
-                    throw new Exception("Invalid player name in given match within given created group");
+                    throw new Exception("Invalid player name in given match within given group");
                 }
             }
         }
@@ -76,8 +76,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             round.SetAdvancingPerGroupCount(playersPerGroupCount);
         }
 
-        [Then(@"created rounds in tournament (.*) should be valid with values")]
-        public void CreatedRoundsInTournamentShouldBeValidWithValues(int tournamentIndex, Table table)
+        [Then(@"rounds in tournament (.*) should be valid with values")]
+        public void ThenRoundsInTournamentShouldBeValidWithValues(int tournamentIndex, Table table)
         {
             if (table == null)
             {
@@ -174,8 +174,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             round.GetPlayState().Should().Be(playState);
         }
 
-        [Then(@"advancing players in created group (.*) is exactly ""(.*)""")]
-        public void ThenWinningPlayersInGroupIs(int groupIndex, string commaSeparatedPlayerNames)
+        [Then(@"advancing players in group (.*) is exactly ""(.*)""")]
+        public void ThenAdvancingPlayersInGroupIsExactly(int groupIndex, string commaSeparatedPlayerNames)
         {
             GroupBase group = createdGroups[groupIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");

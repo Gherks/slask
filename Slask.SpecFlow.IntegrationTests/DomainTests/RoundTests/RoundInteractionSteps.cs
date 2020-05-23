@@ -12,8 +12,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
     [Binding, Scope(Feature = "RoundInteraction", Tag = "BracketRoundInteractionTag")]
     public class BracketRoundInteractionSteps : BracketGroupStepDefinitions
     {
-        [Then(@"fetched advancing players in created round (.*) should be exactly ""(.*)""")]
-        public void ThenFetchedAdvancingPlayersInCreatedRoundShouldBeExactly(int roundIndex, string commaSeparatedPlayerNames)
+        [Then(@"fetched advancing players in round (.*) should be exactly ""(.*)""")]
+        public void ThenFetchedAdvancingPlayersInRoundShouldBeExactly(int roundIndex, string commaSeparatedPlayerNames)
         {
             RoundBase round = createdRounds[roundIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
@@ -21,8 +21,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             RoundInteractionStepUtility.FetchingAdvancingPlayersInRoundYieldsGivenPlayerNames(round, playerNames);
         }
 
-        [Then(@"fetched advancing players in created round (.*) should yield null")]
-        public void ThenFetchedAdvancingPlayersInCreatedRoundShouldBeEmpty(int roundIndex)
+        [Then(@"fetched advancing players in round (.*) should yield null")]
+        public void ThenFetchedAdvancingPlayersInRoundShouldBeEmpty(int roundIndex)
         {
             RoundBase round = createdRounds[roundIndex];
 
@@ -33,8 +33,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
     [Binding, Scope(Feature = "RoundInteraction", Tag = "DualTournamentRoundInteractionTag")]
     public class DualTournamentRoundInteractionSteps : DualTournamentGroupStepDefinitions
     {
-        [Then(@"fetched advancing players in created round (.*) should be exactly ""(.*)""")]
-        public void ThenFetchedAdvancingPlayersInCreatedRoundShouldBeExactly(int roundIndex, string commaSeparatedPlayerNames)
+        [Then(@"fetched advancing players in round (.*) should be exactly ""(.*)""")]
+        public void ThenFetchedAdvancingPlayersInRoundShouldBeExactly(int roundIndex, string commaSeparatedPlayerNames)
         {
             RoundBase round = createdRounds[roundIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
@@ -42,8 +42,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             RoundInteractionStepUtility.FetchingAdvancingPlayersInRoundYieldsGivenPlayerNames(round, playerNames);
         }
 
-        [Then(@"fetched advancing players in created round (.*) should yield null")]
-        public void ThenFetchedAdvancingPlayersInCreatedRoundShouldBeEmpty(int roundIndex)
+        [Then(@"fetched advancing players in round (.*) should yield null")]
+        public void ThenFetchedAdvancingPlayersInRoundShouldBeEmpty(int roundIndex)
         {
             RoundBase round = createdRounds[roundIndex];
 
@@ -54,8 +54,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
     [Binding, Scope(Feature = "RoundInteraction", Tag = "RoundRobinRoundInteractionTag")]
     public class RoundRobinRoundInteractionSteps : RoundRobinGroupStepDefinitions
     {
-        [Then(@"fetched advancing players in created round (.*) should be exactly ""(.*)""")]
-        public void ThenFetchedAdvancingPlayersInCreatedRoundShouldBeExactly(int roundIndex, string commaSeparatedPlayerNames)
+        [Then(@"fetched advancing players in round (.*) should be exactly ""(.*)""")]
+        public void ThenFetchedAdvancingPlayersInRoundShouldBeExactly(int roundIndex, string commaSeparatedPlayerNames)
         {
             RoundBase round = createdRounds[roundIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
@@ -63,8 +63,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             RoundInteractionStepUtility.FetchingAdvancingPlayersInRoundYieldsGivenPlayerNames(round, playerNames);
         }
 
-        [Then(@"fetched advancing players in created round (.*) should yield null")]
-        public void ThenFetchedAdvancingPlayersInCreatedRoundShouldBeEmpty(int roundIndex)
+        [Then(@"fetched advancing players in round (.*) should yield null")]
+        public void ThenFetchedAdvancingPlayersInRoundShouldBeEmpty(int roundIndex)
         {
             RoundBase round = createdRounds[roundIndex];
 

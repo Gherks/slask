@@ -15,7 +15,7 @@ Scenario: Start time in matches in round robin groups is spaced with one hour up
 			| Round type  | Round name        | Best of | Advancing per group count | Players per group count |
 			| Round robin | Round robin round | 3       | 1                         | 8                       |
 	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
-	Then minutes between matches in created group 0 should be 60
+	Then minutes between matches in group 0 should be 60
 
 Scenario: Creates proper round robin layout upon group creation
 	Given a tournament named "GSL 2019" has been created
@@ -41,7 +41,7 @@ Scenario: Round robin progression with four players goes as expected
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
-	Then advancing players in created group 0 is exactly "Fourth, First"
+	Then advancing players in group 0 is exactly "Fourth, First"
 		And participating players in group 0 should be mapped accordingly
 			| Match index | Player 1 name | Player 2 name |
 			| 0           | First         | Third         |
@@ -60,7 +60,7 @@ Scenario: Round robin progression with five players goes as expected
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
-	Then advancing players in created group 0 is exactly "Fifth, First, Fourth"
+	Then advancing players in group 0 is exactly "Fifth, First, Fourth"
 		And participating players in group 0 should be mapped accordingly
 			| Match index | Player 1 name | Player 2 name |
 			| 0           | First         | Fourth        |
@@ -84,7 +84,7 @@ Scenario: PlayState is set to Ongoing when group has finished with a problematic
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
-	When score is added to players in given matches in created groups
+	When score is added to players in given matches in groups
 		| Group index | Match index | Scoring player | Added score |
 		| 1           | 0           | Rain           | 2           |
 		| 1           | 1           | FanTaSy        | 2           |

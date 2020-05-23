@@ -23,7 +23,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.UtilityTests
         {
             if (createdTournaments.Count <= tournamentIndex)
             {
-                throw new IndexOutOfRangeException("Given created tournament index is out of bounds");
+                throw new IndexOutOfRangeException("Given tournament index is out of bounds");
             }
 
             Tournament tournament = createdTournaments[tournamentIndex];

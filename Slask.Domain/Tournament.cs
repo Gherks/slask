@@ -185,7 +185,7 @@ namespace Slask.Domain
 
         public PlayerReference GetPlayerReferenceByPlayerName(string name)
         {
-            return GetPlayerReferences().FirstOrDefault(playerReference => playerReference.Name.ToLower() == name.ToLower());
+            return GetPlayerReferences().FirstOrDefault(playerReference => playerReference.Name == name);
         }
 
         public Better GetBetterById(Guid id)

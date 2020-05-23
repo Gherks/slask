@@ -46,8 +46,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             }
         }
 
-        [Then(@"minutes between matches in created group (.*) should be (.*)")]
-        public void ThenMinutesBetweenMatchesInCreatedGroupShouldBe(int groupIndex, int expectedMinutes)
+        [Then(@"minutes between matches in group (.*) should be (.*)")]
+        public void ThenMinutesBetweenMatchesInGroupShouldBe(int groupIndex, int expectedMinutes)
         {
             GroupBase group = createdGroups[groupIndex];
 
@@ -66,8 +66,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             }
         }
 
-        [Then(@"created group (.*) should contain exactly these player references with names: ""(.*)""")]
-        public void ThenCreatedGroupShouldContainExactlyThesePlayerReferencesWithNames(int groupIndex, string commaSeparatedPlayerNames)
+        [Then(@"group (.*) should contain exactly these player references with names: ""(.*)""")]
+        public void ThenGroupShouldContainExactlyThesePlayerReferencesWithNames(int groupIndex, string commaSeparatedPlayerNames)
         {
             GroupBase group = createdGroups[groupIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
@@ -81,7 +81,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
         }
 
         [Then(@"participating players in group (.*) should be mapped accordingly")]
-        public void ThenParticipatingPlayersInCreatedGroupShouldBeMappedAccordingly(int groupIndex, Table table)
+        public void ThenParticipatingPlayersInGroupShouldBeMappedAccordingly(int groupIndex, Table table)
         {
             GroupBase group = createdGroups[groupIndex];
 

@@ -39,8 +39,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             GivenPlayersIsRegisteredToRound("First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth", 0);
         }
 
-        [Then(@"match (.*) in created group (.*) should be in state ""(.*)""")]
-        public void ThenCreatedMatchInCreatedGroupShouldBeInState(int matchIndex, int createdGroupIndex, string playStateString)
+        [Then(@"match (.*) in group (.*) should be in state ""(.*)""")]
+        public void ThenMatchInGroupShouldBeInState(int matchIndex, int createdGroupIndex, string playStateString)
         {
             PlayState playState = ParsePlayStateString(playStateString);
 
@@ -50,8 +50,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             match.GetPlayState().Should().Be(playState);
         }
 
-        [Then(@"winning player can be fetched from match (.*) in created group (.*)")]
-        public void ThenWinningPlayerCanBeFetchedFromMatchInCreatedGroup(int matchIndex, int createdGroupIndex)
+        [Then(@"winning player can be fetched from match (.*) in group (.*)")]
+        public void ThenWinningPlayerCanBeFetchedFromMatchInGroup(int matchIndex, int createdGroupIndex)
         {
             GroupBase group = createdGroups[createdGroupIndex];
             Match match = group.Matches[matchIndex];
@@ -59,8 +59,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             match.GetWinningPlayer().Should().NotBeNull();
         }
 
-        [Then(@"losing player can be fetched from match (.*) in created group (.*)")]
-        public void ThenLosingPlayerCanBeFetchedFromMatchInCreatedGroup(int matchIndex, int createdGroupIndex)
+        [Then(@"losing player can be fetched from match (.*) in group (.*)")]
+        public void ThenLosingPlayerCanBeFetchedFromMatchInGroup(int matchIndex, int createdGroupIndex)
         {
             GroupBase group = createdGroups[createdGroupIndex];
             Match match = group.Matches[matchIndex];
@@ -68,8 +68,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             match.GetLosingPlayer().Should().NotBeNull();
         }
 
-        [Then(@"winning player cannot be fetched from match (.*) in created group (.*)")]
-        public void ThenWinningPlayerCannotBeFetchedFromMatchInCreatedGroup(int matchIndex, int createdGroupIndex)
+        [Then(@"winning player cannot be fetched from match (.*) in group (.*)")]
+        public void ThenWinningPlayerCannotBeFetchedFromMatchInGroup(int matchIndex, int createdGroupIndex)
         {
             GroupBase group = createdGroups[createdGroupIndex];
             Match match = group.Matches[matchIndex];
@@ -77,8 +77,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             match.GetWinningPlayer().Should().BeNull();
         }
 
-        [Then(@"losing player cannot be fetched from match (.*) in created group (.*)")]
-        public void ThenLosingPlayerCannotBeFetchedFromMatchInCreatedGroup(int matchIndex, int createdGroupIndex)
+        [Then(@"losing player cannot be fetched from match (.*) in group (.*)")]
+        public void ThenLosingPlayerCannotBeFetchedFromMatchInGroup(int matchIndex, int createdGroupIndex)
         {
             GroupBase group = createdGroups[createdGroupIndex];
             Match match = group.Matches[matchIndex];
