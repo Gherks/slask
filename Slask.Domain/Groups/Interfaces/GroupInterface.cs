@@ -1,5 +1,6 @@
 ﻿using Slask.Domain.Rounds.Bases;
 using Slask.Domain.Utilities;
+using Slask.Utilities.PlayerStandingsSolver;
 using System;
 using System.Collections.Generic;
 
@@ -9,8 +10,10 @@ namespace Slask.Domain.Groups.Interfaces
     {
         Guid Id { get; }
         List<Match> Matches { get; }
-        RoundBase Round { get; }
-        Guid RoundId { get; }
+        public Guid RoundId { get; }
+        public RoundBase Round { get; }
+        public List<PlayerReference> PlayerReferences { get; }
+        public List<PlayerStandingEntry> ChoosenTyingPlayerEntries { get; }
 
         bool AddPlayerReferences(List<PlayerReference> playerReferences);
         PlayState GetPlayState();
@@ -18,7 +21,9 @@ namespace Slask.Domain.Groups.Interfaces
         bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences);
         bool NewDateTimeIsValid(Match match, DateTime dateTime);
         bool HasProblematicTie();
+        List<PlayerStandingEntry> FindProblematiclyTyingPlayers();
         bool SolveTieByChoosing(string playerName);
+        bool HasSolvedTie();
         void OnMatchScoreDecreased(Match match);
         void OnMatchScoreIncreased(Match match);
     }
