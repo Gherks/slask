@@ -2,8 +2,8 @@
 using Slask.Common;
 using Slask.Domain.Groups.Bases;
 using Slask.Domain.Groups.GroupUtility;
+using Slask.Domain.Utilities;
 using Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests;
-using Slask.Utilities.PlayerStandingsSolver;
 using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;

@@ -34,61 +34,53 @@ namespace Slask.Xunit.UnitTests.DomainTests.UtilityTests
         [Fact]
         public void CanReportOnTournamentIssue()
         {
-            string description = "An round issue";
-
-            tournamentIssueReporter.Report(tournament, description);
+            tournamentIssueReporter.Report(tournament, TournamentIssues.StartDateTimeIsInThePast);
 
             tournamentIssueReporter.Issues.First().Round.Should().Be(-1);
             tournamentIssueReporter.Issues.First().Group.Should().Be(-1);
             tournamentIssueReporter.Issues.First().Match.Should().Be(-1);
-            tournamentIssueReporter.Issues.First().Description.Should().Be(description);
+            tournamentIssueReporter.Issues.First().Description.Should().Be("Start date time must be a future date");
         }
 
         [Fact]
         public void CanReportOnRoundIssue()
         {
-            string description = "An round issue";
-
-            tournamentIssueReporter.Report(round, description);
+            tournamentIssueReporter.Report(round, TournamentIssues.StartDateTimeIsInThePast);
 
             tournamentIssueReporter.Issues.First().Round.Should().Be(0);
             tournamentIssueReporter.Issues.First().Group.Should().Be(-1);
             tournamentIssueReporter.Issues.First().Match.Should().Be(-1);
-            tournamentIssueReporter.Issues.First().Description.Should().Be(description);
+            tournamentIssueReporter.Issues.First().Description.Should().Be("Start date time must be a future date");
         }
 
         [Fact]
         public void CanReportOnGroupIssue()
         {
-            string description = "An group issue";
-
-            tournamentIssueReporter.Report(group, description);
+            tournamentIssueReporter.Report(group, TournamentIssues.StartDateTimeIsInThePast);
 
             tournamentIssueReporter.Issues.First().Round.Should().Be(0);
             tournamentIssueReporter.Issues.First().Group.Should().Be(0);
             tournamentIssueReporter.Issues.First().Match.Should().Be(-1);
-            tournamentIssueReporter.Issues.First().Description.Should().Be(description);
+            tournamentIssueReporter.Issues.First().Description.Should().Be("Start date time must be a future date");
         }
 
         [Fact]
         public void CanReportOnMatchIssue()
         {
-            string description = "An match issue";
-
-            tournamentIssueReporter.Report(match, description);
+            tournamentIssueReporter.Report(match, TournamentIssues.StartDateTimeIsInThePast);
 
             tournamentIssueReporter.Issues.First().Round.Should().Be(0);
             tournamentIssueReporter.Issues.First().Group.Should().Be(0);
             tournamentIssueReporter.Issues.First().Match.Should().Be(0);
-            tournamentIssueReporter.Issues.First().Description.Should().Be(description);
+            tournamentIssueReporter.Issues.First().Description.Should().Be("Start date time must be a future date");
         }
 
         [Fact]
         public void CanClearReports()
         {
-            tournamentIssueReporter.Report(round, "An round issue");
-            tournamentIssueReporter.Report(group, "An group issue");
-            tournamentIssueReporter.Report(match, "An match issue");
+            tournamentIssueReporter.Report(round, TournamentIssues.NotFillingAllGroupsWithPlayers);
+            tournamentIssueReporter.Report(group, TournamentIssues.RoundDoesNotSynergizeWithPreviousRound);
+            tournamentIssueReporter.Report(match, TournamentIssues.AdvancersCountInRoundIsGreaterThanParticipantCount);
 
             tournamentIssueReporter.Clear();
 
