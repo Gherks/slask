@@ -9,9 +9,11 @@ namespace Slask.Domain.Groups.Interfaces
     public interface GroupInterface
     {
         Guid Id { get; }
+        string Name { get; }
         List<Match> Matches { get; }
         public Guid RoundId { get; }
         public RoundBase Round { get; }
+
         public List<PlayerReference> PlayerReferences { get; }
         public List<PlayerStandingEntry> ChoosenTyingPlayerEntries { get; }
 
