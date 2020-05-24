@@ -44,5 +44,19 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
                 round.AdvancingPerGroupCount.Should().Be(2);
             }
         }
-	}
+
+        [Fact]
+        public void CanChangeGroupSize()
+        {
+            DualTournamentRound round = tournament.AddDualTournamentRound();
+
+            round.Groups.First().Matches.Should().HaveCount(5);
+            round.PlayersPerGroupCount.Should().Be(4);
+
+            round.SetPlayersPerGroupCount(8);
+
+            round.Groups.First().Matches.Should().HaveCount(5);
+            round.PlayersPerGroupCount.Should().Be(4);
+        }
+    }
 }

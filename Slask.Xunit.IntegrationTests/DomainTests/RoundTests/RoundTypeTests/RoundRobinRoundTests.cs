@@ -43,6 +43,28 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
         }
 
         [Fact]
+        public void CanChangeAdvancingCount()
+        {
+            RoundRobinRound round = tournament.AddRoundRobinRound();
+
+            round.AdvancingPerGroupCount.Should().Be(1);
+            round.SetAdvancingPerGroupCount(4);
+            round.AdvancingPerGroupCount.Should().Be(4);
+        }
+
+        [Fact]
+        public void CanChangeGroupSize()
+        {
+            RoundRobinRound round = tournament.AddRoundRobinRound();
+
+            round.Groups.First().Matches.Should().HaveCount(1);
+            round.SetPlayersPerGroupCount(4);
+
+            round.Groups.First().Matches.Should().HaveCount(6);
+            round.PlayersPerGroupCount.Should().Be(4);
+        }
+
+        [Fact]
         public void DoesNotFlagRoundAsProlematicTieWhenNoProblematicTieHappens()
         {
             round.SetPlayersPerGroupCount(3);
