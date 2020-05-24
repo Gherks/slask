@@ -52,7 +52,7 @@ namespace Slask.Xunit.IntegrationTests.ServiceTests
             string username2 = "Guggelito";
 
             User user = userService.CreateUser(username1);
-            userService.RenameUserTo(user.Id, username2);
+            userService.RenameUser(user.Id, username2);
 
             user.Name.Should().Be(username2);
         }
@@ -66,7 +66,7 @@ namespace Slask.Xunit.IntegrationTests.ServiceTests
             User user1 = userService.CreateUser(username1);
             User user2 = userService.CreateUser(username2);
 
-            userService.RenameUserTo(user2.Id, username1.ToUpper());
+            userService.RenameUser(user2.Id, username1.ToUpper());
 
             user1.Name.Should().Be(username1);
             user2.Name.Should().Be(username2);
@@ -81,7 +81,7 @@ namespace Slask.Xunit.IntegrationTests.ServiceTests
             User user1 = userService.CreateUser(username1);
             User user2 = userService.CreateUser(username2);
 
-            userService.RenameUserTo(user2.Id, username1 + " ");
+            userService.RenameUser(user2.Id, username1 + " ");
 
             user1.Name.Should().Be(username1);
             user2.Name.Should().Be(username2);
