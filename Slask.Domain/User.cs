@@ -24,5 +24,10 @@ namespace Slask.Domain
                 Name = name
             };
         }
+
+        public void RenameTo(string name)
+        {
+            Name = name.Trim();
+        }
     }
 }
