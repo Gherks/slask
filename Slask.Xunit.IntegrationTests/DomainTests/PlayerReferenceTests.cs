@@ -3,7 +3,7 @@ using Slask.Domain;
 using Slask.Domain.Rounds;
 using Xunit;
 
-namespace Slask.Xunit.UnitTests.DomainTests
+namespace Slask.Xunit.IntegrationTests.DomainTests
 {
     public class PlayerReferenceTests
     {

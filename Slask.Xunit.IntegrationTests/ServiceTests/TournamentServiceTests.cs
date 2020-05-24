@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
-using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
 using Slask.Persistence;
@@ -11,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Slask.UnitTests.ServiceTests
+namespace Slask.Xunit.IntegrationTests.ServiceTests
 {
     public class TournamentServiceTests
     {
