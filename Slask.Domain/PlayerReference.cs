@@ -43,6 +43,8 @@ namespace Slask.Domain
 
         public void RenameTo(string name)
         {
+            name = name.Trim();
+
             if (name.Length > 0)
             {
                 bool newNameIsntAlreadyInUse = Tournament.GetPlayerReferenceByPlayerName(name) == null;
