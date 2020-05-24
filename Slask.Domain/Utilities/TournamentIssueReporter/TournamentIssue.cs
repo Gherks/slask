@@ -3,11 +3,10 @@ using System.Collections.Generic;
 
 namespace Slask.Domain.Utilities
 {
-    public class TournamentIssue
+    public class TournamentIssue : TournamentIssueInterface
     {
         private TournamentIssue()
         {
-
         }
 
         public int Round { get; private set; }
