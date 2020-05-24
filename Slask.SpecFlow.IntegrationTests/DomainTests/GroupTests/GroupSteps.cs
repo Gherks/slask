@@ -124,7 +124,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             group.GetPlayState().Should().Be(playState);
         }
 
-        [Then(@"advancing players from round (.*) should be ""(.*)""")]
+        [Then(@"advancing players from round (.*) should be exactly ""(.*)""")]
         public void ThenAdvancingPlayersFromRoundFromFirstToLastShouldBe(int roundIndex, string commaSeparatedPlayerNames)
         {
             RoundBase round = createdRounds[roundIndex];
@@ -140,8 +140,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             }
         }
 
-        [Then(@"advancing players from group (.*) should be ""(.*)""")]
-        public void ThenAdvancingPlayersFromGroupFromFirstToLastShouldBe(int groupIndex, string commaSeparatedPlayerNames)
+        [Then(@"advancing players from group (.*) should be exactly ""(.*)""")]
+        public void ThenAdvancingPlayersFromGroupFromFirstToLastShouldBeExactly(int groupIndex, string commaSeparatedPlayerNames)
         {
             GroupBase group = createdGroups[groupIndex];
             List<string> expectedPlayerNameOrder = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");

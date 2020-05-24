@@ -1,11 +1,9 @@
 ﻿using Slask.Domain.Groups.Bases;
 using Slask.Domain.Rounds.Bases;
-using Slask.Domain.Utilities;
 using Slask.Utilities.PlayerStandingsSolver;
-using System;
 using System.Collections.Generic;
 
-namespace Slask.Domain.Groups.GroupUtility
+namespace Slask.Domain.Utilities
 {
     public static class AdvancingPlayersSolver
     {

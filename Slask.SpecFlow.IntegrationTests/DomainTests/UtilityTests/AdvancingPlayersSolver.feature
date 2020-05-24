@@ -12,7 +12,7 @@ Scenario: Can fetch advancing players from finished round
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
-	Then advancing players from round 0 should be "Bomber, FanTaSy, Maru, Rain, Stephano"
+	Then advancing players from round 0 should be exactly "Bomber, FanTaSy, Maru, Rain, Stephano"
 
 Scenario: Can fetch advancing players from finished group
 	Given a tournament named "GSL 2019" has been created
@@ -24,7 +24,7 @@ Scenario: Can fetch advancing players from finished group
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
-	Then advancing players from group 0 should be "Maru, Rain"
+	Then advancing players from group 0 should be exactly "Maru, Rain"
 
 Scenario: Cannot fetch advancing players from round that is unfinished
 	Given a tournament named "GSL 2019" has been created
@@ -35,7 +35,7 @@ Scenario: Cannot fetch advancing players from round that is unfinished
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
-	Then advancing players from round 0 should be ""
+	Then advancing players from round 0 should be exactly ""
 
 Scenario: Cannot fetch advancing players from group that is unfinished
 	Given a tournament named "GSL 2019" has been created
@@ -46,4 +46,4 @@ Scenario: Cannot fetch advancing players from group that is unfinished
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
-	Then advancing players from group 1 should be ""
+	Then advancing players from group 1 should be exactly ""
