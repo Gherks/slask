@@ -46,6 +46,48 @@ namespace Slask.Xunit.IntegrationTests.ServiceTests
         }
 
         [Fact]
+        public void CanRenameUser()
+        {
+            string username1 = "Stålberto";
+            string username2 = "Guggelito";
+
+            User user = userService.CreateUser(username1);
+            userService.RenameUserTo(user.Id, username2);
+
+            user.Name.Should().Be(username2);
+        }
+
+        [Fact]
+        public void CannotRenameUserWithNameAlreadyInUseNotMatterLetterCasing()
+        {
+            string username1 = "Stålberto";
+            string username2 = "Guggelito";
+
+            User user1 = userService.CreateUser(username1);
+            User user2 = userService.CreateUser(username2);
+
+            userService.RenameUserTo(user2.Id, username1.ToUpper());
+
+            user1.Name.Should().Be(username1);
+            user2.Name.Should().Be(username2);
+        }
+
+        [Fact]
+        public void CannotRenameUserToNameThatOnlyDiffersInWhitespaceToNameAlreadyInUse()
+        {
+            string username1 = "Stålberto";
+            string username2 = "Guggelito";
+
+            User user1 = userService.CreateUser(username1);
+            User user2 = userService.CreateUser(username2);
+
+            userService.RenameUserTo(user2.Id, username1 + " ");
+
+            user1.Name.Should().Be(username1);
+            user2.Name.Should().Be(username2);
+        }
+
+        [Fact]
         public void CanGetUserById()
         {
             User createdUser = userService.CreateUser("Stålberto");
