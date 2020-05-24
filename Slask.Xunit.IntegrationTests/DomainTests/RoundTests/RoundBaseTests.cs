@@ -71,7 +71,7 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests
         }
 
         [Fact]
-        public void CannotRenameRoundToTheSameAsOtherRound()
+        public void CannotRenameRoundToTheSameAsOtherRoundNoMatterLetterCasing()
         {
             RoundRobinRound firstRound = tournament.AddRoundRobinRound();
             RoundRobinRound secondRound = tournament.AddRoundRobinRound();
@@ -80,7 +80,7 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests
             string initialRoundName = secondRound.Name;
 
             firstRound.RenameTo(newName);
-            secondRound.RenameTo(newName);
+            secondRound.RenameTo(newName.ToLower());
 
             firstRound.Name.Should().Be(newName);
             secondRound.Name.Should().Be(initialRoundName);
