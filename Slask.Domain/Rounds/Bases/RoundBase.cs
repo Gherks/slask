@@ -54,12 +54,19 @@ namespace Slask.Domain.Rounds.Bases
 
         public bool RenameTo(string name)
         {
-            foreach (RoundBase roundBase in Tournament.Rounds)
-            {
-                bool newNameIsEmpty = name.Length == 0;
-                bool nameIsInUse = roundBase.Name.ToUpper() == name.ToUpper();
+            name = name.Trim();
+            bool newNameIsEmpty = name.Length == 0;
 
-                if (newNameIsEmpty || nameIsInUse)
+            if (newNameIsEmpty)
+            {
+                return false;
+            }
+
+            foreach (RoundBase round in Tournament.Rounds)
+            {
+                bool nameIsInUse = round.Name.ToUpper() == name.ToUpper();
+
+                if (nameIsInUse)
                 {
                     return false;
                 }
