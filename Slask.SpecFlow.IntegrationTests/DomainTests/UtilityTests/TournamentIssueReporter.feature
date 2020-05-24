@@ -157,4 +157,4 @@ Scenario: Issues prevents tournament from starting when present
 	When groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
-	Then advancing players from round 0 should be ""
+	Then advancing players from round 0 should be exactly ""

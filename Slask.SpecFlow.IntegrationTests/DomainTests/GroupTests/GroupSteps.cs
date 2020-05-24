@@ -124,7 +124,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             group.GetPlayState().Should().Be(playState);
         }
 
-        [Then(@"advancing players from round (.*) should be ""(.*)""")]
+        [Then(@"advancing players from round (.*) should be exactly ""(.*)""")]
         public void ThenAdvancingPlayersFromRoundFromFirstToLastShouldBe(int roundIndex, string commaSeparatedPlayerNames)
         {
             RoundBase round = createdRounds[roundIndex];
