@@ -25,12 +25,16 @@ namespace Slask.Domain.Groups
                 return null;
             }
 
-            return new RoundRobinGroup()
+            RoundRobinGroup group = new RoundRobinGroup()
             {
                 Id = Guid.NewGuid(),
                 RoundId = round.Id,
                 Round = round
             };
+
+            group.AssignDefaultName();
+
+            return group;
         }
 
         public override bool NewDateTimeIsValid(Match match, DateTime dateTime)

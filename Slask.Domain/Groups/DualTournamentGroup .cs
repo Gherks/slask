@@ -34,6 +34,8 @@ namespace Slask.Domain.Groups
                 Round = round
             };
 
+            group.AssignDefaultName();
+
             return group;
         }
 

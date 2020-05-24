@@ -220,6 +220,11 @@ namespace Slask.Domain.Groups.Bases
             }
         }
 
+        protected void AssignDefaultName()
+        {
+            Name = "Group " + Labeler.GetLabelForIndex(Round.Groups.Count);
+        }
+
         internal void RemoveAllMatchBetsOnMatch(Match match)
         {
             foreach (Better better in Round.Tournament.Betters)
