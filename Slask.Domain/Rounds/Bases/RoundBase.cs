@@ -54,12 +54,19 @@ namespace Slask.Domain.Rounds.Bases
 
         public bool RenameTo(string name)
         {
-            foreach (RoundBase roundBase in Tournament.Rounds)
-            {
-                bool newNameIsEmpty = name.Length == 0;
-                bool nameIsInUse = roundBase.Name.ToUpper() == name.ToUpper();
+            name = name.Trim();
+            bool newNameIsEmpty = name.Length == 0;
 
-                if (newNameIsEmpty || nameIsInUse)
+            if (newNameIsEmpty)
+            {
+                return false;
+            }
+
+            foreach (RoundBase round in Tournament.Rounds)
+            {
+                bool nameIsInUse = round.Name.ToUpper() == name.ToUpper();
+
+                if (nameIsInUse)
                 {
                     return false;
                 }
@@ -385,14 +392,14 @@ namespace Slask.Domain.Rounds.Bases
                     bool renameFailed = true;
                     do
                     {
-                        defaultName = "Round " + GetNextDefaultRoundLettering(++index);
+                        defaultName = "Round " + Labeler.GetLabelForIndex(++index);
                         renameFailed = !RenameTo(defaultName);
                     }
                     while (renameFailed);
                 }
             }
 
-            defaultName = "Round " + GetNextDefaultRoundLettering(Tournament.Rounds.Count);
+            defaultName = "Round " + Labeler.GetLabelForIndex(Tournament.Rounds.Count);
             return RenameTo(defaultName);
         }
 
@@ -406,23 +413,6 @@ namespace Slask.Domain.Rounds.Bases
         {
             // LOG Error: Adding group using base, something went horribly wrong.
             throw new NotImplementedException();
-        }
-
-        private string GetNextDefaultRoundLettering(int letterIndex)
-        {
-            const string lookup = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            int letterCount = lookup.Length;
-
-            if (letterIndex >= letterCount)
-            {
-                int endingIndex = letterIndex % letterCount;
-                int restIndex = (letterIndex - endingIndex) / letterCount;
-                return GetNextDefaultRoundLettering(restIndex - 1) + GetNextDefaultRoundLettering(endingIndex);
-            }
-            else
-            {
-                return lookup[letterIndex].ToString();
-            }
         }
 
         private bool ConstructGroups()

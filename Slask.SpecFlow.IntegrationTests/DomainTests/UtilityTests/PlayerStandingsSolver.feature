@@ -5,8 +5,8 @@
 Scenario: Fetches correctly ordered list of player standing entries
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type  | Round name        | Best of | Players per group count |
-			| Round robin | Round robin round | 3       | 8                       |
+			| Round type  | Best of | Players per group count |
+			| Round robin | 3       | 8                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |

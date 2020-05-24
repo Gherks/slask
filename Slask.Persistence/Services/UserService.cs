@@ -27,6 +27,32 @@ namespace Slask.Persistence.Services
             return user;
         }
 
+        public bool RenameUser(Guid id, string name)
+        {
+            bool renameSuccessful = RenameUserTo(id, name);
+
+            if (renameSuccessful)
+            {
+                _slaskContext.SaveChanges();
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool RenameUserAsync(Guid id, string name)
+        {
+            bool renameSuccessful = RenameUserTo(id, name);
+
+            if (renameSuccessful)
+            {
+                _slaskContext.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+        }
+
         public User GetUserByName(string name)
         {
             return _slaskContext.Users.FirstOrDefault(user => user.Name.ToLower() == name.ToLower());
@@ -51,6 +77,32 @@ namespace Slask.Persistence.Services
             _slaskContext.Add(user);
 
             return user;
+        }
+
+        private bool RenameUserTo(Guid id, string name)
+        {
+            name = name.Trim();
+
+            User user = GetUserById(id);
+            bool userFound = user != null;
+
+            if (userFound)
+            {
+                User userWithName = GetUserByName(name);
+                bool noUserWithNameExist = userWithName == null;
+
+                if (noUserWithNameExist)
+                {
+                    user.RenameTo(name);
+                    return true;
+                }
+
+                // LOG Error: Could not rename user - user with given name already exist.
+                return false;
+            }
+
+            // LOG Error: Could not rename user - user not found.
+            return false;
         }
     }
 }

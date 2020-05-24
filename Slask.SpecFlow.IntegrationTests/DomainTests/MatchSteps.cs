@@ -25,21 +25,18 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
             Table roundTable = new Table(new string[] {
                             "Round type",
-                            "Round name",
                             "Best of",
                             "Advancing per group count",
                             "Players per group count"});
 
             roundTable.AddRow(new string[] {
                             "Round robin",
-                            "Round 1",
                             "3",
                             "3",
                             "4"});
 
             roundTable.AddRow(new string[] {
                             "Bracket",
-                            "Round 2",
                             "3",
                             "1",
                             "6"});

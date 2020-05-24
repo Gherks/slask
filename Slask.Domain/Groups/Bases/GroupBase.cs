@@ -21,6 +21,7 @@ namespace Slask.Domain.Groups.Bases
         }
 
         public Guid Id { get; protected set; }
+        public string Name { get; protected set; }
         public List<Match> Matches { get; protected set; }
         public Guid RoundId { get; protected set; }
         public RoundBase Round { get; protected set; }
@@ -217,6 +218,11 @@ namespace Slask.Domain.Groups.Bases
             {
                 Matches.Add(Match.Create(this));
             }
+        }
+
+        protected void AssignDefaultName()
+        {
+            Name = "Group " + Labeler.GetLabelForIndex(Round.Groups.Count);
         }
 
         internal void RemoveAllMatchBetsOnMatch(Match match)

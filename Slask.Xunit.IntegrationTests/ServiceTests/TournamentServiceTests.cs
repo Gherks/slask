@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
-using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.Bases;
 using Slask.Persistence;
@@ -11,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Slask.UnitTests.ServiceTests
+namespace Slask.Xunit.IntegrationTests.ServiceTests
 {
     public class TournamentServiceTests
     {
@@ -102,12 +101,14 @@ namespace Slask.UnitTests.ServiceTests
         [Fact]
         public void CannotRenameTournamentToNameAlreadyInUseNoMatterLetterCasing()
         {
-            Tournament secondTournament = tournamentService.CreateTournament("BHA Open 2019");
+            string tournamentName = "bha open 2019";
 
-            bool result = tournamentService.RenameTournament(secondTournament.Id, tournament.Name.ToUpper());
+            Tournament tournament = tournamentService.CreateTournament(tournamentName);
+
+            bool result = tournamentService.RenameTournament(tournament.Id, tournamentName.ToUpper());
 
             result.Should().BeFalse();
-            secondTournament.Name.Should().Be("BHA Open 2019");
+            tournament.Name.Should().Be(tournamentName);
         }
 
         [Fact]

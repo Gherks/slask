@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Slask.Xunit.IntegrationTests.DomainTests.GroupTests
+namespace Slask.Xunit.IntegrationTests.DomainTests.GroupTests.GroupTypeTests
 {
     public class RoundRobinGroupTests
     {
