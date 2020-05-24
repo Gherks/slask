@@ -1,6 +1,6 @@
 ﻿using Slask.Domain;
 
-namespace Slask.Utilities.PlayerStandingsSolver
+namespace Slask.Domain.Utilities
 {
     public class PlayerStandingEntry
     {
