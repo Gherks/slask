@@ -42,25 +42,5 @@ namespace Slask.Xunit.UnitTests.DomainTests
 
             playerReference.Should().BeNull();
         }
-
-        [Fact]
-        public void PlayerReferenceCanBeRenamed()
-        {
-            PlayerReference playerReference = PlayerReference.Create("Maru", tournament);
-
-            playerReference.RenameTo("Idra");
-
-            playerReference.Name.Should().Be("Idra");
-        }
-
-        [Fact]
-        public void PlayerReferenceCannotBeRenamedToEmptyName()
-        {
-            PlayerReference playerReference = PlayerReference.Create("Maru", tournament);
-
-            playerReference.RenameTo("");
-
-            playerReference.Name.Should().Be("Maru");
-        }
     }
 }
