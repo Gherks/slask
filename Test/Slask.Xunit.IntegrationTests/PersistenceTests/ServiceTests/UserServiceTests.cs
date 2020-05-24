@@ -5,7 +5,7 @@ using Slask.TestCore;
 using System;
 using Xunit;
 
-namespace Slask.Xunit.IntegrationTests.ServiceTests
+namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
 {
     public class UserServiceTests
     {

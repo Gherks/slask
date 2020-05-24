@@ -2,12 +2,23 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
     <RunAnalyzersDuringLiveAnalysis>false</RunAnalyzersDuringLiveAnalysis>
+
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="5.10.3" />
+    <None Remove="TournamentServiceContext_.cs~RF54687baa.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
     <PackageReference Include="Moq" Version="4.14.1" />
@@ -19,10 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Slask.Common\Slask.Common.csproj" />
-    <ProjectReference Include="..\Slask.Domain\Slask.Domain.csproj" />
-    <ProjectReference Include="..\Slask.Persistence\Slask.Persistence.csproj" />
-    <ProjectReference Include="..\Slask.TestCore\Slask.TestCore.csproj" />
+    <ProjectReference Include="..\..\Slask.Common\Slask.Common.csproj" />
+    <ProjectReference Include="..\..\Slask.Domain\Slask.Domain.csproj" />
+    <ProjectReference Include="..\..\Slask.Persistence\Slask.Persistence.csproj" />
   </ItemGroup>
 
 </Project>

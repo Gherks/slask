@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Slask.Xunit.IntegrationTests.ServiceTests
+namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
 {
     public class TournamentServiceTests
     {

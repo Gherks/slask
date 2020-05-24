@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Slask.Application\Slask.Application.csproj" />
+    <ProjectReference Include="..\..\Slask.Application\Slask.Application.csproj" />
     <ProjectReference Include="..\Slask.TestCore\Slask.TestCore.csproj" />
   </ItemGroup>
 

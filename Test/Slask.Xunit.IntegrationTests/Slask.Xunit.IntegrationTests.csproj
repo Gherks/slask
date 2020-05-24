@@ -18,9 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Slask.Common\Slask.Common.csproj" />
-    <ProjectReference Include="..\Slask.Domain\Slask.Domain.csproj" />
-    <ProjectReference Include="..\Slask.Persistence\Slask.Persistence.csproj" />
+    <ProjectReference Include="..\..\Slask.Common\Slask.Common.csproj" />
+    <ProjectReference Include="..\..\Slask.Domain\Slask.Domain.csproj" />
+    <ProjectReference Include="..\..\Slask.Persistence\Slask.Persistence.csproj" />
     <ProjectReference Include="..\Slask.TestCore\Slask.TestCore.csproj" />
   </ItemGroup>
 
