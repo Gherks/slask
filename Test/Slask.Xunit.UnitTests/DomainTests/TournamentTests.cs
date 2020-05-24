@@ -1,9 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
-using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -159,7 +157,7 @@ namespace Slask.Xunit.UnitTests.DomainTests
         {
             List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain" };
 
-            foreach(string playerName in playerNames)
+            foreach (string playerName in playerNames)
             {
                 bracketRound.RegisterPlayerReference(playerName);
             }

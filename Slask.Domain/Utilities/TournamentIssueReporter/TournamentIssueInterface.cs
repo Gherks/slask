@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Slask.Domain.Utilities
+﻿namespace Slask.Domain.Utilities
 {
     public interface TournamentIssueInterface
     {

@@ -7,7 +7,6 @@ using Slask.Domain.Utilities;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests.ServiceTests;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TechTalk.SpecFlow;
 
 namespace Slask.SpecFlow.IntegrationTests.DomainTests

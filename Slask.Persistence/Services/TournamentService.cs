@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Slask.Domain;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Slask.Common;
-using Slask.Domain;
 
 namespace Slask.Persistence.Services
 {

@@ -2,8 +2,6 @@
 using Slask.Domain;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -37,7 +35,7 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests
         [Fact]
         public void AddingEnoughRoundsToUseAllSingleLetterRestartsLetteringWithTwoLetters()
         {
-            for(int index = 0; index < 10; ++index)
+            for (int index = 0; index < 10; ++index)
             {
                 tournament.AddBracketRound();
                 tournament.AddDualTournamentRound();

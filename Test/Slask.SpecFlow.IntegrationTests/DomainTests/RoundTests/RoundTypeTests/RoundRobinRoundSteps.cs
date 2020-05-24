@@ -1,11 +1,8 @@
 ﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
-using Slask.Domain.Groups;
 using Slask.Domain.Groups.GroupTypes;
-using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds;
-using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
 
@@ -32,8 +29,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
                 {
                     Player player = match.FindPlayer(playerName);
                     bool playerFound = player != null;
-                    
-                    if(playerFound)
+
+                    if (playerFound)
                     {
                         group.SolveTieByChoosing(player.PlayerReference.Name);
                         break;

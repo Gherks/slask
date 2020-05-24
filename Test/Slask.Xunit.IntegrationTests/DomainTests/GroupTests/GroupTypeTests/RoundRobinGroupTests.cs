@@ -4,8 +4,6 @@ using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 

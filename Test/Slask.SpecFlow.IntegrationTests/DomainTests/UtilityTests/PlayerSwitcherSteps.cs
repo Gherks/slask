@@ -2,7 +2,6 @@
 using Slask.Domain.Groups;
 using Slask.Domain.Groups.GroupUtility;
 using Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests;
-using System;
 using TechTalk.SpecFlow;
 
 namespace Slask.SpecFlow.IntegrationTests.DomainTests.UtilityTests

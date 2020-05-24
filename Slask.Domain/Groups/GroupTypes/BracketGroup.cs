@@ -1,5 +1,4 @@
-﻿using Slask.Domain.Groups;
-using Slask.Domain.Groups.GroupUtility;
+﻿using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
 using System;

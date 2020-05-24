@@ -2,11 +2,7 @@
 using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Procedures.AdvancingPerGroupCount;
 using Slask.Domain.Procedures.PlayersPerGroupCount;
-using Slask.Domain.Rounds;
-using Slask.Domain.Utilities;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Slask.Domain.Rounds.RoundTypes
 {

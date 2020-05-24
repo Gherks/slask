@@ -1,6 +1,6 @@
+using Slask.Domain;
 using System;
 using System.Linq;
-using Slask.Domain;
 
 namespace Slask.Persistence.Services
 {

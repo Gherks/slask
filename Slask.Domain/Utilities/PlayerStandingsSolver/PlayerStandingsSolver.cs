@@ -1,5 +1,4 @@
-﻿using Slask.Domain;
-using Slask.Domain.Groups;
+﻿using Slask.Domain.Groups;
 using System;
 using System.Collections.Generic;
 using System.Linq;

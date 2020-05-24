@@ -13,7 +13,7 @@ namespace Slask.Domain
 
         public static User Create(string name)
         {
-            if(name == null || name == "")
+            if (name == null || name == "")
             {
                 return null;
             }

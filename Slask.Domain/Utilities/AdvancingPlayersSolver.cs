@@ -63,7 +63,7 @@ namespace Slask.Domain.Utilities
         {
             List<PlayerStandingEntry> nonFilteredPlayers = new List<PlayerStandingEntry>();
 
-            foreach(PlayerStandingEntry entry in group.FindProblematiclyTyingPlayers())
+            foreach (PlayerStandingEntry entry in group.FindProblematiclyTyingPlayers())
             {
                 nonFilteredPlayers.Remove(entry);
             }

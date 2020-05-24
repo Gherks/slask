@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
-using Slask.Domain.Utilities;
 using Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests;
 using System;
 using TechTalk.SpecFlow;

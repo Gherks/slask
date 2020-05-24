@@ -3,7 +3,6 @@ using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Groups.GroupTypes;
-using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds;
 using Slask.Domain.Utilities;
 using Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests;
