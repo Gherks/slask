@@ -1,5 +1,4 @@
-﻿using Slask.Domain.Groups.Bases;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Slask.Domain.Groups.GroupUtility

@@ -1,9 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
-using Slask.Domain.Groups;
-using Slask.Domain.Rounds;
-using Slask.Domain.Rounds.Bases;
-using System.Linq;
+using Slask.Domain.Rounds.RoundTypes;
 using Xunit;
 
 namespace Slask.Xunit.UnitTests.DomainTests.RoundTests.RoundTypeTests
@@ -32,5 +29,5 @@ namespace Slask.Xunit.UnitTests.DomainTests.RoundTests.RoundTypeTests
             round.TournamentId.Should().Be(tournament.Id);
             round.Tournament.Should().Be(tournament);
         }
-	}
+    }
 }

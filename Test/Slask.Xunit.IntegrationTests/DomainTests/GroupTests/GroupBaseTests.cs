@@ -1,10 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
-using Slask.Domain.Groups;
-using Slask.Domain.Rounds;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Slask.Domain.Rounds.RoundTypes;
 using Xunit;
 
 namespace Slask.Xunit.IntegrationTests.DomainTests.GroupTests

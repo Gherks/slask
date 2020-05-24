@@ -1,5 +1,5 @@
 ﻿using Slask.Common;
-using Slask.Domain.Rounds.Bases;
+using Slask.Domain.Rounds;
 using System;
 
 namespace Slask.Domain.Utilities

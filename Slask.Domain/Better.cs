@@ -37,7 +37,7 @@ namespace Slask.Domain
         {
             bool anyParameterIsInvalid = !PlaceMatchBetParametersAreValid(match, player);
 
-            if(anyParameterIsInvalid)
+            if (anyParameterIsInvalid)
             {
                 return false;
             }

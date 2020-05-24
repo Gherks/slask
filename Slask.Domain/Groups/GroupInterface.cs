@@ -1,9 +1,9 @@
-﻿using Slask.Domain.Rounds.Bases;
+﻿using Slask.Domain.Rounds;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 
-namespace Slask.Domain.Groups.Interfaces
+namespace Slask.Domain.Groups
 {
     public interface GroupInterface
     {

@@ -1,12 +1,11 @@
-﻿using Slask.Domain.Groups.Bases;
-using Slask.Domain.Rounds;
+﻿using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace Slask.Domain.Groups
+namespace Slask.Domain.Groups.GroupTypes
 {
     public class DualTournamentGroup : GroupBase
     {

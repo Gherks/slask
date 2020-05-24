@@ -1,6 +1,5 @@
 using Slask.Domain.Bets;
-using Slask.Domain.Groups.Interfaces;
-using Slask.Domain.Rounds.Bases;
+using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
@@ -8,7 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace Slask.Domain.Groups.Bases
+namespace Slask.Domain.Groups
 {
     public partial class GroupBase : GroupInterface
     {

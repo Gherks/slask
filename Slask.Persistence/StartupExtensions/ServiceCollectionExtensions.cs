@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 using Slask.Persistence.Services;
+using System.Reflection;
 
 namespace Slask.Persistence.StartupExtensions
 {

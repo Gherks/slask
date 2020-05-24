@@ -1,8 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
-using Slask.Domain.Groups;
-using Slask.Domain.Rounds;
-using Slask.Domain.Rounds.Bases;
+using Slask.Domain.Rounds.RoundTypes;
 using System.Linq;
 using Xunit;
 
@@ -38,7 +36,7 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
         {
             DualTournamentRound round = tournament.AddDualTournamentRound();
 
-            for(int advancingPerGroupCount = 0; advancingPerGroupCount < 16; ++advancingPerGroupCount)
+            for (int advancingPerGroupCount = 0; advancingPerGroupCount < 16; ++advancingPerGroupCount)
             {
                 round.SetAdvancingPerGroupCount(advancingPerGroupCount);
                 round.AdvancingPerGroupCount.Should().Be(2);

@@ -1,5 +1,5 @@
-﻿using Slask.Domain.Groups.Bases;
-using Slask.Domain.Rounds.Bases;
+﻿using Slask.Domain.Groups;
+using Slask.Domain.Rounds;
 using System.Collections.Generic;
 
 namespace Slask.Domain.Utilities
@@ -63,7 +63,7 @@ namespace Slask.Domain.Utilities
         {
             List<PlayerStandingEntry> nonFilteredPlayers = new List<PlayerStandingEntry>();
 
-            foreach(PlayerStandingEntry entry in group.FindProblematiclyTyingPlayers())
+            foreach (PlayerStandingEntry entry in group.FindProblematiclyTyingPlayers())
             {
                 nonFilteredPlayers.Remove(entry);
             }

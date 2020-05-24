@@ -1,8 +1,4 @@
-﻿using Slask.Common;
-using Slask.Domain;
-using Slask.Domain.Groups;
-using System;
-using TechTalk.SpecFlow;
+﻿using TechTalk.SpecFlow;
 
 namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
 {

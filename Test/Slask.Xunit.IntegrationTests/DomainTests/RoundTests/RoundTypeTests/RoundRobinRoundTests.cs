@@ -1,9 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
-using Slask.Domain.Groups;
-using Slask.Domain.Rounds;
-using Slask.Domain.Rounds.Bases;
+using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
 using System;
 using System.Linq;

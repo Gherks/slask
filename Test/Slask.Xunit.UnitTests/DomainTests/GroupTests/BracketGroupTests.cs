@@ -1,10 +1,8 @@
 using FluentAssertions;
-using Slask.Common;
 using Slask.Domain;
-using Slask.Domain.Groups;
+using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Groups.GroupUtility;
-using Slask.Domain.Rounds;
-using System;
+using Slask.Domain.Rounds.RoundTypes;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;

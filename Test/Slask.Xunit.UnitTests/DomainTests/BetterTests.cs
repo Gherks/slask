@@ -2,9 +2,9 @@
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Bets;
-using Slask.Domain.Groups;
+using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Groups.GroupUtility;
-using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.RoundTypes;
 using System;
 using System.Linq;
 using Xunit;

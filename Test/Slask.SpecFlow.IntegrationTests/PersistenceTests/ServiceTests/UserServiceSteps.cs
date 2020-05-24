@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
 
-namespace Slask.SpecFlow.IntegrationTests.ServiceTests
+namespace Slask.SpecFlow.IntegrationTests.PersistenceTests.ServiceTests
 {
     [Binding, Scope(Feature = "UserService")]
     public class UserServiceSteps : UserServiceStepDefinitions

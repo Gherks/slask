@@ -1,11 +1,10 @@
-﻿using Slask.Domain.Groups.Bases;
-using Slask.Domain.Rounds.Bases;
+﻿using Slask.Domain.Groups;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 
-namespace Slask.Domain.Rounds.Interfaces
+namespace Slask.Domain.Rounds
 {
     public interface RoundInterface
     {

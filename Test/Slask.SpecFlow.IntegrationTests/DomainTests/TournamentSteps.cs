@@ -1,14 +1,12 @@
 ﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
-using Slask.Domain.Groups.Bases;
+using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
-using Slask.Domain.Rounds.Bases;
 using Slask.Domain.Utilities;
-using Slask.SpecFlow.IntegrationTests.ServiceTests;
+using Slask.SpecFlow.IntegrationTests.PersistenceTests.ServiceTests;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TechTalk.SpecFlow;
 
 namespace Slask.SpecFlow.IntegrationTests.DomainTests

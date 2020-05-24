@@ -1,6 +1,5 @@
-using Slask.Domain.Groups.Bases;
 using Slask.Domain.Groups.GroupUtility;
-using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.RoundTypes;
 using System;
 using System.Collections.Generic;
 
@@ -10,7 +9,7 @@ using System.Collections.Generic;
  * of (N - 1) rounds, N / 2 games can be run concurrently, provided there exist sufficient resources (e.g. courts for a tennis 
  * tournament). If N is odd, there will be N rounds, each with (N - 1) / 2 games, and one competitor having no game in that round. 
  */
-namespace Slask.Domain.Groups
+namespace Slask.Domain.Groups.GroupTypes
 {
     public class RoundRobinGroup : GroupBase
     {

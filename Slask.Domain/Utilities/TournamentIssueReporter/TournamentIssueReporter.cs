@@ -1,6 +1,5 @@
-﻿using Slask.Domain.Groups.Bases;
-using Slask.Domain.Rounds.Bases;
-using System;
+﻿using Slask.Domain.Groups;
+using Slask.Domain.Rounds;
 using System.Collections.Generic;
 
 namespace Slask.Domain.Utilities

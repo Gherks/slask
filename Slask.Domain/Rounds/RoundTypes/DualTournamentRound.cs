@@ -1,20 +1,18 @@
 ﻿using Slask.Domain.Groups;
-using Slask.Domain.Groups.Bases;
+using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Procedures.AdvancingPerGroupCount;
 using Slask.Domain.Procedures.PlayersPerGroupCount;
-using Slask.Domain.Rounds.Bases;
 using System;
-using System.Linq;
 
-namespace Slask.Domain.Rounds
+namespace Slask.Domain.Rounds.RoundTypes
 {
-    public class BracketRound : RoundBase
+    public class DualTournamentRound : RoundBase
     {
-        private BracketRound()
+        private DualTournamentRound()
         {
         }
 
-        public static BracketRound Create(Tournament tournament)
+        public static DualTournamentRound Create(Tournament tournament)
         {
             bool givenTournamentIsInvalid = tournament == null;
 
@@ -23,25 +21,25 @@ namespace Slask.Domain.Rounds
                 return null;
             }
 
-            BracketRound round = new BracketRound
+            DualTournamentRound round = new DualTournamentRound
             {
                 Id = Guid.NewGuid(),
-                PlayersPerGroupCount = 2,
+                PlayersPerGroupCount = 4,
                 BestOf = 3,
-                AdvancingPerGroupCount = 1,
+                AdvancingPerGroupCount = 2,
                 TournamentId = tournament.Id,
                 Tournament = tournament
             };
 
             round.AssignDefaultName();
-            round.AssignProcedures(new MutablePlayersPerGroupCountProcedure(), new ImmutableAdvancingPerGroupCountProcedure());
+            round.AssignProcedures(new ImmutablePlayersPerGroupCountProcedure(), new ImmutableAdvancingPerGroupCountProcedure());
 
             return round;
         }
 
         protected override GroupBase AddGroup()
         {
-            return BracketGroup.Create(this);
+            return DualTournamentGroup.Create(this);
         }
     }
 }

@@ -3,7 +3,7 @@ using Slask.Common;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Slask.UnitTests.CommonTests
+namespace Slask.Xunit.UnitTests.CommonTests
 {
     public class StringUtilityTests
     {
