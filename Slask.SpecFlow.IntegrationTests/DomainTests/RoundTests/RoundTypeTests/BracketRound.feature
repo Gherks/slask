@@ -5,8 +5,8 @@
 Scenario: Cannot reconfigure players per group count in bracket round when it has started
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type | Round name    | Best of | Advancing per group count | Players per group count |
-			| Bracket    | Bracket round | 3       | 1                         | 4                       |
+			| Round type | Best of | Advancing per group count | Players per group count |
+			| Bracket    | 3       | 1                         | 4                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
@@ -17,8 +17,8 @@ Scenario: Cannot reconfigure players per group count in bracket round when it ha
 Scenario: Cannot reconfigure best of in bracket round when it has started
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type | Round name    | Best of | Advancing per group count | Players per group count |
-			| Bracket    | Bracket round | 3       | 1                         | 4                       |
+			| Round type | Best of | Advancing per group count | Players per group count |
+			| Bracket    | 3       | 1                         | 4                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
