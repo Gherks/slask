@@ -40,9 +40,9 @@ namespace Slask.Domain
             };
         }
 
-        public void ChangeName(string name)
+        public void RenameTo(string name)
         {
-            Name = name;
+            Name = name.Trim();
         }
 
         public BracketRound AddBracketRound()

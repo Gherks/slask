@@ -61,10 +61,11 @@ namespace Slask.Persistence.Services
             if (nameIsNotEmpty && nameIsNotInUse)
             {
                 Tournament tournament = GetTournamentById(id);
+                bool tournamentFound = tournament != null;
 
-                if (tournament != null)
+                if (tournamentFound)
                 {
-                    tournament.ChangeName(name);
+                    tournament.RenameTo(name);
                     SaveAsync(tournament);
 
                     return true;
