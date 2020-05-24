@@ -1,4 +1,5 @@
 ﻿using Slask.Domain.Rounds.Bases;
+using Slask.Domain.Utilities;
 using System;
 
 namespace Slask.Domain.Rounds.RoundUtilities
@@ -26,18 +27,14 @@ namespace Slask.Domain.Rounds.RoundUtilities
 
             if (doesNotFillAllGroupsEvenly)
             {
-                string description;
-
                 if (round.IsFirstRound())
                 {
-                    description = "Current player count does not fill all group(s) to capacity. Add more players or reduce group capacity.";
+                    round.Tournament.TournamentIssueReporter.Report(round, TournamentIssues.NotFillingAllGroupsWithPlayers);
                 }
                 else
                 {
-                    description = "Round does not synergize with previous round. Advancing players from previous round will not fill the groups within the current round to capacity.";
+                    round.Tournament.TournamentIssueReporter.Report(round, TournamentIssues.RoundDoesNotSynergizeWithPreviousRound);
                 }
-
-                round.Tournament.TournamentIssueReporter.Report(round, description);
             }
         }
 
@@ -47,8 +44,7 @@ namespace Slask.Domain.Rounds.RoundUtilities
 
             if (advancingCountIsEqualOrGreaterThanPlayersPerGroupCount)
             {
-                string description = "Round can't have advancing per group count equal or greather than players per group count.";
-                round.Tournament.TournamentIssueReporter.Report(round, description);
+                round.Tournament.TournamentIssueReporter.Report(round, TournamentIssues.AdvancersCountInRoundIsGreaterThanParticipantCount);
             }
         }
 
@@ -58,8 +54,7 @@ namespace Slask.Domain.Rounds.RoundUtilities
 
             if (lastRoundHasSeveralGroups)
             {
-                string description = "Last round should not contain more than one group. Increase group capacity until all players will fit into one group.";
-                round.Tournament.TournamentIssueReporter.Report(round, description);
+                round.Tournament.TournamentIssueReporter.Report(round, TournamentIssues.LastRoundContainsMoreThanOneGroup);
             }
         }
 
@@ -69,8 +64,7 @@ namespace Slask.Domain.Rounds.RoundUtilities
 
             if (lastRoundHasSeveralAdvancingPlayers)
             {
-                string description = "Last round should not have more than one player that advances.";
-                round.Tournament.TournamentIssueReporter.Report(round, description);
+                round.Tournament.TournamentIssueReporter.Report(round, TournamentIssues.LastRoundHasMoreThanOneAdvancers);
             }
         }
     }

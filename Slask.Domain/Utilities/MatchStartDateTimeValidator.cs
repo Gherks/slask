@@ -28,7 +28,7 @@ namespace Slask.Domain.Utilities
             if (newStartDateTimeIsInThePast)
             {
                 TournamentIssueReporter tournamentIssueReporter = match.Group.Round.Tournament.TournamentIssueReporter;
-                tournamentIssueReporter.Report(match, "Start date time must be a future date time");
+                tournamentIssueReporter.Report(match, TournamentIssues.StartDateTimeIsInThePast);
                 return false;
             }
 
@@ -47,7 +47,7 @@ namespace Slask.Domain.Utilities
                 if (newStartDateTimeIsEarlierThanMatchInPreviousRound)
                 {
                     TournamentIssueReporter tournamentIssueReporter = match.Group.Round.Tournament.TournamentIssueReporter;
-                    tournamentIssueReporter.Report(match, "Start date time can't be earlier than any match in previous round.");
+                    tournamentIssueReporter.Report(match, TournamentIssues.StartDateTimeIncompatibleWithPreviousRound);
                 }
             }
         }
@@ -59,7 +59,7 @@ namespace Slask.Domain.Utilities
             if (newStartDateTimeDoesNotComplyWithGroupRules)
             {
                 TournamentIssueReporter tournamentIssueReporter = match.Group.Round.Tournament.TournamentIssueReporter;
-                tournamentIssueReporter.Report(match, "Start date time does not work with group rules");
+                tournamentIssueReporter.Report(match, TournamentIssues.StartDateTimeIncompatibleWithGroupRules);
             }
         }
     }
