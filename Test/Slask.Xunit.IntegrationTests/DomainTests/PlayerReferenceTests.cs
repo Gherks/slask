@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
-using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.RoundTypes;
 using Xunit;
 
 namespace Slask.Xunit.IntegrationTests.DomainTests

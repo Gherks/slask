@@ -1,11 +1,11 @@
 ﻿using Slask.Domain;
-using Slask.Domain.Groups.Bases;
+using Slask.Domain.Groups;
 using Slask.Domain.Groups.GroupUtility;
 using Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests;
 using System;
 using TechTalk.SpecFlow;
 
-namespace Slask.SpecFlow.IntegrationTests.DomainTests
+namespace Slask.SpecFlow.IntegrationTests.DomainTests.UtilityTests
 {
     [Binding, Scope(Feature = "PlayerSwitcher")]
     public class PlayerSwitcherSteps : PlayerSwitcherStepDefinitions

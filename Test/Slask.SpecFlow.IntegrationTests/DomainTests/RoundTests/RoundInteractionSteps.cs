@@ -1,13 +1,13 @@
 ﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
-using Slask.Domain.Rounds.Bases;
+using Slask.Domain.Rounds;
 using Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests;
 using System.Collections.Generic;
 using System.Linq;
 using TechTalk.SpecFlow;
 
-namespace Slask.SpecFlow.IntegrationTests.DomainTests
+namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 {
     [Binding, Scope(Feature = "RoundInteraction", Tag = "BracketRoundInteractionTag")]
     public class BracketRoundInteractionSteps : BracketGroupStepDefinitions

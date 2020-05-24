@@ -1,12 +1,12 @@
 ﻿using Slask.Domain.Groups;
-using Slask.Domain.Groups.Bases;
+using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Procedures.AdvancingPerGroupCount;
 using Slask.Domain.Procedures.PlayersPerGroupCount;
-using Slask.Domain.Rounds.Bases;
+using Slask.Domain.Rounds;
 using System;
 using System.Linq;
 
-namespace Slask.Domain.Rounds
+namespace Slask.Domain.Rounds.RoundTypes
 {
     public class DualTournamentRound : RoundBase
     {

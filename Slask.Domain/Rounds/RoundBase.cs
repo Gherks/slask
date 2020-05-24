@@ -1,17 +1,15 @@
 ﻿using Slask.Common;
 using Slask.Domain.Groups;
-using Slask.Domain.Groups.Bases;
 using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Procedures.AdvancingPerGroupCount;
 using Slask.Domain.Procedures.PlayersPerGroupCount;
-using Slask.Domain.Rounds.Interfaces;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Slask.Domain.Rounds.Bases
+namespace Slask.Domain.Rounds
 {
     public class RoundBase : RoundInterface
     {

@@ -2,8 +2,7 @@
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
-using Slask.Domain.Groups.Bases;
-using Slask.Domain.Rounds.Bases;
+using Slask.Domain.Rounds;
 using Slask.Persistence.Services;
 using Slask.TestCore;
 using System;
@@ -11,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TechTalk.SpecFlow;
 
-namespace Slask.SpecFlow.IntegrationTests.ServiceTests
+namespace Slask.SpecFlow.IntegrationTests.PersistenceTests.ServiceTests
 {
     [Binding, Scope(Feature = "TournamentService")]
     public class TournamentServiceSteps : TournamentServiceStepDefinitions

@@ -2,10 +2,9 @@
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
-using Slask.Domain.Groups.Bases;
+using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds;
-using Slask.Domain.Rounds.Bases;
 using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;

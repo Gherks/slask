@@ -1,8 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
-using Slask.Domain.Groups.Bases;
+using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
-using Slask.Domain.Rounds.Bases;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;

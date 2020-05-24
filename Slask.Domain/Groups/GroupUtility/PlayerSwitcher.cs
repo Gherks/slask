@@ -1,4 +1,5 @@
-﻿using Slask.Domain.Utilities;
+﻿using Slask.Domain.Groups.GroupTypes;
+using Slask.Domain.Utilities;
 
 namespace Slask.Domain.Groups.GroupUtility
 {

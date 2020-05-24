@@ -1,13 +1,13 @@
-﻿using Slask.Domain.Groups.Bases;
+﻿using Slask.Domain.Groups;
 using Slask.Domain.Groups.GroupUtility;
-using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
-namespace Slask.Domain.Groups
+namespace Slask.Domain.Groups.GroupTypes
 {
     public class BracketGroup : GroupBase
     {
@@ -137,7 +137,7 @@ namespace Slask.Domain.Groups
                 try
                 {
                     playerReference1 = playerReferences[matchIndex * 2];
-                    playerReference2 = playerReferences[(matchIndex * 2) + 1];
+                    playerReference2 = playerReferences[matchIndex * 2 + 1];
 
                     Matches[matchIndex].SetPlayers(playerReference1, playerReference2);
                 }
