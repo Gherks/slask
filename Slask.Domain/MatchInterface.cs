@@ -1,8 +1,6 @@
-using Slask.Common;
 using Slask.Domain.Groups;
 using Slask.Domain.Utilities;
 using System;
-using System.Collections.Generic;
 
 namespace Slask.Domain
 {

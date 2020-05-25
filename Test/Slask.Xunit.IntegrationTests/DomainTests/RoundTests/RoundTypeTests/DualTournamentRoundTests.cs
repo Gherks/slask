@@ -35,7 +35,7 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
         {
             DualTournamentRound round = tournament.AddDualTournamentRound();
 
-            for (int advancingPerGroupCount = 0; advancingPerGroupCount < 16; ++advancingPerGroupCount)
+            for (int advancingPerGroupCount = -5; advancingPerGroupCount < 16; ++advancingPerGroupCount)
             {
                 round.SetAdvancingPerGroupCount(advancingPerGroupCount);
                 round.AdvancingPerGroupCount.Should().Be(2);
@@ -43,7 +43,7 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
         }
 
         [Fact]
-        public void CanChangeGroupSize()
+        public void CannotChangePlayersPerGroupSize()
         {
             DualTournamentRound round = tournament.AddDualTournamentRound();
 
@@ -51,6 +51,9 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
             round.PlayersPerGroupCount.Should().Be(4);
 
             round.SetPlayersPerGroupCount(8);
+            round.SetPlayersPerGroupCount(1);
+            round.SetPlayersPerGroupCount(0);
+            round.SetPlayersPerGroupCount(-1);
 
             round.Groups.First().Matches.Should().HaveCount(5);
             round.PlayersPerGroupCount.Should().Be(4);

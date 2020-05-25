@@ -40,7 +40,7 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
         }
 
         [Fact]
-        public void CanChangeAdvancingCount()
+        public void CanChangeAdvancingPerGroupCount()
         {
             RoundRobinRound round = tournament.AddRoundRobinRound();
 
@@ -50,15 +50,47 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
         }
 
         [Fact]
-        public void CanChangeGroupSize()
+        public void CannotSetAdvancingPerGroupCountToAnythingLessThanOne()
+        {
+            RoundRobinRound round = tournament.AddRoundRobinRound();
+
+            round.AdvancingPerGroupCount.Should().Be(1);
+
+            round.SetPlayersPerGroupCount(0);
+            round.SetPlayersPerGroupCount(-1);
+            round.SetPlayersPerGroupCount(-2);
+
+            round.AdvancingPerGroupCount.Should().Be(1);
+        }
+
+        [Fact]
+        public void CanChangePlayersPerGroupSize()
         {
             RoundRobinRound round = tournament.AddRoundRobinRound();
 
             round.Groups.First().Matches.Should().HaveCount(1);
+            round.PlayersPerGroupCount.Should().Be(2);
+
             round.SetPlayersPerGroupCount(4);
 
             round.Groups.First().Matches.Should().HaveCount(6);
             round.PlayersPerGroupCount.Should().Be(4);
+        }
+
+        [Fact]
+        public void CannotSetPlayersPerGroupSizeToAnythingLessThanTwo()
+        {
+            RoundRobinRound round = tournament.AddRoundRobinRound();
+
+            round.Groups.First().Matches.Should().HaveCount(1);
+            round.PlayersPerGroupCount.Should().Be(2);
+
+            round.SetPlayersPerGroupCount(1);
+            round.SetPlayersPerGroupCount(0);
+            round.SetPlayersPerGroupCount(-1);
+
+            round.Groups.First().Matches.Should().HaveCount(1);
+            round.PlayersPerGroupCount.Should().Be(2);
         }
 
         [Fact]
