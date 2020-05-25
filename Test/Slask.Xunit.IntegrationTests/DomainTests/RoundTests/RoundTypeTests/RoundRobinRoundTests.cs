@@ -55,6 +55,8 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
             RoundRobinRound round = tournament.AddRoundRobinRound();
 
             round.Groups.First().Matches.Should().HaveCount(1);
+            round.PlayersPerGroupCount.Should().Be(2);
+
             round.SetPlayersPerGroupCount(4);
 
             round.Groups.First().Matches.Should().HaveCount(6);

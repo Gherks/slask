@@ -43,7 +43,7 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
         }
 
         [Fact]
-        public void CanChangeGroupSize()
+        public void CannotChangeGroupSize()
         {
             DualTournamentRound round = tournament.AddDualTournamentRound();
 

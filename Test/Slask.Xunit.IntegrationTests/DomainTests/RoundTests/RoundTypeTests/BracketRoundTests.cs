@@ -48,6 +48,8 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
             BracketRound round = tournament.AddBracketRound();
 
             round.Groups.First().Matches.Should().HaveCount(1);
+            round.PlayersPerGroupCount.Should().Be(2);
+
             round.SetPlayersPerGroupCount(8);
 
             round.Groups.First().Matches.Should().HaveCount(7);
