@@ -1,4 +1,5 @@
 ﻿using Slask.Domain.Bets;
+using Slask.Domain.Bets.BetTypes;
 using System;
 using System.Collections.Generic;
 

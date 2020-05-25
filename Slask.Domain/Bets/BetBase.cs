@@ -2,7 +2,7 @@
 
 namespace Slask.Domain.Bets
 {
-    public class BetBase
+    public class BetBase : BetInterface
     {
         protected BetBase()
         {

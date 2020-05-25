@@ -1,4 +1,4 @@
-﻿namespace Slask.Domain.Bets
+﻿namespace Slask.Domain.Bets.BetTypes
 {
     public class MiscBet : BetBase
     {

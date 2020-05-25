@@ -4,7 +4,7 @@
 using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
-using Slask.Domain.Bets;
+using Slask.Domain.Bets.BetTypes;
 using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Rounds.RoundTypes;
 using System;
