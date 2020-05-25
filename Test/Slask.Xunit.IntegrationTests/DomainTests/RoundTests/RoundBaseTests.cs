@@ -180,7 +180,7 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests
             RoundBase round = tournament.AddBracketRound();
             round.SetPlayersPerGroupCount(2);
 
-            foreach(string playerName in playerNames)
+            foreach (string playerName in playerNames)
             {
                 round.RegisterPlayerReference(playerName);
             }
