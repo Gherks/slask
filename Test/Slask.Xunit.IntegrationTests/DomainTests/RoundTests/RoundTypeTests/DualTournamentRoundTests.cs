@@ -35,7 +35,7 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
         {
             DualTournamentRound round = tournament.AddDualTournamentRound();
 
-            for (int advancingPerGroupCount = 0; advancingPerGroupCount < 16; ++advancingPerGroupCount)
+            for (int advancingPerGroupCount = -5; advancingPerGroupCount < 16; ++advancingPerGroupCount)
             {
                 round.SetAdvancingPerGroupCount(advancingPerGroupCount);
                 round.AdvancingPerGroupCount.Should().Be(2);

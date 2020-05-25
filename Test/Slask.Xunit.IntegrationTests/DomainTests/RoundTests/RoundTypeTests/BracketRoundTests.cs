@@ -35,7 +35,7 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
         {
             BracketRound round = tournament.AddBracketRound();
 
-            for (int advancingPerGroupCount = 0; advancingPerGroupCount < 16; ++advancingPerGroupCount)
+            for (int advancingPerGroupCount = -5; advancingPerGroupCount < 16; ++advancingPerGroupCount)
             {
                 round.SetAdvancingPerGroupCount(advancingPerGroupCount);
                 round.AdvancingPerGroupCount.Should().Be(1);
