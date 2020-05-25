@@ -26,7 +26,6 @@ namespace Slask.Domain.Rounds
         public Guid Id { get; protected set; }
         public string Name { get; protected set; }
         public int PlayersPerGroupCount { get; protected set; }
-        public int BestOf { get; protected set; }
         public int AdvancingPerGroupCount { get; protected set; }
         public List<GroupBase> Groups { get; protected set; }
         public List<PlayerReference> PlayerReferences { get; protected set; }
@@ -148,21 +147,6 @@ namespace Slask.Domain.Rounds
             }
 
             return true;
-        }
-
-        public bool SetBestOf(int bestOf)
-        {
-            bool tournamentHasNotBegun = GetPlayState() == PlayState.NotBegun;
-            bool newBestOfIsUneven = bestOf % 2 != 0;
-            bool bestOfIsGreaterThanZero = bestOf > 0;
-
-            if (tournamentHasNotBegun && newBestOfIsUneven && bestOfIsGreaterThanZero)
-            {
-                BestOf = bestOf;
-                return true;
-            }
-
-            return false;
         }
 
         public bool IsFirstRound()

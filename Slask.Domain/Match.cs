@@ -16,6 +16,7 @@ namespace Slask.Domain
         }
 
         public Guid Id { get; private set; }
+        public int BestOf { get; protected set; }
         public DateTime StartDateTime { get; private set; }
         private List<Player> Players { get; set; }
         public Guid GroupId { get; private set; }
@@ -38,6 +39,7 @@ namespace Slask.Domain
             Match match = new Match()
             {
                 Id = Guid.NewGuid(),
+                BestOf = 3,
                 StartDateTime = DateTime.MaxValue,
                 GroupId = group.Id,
                 Group = group
@@ -46,9 +48,44 @@ namespace Slask.Domain
             return match;
         }
 
-        public bool IsReady()
+        public bool SetBestOf(int bestOf)
         {
-            return Player1 != null && Player2 != null;
+            bool matchHasNotBegun = GetPlayState() == PlayState.NotBegun;
+            bool newBestOfIsUneven = bestOf % 2 != 0;
+            bool bestOfIsGreaterThanZero = bestOf > 0;
+
+            if (matchHasNotBegun && newBestOfIsUneven && bestOfIsGreaterThanZero)
+            {
+                BestOf = bestOf;
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetStartDateTime(DateTime dateTime)
+        {
+            bool newDateTimeIsValid = MatchStartDateTimeValidator.Validate(this, dateTime);
+
+            if (newDateTimeIsValid)
+            {
+                StartDateTime = dateTime;
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool SetPlayers(PlayerReference player1Reference, PlayerReference player2Reference)
+        {
+            if (player1Reference == null || player2Reference == null || player1Reference.Id != player2Reference.Id)
+            {
+                CreatePlayerWithReference(0, player1Reference);
+                CreatePlayerWithReference(1, player2Reference);
+                return true;
+            }
+
+            return false;
         }
 
         public bool AddPlayer(PlayerReference playerReference)
@@ -67,18 +104,6 @@ namespace Slask.Domain
             if (Player2 == null)
             {
                 CreatePlayerWithReference(1, playerReference);
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool SetPlayers(PlayerReference player1Reference, PlayerReference player2Reference)
-        {
-            if (player1Reference == null || player2Reference == null || player1Reference.Id != player2Reference.Id)
-            {
-                CreatePlayerWithReference(0, player1Reference);
-                CreatePlayerWithReference(1, player2Reference);
                 return true;
             }
 
@@ -115,17 +140,9 @@ namespace Slask.Domain
             return null;
         }
 
-        public bool SetStartDateTime(DateTime dateTime)
+        public bool IsReady()
         {
-            bool newDateTimeIsValid = MatchStartDateTimeValidator.Validate(this, dateTime);
-
-            if (newDateTimeIsValid)
-            {
-                StartDateTime = dateTime;
-                return true;
-            }
-
-            return false;
+            return Player1 != null && Player2 != null;
         }
 
         public PlayState GetPlayState()
@@ -173,7 +190,7 @@ namespace Slask.Domain
         {
             if (Player1 != null && Player2 != null)
             {
-                int matchPointBarrier = Group.Round.BestOf - (Group.Round.BestOf / 2);
+                int matchPointBarrier = BestOf - (BestOf / 2);
 
                 return Player1.Score >= matchPointBarrier || Player2.Score >= matchPointBarrier;
             }

@@ -25,7 +25,6 @@ namespace Slask.Domain.Rounds.RoundTypes
             {
                 Id = Guid.NewGuid(),
                 PlayersPerGroupCount = 4,
-                BestOf = 3,
                 AdvancingPerGroupCount = 2,
                 TournamentId = tournament.Id,
                 Tournament = tournament

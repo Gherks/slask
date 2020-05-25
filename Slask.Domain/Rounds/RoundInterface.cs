@@ -11,7 +11,6 @@ namespace Slask.Domain.Rounds
         Guid Id { get; }
         string Name { get; }
         int PlayersPerGroupCount { get; }
-        int BestOf { get; }
         int AdvancingPerGroupCount { get; }
         List<GroupBase> Groups { get; }
         List<PlayerReference> PlayerReferences { get; }
@@ -25,7 +24,6 @@ namespace Slask.Domain.Rounds
         bool Construct();
         bool FillGroupsWithPlayerReferences();
         bool SetPlayersPerGroupCount(int count);
-        bool SetBestOf(int bestOf);
         bool SetAdvancingPerGroupCount(int count);
         bool HasProblematicTie();
         bool IsFirstRound();
