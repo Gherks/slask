@@ -2,6 +2,7 @@
 using Slask.Domain;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -85,24 +86,130 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests
         }
 
         [Fact]
-        public void FetchingPreviousRoundFromFirstRoundYieldsNull()
+        public void CanDetectWhenRoundIsTheFirstOne()
         {
-            RoundBase round = tournament.AddRoundRobinRound();
+            RoundBase firstRound = tournament.AddRoundRobinRound();
+            RoundBase secondRound = tournament.AddRoundRobinRound();
 
-            RoundBase previousRound = round.GetPreviousRound();
+            bool isFirstRound = firstRound.IsFirstRound();
+
+            isFirstRound.Should().BeTrue();
+        }
+
+        [Fact]
+        public void CanDetectWhenRoundIsNotTheFirstOne()
+        {
+            RoundBase firstRound = tournament.AddRoundRobinRound();
+            RoundBase secondRound = tournament.AddRoundRobinRound();
+
+            bool isFirstRound = secondRound.IsFirstRound();
+
+            isFirstRound.Should().BeFalse();
+        }
+
+        [Fact]
+        public void CanDetectWhenRoundIsTheLastOne()
+        {
+            RoundBase firstRound = tournament.AddRoundRobinRound();
+            RoundBase secondRound = tournament.AddRoundRobinRound();
+
+            bool isLastRound = secondRound.IsLastRound();
+
+            isLastRound.Should().BeTrue();
+        }
+
+        [Fact]
+        public void CanDetectWhenRoundIsNotTheLastOne()
+        {
+            RoundBase firstRound = tournament.AddRoundRobinRound();
+            RoundBase secondRound = tournament.AddRoundRobinRound();
+
+            bool isFirstRound = firstRound.IsLastRound();
+
+            isFirstRound.Should().BeFalse();
+        }
+
+        [Fact]
+        public void CanFetchRoundAfterThisRound()
+        {
+            RoundBase firstRound = tournament.AddRoundRobinRound();
+            RoundBase secondRound = tournament.AddRoundRobinRound();
+
+            RoundBase nextRound = firstRound.GetNextRound();
+
+            nextRound.Should().Be(secondRound);
+        }
+
+        [Fact]
+        public void FetchingNextRoundWithLastRoundYieldsNull()
+        {
+            RoundBase firstRound = tournament.AddRoundRobinRound();
+            RoundBase secondRound = tournament.AddRoundRobinRound();
+
+            RoundBase nextRound = secondRound.GetNextRound();
+
+            nextRound.Should().BeNull();
+        }
+
+        [Fact]
+        public void CanFetchRoundBeforeThisRound()
+        {
+            RoundBase beforeRound = tournament.AddRoundRobinRound();
+            RoundBase thisRound = tournament.AddRoundRobinRound();
+
+            RoundBase previousRound = thisRound.GetPreviousRound();
+
+            previousRound.Should().Be(beforeRound);
+        }
+
+        [Fact]
+        public void FetchingPreviousRoundWithFirstRoundYieldsNull()
+        {
+            RoundBase firstRound = tournament.AddRoundRobinRound();
+
+            RoundBase previousRound = firstRound.GetPreviousRound();
 
             previousRound.Should().BeNull();
         }
 
         [Fact]
-        public void FetchingPreviousRoundFromSecondRoundYieldsFirstRound()
+        public void CanFetchFirstMatch()
         {
-            RoundBase firstRound = tournament.AddRoundRobinRound();
-            RoundBase secondRound = tournament.AddRoundRobinRound();
+            List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain" };
 
-            RoundBase previousRound = secondRound.GetPreviousRound();
+            RoundBase round = tournament.AddBracketRound();
+            round.SetPlayersPerGroupCount(2);
 
-            previousRound.Should().Be(firstRound);
+            foreach(string playerName in playerNames)
+            {
+                round.RegisterPlayerReference(playerName);
+            }
+
+            Match match = round.GetFirstMatch();
+
+            match.Group.Should().Be(round.Groups[0]);
+            match.Player1.Name.Should().Be(playerNames[0]);
+            match.Player2.Name.Should().Be(playerNames[1]);
+        }
+
+        [Fact]
+        public void CanFetchLastMatch()
+        {
+            List<string> playerNames = new List<string>() { "Maru", "Stork", "Taeja", "Rain" };
+
+            RoundBase round = tournament.AddBracketRound();
+            round.SetPlayersPerGroupCount(2);
+
+            foreach (string playerName in playerNames)
+            {
+                round.RegisterPlayerReference(playerName);
+            }
+
+            Match match = round.GetLastMatch();
+
+            match.Group.Should().Be(round.Groups[1]);
+            match.Player1.Name.Should().Be(playerNames[2]);
+            match.Player2.Name.Should().Be(playerNames[3]);
         }
 
         [Fact]
