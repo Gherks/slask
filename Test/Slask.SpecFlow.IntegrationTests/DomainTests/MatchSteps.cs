@@ -43,48 +43,66 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             GivenPlayersIsRegisteredToRound("First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth", 0);
         }
 
+        [When(@"best of in match (.*) in group (.*) is set to (.*)")]
+        public void WhenBestOfInMatchInGroupIsSetTo(int matchIndex, int groupIndex, int bestOf)
+        {
+            GroupBase group = createdGroups[groupIndex];
+            Match match = group.Matches[matchIndex];
+
+            match.SetBestOf(bestOf);
+        }
+
+        [Then(@"best of in match (.*) in group (.*) should be (.*)")]
+        public void ThenBestOfInMatchInGroupShouldBe(int matchIndex, int groupIndex, int bestOf)
+        {
+            GroupBase group = createdGroups[groupIndex];
+            Match match = group.Matches[matchIndex];
+
+            match.BestOf.Should().Be(bestOf);
+        }
+
         [Then(@"match (.*) in group (.*) should be in state ""(.*)""")]
-        public void ThenMatchInGroupShouldBeInState(int matchIndex, int createdGroupIndex, string playStateString)
+        public void ThenMatchInGroupShouldBeInState(int matchIndex, int groupIndex, string playStateString)
         {
             PlayState playState = ParsePlayStateString(playStateString);
 
-            GroupBase group = createdGroups[createdGroupIndex];
+            GroupBase group = createdGroups[groupIndex];
             Match match = group.Matches[matchIndex];
 
             match.GetPlayState().Should().Be(playState);
         }
 
         [Then(@"winning player can be fetched from match (.*) in group (.*)")]
-        public void ThenWinningPlayerCanBeFetchedFromMatchInGroup(int matchIndex, int createdGroupIndex)
+        public void ThenWinningPlayerCanBeFetchedFromMatchInGroup(int matchIndex, int groupIndex)
         {
-            GroupBase group = createdGroups[createdGroupIndex];
+            GroupBase group = createdGroups[groupIndex];
             Match match = group.Matches[matchIndex];
 
             match.GetWinningPlayer().Should().NotBeNull();
         }
 
         [Then(@"losing player can be fetched from match (.*) in group (.*)")]
-        public void ThenLosingPlayerCanBeFetchedFromMatchInGroup(int matchIndex, int createdGroupIndex)
+        public void ThenLosingPlayerCanBeFetchedFromMatchInGroup(int matchIndex, int groupIndex)
         {
-            GroupBase group = createdGroups[createdGroupIndex];
+            GroupBase group = createdGroups[groupIndex];
             Match match = group.Matches[matchIndex];
 
             match.GetLosingPlayer().Should().NotBeNull();
         }
 
         [Then(@"winning player cannot be fetched from match (.*) in group (.*)")]
-        public void ThenWinningPlayerCannotBeFetchedFromMatchInGroup(int matchIndex, int createdGroupIndex)
+        public void ThenWinningPlayerCannotBeFetchedFromMatchInGroup(int matchIndex, int groupIndex)
         {
-            GroupBase group = createdGroups[createdGroupIndex];
+            GroupBase group = createdGroups[groupIndex];
             Match match = group.Matches[matchIndex];
 
             match.GetWinningPlayer().Should().BeNull();
         }
 
         [Then(@"losing player cannot be fetched from match (.*) in group (.*)")]
-        public void ThenLosingPlayerCannotBeFetchedFromMatchInGroup(int matchIndex, int createdGroupIndex)
+        public void ThenLosingPlayerCannotBeFetchedFromMatchInGroup(int matchIndex, int groupIndex)
         {
-            GroupBase group = createdGroups[createdGroupIndex];
+            GroupBase group = createdGroups[groupIndex];
             Match match = group.Matches[matchIndex];
 
             match.GetLosingPlayer().Should().BeNull();

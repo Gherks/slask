@@ -2,6 +2,30 @@
 	Does a bunch of tests on Matches
 
 @MatchTag
+Scenario: Can reconfigure best of in match before it has started but tournament has started
+	Given a tournament named "GSL 2019" has been created
+		And tournament 0 adds rounds
+			| Round type  | Advancing per group count | Players per group count |
+			| Round robin | 1                         | 4                       |
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And groups within tournament is played out and betted on
+			| Tournament index | Round index | Group index |
+			| 0                | 0           | 0           |
+	When best of in match 0 in group 1 is set to 5
+	Then best of in match 0 in group 1 should be 5
+
+Scenario: Cannot reconfigure best of in match when it has started
+	Given a tournament named "GSL 2019" has been created
+		And tournament 0 adds rounds
+			| Round type  | Advancing per group count | Players per group count |
+			| Round robin | 1                         | 4                       |
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And groups within tournament is played out and betted on
+			| Tournament index | Round index | Group index |
+			| 0                | 0           | 0           |
+	When best of in match 0 in group 0 is set to 5
+	Then best of in match 0 in group 0 should be 3
+
 Scenario: Match returns NotBegun state before match is played
 	When a round robin tournament with users and players has been created
 	Then match 0 in group 0 should be in state "NotBegun"

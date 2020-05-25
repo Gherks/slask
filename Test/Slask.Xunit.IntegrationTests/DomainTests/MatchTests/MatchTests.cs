@@ -8,9 +8,9 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace Slask.Xunit.UnitTests.DomainTests.MatchTests
+namespace Slask.Xunit.IntegrationTests.DomainTests.MatchTests
 {
-    public class MatchTests
+    public class MatchTests : IDisposable
     {
         private const string firstPlayerName = "Maru";
         private const string secondPlayerName = "Stork";
@@ -30,10 +30,16 @@ namespace Slask.Xunit.UnitTests.DomainTests.MatchTests
             match = bracketGroup.Matches.First();
         }
 
+        public void Dispose()
+        {
+            SystemTimeMocker.Reset();
+        }
+
         [Fact]
         public void CanCreateMatch()
         {
             match.Should().NotBeNull();
+            match.BestOf.Should().Be(3);
             match.Player1.Should().NotBeNull();
             match.Player1.Name.Should().Be(firstPlayerName);
             match.Player2.Should().NotBeNull();
@@ -41,6 +47,60 @@ namespace Slask.Xunit.UnitTests.DomainTests.MatchTests
             match.StartDateTime.Should().NotBeBefore(SystemTime.Now);
             match.GroupId.Should().Be(bracketGroup.Id);
             match.Group.Should().Be(bracketGroup);
+        }
+
+        [Fact]
+        public void CanChangeBestOf()
+        {
+            int bestOf = 9;
+
+            bool setResult = match.SetBestOf(bestOf);
+
+            setResult.Should().BeTrue();
+            match.BestOf.Should().Be(bestOf);
+        }
+
+        [Fact]
+        public void CannotSetRoundBestOfToZero()
+        {
+            bool setResult = match.SetBestOf(0);
+
+            setResult.Should().BeFalse();
+            match.BestOf.Should().Be(3);
+        }
+
+        [Fact]
+        public void CannotSetRoundBestOfToEvenValue()
+        {
+            match.SetBestOf(1);
+
+            for (int bestOf = 1; bestOf < 32; ++bestOf)
+            {
+                bool setResult = match.SetBestOf(bestOf);
+
+                bool bestOfIsEven = bestOf % 2 == 0;
+                if (bestOfIsEven)
+                {
+                    setResult.Should().BeFalse();
+                    match.BestOf.Should().Be(bestOf - 1);
+                }
+                else
+                {
+                    setResult.Should().BeTrue();
+                    match.BestOf.Should().Be(bestOf);
+                }
+            }
+        }
+
+        [Fact]
+        public void CannotChangeBestOfWhenMatchHasStarted()
+        {
+            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+
+            bool setResult = match.SetBestOf(7);
+
+            setResult.Should().BeFalse();
+            match.BestOf.Should().Be(3);
         }
 
         [Fact]
@@ -340,7 +400,7 @@ namespace Slask.Xunit.UnitTests.DomainTests.MatchTests
 
         private int GetWinningScore()
         {
-            return (int)Math.Ceiling(bracketRound.BestOf / 2.0);
+            return (int)Math.Ceiling(match.BestOf / 2.0);
         }
     }
 }

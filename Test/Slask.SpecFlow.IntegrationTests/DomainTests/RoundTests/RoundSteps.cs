@@ -59,14 +59,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             round.SetPlayersPerGroupCount(playersPerGroupCount);
         }
 
-        [When(@"best of in round (.*) is set to (.*)")]
-        public void WhenAdvancingPlayersPerGroupCountInRoundIsSetTo(int roundIndex, int bestOf)
-        {
-            RoundBase round = createdRounds[roundIndex];
-
-            round.SetBestOf(bestOf);
-        }
-
         [When(@"advancing per group count in round (.*) is set to (.*)")]
         public void WhenAdvancingPerGroupCountInRoundIsSetTo(int roundIndex, int playersPerGroupCount)
         {
@@ -145,14 +137,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             RoundBase round = createdRounds[roundIndex];
 
             round.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
-        }
-
-        [Then(@"best of in round (.*) should be (.*)")]
-        public void BestOfInRoundIsSetTo(int roundIndex, int bestOf)
-        {
-            RoundBase round = createdRounds[roundIndex];
-
-            round.BestOf.Should().Be(bestOf);
         }
 
         [Then(@"advancing per group count in round (.*) should be (.*)")]

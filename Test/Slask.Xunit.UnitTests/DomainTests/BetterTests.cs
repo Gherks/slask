@@ -103,7 +103,7 @@ namespace Slask.Xunit.UnitTests.DomainTests
             Better better = GivenABetterIsCreated();
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
-            int winningScore = (int)Math.Ceiling(bracketRound.BestOf / 2.0);
+            int winningScore = (int)Math.Ceiling(match.BestOf / 2.0);
             match.Player1.IncreaseScore(winningScore);
 
             better.PlaceMatchBet(match, match.Player1);

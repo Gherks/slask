@@ -24,7 +24,6 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
             round.Id.Should().NotBeEmpty();
             round.Name.Should().Be("Round A");
             round.PlayersPerGroupCount.Should().Be(4);
-            round.BestOf.Should().Be(3);
             round.AdvancingPerGroupCount.Should().Be(2);
             round.Groups.Should().HaveCount(1);
             round.TournamentId.Should().Be(tournament.Id);

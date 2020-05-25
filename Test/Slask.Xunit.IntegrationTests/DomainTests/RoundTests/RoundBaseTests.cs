@@ -85,41 +85,6 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests
         }
 
         [Fact]
-        public void CannotSetRoundBestOfToZero()
-        {
-            RoundRobinRound round = tournament.AddRoundRobinRound();
-
-            bool setResult = round.SetBestOf(0);
-
-            setResult.Should().BeFalse();
-            round.BestOf.Should().Be(3);
-        }
-
-        [Fact]
-        public void CannotSetRoundBestOfToEvenValue()
-        {
-            RoundRobinRound round = tournament.AddRoundRobinRound();
-            round.SetBestOf(1);
-
-            for (int bestOf = 1; bestOf < 32; ++bestOf)
-            {
-                bool setResult = round.SetBestOf(bestOf);
-
-                bool bestOfIsEven = bestOf % 2 == 0;
-                if (bestOfIsEven)
-                {
-                    setResult.Should().BeFalse();
-                    round.BestOf.Should().Be(bestOf - 1);
-                }
-                else
-                {
-                    setResult.Should().BeTrue();
-                    round.BestOf.Should().Be(bestOf);
-                }
-            }
-        }
-
-        [Fact]
         public void FetchingPreviousRoundFromFirstRoundYieldsNull()
         {
             RoundBase round = tournament.AddRoundRobinRound();

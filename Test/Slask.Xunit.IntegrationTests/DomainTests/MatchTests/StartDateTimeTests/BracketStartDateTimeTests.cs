@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Slask.Xunit.UnitTests.DomainTests.MatchTests.StartDateTimeTests
+namespace Slask.Xunit.IntegrationTests.DomainTests.MatchTests.StartDateTimeTests
 {
     public class BracketStartDateTimeTests
     {

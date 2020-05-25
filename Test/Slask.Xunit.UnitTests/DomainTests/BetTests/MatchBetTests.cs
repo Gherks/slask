@@ -99,7 +99,7 @@ namespace Slask.Xunit.UnitTests.DomainTests.BetTests
         {
             SystemTimeMocker.SetOneSecondAfter(firstMatch.StartDateTime);
 
-            int winningScore = (int)Math.Ceiling(round.BestOf / 2.0);
+            int winningScore = (int)Math.Ceiling(firstMatch.BestOf / 2.0);
             firstMatch.Player1.IncreaseScore(winningScore);
 
             MatchBet matchBet = MatchBet.Create(better, firstMatch, firstMatch.Player1);

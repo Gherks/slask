@@ -282,10 +282,10 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
         protected bool PlayAvailableMatches(GroupBase group)
         {
-            int winningScore = (int)Math.Ceiling(group.Round.BestOf / 2.0);
-
             foreach (Match match in group.Matches)
             {
+                int winningScore = (int)Math.Ceiling(match.BestOf / 2.0);
+
                 bool matchShouldHaveStarted = match.StartDateTime < SystemTime.Now;
                 bool matchIsNotFinished = match.GetPlayState() != PlayState.Finished;
 

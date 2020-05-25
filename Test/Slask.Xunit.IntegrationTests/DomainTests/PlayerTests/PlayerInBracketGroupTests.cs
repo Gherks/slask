@@ -23,7 +23,6 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.PlayerTests
         {
             tournament = Tournament.Create("GSL 2019");
             round = tournament.AddBracketRound();
-            round.SetBestOf(5);
             round.SetAdvancingPerGroupCount(1);
             round.SetPlayersPerGroupCount(4);
 
@@ -34,6 +33,8 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.PlayerTests
 
             group = round.Groups.First() as BracketGroup;
             match = group.Matches.First();
+            match.SetBestOf(5);
+
             player = match.Player1;
         }
 
