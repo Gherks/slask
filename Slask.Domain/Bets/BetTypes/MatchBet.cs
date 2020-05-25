@@ -1,7 +1,7 @@
 ﻿using Slask.Domain.Utilities;
 using System;
 
-namespace Slask.Domain.Bets
+namespace Slask.Domain.Bets.BetTypes
 {
     public class MatchBet : BetBase
     {
