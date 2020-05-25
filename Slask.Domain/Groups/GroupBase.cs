@@ -1,4 +1,4 @@
-using Slask.Domain.Bets;
+using Slask.Domain.Bets.BetTypes;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
