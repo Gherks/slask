@@ -9,7 +9,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace Slask.Xunit.UnitTests.DomainTests
+namespace Slask.Xunit.IntegrationTests.DomainTests
 {
     public class BetterTests
     {
@@ -33,7 +33,7 @@ namespace Slask.Xunit.UnitTests.DomainTests
         [Fact]
         public void CanCreateBetter()
         {
-            Better better = GivenABetterIsCreated();
+            Better better = tournament.AddBetter(user);
 
             better.Id.Should().NotBeEmpty();
             better.User.Should().NotBeNull();
@@ -61,7 +61,7 @@ namespace Slask.Xunit.UnitTests.DomainTests
         [Fact]
         public void CanPlaceMatchBetOnMatch()
         {
-            Better better = GivenABetterIsCreated();
+            Better better = tournament.AddBetter(user);
 
             better.PlaceMatchBet(match, match.Player1);
 
@@ -74,7 +74,7 @@ namespace Slask.Xunit.UnitTests.DomainTests
         [Fact]
         public void CannotPlaceMatchBetOnMatchThatIsNotReady()
         {
-            Better better = GivenABetterIsCreated();
+            Better better = tournament.AddBetter(user);
             bracketRound.SetPlayersPerGroupCount(3);
             bracketRound.RegisterPlayerReference("Taeja");
 
@@ -89,7 +89,7 @@ namespace Slask.Xunit.UnitTests.DomainTests
         [Fact]
         public void CannotPlaceMatchBetOnMatchThatOngoing()
         {
-            Better better = GivenABetterIsCreated();
+            Better better = tournament.AddBetter(user);
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
             better.PlaceMatchBet(match, match.Player1);
@@ -100,7 +100,7 @@ namespace Slask.Xunit.UnitTests.DomainTests
         [Fact]
         public void CannotPlaceMatchBetOnMatchThatIsFinished()
         {
-            Better better = GivenABetterIsCreated();
+            Better better = tournament.AddBetter(user);
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
             int winningScore = (int)Math.Ceiling(match.BestOf / 2.0);
@@ -114,7 +114,7 @@ namespace Slask.Xunit.UnitTests.DomainTests
         [Fact]
         public void BettingOnMatchThatHasAlreadyBeenBettedOnCreatesANewBet()
         {
-            Better better = GivenABetterIsCreated();
+            Better better = tournament.AddBetter(user);
 
             better.PlaceMatchBet(match, match.Player1);
             better.PlaceMatchBet(match, match.Player2);
@@ -128,7 +128,7 @@ namespace Slask.Xunit.UnitTests.DomainTests
         [Fact]
         public void CannotCreateNewBetOnMatchThatHasBegun()
         {
-            Better better = GivenABetterIsCreated();
+            Better better = tournament.AddBetter(user);
 
             better.PlaceMatchBet(match, match.Player1);
 
@@ -145,7 +145,7 @@ namespace Slask.Xunit.UnitTests.DomainTests
         [Fact]
         public void MatchBetIsRemovedWhenMatchLayoutIsChangedInOneMatch()
         {
-            Better better = GivenABetterIsCreated();
+            Better better = tournament.AddBetter(user);
 
             better.PlaceMatchBet(match, match.Player1);
 
@@ -157,7 +157,7 @@ namespace Slask.Xunit.UnitTests.DomainTests
         [Fact]
         public void MatchBetIsRemovedWhenMatchLayoutIsChangedInTwoMatches()
         {
-            Better better = GivenABetterIsCreated();
+            Better better = tournament.AddBetter(user);
 
             bracketRound.SetPlayersPerGroupCount(4);
             bracketRound.RegisterPlayerReference("Taeja");
@@ -173,11 +173,6 @@ namespace Slask.Xunit.UnitTests.DomainTests
             PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player1);
 
             better.Bets.Should().BeEmpty();
-        }
-
-        private Better GivenABetterIsCreated()
-        {
-            return tournament.AddBetter(user);
         }
 
         private void ValidateMatchBet(MatchBet matchBet, Better correctBetter, Match correctMatch, Player correctPlayer)
