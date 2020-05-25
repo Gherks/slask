@@ -5,8 +5,8 @@
 Scenario: Cannot reconfigure best of in dual tournament round when it has started
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type      | Best of | Advancing per group count | Players per group count |
-			| Dual tournament | 3       | 1                         | 4                       |
+			| Round type      | Advancing per group count | Players per group count |
+			| Dual tournament | 1                         | 4                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |

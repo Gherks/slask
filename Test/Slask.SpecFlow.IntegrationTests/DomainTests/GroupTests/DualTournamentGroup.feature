@@ -5,15 +5,15 @@
 Scenario: Adding group to dual tournament round creates bracket group
 	Given a tournament named "GSL 2019" has been created
 	When tournament 0 adds rounds
-		| Round type      | Best of | Advancing per group count | Players per group count |
-		| Dual tournament | 3       | 2                         | 4                       |
+		| Round type      | Advancing per group count | Players per group count |
+		| Dual tournament | 2                         | 4                       |
 	Then group 0 should be valid of type "Dual tournament"
 
 Scenario: Start time in matches in dual tournament group is spaced with one hour upon creation
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type      | Best of | Advancing per group count | Players per group count |
-			| Dual tournament | 3       | 2                         | 4                       |
+			| Round type      | Advancing per group count | Players per group count |
+			| Dual tournament | 2                         | 4                       |
 	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
 	Then minutes between matches in group 0 should be 60
 
@@ -27,8 +27,8 @@ Scenario: Creates proper dual tournament layout upon group creation
 	#
 	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
 		And tournament 0 adds rounds
-			| Round type      | Best of | Advancing per group count | Players per group count |
-			| Dual tournament | 3       | 2                         | 4                       |
+			| Round type      | Advancing per group count | Players per group count |
+			| Dual tournament | 2                         | 4                       |
 	When players "First, Second, Third, Fourth" is registered to round 0
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
@@ -45,9 +45,9 @@ Scenario: Dual tournament progression goes as expected
 	#
 	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
 		And tournament 0 adds rounds
-			| Round type      | Best of | Advancing per group count | Players per group count |
-			| Dual tournament | 3       | 2                         | 4                       |
-			| Bracket         | 3       | 1                         | 2                       |
+			| Round type      | Advancing per group count | Players per group count |
+			| Dual tournament | 2                         | 4                       |
+			| Bracket         | 1                         | 2                       |
 		And players "First, Second, Third, Fourth" is registered to round 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |

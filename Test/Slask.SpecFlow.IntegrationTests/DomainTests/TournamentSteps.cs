@@ -32,7 +32,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
             foreach (TableRow row in table.Rows)
             {
-                ParseRoundTable(row, out string type, out string name, out int bestOf, out int advancingCount, out int playersPerGroupCount);
+                ParseRoundTable(row, out string type, out string name, out int advancingCount, out int playersPerGroupCount);
 
                 if (type.Length > 0)
                 {
@@ -60,7 +60,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
                     }
 
                     round.RenameTo(name);
-                    round.SetBestOf(bestOf);
                     round.SetAdvancingPerGroupCount(advancingCount);
                     round.SetPlayersPerGroupCount(playersPerGroupCount);
 
@@ -211,11 +210,10 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             tournament.GetPlayState().Should().Be(playState);
         }
 
-        protected static void ParseRoundTable(TableRow row, out string typeName, out string name, out int bestOf, out int advancingCount, out int playersPerGroupCount)
+        protected static void ParseRoundTable(TableRow row, out string typeName, out string name, out int advancingCount, out int playersPerGroupCount)
         {
             typeName = "";
             name = "";
-            bestOf = 1;
             advancingCount = 1;
             playersPerGroupCount = 2;
 
@@ -227,11 +225,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             if (row.ContainsKey("Round name"))
             {
                 name = row["Round name"];
-            }
-
-            if (row.ContainsKey("Best of"))
-            {
-                int.TryParse(row["Best of"], out bestOf);
             }
 
             if (row.ContainsKey("Advancing per group count"))

@@ -87,7 +87,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
-                ParseRoundTable(table.Rows[index], out string roundType, out string name, out int bestOf, out int advancingCount, out int playersPerGroupCount);
+                ParseRoundTable(table.Rows[index], out string roundType, out string name, out int advancingCount, out int playersPerGroupCount);
 
                 RoundBase round = tournament.Rounds[index];
 
@@ -104,7 +104,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
                     roundType.Should().Be("Round robin");
                 }
 
-                CheckRoundValidity(round, name, bestOf, advancingCount, playersPerGroupCount);
+                CheckRoundValidity(round, name, advancingCount, playersPerGroupCount);
             }
         }
 
@@ -120,7 +120,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
-                ParseRoundTable(table.Rows[index], out string roundType, out string name, out int bestOf, out int advancingCount, out int playersPerGroupCount);
+                ParseRoundTable(table.Rows[index], out string roundType, out string name, out int advancingCount, out int playersPerGroupCount);
 
                 if (round is BracketRound bracketRound)
                 {
@@ -135,7 +135,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
                     roundType.Should().Be("Round robin");
                 }
 
-                CheckRoundValidity(round, name, bestOf, advancingCount, playersPerGroupCount);
+                CheckRoundValidity(round, name, advancingCount, playersPerGroupCount);
             }
         }
 
@@ -188,7 +188,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
                 playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
             }
         }
-        protected static void CheckRoundValidity(RoundBase round, string correctName, int bestOf, int advancingCount, int playersPerGroupCount)
+        protected static void CheckRoundValidity(RoundBase round, string correctName, int advancingCount, int playersPerGroupCount)
         {
             if (round == null)
             {
@@ -199,7 +199,6 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests
             round.Id.Should().NotBeEmpty();
             round.Name.Should().Be(correctName);
             round.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
-            round.BestOf.Should().Be(bestOf);
             round.AdvancingPerGroupCount.Should().Be(advancingCount);
             round.Groups.Should().HaveCount(1);
             round.TournamentId.Should().NotBeEmpty();
