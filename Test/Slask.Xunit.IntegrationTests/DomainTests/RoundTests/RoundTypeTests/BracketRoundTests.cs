@@ -43,7 +43,7 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
         }
 
         [Fact]
-        public void CanChangeGroupSize()
+        public void CannotChangePlayersPerGroupSize()
         {
             BracketRound round = tournament.AddBracketRound();
 
@@ -54,6 +54,22 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.RoundTests.RoundTypeTests
 
             round.Groups.First().Matches.Should().HaveCount(7);
             round.PlayersPerGroupCount.Should().Be(8);
+        }
+
+        [Fact]
+        public void CannotSetPlayersPerGroupSizeToAnythingLessThanTwo()
+        {
+            BracketRound round = tournament.AddBracketRound();
+
+            round.Groups.First().Matches.Should().HaveCount(1);
+            round.PlayersPerGroupCount.Should().Be(2);
+
+            round.SetPlayersPerGroupCount(1);
+            round.SetPlayersPerGroupCount(0);
+            round.SetPlayersPerGroupCount(-1);
+
+            round.Groups.First().Matches.Should().HaveCount(1);
+            round.PlayersPerGroupCount.Should().Be(2);
         }
     }
 }
