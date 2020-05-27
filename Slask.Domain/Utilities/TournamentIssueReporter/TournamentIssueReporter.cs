@@ -8,10 +8,10 @@ namespace Slask.Domain.Utilities
     {
         public TournamentIssueReporter()
         {
-            Issues = new List<TournamentIssueInterface>();
+            Issues = new List<TournamentIssue>();
         }
 
-        public List<TournamentIssueInterface> Issues { get; private set; }
+        public List<TournamentIssue> Issues { get; private set; }
 
         public void Report(Tournament tournament, TournamentIssues issue)
         {
