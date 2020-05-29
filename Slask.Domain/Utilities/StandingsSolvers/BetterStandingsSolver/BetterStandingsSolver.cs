@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Slask.Domain.Utilities
+namespace Slask.Domain.Utilities.StandingsSolvers
 {
     public static class BetterStandingsSolver
     {
@@ -33,7 +33,7 @@ namespace Slask.Domain.Utilities
         {
             foreach (BetterStandingsEntry entry in betterStandings)
             {
-                foreach (BetInterface bet in entry.Better.Bets)
+                foreach (BetInterface bet in entry.Object.Bets)
                 {
                     if (bet.IsWon())
                     {

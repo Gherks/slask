@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Slask.Domain.Utilities
+namespace Slask.Domain.Utilities.StandingsSolvers
 {
     public static class PlayerStandingsSolver
     {
@@ -13,7 +13,7 @@ namespace Slask.Domain.Utilities
 
             AggregateWinsForPlayerStandingEntries(playerStandings, group);
 
-            return playerStandings.OrderByDescending(player => player.Wins).ToList();
+            return playerStandings.OrderByDescending(player => player.Points).ToList();
         }
 
         private static List<PlayerStandingEntry> CreateStandingsList(GroupBase group)
@@ -39,7 +39,7 @@ namespace Slask.Domain.Utilities
                     continue;
                 }
 
-                PlayerStandingEntry playerStandingEntry = playerStandings.Find(player => player.PlayerReference.Name == winner.PlayerReference.Name);
+                PlayerStandingEntry playerStandingEntry = playerStandings.Find(player => player.Object.Name == winner.PlayerReference.Name);
 
                 if (playerStandingEntry == null)
                 {
@@ -47,7 +47,7 @@ namespace Slask.Domain.Utilities
                     throw new Exception("Failed to find player reference when calculating player standings for some reason");
                 }
 
-                playerStandingEntry.AddWin();
+                playerStandingEntry.AddPoint();
             }
         }
     }

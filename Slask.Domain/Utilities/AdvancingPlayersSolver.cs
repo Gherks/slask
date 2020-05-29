@@ -1,5 +1,6 @@
 ﻿using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
+using Slask.Domain.Utilities.StandingsSolvers;
 using System.Collections.Generic;
 
 namespace Slask.Domain.Utilities
@@ -38,7 +39,7 @@ namespace Slask.Domain.Utilities
 
                 foreach (PlayerStandingEntry entry in playerStandings)
                 {
-                    advancingPlayers.Add(entry.PlayerReference);
+                    advancingPlayers.Add(entry.Object);
                 }
 
                 return advancingPlayers;

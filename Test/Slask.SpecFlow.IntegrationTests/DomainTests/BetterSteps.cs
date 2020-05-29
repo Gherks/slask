@@ -3,7 +3,7 @@ using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
-using Slask.Domain.Utilities;
+using Slask.Domain.Utilities.StandingsSolvers;
 using Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests;
 using System;
 using System.Collections.Generic;
@@ -60,7 +60,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             {
                 ParseBetterStandings(table.Rows[index], out string betterName, out int points);
 
-                betterStandings[index].Better.User.Name.Should().Be(betterName);
+                betterStandings[index].Object.User.Name.Should().Be(betterName);
                 betterStandings[index].Points.Should().Be(points);
             }
         }

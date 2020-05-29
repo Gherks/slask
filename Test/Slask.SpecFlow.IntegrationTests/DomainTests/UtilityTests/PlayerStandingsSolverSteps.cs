@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain.Groups;
-using Slask.Domain.Utilities;
+using Slask.Domain.Utilities.StandingsSolvers;
 using Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
@@ -28,7 +28,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.UtilityTests
 
             for (int index = 0; index < playerStandings.Count; ++index)
             {
-                playerStandings[index].PlayerReference.Name.Should().Be(expectedPlayerNameOrder[index]);
+                playerStandings[index].Object.Name.Should().Be(expectedPlayerNameOrder[index]);
             }
         }
     }

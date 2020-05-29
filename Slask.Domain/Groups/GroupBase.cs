@@ -2,6 +2,7 @@ using Slask.Domain.Bets.BetTypes;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
+using Slask.Domain.Utilities.StandingsSolvers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -132,13 +133,13 @@ namespace Slask.Domain.Groups
             PlayerStandingEntry aboveThresholdPlayer = playerStandings[Round.AdvancingPerGroupCount - 1];
             PlayerStandingEntry belowThresholdPlayer = playerStandings[Round.AdvancingPerGroupCount];
 
-            bool playersPartOfProblematicTie = aboveThresholdPlayer.Wins == belowThresholdPlayer.Wins;
+            bool playersPartOfProblematicTie = aboveThresholdPlayer.Points == belowThresholdPlayer.Points;
 
             if (playersPartOfProblematicTie)
             {
                 foreach (PlayerStandingEntry entry in playerStandings)
                 {
-                    bool isPartOfTie = entry.Wins == aboveThresholdPlayer.Wins;
+                    bool isPartOfTie = entry.Points == aboveThresholdPlayer.Points;
 
                     if (isPartOfTie)
                     {
@@ -178,7 +179,7 @@ namespace Slask.Domain.Groups
             if (hasPlayersChosenForSolvingTie)
             {
                 List<PlayerStandingEntry> playerStandings = FindProblematiclyTyingPlayers();
-                int tyingScore = playerStandings.First().Wins;
+                int tyingScore = playerStandings.First().Points;
 
                 playerStandings = PlayerStandingsSolver.FetchFrom(this);
 
@@ -186,7 +187,7 @@ namespace Slask.Domain.Groups
 
                 foreach (PlayerStandingEntry entry in playerStandings)
                 {
-                    if (entry.Wins > tyingScore)
+                    if (entry.Points > tyingScore)
                     {
                         clearWinners += 1;
                     }
@@ -246,7 +247,7 @@ namespace Slask.Domain.Groups
 
             foreach (PlayerStandingEntry entry in tyingPlayers)
             {
-                if (entry.PlayerReference.Name == playerName)
+                if (entry.Object.Name == playerName)
                 {
                     bool haveNotChosePlayerAlready = !ChoosenTyingPlayerEntries.Contains(entry);
 
