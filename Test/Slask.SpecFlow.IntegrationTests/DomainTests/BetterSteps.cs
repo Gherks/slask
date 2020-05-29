@@ -3,6 +3,7 @@ using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
+using Slask.Domain.Utilities;
 using Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests;
 using System;
 using System.Collections.Generic;
@@ -51,7 +52,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
         {
             Tournament tournament = createdTournaments[tournamentIndex];
 
-            List<BetterEntry> betterStandings = BetterStandingsSolver.Solve(tournament);
+            List<BetterStandingsEntry> betterStandings = BetterStandingsSolver.FetchFrom(tournament);
 
             betterStandings.Should().HaveCount(table.Rows.Count);
 
@@ -59,25 +60,8 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             {
                 ParseBetterStandings(table.Rows[index], out string betterName, out int points);
 
-                betterStandings[index].Name.Should().Be(betterName);
+                betterStandings[index].Better.User.Name.Should().Be(betterName);
                 betterStandings[index].Points.Should().Be(points);
-            }
-        }
-
-        [Then(@"solving player standings in tournament (.*) is ordered from first to last ""(.*)""")]
-        public void ThenSolvingPlayerStandingsIsOrderedFromFirstToLast(int tournamentIndex, string commaSeparatedBetterNames)
-        {
-            List<string> betterNames = StringUtility.ToStringList(commaSeparatedBetterNames, ",");
-
-            Tournament tournament = createdTournaments[tournamentIndex];
-
-            List<BetterEntry> betterStandings = BetterStandingsSolver.Solve(tournament);
-
-            betterStandings.Should().HaveCount(betterNames.Count);
-
-            for(int index = 0; index < betterStandings.Count; ++index)
-            {
-                betteStandings[index].Name.Should().Be(betterNames[index]);
             }
         }
 
