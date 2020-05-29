@@ -7,5 +7,7 @@ namespace Slask.Domain.Bets
         Better Better { get; }
         Guid BetterId { get; }
         Guid Id { get; }
+
+        public bool IsWon();
     }
 }

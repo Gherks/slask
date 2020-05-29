@@ -72,7 +72,7 @@ namespace Slask.Xunit.IntegrationTests.DomainTests.MatchTests.StartDateTimeTests
             return dualTournamentRound.Groups.First() as DualTournamentGroup;
         }
 
-        private void ConfirmIssueIsAsExpected(TournamentIssueInterface issue, int roundIndex, int groupIndex, int matchIndex)
+        private void ConfirmIssueIsAsExpected(TournamentIssue issue, int roundIndex, int groupIndex, int matchIndex)
         {
             issue.Round.Should().Be(roundIndex);
             issue.Group.Should().Be(groupIndex);

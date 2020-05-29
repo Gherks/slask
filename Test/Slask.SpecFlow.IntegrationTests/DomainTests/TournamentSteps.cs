@@ -123,6 +123,54 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             }
         }
 
+        [Given(@"groups within tournament is played out")]
+        [When(@"groups within tournament is played out")]
+        public void GivenGroupsWithinTournamentIsPlayedOut(Table table)
+        {
+            if (table == null)
+            {
+                throw new ArgumentNullException(nameof(table));
+            }
+
+            foreach (TableRow row in table.Rows)
+            {
+                ParseTargetGroupToPlay(row, out int tournamentIndex, out int roundIndex, out int groupIndex);
+
+                bool tournamentIndexIsValid = createdTournaments.Count > tournamentIndex;
+                bool roundIndexIsValid = createdTournaments[tournamentIndex].Rounds.Count > roundIndex;
+                bool groupIndexIsValid = createdTournaments[tournamentIndex].Rounds[roundIndex].Groups.Count > groupIndex;
+
+                if (!tournamentIndexIsValid || !roundIndexIsValid || !groupIndexIsValid)
+                {
+                    throw new IndexOutOfRangeException("Tournament, round, or group with given index does not exist");
+                }
+
+                SystemTimeMocker.Reset();
+                Tournament tournament = createdTournaments[tournamentIndex];
+                RoundBase round = tournament.Rounds[roundIndex];
+                GroupBase group = round.Groups[groupIndex];
+
+                while (group.GetPlayState() != PlayState.Finished)
+                {
+                    foreach (Match match in group.Matches)
+                    {
+                        if (match.IsReady() && match.GetPlayState() == PlayState.NotBegun)
+                        {
+                            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+                            break;
+                        }
+                    }
+
+                    bool playedMatchesSuccessfully = PlayAvailableMatches(group);
+
+                    if (!playedMatchesSuccessfully)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
         [Given(@"groups within tournament is played out and betted on")]
         [When(@"groups within tournament is played out and betted on")]
         public void GivenGroupsWithinTournamentIsPlayedOutAndBettedOn(Table table)
@@ -134,7 +182,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
             foreach (TableRow row in table.Rows)
             {
-                ParseTargetGroupToPlaceBets(row, out int tournamentIndex, out int roundIndex, out int groupIndex);
+                ParseTargetGroupToPlay(row, out int tournamentIndex, out int roundIndex, out int groupIndex);
 
                 bool tournamentIndexIsValid = createdTournaments.Count > tournamentIndex;
                 bool roundIndexIsValid = createdTournaments[tournamentIndex].Rounds.Count > roundIndex;
@@ -258,7 +306,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             return "";
         }
 
-        protected static void ParseTargetGroupToPlaceBets(TableRow row, out int tournamentIndex, out int roundIndex, out int groupIndex)
+        protected static void ParseTargetGroupToPlay(TableRow row, out int tournamentIndex, out int roundIndex, out int groupIndex)
         {
             tournamentIndex = 0;
             roundIndex = 0;

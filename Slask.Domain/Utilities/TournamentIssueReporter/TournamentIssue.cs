@@ -1,6 +1,6 @@
 ﻿namespace Slask.Domain.Utilities
 {
-    public class TournamentIssue : TournamentIssueInterface
+    public class TournamentIssue
     {
         private TournamentIssue()
         {
