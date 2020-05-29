@@ -165,7 +165,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
             group.Round.Should().NotBeNull();
         }
 
-        protected static void ParseBracketGroupMatchSetup(TableRow row, out int matchIndex, out string player1Name, out string player2Name)
+        protected void ParseBracketGroupMatchSetup(TableRow row, out int matchIndex, out string player1Name, out string player2Name)
         {
             matchIndex = -1;
             player1Name = "";
