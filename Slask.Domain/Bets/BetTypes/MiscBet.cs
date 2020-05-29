@@ -20,5 +20,10 @@
                 Player = player
             };
         }
+
+        public override bool IsWon()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -14,6 +14,21 @@ namespace Slask.Domain.Bets.BetTypes
         public Guid PlayerId { get; private set; }
         public Player Player { get; private set; }
 
+        public override bool IsWon()
+        {
+            bool anyParameterIsInvalid = !ParametersAreValid(Better, Match, Player);
+
+            if (anyParameterIsInvalid)
+            {
+                return false;
+            }
+
+            Player winningPlayer = Match.GetWinningPlayer();
+
+            bool betIsWon = Player == winningPlayer;
+            return betIsWon;
+        }
+
         public static MatchBet Create(Better better, Match match, Player player)
         {
             bool anyParameterIsInvalid = !ParametersAreValid(better, match, player);
