@@ -1,4 +1,4 @@
-﻿namespace Slask.Domain.Utilities
+﻿namespace Slask.Domain.Utilities.StandingsSolvers
 {
     public interface StandingsEntryInterface<Type>
     {
