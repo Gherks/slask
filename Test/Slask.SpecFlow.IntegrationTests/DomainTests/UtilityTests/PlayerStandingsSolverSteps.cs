@@ -2,7 +2,6 @@
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
-using Slask.Domain.Utilities;
 using Slask.Domain.Utilities.StandingsSolvers;
 using Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests;
 using System.Collections.Generic;
