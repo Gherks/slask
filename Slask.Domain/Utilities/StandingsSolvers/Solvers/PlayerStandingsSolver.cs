@@ -1,34 +1,24 @@
 ﻿using Slask.Domain.Groups;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Slask.Domain.Utilities.StandingsSolvers
 {
-    public static class PlayerStandingsSolver
+    public class PlayerStandingsSolver : StandingsSolverBase<GroupBase, PlayerReference>
     {
-        public static List<PlayerStandingEntry> FetchFrom(GroupBase group)
+        protected override List<StandingsEntry<PlayerReference>> CreateStandingsList(GroupBase group)
         {
-            List<PlayerStandingEntry> playerStandings = CreateStandingsList(group);
-
-            AggregateWinsForPlayerStandingEntries(playerStandings, group);
-
-            return playerStandings.OrderByDescending(player => player.Points).ToList();
-        }
-
-        private static List<PlayerStandingEntry> CreateStandingsList(GroupBase group)
-        {
-            List<PlayerStandingEntry> playerStandings = new List<PlayerStandingEntry>();
+            List<StandingsEntry<PlayerReference>> playerStandings = new List<StandingsEntry<PlayerReference>>();
 
             foreach (PlayerReference participant in group.PlayerReferences)
             {
-                playerStandings.Add(PlayerStandingEntry.Create(participant));
+                playerStandings.Add(StandingsEntry<PlayerReference>.Create(participant));
             }
 
             return playerStandings;
         }
 
-        private static void AggregateWinsForPlayerStandingEntries(List<PlayerStandingEntry> playerStandings, GroupBase group)
+        protected override void AggregatePointsForStandingEntries(GroupBase group, List<StandingsEntry<PlayerReference>> playerStandings)
         {
             foreach (Match match in group.Matches)
             {
@@ -39,7 +29,7 @@ namespace Slask.Domain.Utilities.StandingsSolvers
                     continue;
                 }
 
-                PlayerStandingEntry playerStandingEntry = playerStandings.Find(player => player.Object.Name == winner.PlayerReference.Name);
+                StandingsEntry<PlayerReference> playerStandingEntry = playerStandings.Find(player => player.Object.Name == winner.PlayerReference.Name);
 
                 if (playerStandingEntry == null)
                 {
