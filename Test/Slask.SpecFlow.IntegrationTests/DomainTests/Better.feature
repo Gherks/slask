@@ -2,7 +2,7 @@
 	Does a bunch of tests on Betters
 
 @BetterTag
-Scenario: Can deteremine correct better standings
+Scenario: Can fetch correct better standings from tournament
 	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito, Kimmieboi" added to it
 		And tournament 0 adds rounds
 			| Round type | Advancing per group count | Players per group count |

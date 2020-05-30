@@ -1,5 +1,6 @@
 ﻿using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
+using Slask.Domain.Utilities.StandingsSolvers;
 using System.Collections.Generic;
 
 namespace Slask.Domain.Utilities
@@ -25,7 +26,8 @@ namespace Slask.Domain.Utilities
         {
             if (group.GetPlayState() == PlayState.Finished)
             {
-                List<PlayerStandingEntry> playerStandings = PlayerStandingsSolver.FetchFrom(group);
+                PlayerStandingsSolver playerStandingsSolver = new PlayerStandingsSolver();
+                List<StandingsEntry<PlayerReference>> playerStandings = playerStandingsSolver.FetchFrom(group);
                 playerStandings = FilterAdvancingPlayers(group, playerStandings);
 
                 if (group.HasProblematicTie())
@@ -36,9 +38,9 @@ namespace Slask.Domain.Utilities
 
                 List<PlayerReference> advancingPlayers = new List<PlayerReference>();
 
-                foreach (PlayerStandingEntry entry in playerStandings)
+                foreach (StandingsEntry<PlayerReference> entry in playerStandings)
                 {
-                    advancingPlayers.Add(entry.PlayerReference);
+                    advancingPlayers.Add(entry.Object);
                 }
 
                 return advancingPlayers;
@@ -47,9 +49,9 @@ namespace Slask.Domain.Utilities
             return new List<PlayerReference>();
         }
 
-        private static List<PlayerStandingEntry> FilterAdvancingPlayers(GroupBase group, List<PlayerStandingEntry> playerStandings)
+        private static List<StandingsEntry<PlayerReference>> FilterAdvancingPlayers(GroupBase group, List<StandingsEntry<PlayerReference>> playerStandings)
         {
-            List<PlayerStandingEntry> nonFilteredPlayers = new List<PlayerStandingEntry>();
+            List<StandingsEntry<PlayerReference>> nonFilteredPlayers = new List<StandingsEntry<PlayerReference>>();
 
             for (int index = 0; index < group.Round.AdvancingPerGroupCount; ++index)
             {
@@ -59,11 +61,11 @@ namespace Slask.Domain.Utilities
             return nonFilteredPlayers;
         }
 
-        private static List<PlayerStandingEntry> FilterTyingPlayers(GroupBase group, List<PlayerStandingEntry> playerStandings)
+        private static List<StandingsEntry<PlayerReference>> FilterTyingPlayers(GroupBase group, List<StandingsEntry<PlayerReference>> playerStandings)
         {
-            List<PlayerStandingEntry> nonFilteredPlayers = new List<PlayerStandingEntry>();
+            List<StandingsEntry<PlayerReference>> nonFilteredPlayers = new List<StandingsEntry<PlayerReference>>();
 
-            foreach (PlayerStandingEntry entry in group.FindProblematiclyTyingPlayers())
+            foreach (StandingsEntry<PlayerReference> entry in group.FindProblematiclyTyingPlayers())
             {
                 nonFilteredPlayers.Remove(entry);
             }

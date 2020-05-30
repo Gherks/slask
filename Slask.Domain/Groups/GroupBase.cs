@@ -2,6 +2,7 @@ using Slask.Domain.Bets.BetTypes;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
+using Slask.Domain.Utilities.StandingsSolvers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,7 +16,7 @@ namespace Slask.Domain.Groups
         {
             Matches = new List<Match>();
             PlayerReferences = new List<PlayerReference>();
-            ChoosenTyingPlayerEntries = new List<PlayerStandingEntry>();
+            ChoosenTyingPlayerEntries = new List<StandingsEntry<PlayerReference>>();
         }
 
         public Guid Id { get; protected set; }
@@ -28,7 +29,7 @@ namespace Slask.Domain.Groups
         public List<PlayerReference> PlayerReferences { get; private set; }
 
         [NotMapped]
-        public List<PlayerStandingEntry> ChoosenTyingPlayerEntries { get; private set; }
+        public List<StandingsEntry<PlayerReference>> ChoosenTyingPlayerEntries { get; private set; }
 
         public bool AddPlayerReferences(List<PlayerReference> playerReferences)
         {
@@ -117,28 +118,29 @@ namespace Slask.Domain.Groups
             return FindProblematiclyTyingPlayers().Count > 0;
         }
 
-        public List<PlayerStandingEntry> FindProblematiclyTyingPlayers()
+        public List<StandingsEntry<PlayerReference>> FindProblematiclyTyingPlayers()
         {
             bool notAllMatchesHasBeenPlayed = !AllMatchesPlayStatesAre(PlayState.Finished);
 
             if (notAllMatchesHasBeenPlayed)
             {
-                return new List<PlayerStandingEntry>();
+                return new List<StandingsEntry<PlayerReference>>();
             }
 
-            List<PlayerStandingEntry> problematicPlayers = new List<PlayerStandingEntry>();
-            List<PlayerStandingEntry> playerStandings = PlayerStandingsSolver.FetchFrom(this);
+            PlayerStandingsSolver playerStandingsSolver = new PlayerStandingsSolver();
+            List<StandingsEntry<PlayerReference>> playerStandings = playerStandingsSolver.FetchFrom(this);
+            List<StandingsEntry<PlayerReference>> problematicPlayers = new List<StandingsEntry<PlayerReference>>();
 
-            PlayerStandingEntry aboveThresholdPlayer = playerStandings[Round.AdvancingPerGroupCount - 1];
-            PlayerStandingEntry belowThresholdPlayer = playerStandings[Round.AdvancingPerGroupCount];
+            StandingsEntry<PlayerReference> aboveThresholdPlayer = playerStandings[Round.AdvancingPerGroupCount - 1];
+            StandingsEntry<PlayerReference> belowThresholdPlayer = playerStandings[Round.AdvancingPerGroupCount];
 
-            bool playersPartOfProblematicTie = aboveThresholdPlayer.Wins == belowThresholdPlayer.Wins;
+            bool playersPartOfProblematicTie = aboveThresholdPlayer.Points == belowThresholdPlayer.Points;
 
             if (playersPartOfProblematicTie)
             {
-                foreach (PlayerStandingEntry entry in playerStandings)
+                foreach (StandingsEntry<PlayerReference> entry in playerStandings)
                 {
-                    bool isPartOfTie = entry.Wins == aboveThresholdPlayer.Wins;
+                    bool isPartOfTie = entry.Points == aboveThresholdPlayer.Points;
 
                     if (isPartOfTie)
                     {
@@ -152,7 +154,7 @@ namespace Slask.Domain.Groups
 
         public bool SolveTieByChoosing(string playerName)
         {
-            List<PlayerStandingEntry> tyingPlayers = FindProblematiclyTyingPlayers();
+            List<StandingsEntry<PlayerReference>> tyingPlayers = FindProblematiclyTyingPlayers();
             bool hasTyingPlayers = tyingPlayers.Count > 0;
 
             if (hasTyingPlayers)
@@ -177,16 +179,17 @@ namespace Slask.Domain.Groups
 
             if (hasPlayersChosenForSolvingTie)
             {
-                List<PlayerStandingEntry> playerStandings = FindProblematiclyTyingPlayers();
-                int tyingScore = playerStandings.First().Wins;
+                List<StandingsEntry<PlayerReference>> playerStandings = FindProblematiclyTyingPlayers();
+                int tyingScore = playerStandings.First().Points;
 
-                playerStandings = PlayerStandingsSolver.FetchFrom(this);
+                PlayerStandingsSolver playerStandingsSolver = new PlayerStandingsSolver();
+                playerStandings = playerStandingsSolver.FetchFrom(this);
 
                 int clearWinners = 0;
 
-                foreach (PlayerStandingEntry entry in playerStandings)
+                foreach (StandingsEntry<PlayerReference> entry in playerStandings)
                 {
-                    if (entry.Wins > tyingScore)
+                    if (entry.Points > tyingScore)
                     {
                         clearWinners += 1;
                     }
@@ -242,11 +245,11 @@ namespace Slask.Domain.Groups
 
         private bool ChooseTyingPlayer(string playerName)
         {
-            List<PlayerStandingEntry> tyingPlayers = FindProblematiclyTyingPlayers();
+            List<StandingsEntry<PlayerReference>> tyingPlayers = FindProblematiclyTyingPlayers();
 
-            foreach (PlayerStandingEntry entry in tyingPlayers)
+            foreach (StandingsEntry<PlayerReference> entry in tyingPlayers)
             {
-                if (entry.PlayerReference.Name == playerName)
+                if (entry.Object.Name == playerName)
                 {
                     bool haveNotChosePlayerAlready = !ChoosenTyingPlayerEntries.Contains(entry);
 

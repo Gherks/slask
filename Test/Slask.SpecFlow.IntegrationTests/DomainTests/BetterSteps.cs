@@ -1,11 +1,9 @@
 ﻿using FluentAssertions;
-using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
-using Slask.Domain.Utilities;
+using Slask.Domain.Utilities.StandingsSolvers;
 using Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests;
-using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
 
@@ -52,15 +50,15 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
         {
             Tournament tournament = createdTournaments[tournamentIndex];
 
-            List<BetterStandingsEntry> betterStandings = BetterStandingsSolver.FetchFrom(tournament);
+            List<StandingsEntry<Better>> betterStandings = tournament.GetBetterStandings();
 
             betterStandings.Should().HaveCount(table.Rows.Count);
 
-            for(int index = 0; index < table.Rows.Count; ++index)
+            for (int index = 0; index < table.Rows.Count; ++index)
             {
                 ParseBetterStandings(table.Rows[index], out string betterName, out int points);
 
-                betterStandings[index].Better.User.Name.Should().Be(betterName);
+                betterStandings[index].Object.User.Name.Should().Be(betterName);
                 betterStandings[index].Points.Should().Be(points);
             }
         }

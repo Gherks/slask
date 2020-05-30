@@ -2,6 +2,7 @@
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
+using Slask.Domain.Utilities.StandingsSolvers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -220,6 +221,12 @@ namespace Slask.Domain
             bool lastRoundIsFinished = Rounds.Last().GetPlayState() == PlayState.Finished;
 
             return lastRoundIsFinished ? PlayState.Finished : PlayState.Ongoing;
+        }
+
+        public List<StandingsEntry<Better>> GetBetterStandings()
+        {
+            BetterStandingsSolver betterStandingsSolver = new BetterStandingsSolver();
+            return betterStandingsSolver.FetchFrom(this);
         }
 
         private bool IntegrateRoundToTournament(RoundBase round)

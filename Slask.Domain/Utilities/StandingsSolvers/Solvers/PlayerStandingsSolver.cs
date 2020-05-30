@@ -1,0 +1,44 @@
+﻿using Slask.Domain.Groups;
+using System;
+using System.Collections.Generic;
+
+namespace Slask.Domain.Utilities.StandingsSolvers
+{
+    public class PlayerStandingsSolver : StandingsSolverBase<GroupBase, PlayerReference>
+    {
+        protected override List<StandingsEntry<PlayerReference>> CreateStandingsList(GroupBase group)
+        {
+            List<StandingsEntry<PlayerReference>> playerStandings = new List<StandingsEntry<PlayerReference>>();
+
+            foreach (PlayerReference participant in group.PlayerReferences)
+            {
+                playerStandings.Add(StandingsEntry<PlayerReference>.Create(participant));
+            }
+
+            return playerStandings;
+        }
+
+        protected override void AggregatePointsForStandingEntries(GroupBase group, List<StandingsEntry<PlayerReference>> playerStandings)
+        {
+            foreach (Match match in group.Matches)
+            {
+                Player winner = match.GetWinningPlayer();
+
+                if (winner == null)
+                {
+                    continue;
+                }
+
+                StandingsEntry<PlayerReference> playerStandingEntry = playerStandings.Find(player => player.Object.Name == winner.PlayerReference.Name);
+
+                if (playerStandingEntry == null)
+                {
+                    // LOG Error: Failed to find player reference when calculating player standings for some reason
+                    throw new Exception("Failed to find player reference when calculating player standings for some reason");
+                }
+
+                playerStandingEntry.AddPoint();
+            }
+        }
+    }
+}
