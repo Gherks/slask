@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
 using Slask.Common;
+using Slask.Domain;
 using Slask.Domain.Groups;
+using Slask.Domain.Utilities;
 using Slask.Domain.Utilities.StandingsSolvers;
 using Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests;
 using System.Collections.Generic;
@@ -22,7 +24,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.UtilityTests
             GroupBase group = createdGroups[groupIndex];
             List<string> expectedPlayerNameOrder = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
-            List<PlayerStandingEntry> playerStandings = PlayerStandingsSolver.FetchFrom(group);
+
+            PlayerStandingsSolver playerStandingsSolver = new PlayerStandingsSolver();
+            List<StandingsEntry<PlayerReference>> playerStandings = playerStandingsSolver.FetchFrom(group);
 
             playerStandings.Should().HaveCount(expectedPlayerNameOrder.Count);
 

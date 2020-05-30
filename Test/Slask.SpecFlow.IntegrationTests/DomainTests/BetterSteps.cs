@@ -3,6 +3,7 @@ using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
+using Slask.Domain.Utilities;
 using Slask.Domain.Utilities.StandingsSolvers;
 using Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests;
 using System;
@@ -52,7 +53,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
         {
             Tournament tournament = createdTournaments[tournamentIndex];
 
-            List<BetterStandingsEntry> betterStandings = BetterStandingsSolver.FetchFrom(tournament);
+            List<StandingsEntry<Better>> betterStandings = tournament.GetBetterStandings();
 
             betterStandings.Should().HaveCount(table.Rows.Count);
 
