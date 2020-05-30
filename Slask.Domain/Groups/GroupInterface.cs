@@ -15,7 +15,7 @@ namespace Slask.Domain.Groups
         public RoundBase Round { get; }
 
         public List<PlayerReference> PlayerReferences { get; }
-        public List<PlayerStandingEntry> ChoosenTyingPlayerEntries { get; }
+        public List<StandingsEntry<PlayerReference>> ChoosenTyingPlayerEntries { get; }
 
         bool AddPlayerReferences(List<PlayerReference> playerReferences);
         PlayState GetPlayState();
@@ -23,7 +23,7 @@ namespace Slask.Domain.Groups
         bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences);
         bool NewDateTimeIsValid(Match match, DateTime dateTime);
         bool HasProblematicTie();
-        List<PlayerStandingEntry> FindProblematiclyTyingPlayers();
+        List<StandingsEntry<PlayerReference>> FindProblematiclyTyingPlayers();
         bool SolveTieByChoosing(string playerName);
         bool HasSolvedTie();
         void OnMatchScoreDecreased(Match match);
