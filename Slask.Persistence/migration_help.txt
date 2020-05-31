@@ -1,0 +1,17 @@
+# Migrations
+Commands executed within *Package Manager Console*
+
+## Create new migration of current state
+    add-migration <migration_name>
+
+## Remove latest migration (that has not been applied to database)
+    remove-migration
+
+## Applying migrations that has not been applied
+    update-database
+
+## Updating to a specific migration
+    update-database <migration_name>
+
+## Generate migration script of current state
+    script-migration
