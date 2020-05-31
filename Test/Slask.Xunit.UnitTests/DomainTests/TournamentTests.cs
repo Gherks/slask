@@ -37,7 +37,6 @@ namespace Slask.Xunit.UnitTests.DomainTests
             tournament.Rounds.Should().BeEmpty();
             tournament.Betters.Should().BeEmpty();
             tournament.Settings.Should().BeEmpty();
-            tournament.MiscBetCatalogue.Should().BeEmpty();
         }
 
         [Fact]
