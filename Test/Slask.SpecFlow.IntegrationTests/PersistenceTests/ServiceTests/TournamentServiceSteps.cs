@@ -280,7 +280,6 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests.ServiceTests
             tournament.Name.Should().Be(correctName);
             tournament.Rounds.Should().BeEmpty();
             tournament.Betters.Should().BeEmpty();
-            tournament.Settings.Should().BeEmpty();
         }
     }
 }
