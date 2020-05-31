@@ -6,10 +6,12 @@ using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Slask.Domain.Rounds
 {
+    [Table("Round")]
     public class RoundBase : RoundInterface
     {
         protected RoundBase()

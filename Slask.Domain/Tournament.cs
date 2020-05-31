@@ -15,8 +15,6 @@ namespace Slask.Domain
         {
             Rounds = new List<RoundBase>();
             Betters = new List<Better>();
-            Settings = new List<Settings>();
-            MiscBetCatalogue = new List<MiscBetCatalogue>();
             TournamentIssueReporter = new TournamentIssueReporter();
         }
 
@@ -24,8 +22,6 @@ namespace Slask.Domain
         public string Name { get; private set; }
         public List<RoundBase> Rounds { get; private set; }
         public List<Better> Betters { get; private set; }
-        public List<Settings> Settings { get; private set; }
-        public List<MiscBetCatalogue> MiscBetCatalogue { get; private set; }
 
         // Ignored by SlaskContext
         public TournamentIssueReporter TournamentIssueReporter { get; private set; }

@@ -10,6 +10,7 @@ using System.Linq;
 
 namespace Slask.Domain.Groups
 {
+    [Table("Group")]
     public partial class GroupBase : GroupInterface
     {
         protected GroupBase()
