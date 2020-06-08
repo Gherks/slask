@@ -38,8 +38,8 @@ Scenario: Round robin progression with four players goes as expected
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 2                         | 4                       |
 			| Round robin | 1                         | 2                       |
-	When players "First, Second, Third, Fourth" is registered to round 0
-		And groups within tournament is played out and betted on
+		And players "First, Second, Third, Fourth" is registered to round 0
+	When groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 	Then advancing players in group 0 is exactly "Fourth, First"
@@ -58,7 +58,7 @@ Scenario: Round robin progression with five players goes as expected
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 3                         | 5                       |
 			| Round robin | 1                         | 3                       |
-	When players "First, Second, Third, Fourth, Fifth" is registered to round 0
+	And players "First, Second, Third, Fourth, Fifth" is registered to round 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
