@@ -88,12 +88,11 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
         }
 
         [Fact]
-        public void CanGetUserById()
+        public void CanFetchUserById()
         {
             User createdUser = userService.CreateUser("Stålberto");
             User fetchedUser = userService.GetUserById(createdUser.Id);
 
-            fetchedUser.Should().NotBeNull();
             fetchedUser.Id.Should().Be(createdUser.Id);
             fetchedUser.Name.Should().Be(createdUser.Name);
         }
@@ -107,7 +106,7 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
         }
 
         [Fact]
-        public void CanGetUserByNameNoMatterLetterCasing()
+        public void CanFetchUserByNameNoMatterLetterCasing()
         {
             User createdUser = userService.CreateUser("Stålberto");
             User fetchedUser = userService.GetUserByName(createdUser.Name.ToUpper());
