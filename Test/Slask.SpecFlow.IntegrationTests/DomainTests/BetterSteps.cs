@@ -3,7 +3,7 @@ using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Utilities.StandingsSolvers;
-using Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests;
+using Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
 
@@ -15,7 +15,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
     }
 
-    public class BetterStepDefinitions : RoundStepDefinitions
+    public class BetterStepDefinitions : GroupStepDefinitions
     {
         [Given(@"betters places match bets")]
         [When(@"betters places match bets")]
