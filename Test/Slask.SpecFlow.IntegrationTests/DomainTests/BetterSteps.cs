@@ -45,7 +45,9 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             }
         }
 
-        [Then(@"player standings in tournament (.*) from first to last looks like this")]
+        [Given(@"better standings in tournament (.*) from first to last looks like this")]
+        [When(@"better standings in tournament (.*) from first to last looks like this")]
+        [Then(@"better standings in tournament (.*) from first to last looks like this")]
         public void ThenPlayerStandingsFromFirstToLastLooksLikeThis(int tournamentIndex, Table table)
         {
             Tournament tournament = createdTournaments[tournamentIndex];
