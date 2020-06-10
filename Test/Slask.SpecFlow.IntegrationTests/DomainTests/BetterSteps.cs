@@ -19,7 +19,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
     {
         [Given(@"betters places match bets")]
         [When(@"betters places match bets")]
-        public void WhenBettersPlacesMatchBets(Table table)
+        public void GivenBettersPlacesMatchBets(Table table)
         {
             foreach (TableRow row in table.Rows)
             {
@@ -48,7 +48,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
         [Given(@"better standings in tournament (.*) from first to last looks like this")]
         [When(@"better standings in tournament (.*) from first to last looks like this")]
         [Then(@"better standings in tournament (.*) from first to last looks like this")]
-        public void ThenPlayerStandingsFromFirstToLastLooksLikeThis(int tournamentIndex, Table table)
+        public void GivenPlayerStandingsFromFirstToLastLooksLikeThis(int tournamentIndex, Table table)
         {
             Tournament tournament = createdTournaments[tournamentIndex];
 
