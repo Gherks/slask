@@ -1,4 +1,4 @@
-using Slask.Domain.Utilities;
+﻿using Slask.Domain.Utilities;
 using System;
 
 namespace Slask.Domain.Bets.BetTypes
@@ -32,7 +32,7 @@ namespace Slask.Domain.Bets.BetTypes
 
             Player winningPlayer = Match.GetWinningPlayer();
 
-            bool betIsWon = Player == winningPlayer;
+            bool betIsWon = Player.Id == winningPlayer.Id;
             return betIsWon;
         }
 
