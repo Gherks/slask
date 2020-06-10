@@ -1,4 +1,4 @@
-﻿using Slask.Domain.Utilities;
+using Slask.Domain.Utilities;
 using System;
 
 namespace Slask.Domain.Bets.BetTypes
@@ -19,6 +19,13 @@ namespace Slask.Domain.Bets.BetTypes
             bool anyParameterIsInvalid = !ParametersAreValid(Better, Match, Player);
 
             if (anyParameterIsInvalid)
+            {
+                return false;
+            }
+
+            bool notFinished = Match.GetPlayState() != PlayState.Finished;
+
+            if (notFinished)
             {
                 return false;
             }
