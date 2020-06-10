@@ -92,15 +92,16 @@ Scenario: Can fetch completed tournament in correct way
 			| Kimmieboi   | 0           | 1           | 7           | FanTaSy     |
 			| Kimmieboi   | 0           | 1           | 8           | FanTaSy     |
 			| Kimmieboi   | 0           | 1           | 9           | TY          |
-		And groups within tournament is played out and betted on
+		And groups within tournament is played out
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 			| 0                | 0           | 1           |
-		# Points after round 0 has been played out
-		# Stålerto: 11
-		# Bönis: 10
-		# Guggelito: 6
-		# Kimmieboi: 13
+		And better standings in tournament 0 from first to last looks like this
+			| Better name | Points |
+			| Kimmieboi   | 13     |
+			| Stålberto   | 11     |
+			| Bönis       | 10     |
+			| Guggelito   | 7      |
 
 		# Bet on first set of matches in first dual tournament group
 		And betters places match bets
@@ -118,11 +119,12 @@ Scenario: Can fetch completed tournament in correct way
 			| Group index | Match index | Scoring player | Added score |
 			| 2           | 0           | Bomber         | 2           |
 			| 2           | 1           | Rain           | 2           |
-		# Points after first set of matches has been played out
-		# Stålerto: 13
-		# Bönis: 10
-		# Guggelito: 8
-		# Kimmieboi: 13
+		And better standings in tournament 0 from first to last looks like this
+			| Better name | Points |
+			| Stålberto   | 13     |
+			| Kimmieboi   | 13     |
+			| Bönis       | 10     |
+			| Guggelito   | 9      |
 
 		# Bet on winners and losers matches in first dual tournament group
 		And betters places match bets
@@ -140,11 +142,12 @@ Scenario: Can fetch completed tournament in correct way
 			| Group index | Match index | Scoring player | Added score |
 			| 2           | 2           | Bomber         | 2           |
 			| 2           | 3           | Maru           | 2           |
-		# Points after first set of matches has been played out
-		# Stålerto: 13
-		# Bönis: 12
-		# Guggelito: 9
-		# Kimmieboi: 15
+		And better standings in tournament 0 from first to last looks like this
+			| Better name | Points |
+			| Kimmieboi   | 15     |
+			| Stålberto   | 13     |
+			| Bönis       | 12     |
+			| Guggelito   | 10     |
 
 		# Bet on decider match in first dual tournament group
 		And betters places match bets
@@ -157,11 +160,12 @@ Scenario: Can fetch completed tournament in correct way
 		And score is added to players in given matches in groups
 			| Group index | Match index | Scoring player | Added score |
 			| 2           | 4           | Maru           | 2           |
-		# Points after first set of matches has been played out
-		# Stålerto: 14
-		# Bönis: 12
-		# Guggelito: 10
-		# Kimmieboi: 15
+		And better standings in tournament 0 from first to last looks like this
+			| Better name | Points |
+			| Kimmieboi   | 15     |
+			| Stålberto   | 14     |
+			| Bönis       | 12     |
+			| Guggelito   | 11     |
 
 		# Bet on first set of matches in second dual tournament group
 		And betters places match bets
@@ -179,11 +183,12 @@ Scenario: Can fetch completed tournament in correct way
 			| Group index | Match index | Scoring player | Added score |
 			| 3           | 0           | Cure           | 2           |
 			| 3           | 1           | Stephano       | 2           |
-		# Points after first set of matches has been played out
-		# Stålerto: 16
-		# Bönis: 12
-		# Guggelito: 10
-		# Kimmieboi: 16
+		And better standings in tournament 0 from first to last looks like this
+			| Better name | Points |
+			| Stålberto   | 16     |
+			| Kimmieboi   | 16     |
+			| Bönis       | 12     |
+			| Guggelito   | 11     |
 
 		# Bet on winners and losers matches in second dual tournament group
 		And betters places match bets
@@ -201,11 +206,12 @@ Scenario: Can fetch completed tournament in correct way
 			| Group index | Match index | Scoring player | Added score |
 			| 3           | 2           | Cure           | 2           |
 			| 3           | 3           | FanTaSy        | 2           |
-		# Points after winners and losers has been played out
-		# Stålerto: 16
-		# Bönis: 14
-		# Guggelito: 11
-		# Kimmieboi: 17
+		And better standings in tournament 0 from first to last looks like this
+			| Better name | Points |
+			| Kimmieboi   | 17     |
+			| Stålberto   | 16     |
+			| Bönis       | 14     |
+			| Guggelito   | 12     |
 			
 		# Bet on decider match in second dual tournament group
 		And betters places match bets
@@ -218,11 +224,12 @@ Scenario: Can fetch completed tournament in correct way
 		And score is added to players in given matches in groups
 			| Group index | Match index | Scoring player | Added score |
 			| 3           | 4           | FanTaSy        | 2           |
-		# Points after round 1 has been played out
-		# Stålerto: 16
-		# Bönis: 15
-		# Guggelito: 12
-		# Kimmieboi: 17
+		And better standings in tournament 0 from first to last looks like this
+			| Better name | Points |
+			| Kimmieboi   | 17     |
+			| Stålberto   | 16     |
+			| Bönis       | 15     |
+			| Guggelito   | 13     |
 		
 		# Bet on semifinal matches in bracket group
 		And betters places match bets
@@ -240,11 +247,12 @@ Scenario: Can fetch completed tournament in correct way
 			| Group index | Match index | Scoring player | Added score |
 			| 4           | 0           | Bomber         | 2           |
 			| 4           | 1           | Cure           | 2           |
-		# Points after semifinals has been played out
-		# Stålerto: 17
-		# Bönis: 17
-		# Guggelito: 14
-		# Kimmieboi: 18
+		And better standings in tournament 0 from first to last looks like this
+			| Better name | Points |
+			| Kimmieboi   | 18     |
+			| Stålberto   | 17     |
+			| Bönis       | 17     |
+			| Guggelito   | 15     |
 		
 		# Bet on final match in bracket group
 		And betters places match bets
@@ -256,21 +264,10 @@ Scenario: Can fetch completed tournament in correct way
 		# Play final match in bracket group
 		And score is added to players in given matches in groups
 			| Group index | Match index | Scoring player | Added score |
-			| 4           | 0           | Bomber         | 2           |
-		# Points after semifinals has been played out
-		# Stålerto: 18
-		# Bönis: 17
-		# Guggelito: 14
-		# Kimmieboi: 19
-			
-# Maru		Stork		Taeja		Rain	Bomber
-# FanTaSy	Stephano	Thorzain	TY		Cure
-# 
-# 
-# Bomber	Maru		Rain		Stork
-# Cure		FanTaSy		Stephano	Thorzain
-# 
-# 
-# Bomber	Maru
-# Cure		FanTaSy
-
+			| 4           | 2           | Bomber         | 2           |
+		And better standings in tournament 0 from first to last looks like this
+			| Better name | Points |
+			| Kimmieboi   | 19     |
+			| Stålberto   | 18     |
+			| Bönis       | 17     |
+			| Guggelito   | 15     |
