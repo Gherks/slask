@@ -22,7 +22,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         {
             Tournament fetchedTournament = fetchedTournaments[fetchedTournamentIndex];
 
-            for(int index = 0; index < table.Rows.Count; ++index)
+            for (int index = 0; index < table.Rows.Count; ++index)
             {
                 ParseRoundTable(table.Rows[index], out string roundType, out string name, out int advancingCount, out int playersPerGroupCount);
 
@@ -62,7 +62,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
             if (groupType == "BRACKET")
             {
-                foreach(GroupBase group in round.Groups)
+                foreach (GroupBase group in round.Groups)
                 {
                     (group is BracketGroup).Should().BeTrue();
                     (group is DualTournamentGroup).Should().BeFalse();
