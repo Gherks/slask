@@ -23,9 +23,16 @@ namespace Slask.Domain.Bets.BetTypes
                 return false;
             }
 
+            bool notFinished = Match.GetPlayState() != PlayState.Finished;
+
+            if (notFinished)
+            {
+                return false;
+            }
+
             Player winningPlayer = Match.GetWinningPlayer();
 
-            bool betIsWon = Player == winningPlayer;
+            bool betIsWon = Player.Id == winningPlayer.Id;
             return betIsWon;
         }
 

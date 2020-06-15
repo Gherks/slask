@@ -31,7 +31,7 @@ Scenario: Can fetch correct better standings from tournament
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 			| 0                | 0           | 1           |
-	Then player standings in tournament 0 from first to last looks like this
+	Then better standings in tournament 0 from first to last looks like this
 		| Better name | Points |
 		| Stålberto   | 3      |
 		| Guggelito   | 2      |

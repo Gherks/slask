@@ -28,7 +28,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests
         [Then(@"group (.*) should be valid of type ""(.*)""")]
         public void ThenGroupShouldBeValidOfType(int groupIndex, string roundType)
         {
-            string type = GetRoundType(roundType);
+            string type = ParseRoundGroupTypeString(roundType);
 
             GroupBase group = createdGroups[groupIndex];
 

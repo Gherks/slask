@@ -3,7 +3,7 @@ using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Utilities.StandingsSolvers;
-using Slask.SpecFlow.IntegrationTests.DomainTests.RoundTests;
+using Slask.SpecFlow.IntegrationTests.DomainTests.GroupTests;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
 
@@ -15,11 +15,11 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
     }
 
-    public class BetterStepDefinitions : RoundStepDefinitions
+    public class BetterStepDefinitions : GroupStepDefinitions
     {
         [Given(@"betters places match bets")]
         [When(@"betters places match bets")]
-        public void WhenBettersPlacesMatchBets(Table table)
+        public void GivenBettersPlacesMatchBets(Table table)
         {
             foreach (TableRow row in table.Rows)
             {
@@ -45,8 +45,10 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             }
         }
 
-        [Then(@"player standings in tournament (.*) from first to last looks like this")]
-        public void ThenPlayerStandingsFromFirstToLastLooksLikeThis(int tournamentIndex, Table table)
+        [Given(@"better standings in tournament (.*) from first to last looks like this")]
+        [When(@"better standings in tournament (.*) from first to last looks like this")]
+        [Then(@"better standings in tournament (.*) from first to last looks like this")]
+        public void GivenBetterStandingsInTournamentFromFirstToLastLooksLikeThis(int tournamentIndex, Table table)
         {
             Tournament tournament = createdTournaments[tournamentIndex];
 
