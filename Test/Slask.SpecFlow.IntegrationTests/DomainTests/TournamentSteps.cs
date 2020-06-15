@@ -36,7 +36,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
 
                 if (type.Length > 0)
                 {
-                    type = GetRoundType(type);
+                    type = ParseRoundGroupTypeString(type);
                     RoundBase round = null;
 
                     if (type == "BRACKET")
@@ -258,16 +258,16 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             tournament.GetPlayState().Should().Be(playState);
         }
 
-        protected static void ParseRoundTable(TableRow row, out string typeName, out string name, out int advancingCount, out int playersPerGroupCount)
+        protected static void ParseRoundTable(TableRow row, out string roundType, out string name, out int advancingCount, out int playersPerGroupCount)
         {
-            typeName = "";
+            roundType = "";
             name = "";
             advancingCount = 1;
             playersPerGroupCount = 2;
 
             if (row.ContainsKey("Round type"))
             {
-                typeName = row["Round type"];
+                roundType = row["Round type"];
             }
 
             if (row.ContainsKey("Round name"))
@@ -286,7 +286,7 @@ namespace Slask.SpecFlow.IntegrationTests.DomainTests
             }
         }
 
-        protected static string GetRoundType(string type)
+        protected static string ParseRoundGroupTypeString(string type)
         {
             type = StringUtility.ToUpperNoSpaces(type);
 
