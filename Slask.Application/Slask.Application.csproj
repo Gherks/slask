@@ -6,4 +6,8 @@
     <RunAnalyzersDuringBuild>false</RunAnalyzersDuringBuild>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Slask.Domain\Slask.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

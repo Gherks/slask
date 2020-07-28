@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Slask.Application\Slask.Application.csproj" />
     <ProjectReference Include="..\Slask.Domain\Slask.Domain.csproj" />
   </ItemGroup>
 
