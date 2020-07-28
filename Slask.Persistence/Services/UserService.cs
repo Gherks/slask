@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Slask.Persistence.Services
 {
-    public class UserService
+    public class UserService : UserServiceInterface
     {
         private SlaskContext _slaskContext;
 

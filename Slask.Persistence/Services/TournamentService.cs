@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Slask.Persistence.Services
 {
-    public class TournamentService
+    public class TournamentService : TournamentServiceInterface
     {
         private readonly SlaskContext _slaskContext;
 
