@@ -2,7 +2,6 @@
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Slask.Domain.Groups.GroupTypes
@@ -13,11 +12,7 @@ namespace Slask.Domain.Groups.GroupTypes
         {
         }
 
-        [NotMapped]
-        private const int ParticipatingPlayerCapacity = 4;
-
-        [NotMapped]
-        private const int MatchCapacity = 5;
+        private const int _matchCapacity = 5;
 
         public static DualTournamentGroup Create(DualTournamentRound round)
         {
@@ -91,7 +86,7 @@ namespace Slask.Domain.Groups.GroupTypes
 
         public override bool ConstructGroupLayout(int playersPerGroupCount)
         {
-            ChangeMatchCountTo(MatchCapacity);
+            ChangeMatchCountTo(_matchCapacity);
             return true;
         }
 

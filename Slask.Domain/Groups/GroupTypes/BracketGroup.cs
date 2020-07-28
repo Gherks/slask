@@ -3,7 +3,6 @@ using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Slask.Domain.Groups.GroupTypes
@@ -14,7 +13,6 @@ namespace Slask.Domain.Groups.GroupTypes
         {
         }
 
-        [NotMapped]
         public BracketNodeSystem BracketNodeSystem;
 
         public static BracketGroup Create(BracketRound round)

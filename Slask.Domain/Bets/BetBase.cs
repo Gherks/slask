@@ -1,9 +1,7 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Slask.Domain.Bets
 {
-    [Table("Bet")]
     public class BetBase : BetInterface
     {
         protected BetBase()

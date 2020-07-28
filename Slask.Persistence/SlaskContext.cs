@@ -1,5 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Slask.Domain;
+using Slask.Domain.Bets;
+using Slask.Domain.Groups;
+using Slask.Domain.Rounds;
 
 namespace Slask.Persistence
 {
@@ -33,10 +36,20 @@ namespace Slask.Persistence
 
             modelBuilder.Entity<Tournament>().Ignore(tournament => tournament.TournamentIssueReporter);
 
+            modelBuilder.Entity<RoundBase>().ToTable("Round");
+
+            modelBuilder.Entity<GroupBase>().ToTable("Group");
+            modelBuilder.Entity<GroupBase>().Ignore(group => group.PlayerReferences);
+            modelBuilder.Entity<GroupBase>().Ignore(group => group.ChoosenTyingPlayerEntries);
+
+            //modelBuilder.Entity<BracketGroup>().Ignore(bracketGroup => bracketGroup.BracketNodeSystem); 
+
             modelBuilder.Entity<Match>().Ignore(match => match.Player1);
             modelBuilder.Entity<Match>().Ignore(match => match.Player2);
 
             modelBuilder.Entity<Player>().Ignore(player => player.Name);
+
+            modelBuilder.Entity<BetBase>().ToTable("Bet");
         }
 
         public DbSet<Tournament> Tournaments { get; set; }

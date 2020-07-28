@@ -5,12 +5,10 @@ using Slask.Domain.Utilities;
 using Slask.Domain.Utilities.StandingsSolvers;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Slask.Domain.Groups
 {
-    [Table("Group")]
     public partial class GroupBase : GroupInterface
     {
         protected GroupBase()
@@ -26,10 +24,7 @@ namespace Slask.Domain.Groups
         public Guid RoundId { get; protected set; }
         public RoundBase Round { get; protected set; }
 
-        [NotMapped]
         public List<PlayerReference> PlayerReferences { get; private set; }
-
-        [NotMapped]
         public List<StandingsEntry<PlayerReference>> ChoosenTyingPlayerEntries { get; private set; }
 
         public bool AddPlayerReferences(List<PlayerReference> playerReferences)
