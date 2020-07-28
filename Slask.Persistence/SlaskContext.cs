@@ -34,11 +34,12 @@ namespace Slask.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<RoundBase>().ToTable("Round");
+            modelBuilder.Entity<GroupBase>().ToTable("Group");
+            modelBuilder.Entity<BetBase>().ToTable("Bet");
+
             modelBuilder.Entity<Tournament>().Ignore(tournament => tournament.TournamentIssueReporter);
 
-            modelBuilder.Entity<RoundBase>().ToTable("Round");
-
-            modelBuilder.Entity<GroupBase>().ToTable("Group");
             modelBuilder.Entity<GroupBase>().Ignore(group => group.PlayerReferences);
             modelBuilder.Entity<GroupBase>().Ignore(group => group.ChoosenTyingPlayerEntries);
 
@@ -48,8 +49,6 @@ namespace Slask.Persistence
             modelBuilder.Entity<Match>().Ignore(match => match.Player2);
 
             modelBuilder.Entity<Player>().Ignore(player => player.Name);
-
-            modelBuilder.Entity<BetBase>().ToTable("Bet");
         }
 
         public DbSet<Tournament> Tournaments { get; set; }
