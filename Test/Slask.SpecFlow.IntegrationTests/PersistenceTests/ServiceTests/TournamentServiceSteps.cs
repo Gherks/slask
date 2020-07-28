@@ -49,8 +49,17 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests.ServiceTests
         [When(@"a tournament named ""(.*)"" has been created")]
         public Tournament GivenATournamentNamedHasBeenCreated(string name)
         {
-            createdTournaments.Add(tournamentService.CreateTournamentAsync(name));
-            return createdTournaments.Last();
+            Tournament tournament = tournamentService.CreateTournament(name);
+
+            if (tournament != null)
+            {
+                createdTournaments.Add(tournament);
+                tournamentService.Save(tournament);
+
+                return tournament;
+            }
+
+            return null;
         }
 
         [Given(@"a tournament named ""(.*)"" has been created with users ""(.*)"" added to it")]
@@ -60,7 +69,8 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests.ServiceTests
             List<string> userNames = StringUtility.ToStringList(commaSeparatedUserNames, ",");
             foreach (string userName in userNames)
             {
-                createdUsers.Add(userService.CreateUserAsync(userName));
+                createdUsers.Add(userService.CreateUser(userName));
+                userService.Save();
             }
 
             Tournament tournament = GivenATournamentNamedHasBeenCreated(tournamentName);

@@ -16,38 +16,17 @@ namespace Slask.Persistence.Services
 
         public Tournament CreateTournament(string name)
         {
-            Tournament tournament = Create(name);
-            _slaskContext.SaveChanges();
-            return tournament;
-        }
+            bool givenParametersAreInvalid = !TournamentCreationParametersAreValid(name);
 
-        public Tournament CreateTournamentAsync(string name)
-        {
-            Tournament tournament = Create(name);
-            _slaskContext.SaveChangesAsync();
-            return tournament;
-        }
-
-        public bool Save(Tournament tournament)
-        {
-            if (tournament.HasIssues())
+            if (givenParametersAreInvalid)
             {
-                return false;
+                return null;
             }
 
-            _slaskContext.SaveChanges();
-            return true;
-        }
+            Tournament tournament = Tournament.Create(name);
+            _slaskContext.Add(tournament);
 
-        public bool SaveAsync(Tournament tournament)
-        {
-            if (tournament.HasIssues())
-            {
-                return false;
-            }
-
-            _slaskContext.SaveChangesAsync();
-            return true;
+            return tournament;
         }
 
         public bool RenameTournament(Guid id, string name)
@@ -65,8 +44,6 @@ namespace Slask.Persistence.Services
                 if (tournamentFound)
                 {
                     tournament.RenameTo(name);
-                    SaveAsync(tournament);
-
                     return true;
                 }
             }
@@ -144,19 +121,26 @@ namespace Slask.Persistence.Services
             return tournament.Betters;
         }
 
-        private Tournament Create(string name)
+        public bool Save(Tournament tournament)
         {
-            bool givenParametersAreInvalid = !TournamentCreationParametersAreValid(name);
-
-            if (givenParametersAreInvalid)
+            if (tournament.HasIssues())
             {
-                return null;
+                return false;
             }
 
-            Tournament tournament = Tournament.Create(name);
-            _slaskContext.Add(tournament);
+            _slaskContext.SaveChanges();
+            return true;
+        }
 
-            return tournament;
+        public bool SaveAsync(Tournament tournament)
+        {
+            if (tournament.HasIssues())
+            {
+                return false;
+            }
+
+            _slaskContext.SaveChangesAsync();
+            return true;
         }
 
         private bool TournamentCreationParametersAreValid(string name)
