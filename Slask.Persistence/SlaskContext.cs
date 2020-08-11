@@ -22,6 +22,10 @@ namespace Slask.Persistence
         {
         }
 
+        public DbSet<User> Users { get; private set; }
+        public DbSet<Tournament> Tournaments { get; private set; }
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -50,8 +54,5 @@ namespace Slask.Persistence
 
             modelBuilder.Entity<Player>().Ignore(player => player.Name);
         }
-
-        public DbSet<Tournament> Tournaments { get; set; }
-        public DbSet<User> Users { get; set; }
     }
 }

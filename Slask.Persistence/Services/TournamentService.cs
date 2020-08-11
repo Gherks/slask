@@ -1,4 +1,5 @@
 ﻿using Slask.Domain;
+using Slask.Domain.Rounds.RoundTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -121,26 +122,80 @@ namespace Slask.Persistence.Services
             return tournament.Betters;
         }
 
-        public bool Save(Tournament tournament)
+        public Better AddBetterToTournament(Tournament tournament, User user)
         {
-            if (tournament.HasIssues())
+            Better better = tournament.AddBetter(user);
+
+            if (better != null)
             {
-                return false;
+                _slaskContext.Add(better);
             }
 
-            _slaskContext.SaveChanges();
-            return true;
+            return better;
+        }
+
+        public BracketRound AddBracketRoundToTournament(Tournament tournament)
+        {
+            BracketRound round = tournament.AddBracketRound();
+
+            if (round != null)
+            {
+                _slaskContext.Add(round);
+            }
+
+            return round;
+        }
+
+        public DualTournamentRound AddDualTournamentRoundToTournament(Tournament tournament)
+        {
+            DualTournamentRound round = tournament.AddDualTournamentRound();
+
+            if (round != null)
+            {
+                _slaskContext.Add(round);
+            }
+
+            return round;
+        }
+
+        public RoundRobinRound AddRoundRobinRoundToTournament(Tournament tournament)
+        {
+            RoundRobinRound round = tournament.AddRoundRobinRound();
+
+            if (round != null)
+            {
+                _slaskContext.Add(round);
+            }
+
+            return round;
+        }
+
+        public bool Save(Tournament tournament)
+        {
+            bool tournamentExist = tournament != null;
+            bool tournamentHasNoIssues = tournamentExist && !tournament.HasIssues();
+
+            if (tournamentExist && tournamentHasNoIssues)
+            {
+                _slaskContext.SaveChanges();
+                return true;
+            }
+
+            return false;
         }
 
         public bool SaveAsync(Tournament tournament)
         {
-            if (tournament.HasIssues())
+            bool tournamentExist = tournament != null;
+            bool tournamentHasNoIssues = !tournament.HasIssues();
+
+            if (tournamentExist && tournamentHasNoIssues)
             {
-                return false;
+                _slaskContext.SaveChangesAsync();
+                return true;
             }
 
-            _slaskContext.SaveChangesAsync();
-            return true;
+            return false;
         }
 
         private bool TournamentCreationParametersAreValid(string name)
