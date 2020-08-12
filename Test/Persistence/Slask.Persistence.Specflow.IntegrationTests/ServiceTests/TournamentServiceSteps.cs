@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
-using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Persistence.Services;
 using Slask.TestCore;
@@ -20,41 +19,35 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests.ServiceTests
 
     public class TournamentServiceStepDefinitions : UserServiceStepDefinitions
     {
-        protected readonly TournamentService tournamentService;
-        protected readonly List<Tournament> createdTournaments;
-        protected readonly List<Tournament> fetchedTournaments;
-        protected List<Better> createdBetters;
-        protected List<Better> fetchedBetters;
-        protected readonly List<RoundBase> createdRounds;
-        protected readonly List<RoundBase> fetchedRounds;
-        protected readonly List<GroupBase> createdGroups;
-        protected readonly List<PlayerReference> createdPlayerReferences;
-        protected readonly List<PlayerReference> fetchedPlayerReferences;
+        protected readonly TournamentService _tournamentService;
+        protected readonly List<Tournament> _createdTournaments;
+        protected readonly List<Tournament> _fetchedTournaments;
+        protected List<Better> _createdBetters;
+        protected List<Better> _fetchedBetters;
+        protected readonly List<PlayerReference> _createdPlayerReferences;
+        protected readonly List<PlayerReference> _fetchedPlayerReferences;
 
         public TournamentServiceStepDefinitions()
         {
-            tournamentService = new TournamentService(InMemoryContextCreator.Create());
-            createdTournaments = new List<Tournament>();
-            fetchedTournaments = new List<Tournament>();
-            createdBetters = new List<Better>();
-            fetchedBetters = new List<Better>();
-            createdRounds = new List<RoundBase>();
-            fetchedRounds = new List<RoundBase>();
-            createdGroups = new List<GroupBase>();
-            createdPlayerReferences = new List<PlayerReference>();
-            fetchedPlayerReferences = new List<PlayerReference>();
+            _tournamentService = new TournamentService(InMemoryContextCreator.Create());
+            _createdTournaments = new List<Tournament>();
+            _fetchedTournaments = new List<Tournament>();
+            _createdBetters = new List<Better>();
+            _fetchedBetters = new List<Better>();
+            _createdPlayerReferences = new List<PlayerReference>();
+            _fetchedPlayerReferences = new List<PlayerReference>();
         }
 
         [Given(@"a tournament named ""(.*)"" has been created")]
         [When(@"a tournament named ""(.*)"" has been created")]
         public Tournament GivenATournamentNamedHasBeenCreated(string name)
         {
-            Tournament tournament = tournamentService.CreateTournament(name);
+            Tournament tournament = _tournamentService.CreateTournament(name);
 
             if (tournament != null)
             {
-                createdTournaments.Add(tournament);
-                tournamentService.Save(tournament);
+                _createdTournaments.Add(tournament);
+                _tournamentService.Save();
 
                 return tournament;
             }
@@ -77,7 +70,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests.ServiceTests
 
             foreach (User user in createdUsers)
             {
-                createdBetters.Add(tournament.AddBetter(user));
+                _createdBetters.Add(tournament.AddBetter(user));
             }
 
             return tournament;
@@ -94,7 +87,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests.ServiceTests
 
             foreach (string playerName in playerNames)
             {
-                createdPlayerReferences.Add(bracketRound.RegisterPlayerReference(playerName));
+                _createdPlayerReferences.Add(bracketRound.RegisterPlayerReference(playerName));
             }
 
             return tournament;
@@ -104,32 +97,32 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests.ServiceTests
         [When(@"fetching tournament by tournament id: (.*)")]
         public Tournament GivenFetchingTournamentByTournamentId(Guid tournamentId)
         {
-            fetchedTournaments.Add(tournamentService.GetTournamentById(tournamentId));
-            return fetchedTournaments.Last();
+            _fetchedTournaments.Add(_tournamentService.GetTournamentById(tournamentId));
+            return _fetchedTournaments.Last();
         }
 
         [Given(@"fetching tournament (.*) by tournament id")]
         [When(@"fetching tournament (.*) by tournament id")]
         public Tournament GivenFetchingTournamentByTournamentId(int tournamentIndex)
         {
-            Guid tournamentId = createdTournaments[tournamentIndex].Id;
-            fetchedTournaments.Add(GivenFetchingTournamentByTournamentId(tournamentId));
-            return fetchedTournaments.Last();
+            Guid tournamentId = _createdTournaments[tournamentIndex].Id;
+            _fetchedTournaments.Add(GivenFetchingTournamentByTournamentId(tournamentId));
+            return _fetchedTournaments.Last();
         }
 
         [Given(@"fetching tournament by tournament name: ""(.*)""")]
         [When(@"fetching tournament by tournament name: ""(.*)""")]
         public Tournament GivenFetchingTournamentByTournamentName(string name)
         {
-            fetchedTournaments.Add(tournamentService.GetTournamentByName(name));
-            return fetchedTournaments.Last();
+            _fetchedTournaments.Add(_tournamentService.GetTournamentByName(name));
+            return _fetchedTournaments.Last();
         }
 
         [Given(@"users ""(.*)"" is added to tournament ""(.*)""")]
         [When(@"users ""(.*)"" is added to tournament ""(.*)""")]
         public void GivenUsersIsAddedToTournament(string commaSeparatedUserNames, string tournamentName)
         {
-            Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+            Tournament tournament = _tournamentService.GetTournamentByName(tournamentName);
             List<string> userNames = StringUtility.ToStringList(commaSeparatedUserNames, ",");
 
             foreach (string userName in userNames)
@@ -141,62 +134,62 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests.ServiceTests
         [When(@"tournament (.*) is renamed to: ""(.*)""")]
         public void WhenTournamentIsRenamedTo(int tournamentIndex, string newName)
         {
-            Guid tournamentId = createdTournaments[tournamentIndex].Id;
-            tournamentService.RenameTournament(tournamentId, newName);
+            Guid tournamentId = _createdTournaments[tournamentIndex].Id;
+            _tournamentService.RenameTournament(tournamentId, newName);
         }
 
         [When(@"fetching betters from tournament (.*) by tournament id")]
         public void WhenFetchingBettersFromTournamentByTournamentId(int tournamentIndex)
         {
-            Guid tournamentId = createdTournaments[tournamentIndex].Id;
-            fetchedBetters = tournamentService.GetBettersByTournamentId(tournamentId);
+            Guid tournamentId = _createdTournaments[tournamentIndex].Id;
+            _fetchedBetters = _tournamentService.GetBettersByTournamentId(tournamentId);
         }
 
         [When(@"fetching betters from tournament by tournament name: ""(.*)""")]
         public void FetchingBettersFromTournamentByTournamentName(string tournamentName)
         {
-            fetchedBetters = tournamentService.GetBettersByTournamentName(tournamentName);
+            _fetchedBetters = _tournamentService.GetBettersByTournamentName(tournamentName);
         }
 
         [When(@"fetching player references from tournament (.*) by tournament id")]
         public void WhenFetchingPlayerReferencesFromTournamentByTournamentId(int tournamentIndex)
         {
-            Tournament tournament = createdTournaments[tournamentIndex];
-            List<PlayerReference> playerReferences = tournamentService.GetPlayerReferencesByTournamentId(tournament.Id);
+            Tournament tournament = _createdTournaments[tournamentIndex];
+            List<PlayerReference> playerReferences = _tournamentService.GetPlayerReferencesByTournamentId(tournament.Id);
 
             foreach (PlayerReference playerReference in playerReferences)
             {
-                fetchedPlayerReferences.Add(playerReference);
+                _fetchedPlayerReferences.Add(playerReference);
             }
         }
 
         [When(@"fetching player references from tournament by tournament name: ""(.*)""")]
         public void WhenFetchingPlayerReferencesFromTournamentByTournamentName(string tournamentName)
         {
-            List<PlayerReference> playerReferences = tournamentService.GetPlayerReferencesByTournamentName(tournamentName);
+            List<PlayerReference> playerReferences = _tournamentService.GetPlayerReferencesByTournamentName(tournamentName);
 
             foreach (PlayerReference playerReference in playerReferences)
             {
-                fetchedPlayerReferences.Add(playerReference);
+                _fetchedPlayerReferences.Add(playerReference);
             }
         }
 
         [Then(@"tournament (.*) should be valid with name: ""(.*)""")]
         public void ThenTournamentShouldBeValidWithName(int tournamentIndex, string correctName)
         {
-            CheckTournamentValidity(createdTournaments[tournamentIndex], correctName);
+            CheckTournamentValidity(_createdTournaments[tournamentIndex], correctName);
         }
 
         [Then(@"fetched tournament (.*) should be valid with name: ""(.*)""")]
         public void ThenFetchedTournamentShouldBeValidWithName(int tournamentIndex, string correctName)
         {
-            CheckTournamentValidity(fetchedTournaments[tournamentIndex], correctName);
+            CheckTournamentValidity(_fetchedTournaments[tournamentIndex], correctName);
         }
 
         [Then(@"tournament (.*) should contain valid betters with names: ""(.*)""")]
         public void ThenTournamentShouldContainValidBettersWithNames(int tournamentIndex, string commaSeparatedBetterNames)
         {
-            Tournament tournament = createdTournaments[tournamentIndex];
+            Tournament tournament = _createdTournaments[tournamentIndex];
             List<string> betterNames = StringUtility.ToStringList(commaSeparatedBetterNames, ",");
 
             foreach (string betterName in betterNames)
@@ -211,7 +204,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests.ServiceTests
         [Then(@"fetched tournament (.*) should contain valid betters with names: ""(.*)""")]
         public void ThenFetchedTournamentShouldContainValidBettersWithNames(int tournamentIndex, string commaSeparatedBetterNames)
         {
-            Tournament tournament = fetchedTournaments[tournamentIndex];
+            Tournament tournament = _fetchedTournaments[tournamentIndex];
             List<string> betterNames = StringUtility.ToStringList(commaSeparatedBetterNames, ",");
 
             foreach (string betterName in betterNames)
@@ -226,33 +219,33 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests.ServiceTests
         [Then(@"tournament (.*) should be invalid")]
         public void ThenTournamentShouldBeInvalid(int tournamentIndex)
         {
-            createdTournaments[tournamentIndex].Should().BeNull();
+            _createdTournaments[tournamentIndex].Should().BeNull();
         }
 
         [Then(@"fetched tournament (.*) should be invalid")]
         public void ThenFetchedTournamentShouldBeInvalid(int tournamentIndex)
         {
-            fetchedTournaments[tournamentIndex].Should().BeNull();
+            _fetchedTournaments[tournamentIndex].Should().BeNull();
         }
 
         [Then(@"better (.*) in tournament (.*) should be invalid")]
         public void ThenBetterInTournamentShouldBeInvalid(int betterIndex, int tournamentIndex)
         {
-            Tournament tournament = createdTournaments[tournamentIndex];
+            Tournament tournament = _createdTournaments[tournamentIndex];
             tournament.Betters[betterIndex].Should().BeNull();
         }
 
         [Then(@"better count in tournament (.*) should be (.*)")]
         public void ThenBetterCountIndTournamentShouldBe(int tournamentIndex, int betterCount)
         {
-            Tournament tournament = createdTournaments[tournamentIndex];
+            Tournament tournament = _createdTournaments[tournamentIndex];
             tournament.Betters.Should().HaveCount(betterCount);
         }
 
         [Then(@"tournament (.*) should contain exactly these player references with names: ""(.*)""")]
         public void ThenTournamentShouldContainExactlyThesePlayerReferencesWithNames(int tournamentIndex, string commaSeparetedPlayerNames)
         {
-            Tournament tournament = createdTournaments[tournamentIndex];
+            Tournament tournament = _createdTournaments[tournamentIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparetedPlayerNames, ",");
 
             List<PlayerReference> playerReferences = tournament.GetPlayerReferences();
@@ -270,11 +263,11 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests.ServiceTests
         {
             List<string> playerNames = StringUtility.ToStringList(commaSeparetedPlayerNames, ",");
 
-            fetchedPlayerReferences.Should().HaveCount(playerNames.Count);
+            _fetchedPlayerReferences.Should().HaveCount(playerNames.Count);
 
             foreach (string playerName in playerNames)
             {
-                fetchedPlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+                _fetchedPlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
             }
         }
 

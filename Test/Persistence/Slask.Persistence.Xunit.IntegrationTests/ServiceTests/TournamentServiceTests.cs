@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
-using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Persistence;
 using Slask.Persistence.Services;
@@ -28,7 +27,7 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
             _userService = new UserService(slaskContext);
             _tournamentService = new TournamentService(slaskContext);
             _tournament = _tournamentService.CreateTournament("GSL 2019");
-            _tournamentService.Save(_tournament);
+            _tournamentService.Save();
         }
 
         [Fact]
@@ -37,9 +36,8 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
             string tournamentName = "Homestorycup XX";
 
             Tournament tournament = _tournamentService.CreateTournament(tournamentName);
-            _tournamentService.Save(tournament);
+            _tournamentService.Save();
 
-            tournament.Should().NotBeNull();
             tournament.Id.Should().NotBeEmpty();
             tournament.Name.Should().Be(tournamentName);
             tournament.Rounds.Should().BeEmpty();
@@ -47,20 +45,9 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
         }
 
         [Fact]
-        public void CannotSaveInvalidTournament()
-        {
-            Tournament tournament = _tournamentService.CreateTournament("");
-            _tournamentService.Save(tournament);
-
-            tournament.Should().BeNull();
-        }
-
-        [Fact]
         public void CannotCreateTournamentWithNameAlreadyInUseNoMatterLetterCasing()
         {
             Tournament secondTournament = _tournamentService.CreateTournament(_tournament.Name.ToUpper());
-            _tournamentService.Save(_tournament);
-
             secondTournament.Should().BeNull();
         }
 
@@ -68,37 +55,26 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
         public void CanSaveTournament()
         {
             InitializeUsersAndBetters();
-
-            bool saveResult = _tournamentService.Save(_tournament);
-            saveResult.Should().BeTrue();
-        }
-
-        [Fact]
-        public void CannotSaveTournamentWithIssues()
-        {
-            _tournament.AddDualTournamentRound();
-            bool saveResult = _tournamentService.Save(_tournament);
-
-            saveResult.Should().BeFalse();
+            _tournamentService.Save();
         }
 
         [Fact]
         public void CanRenameTournament()
         {
-            bool result = _tournamentService.RenameTournament(_tournament.Id, "BHA Open 2019");
-            _tournamentService.Save(_tournament);
+            bool renameResult = _tournamentService.RenameTournament(_tournament.Id, "BHA Open 2019");
+            _tournamentService.Save();
 
-            result.Should().BeTrue();
+            renameResult.Should().BeTrue();
             _tournament.Name.Should().Be("BHA Open 2019");
         }
 
         [Fact]
         public void CannotRenameTournamentToEmptyName()
         {
-            bool result = _tournamentService.RenameTournament(_tournament.Id, "");
-            _tournamentService.Save(_tournament);
+            bool renameResult = _tournamentService.RenameTournament(_tournament.Id, "");
+            _tournamentService.Save();
 
-            result.Should().BeFalse();
+            renameResult.Should().BeFalse();
             _tournament.Name.Should().Be("GSL 2019");
         }
 
@@ -108,37 +84,37 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
             string tournamentName = "bha open 2019";
 
             Tournament tournament = _tournamentService.CreateTournament(tournamentName);
+            _tournamentService.Save();
 
-            bool result = _tournamentService.RenameTournament(tournament.Id, tournamentName.ToUpper());
+            bool renameResult = _tournamentService.RenameTournament(tournament.Id, tournamentName.ToUpper());
+            _tournamentService.Save();
 
-            result.Should().BeFalse();
+            renameResult.Should().BeFalse();
             tournament.Name.Should().Be(tournamentName);
         }
 
         [Fact]
         public void CannotRenameNonexistingTournament()
         {
-            bool result = _tournamentService.RenameTournament(Guid.NewGuid(), "BHA Open 2019");
+            bool renameResult = _tournamentService.RenameTournament(Guid.NewGuid(), "BHA Open 2019");
 
-            result.Should().BeFalse();
+            renameResult.Should().BeFalse();
         }
 
         [Fact]
         public void CanGetTournamentById()
         {
-            Tournament fetchedTournament = _tournamentService.GetTournamentById(_tournament.Id);
+            Tournament tournament = _tournamentService.GetTournamentById(_tournament.Id);
 
-            fetchedTournament.Should().NotBeNull();
-            fetchedTournament.Name.Should().Be(_tournament.Name);
+            tournament.Name.Should().Be(_tournament.Name);
         }
 
         [Fact]
         public void CanGetTournamentByName()
         {
-            Tournament fetchedTournament = _tournamentService.GetTournamentByName(_tournament.Name);
+            Tournament tournament = _tournamentService.GetTournamentByName(_tournament.Name);
 
-            fetchedTournament.Should().NotBeNull();
-            fetchedTournament.Name.Should().Be(_tournament.Name);
+            tournament.Name.Should().Be(_tournament.Name);
         }
 
         [Fact]
@@ -154,7 +130,7 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
         {
             InitializeUsersAndBetters();
 
-            Better better = _tournament.AddBetter(_tournament.Betters.First().User);
+            Better better = _tournamentService.AddBetterToTournament(_tournament, _userService.GetUserByName("Stålberto"));
 
             better.Should().BeNull();
         }
@@ -192,11 +168,75 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
         {
             InitializeUsersAndBetters();
 
-            RoundBase round = _tournament.AddRoundRobinRound();
+            _tournamentService.AddRoundRobinRound(_tournament);
 
-            List<PlayerReference> playerReferences = _tournament.GetPlayerReferences();
+            List<PlayerReference> playerReferences = _tournamentService.GetPlayerReferencesByTournamentId(_tournament.Id);
 
             playerReferences.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void CanRegisterPlayerReferencesToRound()
+        {
+            InitializeRoundGroupAndPlayers();
+        }
+
+        //[Fact]
+        //public void PlayerReferencesAreAddedToTournamentWhenNewPlayersAreAddedTournament()
+        //{
+        //    InitializeRoundGroupAndPlayers();
+
+        //    List<PlayerReference> playerReferences = _tournament.GetPlayerReferences();
+
+        //    playerReferences.Should().NotBeNull();
+        //    playerReferences.Should().HaveCount(8);
+
+        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Maru").Should().NotBeNull();
+        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stork").Should().NotBeNull();
+        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Taeja").Should().NotBeNull();
+        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Rain").Should().NotBeNull();
+        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Bomber").Should().NotBeNull();
+        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "FanTaSy").Should().NotBeNull();
+        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stephano").Should().NotBeNull();
+        //    playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Thorzain").Should().NotBeNull();
+        //}
+
+        [Fact]
+        public void CanGetAllPlayerReferencesInTournamentByTournamentId()
+        {
+            InitializeRoundGroupAndPlayers();
+
+            List<PlayerReference> playerReferences = _tournamentService.GetPlayerReferencesByTournamentId(_tournament.Id);
+
+            playerReferences.Should().HaveCount(8);
+
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Maru").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stork").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Taeja").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Rain").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Bomber").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "FanTaSy").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stephano").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Thorzain").Should().NotBeNull();
+        }
+
+        [Fact]
+        public void CanGetAllPlayerReferencesInTournamentByTournamentName()
+        {
+            InitializeRoundGroupAndPlayers();
+
+            List<PlayerReference> playerReferences = _tournamentService.GetPlayerReferencesByTournamentName(_tournament.Name);
+
+            playerReferences.Should().HaveCount(8);
+
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Maru").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stork").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Taeja").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Rain").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Bomber").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "FanTaSy").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Stephano").Should().NotBeNull();
+            playerReferences.FirstOrDefault(playerReference => playerReference.Name == "Thorzain").Should().NotBeNull();
         }
 
         private void InitializeUsersAndBetters()
@@ -209,23 +249,22 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
             _tournamentService.AddBetterToTournament(_tournament, _userService.GetUserByName("Stålberto"));
             _tournamentService.AddBetterToTournament(_tournament, _userService.GetUserByName("Bönis"));
             _tournamentService.AddBetterToTournament(_tournament, _userService.GetUserByName("Guggelito"));
-            _tournamentService.Save(_tournament);
+            _tournamentService.Save();
         }
 
         private void InitializeRoundGroupAndPlayers()
         {
             List<string> playerNames = new List<string> { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
 
-            RoundRobinRound round = _tournamentService.AddRoundRobinRoundToTournament(_tournament);
-            _tournamentService.Save(_tournament); // TEST
-            round.SetPlayersPerGroupCount(playerNames.Count);
+            RoundRobinRound round = _tournamentService.AddRoundRobinRound(_tournament);
+            _tournamentService.SetPlayersPerGroupCountInRound(round, playerNames.Count);
 
             foreach (string playerName in playerNames)
             {
-                round.RegisterPlayerReference(playerName);
+                _tournamentService.RegisterPlayerReference(_tournament, playerName);
             }
 
-            _tournamentService.Save(_tournament);
+            _tournamentService.Save();
         }
     }
 }

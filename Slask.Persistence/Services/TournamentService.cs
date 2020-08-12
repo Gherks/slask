@@ -1,4 +1,5 @@
 ﻿using Slask.Domain;
+using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
 using System;
 using System.Collections.Generic;
@@ -134,7 +135,7 @@ namespace Slask.Persistence.Services
             return better;
         }
 
-        public BracketRound AddBracketRoundToTournament(Tournament tournament)
+        public BracketRound AddBracketRound(Tournament tournament)
         {
             BracketRound round = tournament.AddBracketRound();
 
@@ -146,7 +147,7 @@ namespace Slask.Persistence.Services
             return round;
         }
 
-        public DualTournamentRound AddDualTournamentRoundToTournament(Tournament tournament)
+        public DualTournamentRound AddDualTournamentRound(Tournament tournament)
         {
             DualTournamentRound round = tournament.AddDualTournamentRound();
 
@@ -158,7 +159,7 @@ namespace Slask.Persistence.Services
             return round;
         }
 
-        public RoundRobinRound AddRoundRobinRoundToTournament(Tournament tournament)
+        public RoundRobinRound AddRoundRobinRound(Tournament tournament)
         {
             RoundRobinRound round = tournament.AddRoundRobinRound();
 
@@ -170,32 +171,43 @@ namespace Slask.Persistence.Services
             return round;
         }
 
-        public bool Save(Tournament tournament)
+        public PlayerReference RegisterPlayerReference(Tournament tournament, string name)
         {
-            bool tournamentExist = tournament != null;
-            bool tournamentHasNoIssues = tournamentExist && !tournament.HasIssues();
+            PlayerReference playerReference = null;
+            RoundBase firstRound = tournament.GetFirstRound();
 
-            if (tournamentExist && tournamentHasNoIssues)
+            if (firstRound != null)
             {
-                _slaskContext.SaveChanges();
-                return true;
+                _slaskContext.RemoveRange(firstRound.Groups);
+                playerReference = firstRound.RegisterPlayerReference(name);
+                _slaskContext.AddRange(firstRound.Groups);
+
+                if (playerReference != null)
+                {
+                    _slaskContext.Add(playerReference);
+                }
             }
 
-            return false;
+            return playerReference;
         }
 
-        public bool SaveAsync(Tournament tournament)
+        public void SetPlayersPerGroupCountInRound(RoundBase round, int count)
         {
-            bool tournamentExist = tournament != null;
-            bool tournamentHasNoIssues = !tournament.HasIssues();
+            _slaskContext.RemoveRange(round.Groups);
 
-            if (tournamentExist && tournamentHasNoIssues)
-            {
-                _slaskContext.SaveChangesAsync();
-                return true;
-            }
+            round.SetPlayersPerGroupCount(count);
 
-            return false;
+            _slaskContext.AddRange(round.Groups);
+        }
+
+        public void Save()
+        {
+            _slaskContext.SaveChanges();
+        }
+
+        public void SaveAsync()
+        {
+            _slaskContext.SaveChangesAsync();
         }
 
         private bool TournamentCreationParametersAreValid(string name)

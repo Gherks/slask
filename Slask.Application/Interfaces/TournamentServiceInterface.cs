@@ -14,7 +14,7 @@ namespace Slask.Persistence.Services
         Tournament GetTournamentById(Guid id);
         Tournament GetTournamentByName(string name);
         bool RenameTournament(Guid id, string name);
-        bool Save(Tournament tournament);
-        bool SaveAsync(Tournament tournament);
+        void Save();
+        void SaveAsync();
     }
 }

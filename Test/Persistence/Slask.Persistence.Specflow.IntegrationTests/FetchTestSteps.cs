@@ -21,7 +21,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [Then(@"fetched tournament (.*) should contain rounds")]
         public void ThenFetchedTournamentShouldContainRounds(int fetchedTournamentIndex, Table table)
         {
-            Tournament fetchedTournament = fetchedTournaments[fetchedTournamentIndex];
+            Tournament fetchedTournament = _fetchedTournaments[fetchedTournamentIndex];
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
@@ -57,7 +57,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [Then(@"groups within round (.*) in fetched tournament (.*) is of type ""(.*)""")]
         public void ThenGroupsWithinRoundInFetchedTournamentIsOfType(int roundIndex, int fetchedTournamentIndex, string groupType)
         {
-            Tournament fetchedTournament = fetchedTournaments[fetchedTournamentIndex];
+            Tournament fetchedTournament = _fetchedTournaments[fetchedTournamentIndex];
             RoundBase round = fetchedTournament.Rounds[roundIndex];
             groupType = TestUtilities.ParseRoundGroupTypeString(groupType);
 
