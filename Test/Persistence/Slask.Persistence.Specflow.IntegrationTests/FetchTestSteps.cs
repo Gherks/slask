@@ -25,7 +25,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
-                TestUtilities.ParseRoundTable(table.Rows[index], out string roundType, out string name, out int advancingCount, out int playersPerGroupCount);
+                TestUtilities.ParseRoundTable(table.Rows[index], out string roundType, out _, out _, out _);
 
                 if (roundType.Length > 0)
                 {
