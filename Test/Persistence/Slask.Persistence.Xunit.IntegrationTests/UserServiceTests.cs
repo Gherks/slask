@@ -45,6 +45,7 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
             userService.Save();
 
             User duplicateUser = userService.CreateUser(createdUser.Name.ToUpper());
+            userService.Save();
 
             duplicateUser.Should().BeNull();
         }
