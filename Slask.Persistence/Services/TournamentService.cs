@@ -1,4 +1,4 @@
-﻿using Slask.Domain;
+using Slask.Domain;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
 using System;
@@ -135,7 +135,7 @@ namespace Slask.Persistence.Services
             return better;
         }
 
-        public BracketRound AddBracketRound(Tournament tournament)
+        public BracketRound AddBracketRoundToTournament(Tournament tournament)
         {
             BracketRound round = tournament.AddBracketRound();
 
@@ -147,7 +147,7 @@ namespace Slask.Persistence.Services
             return round;
         }
 
-        public DualTournamentRound AddDualTournamentRound(Tournament tournament)
+        public DualTournamentRound AddDualTournamentRoundToTournament(Tournament tournament)
         {
             DualTournamentRound round = tournament.AddDualTournamentRound();
 
@@ -159,7 +159,7 @@ namespace Slask.Persistence.Services
             return round;
         }
 
-        public RoundRobinRound AddRoundRobinRound(Tournament tournament)
+        public RoundRobinRound AddRoundRobinRoundToTournament(Tournament tournament)
         {
             RoundRobinRound round = tournament.AddRoundRobinRound();
 
@@ -189,6 +189,11 @@ namespace Slask.Persistence.Services
             }
 
             return playerReference;
+        }
+
+        public void RenameRoundInTournament(RoundBase round, string name)
+        {
+            round.RenameTo(name);
         }
 
         public void SetPlayersPerGroupCountInRound(RoundBase round, int count)

@@ -88,9 +88,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
                         round = tournament.AddRoundRobinRound();
                     }
 
-                    bool couldNotCreateRound = round == null;
-
-                    if (couldNotCreateRound)
+                    if (round == null)
                     {
                         return;
                     }
@@ -100,9 +98,8 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
                     round.SetPlayersPerGroupCount(playersPerGroupCount);
 
                     createdRounds.Add(round);
-                    bool addedValidRound = round != null;
 
-                    if (addedValidRound)
+                    if (round != null)
                     {
                         createdGroups.AddRange(round.Groups);
                     }

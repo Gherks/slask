@@ -4,7 +4,6 @@ using Slask.Domain.Groups;
 using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
-using Slask.SpecFlow.IntegrationTests.PersistenceTests.ServiceTests;
 using Slask.TestCore;
 using TechTalk.SpecFlow;
 

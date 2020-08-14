@@ -9,7 +9,7 @@ Scenario: Can fetch completed tournament in correct way
 			| Round robin     | 4                         | 5                       |
 			| Dual tournament | 2                         | 4                       |
 			| Bracket         | 1                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure" is registered to tournament 0
 		And betters places match bets
 			| Better name | Round index | Group index | Match index | Player name |
 			| Stålberto   | 0           | 0           | 0           | Maru        |

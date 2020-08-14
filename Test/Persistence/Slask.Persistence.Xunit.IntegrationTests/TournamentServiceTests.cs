@@ -168,7 +168,7 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
         {
             InitializeUsersAndBetters();
 
-            _tournamentService.AddRoundRobinRound(_tournament);
+            _tournamentService.AddRoundRobinRoundToTournament(_tournament);
 
             List<PlayerReference> playerReferences = _tournamentService.GetPlayerReferencesByTournamentId(_tournament.Id);
 
@@ -256,7 +256,7 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
         {
             List<string> playerNames = new List<string> { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
 
-            RoundRobinRound round = _tournamentService.AddRoundRobinRound(_tournament);
+            RoundRobinRound round = _tournamentService.AddRoundRobinRoundToTournament(_tournament);
             _tournamentService.SetPlayersPerGroupCountInRound(round, playerNames.Count);
 
             foreach (string playerName in playerNames)
