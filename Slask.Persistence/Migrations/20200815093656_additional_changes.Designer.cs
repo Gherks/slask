@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Slask.Persistence;
 
 namespace Slask.Persistence.Migrations
 {
     [DbContext(typeof(SlaskContext))]
-    partial class SlaskContextModelSnapshot : ModelSnapshot
+    [Migration("20200815093656_additional_changes")]
+    partial class additional_changes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
