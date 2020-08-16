@@ -1,4 +1,5 @@
-﻿using Slask.Domain;
+using Microsoft.EntityFrameworkCore;
+using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
@@ -56,12 +57,34 @@ namespace Slask.Persistence.Services
 
         public Tournament GetTournamentById(Guid id)
         {
-            return _slaskContext.Tournaments.FirstOrDefault(tournament => tournament.Id == id);
+            Tournament tournament = _slaskContext.Tournaments
+                .Where(tournament => tournament.Id == id)
+                .Include(tournament => tournament.Betters)
+                .Include(tournament => tournament.Rounds)
+                .FirstOrDefault();
+
+            if (tournament != null)
+            {
+                tournament.FindIssues();
+            }
+
+            return tournament;
         }
 
         public Tournament GetTournamentByName(string name)
         {
-            return _slaskContext.Tournaments.FirstOrDefault(tournament => tournament.Name.ToLower() == name.ToLower());
+            Tournament tournament = _slaskContext.Tournaments
+                .Where(tournament => tournament.Name.ToLower() == name.ToLower())
+                .Include(tournament => tournament.Betters)
+                .Include(tournament => tournament.Rounds)
+                .FirstOrDefault();
+
+            if (tournament != null)
+            {
+                tournament.FindIssues();
+            }
+
+            return tournament;
         }
 
         public List<PlayerReference> GetPlayerReferencesByTournamentId(Guid id)
