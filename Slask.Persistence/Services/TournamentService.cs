@@ -210,11 +210,6 @@ namespace Slask.Persistence.Services
             _slaskContext.SaveChanges();
         }
 
-        public void SaveAsync()
-        {
-            _slaskContext.SaveChangesAsync();
-        }
-
         private bool TournamentCreationParametersAreValid(string name)
         {
             bool nameIsEmpty = name == "";
