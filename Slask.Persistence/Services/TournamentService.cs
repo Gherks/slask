@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
@@ -53,6 +53,14 @@ namespace Slask.Persistence.Services
             }
 
             return false;
+        }
+
+        public IEnumerable<Tournament> GetTournaments(int startIndex = 0, int count = 128)
+        {
+            int controlledStartIndex = Math.Max(0, startIndex);
+            int controlledCount = Math.Max(0, count);
+
+            return _slaskContext.Tournaments.Skip(controlledStartIndex).Take(controlledCount);
         }
 
         public Tournament GetTournamentById(Guid id)
