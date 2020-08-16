@@ -52,7 +52,6 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
         [Given(@"players ""(.*)"" is registered to tournament (.*)")]
         [When(@"players ""(.*)"" is registered to tournament (.*)")]
-        [Then(@"players ""(.*)"" is registered to tournament (.*)")]
         public void GivenPlayersIsRegisteredToRound(string commaSeparatedPlayerNames, int tournamentIndex)
         {
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
@@ -153,6 +152,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                     }
 
                     bool playedMatchesSuccessfully = PlayAvailableMatches(group);
+                    _tournamentService.Save();
 
                     if (!playedMatchesSuccessfully)
                     {
@@ -164,7 +164,6 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
         [Given(@"better standings in tournament (.*) from first to last looks like this")]
         [When(@"better standings in tournament (.*) from first to last looks like this")]
-        [Then(@"better standings in tournament (.*) from first to last looks like this")]
         public void GivenBetterStandingsInTournamentFromFirstToLastLooksLikeThis(int tournamentIndex, Table table)
         {
             Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
@@ -210,9 +209,11 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                 }
                 else
                 {
-                    throw new Exception("Invalid player name in given match within given group");
+                    // LOG Error: Invalid player name in given match within given group
                 }
             }
+
+            _tournamentService.Save();
         }
 
         private bool PlayAvailableMatches(GroupBase group)
@@ -245,6 +246,8 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                     }
                 }
             }
+
+            _tournamentService.Save();
 
             return true;
         }
