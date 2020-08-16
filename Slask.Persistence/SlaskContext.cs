@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Slask.Domain;
 using Slask.Domain.Bets;
 using Slask.Domain.Groups;
@@ -25,6 +26,15 @@ namespace Slask.Persistence
         public DbSet<User> Users { get; private set; }
         public DbSet<Tournament> Tournaments { get; private set; }
 
+        public static readonly ILoggerFactory DebugLoggerFactory 
+            = LoggerFactory.Create(builder =>
+        {
+            builder
+                .AddFilter((category, level) 
+                    => category == DbLoggerCategory.ChangeTracking.Name
+                    && level == LogLevel.Debug)
+                .AddDebug();
+        });
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

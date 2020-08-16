@@ -9,6 +9,9 @@ namespace Slask.TestCore
         public static SlaskContext Create()
         {
             return new SlaskContext(new DbContextOptionsBuilder()
+                .UseLoggerFactory(SlaskContext.DebugLoggerFactory)
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options);
         }
