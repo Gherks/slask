@@ -13,13 +13,18 @@ namespace Slask.Domain
     {
         private Tournament()
         {
+            _created = DateTime.Now;
+
             Rounds = new List<RoundBase>();
             Betters = new List<Better>();
             TournamentIssueReporter = new TournamentIssueReporter();
         }
 
+        private readonly DateTime _created;
+
         public Guid Id { get; private set; }
         public string Name { get; private set; }
+        public DateTime Created { get { return _created; } private set { } }
         public List<RoundBase> Rounds { get; private set; }
         public List<Better> Betters { get; private set; }
 
