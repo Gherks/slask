@@ -100,37 +100,6 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
             }
         }
 
-        //[Then(@"fetched round (.*) in tournament should be valid with values")]
-        //public void ThenFetchedRoundInTournamentShouldBeValidWithValues(int roundIndex, Table table)
-        //{
-        //    if (table == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(table));
-        //    }
-
-        //    RoundBase round = fetchedRounds[roundIndex];
-
-        //    for (int index = 0; index < table.Rows.Count; ++index)
-        //    {
-        //        TestUtilities.ParseRoundTable(table.Rows[index], out string roundType, out string name, out int advancingCount, out int playersPerGroupCount);
-
-        //        if (round is BracketRound bracketRound)
-        //        {
-        //            roundType.Should().Be("Bracket");
-        //        }
-        //        else if (round is DualTournamentRound dualTournamentRound)
-        //        {
-        //            roundType.Should().Be("Dual tournament");
-        //        }
-        //        else if (round is RoundRobinRound roundRobinRound)
-        //        {
-        //            roundType.Should().Be("Round robin");
-        //        }
-
-        //        CheckRoundValidity(round, name, advancingCount, playersPerGroupCount);
-        //    }
-        //}
-
         [Then(@"players per group count in round (.*) should be (.*)")]
         public void PlayersPerGroupCountInRoundIsSetTo(int roundIndex, int playersPerGroupCount)
         {
