@@ -20,7 +20,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [Then(@"fetched tournament (.*) should contain rounds")]
         public void ThenFetchedTournamentShouldContainRounds(int fetchedTournamentIndex, Table table)
         {
-            Tournament fetchedTournament = _fetchedTournaments[fetchedTournamentIndex];
+            Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
@@ -29,7 +29,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                 if (roundType.Length > 0)
                 {
                     roundType = TestUtilities.ParseRoundGroupTypeString(roundType);
-                    RoundBase round = fetchedTournament.Rounds[index];
+                    RoundBase round = tournament.Rounds[index];
 
                     if (roundType == "BRACKET")
                     {
@@ -56,8 +56,9 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [Then(@"groups within round (.*) in fetched tournament (.*) is of type ""(.*)""")]
         public void ThenGroupsWithinRoundInFetchedTournamentIsOfType(int roundIndex, int fetchedTournamentIndex, string groupType)
         {
-            Tournament fetchedTournament = _fetchedTournaments[fetchedTournamentIndex];
-            RoundBase round = fetchedTournament.Rounds[roundIndex];
+            Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
+
+            RoundBase round = tournament.Rounds[roundIndex];
             groupType = TestUtilities.ParseRoundGroupTypeString(groupType);
 
             if (groupType == "BRACKET")

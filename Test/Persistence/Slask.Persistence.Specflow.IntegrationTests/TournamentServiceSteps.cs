@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
@@ -23,47 +23,10 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
     public class TournamentServiceStepDefinitions : UserServiceStepDefinitions
     {
         protected readonly TournamentService _tournamentService;
-        protected readonly List<Tournament> _createdTournaments;
-        protected readonly List<Tournament> _fetchedTournaments;
-        protected readonly List<Better> _createdBetters;
-        protected readonly List<Better> _fetchedBetters;
-        protected readonly List<RoundBase> _createdRounds;
-        protected readonly List<RoundBase> _fetchedRounds;
-        protected readonly List<GroupBase> _createdGroups;
-        protected readonly List<GroupBase> _fetchedGroups;
-        protected readonly List<PlayerReference> _createdPlayerReferences;
-        protected readonly List<PlayerReference> _fetchedPlayerReferences;
 
         public TournamentServiceStepDefinitions()
         {
             _tournamentService = new TournamentService(InMemoryContextCreator.Create());
-            _createdTournaments = new List<Tournament>();
-            _fetchedTournaments = new List<Tournament>();
-            _createdBetters = new List<Better>();
-            _fetchedBetters = new List<Better>();
-            _createdRounds = new List<RoundBase>();
-            _fetchedRounds = new List<RoundBase>();
-            _createdGroups = new List<GroupBase>();
-            _fetchedGroups = new List<GroupBase>();
-            _createdPlayerReferences = new List<PlayerReference>();
-            _fetchedPlayerReferences = new List<PlayerReference>();
-        }
-
-        [Given(@"a tournament named ""(.*)"" has been created")]
-        [When(@"a tournament named ""(.*)"" has been created")]
-        public Tournament GivenATournamentNamedHasBeenCreated(string name)
-        {
-            Tournament tournament = _tournamentService.CreateTournament(name);
-
-            if (tournament != null)
-            {
-                _createdTournaments.Add(tournament);
-                _tournamentService.Save();
-
-                return tournament;
-            }
-
-            return null;
         }
 
         [Given(@"a tournament named ""(.*)"" has been created with users ""(.*)"" added to it")]
@@ -77,7 +40,8 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
             _userService.Save();
 
-            Tournament tournament = GivenATournamentNamedHasBeenCreated(tournamentName);
+            Tournament tournament = _tournamentService.CreateTournament(tournamentName);
+            _tournamentService.Save();
 
             foreach (User user in _createdUsers)
             {
@@ -94,7 +58,8 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         public void GivenPlayersIsRegisteredToRound(string commaSeparatedPlayerNames, int tournamentIndex)
         {
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
-            Tournament tournament = _createdTournaments[tournamentIndex];
+            //Tournament tournament = _createdTournaments[tournamentIndex];
+            Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
 
             foreach (string playerName in playerNames)
             {
@@ -102,26 +67,19 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
 
             _tournamentService.Save();
-
-            RoundBase round = tournament.GetFirstRound();
-            _createdGroups.Clear();
-            while (round != null)
-            {
-                _createdGroups.AddRange(round.Groups);
-                round = round.GetNextRound();
-            }
         }
 
         [Given(@"tournament (.*) adds rounds")]
         [When(@"tournament (.*) adds rounds")]
         public void GivenTournamentAddsRounds(int tournamentIndex, Table table)
         {
-            if (_createdTournaments.Count <= tournamentIndex)
-            {
-                throw new IndexOutOfRangeException("Given tournament index is out of bounds");
-            }
+            //if (_createdTournaments.Count <= tournamentIndex)
+            //{
+            //    throw new IndexOutOfRangeException("Given tournament index is out of bounds");
+            //}
 
-            Tournament tournament = _createdTournaments[tournamentIndex];
+            //Tournament tournament = _createdTournaments[tournamentIndex];
+            Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
 
             foreach (TableRow row in table.Rows)
             {
@@ -157,32 +115,8 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                     _tournamentService.Save();
                     _tournamentService.SetPlayersPerGroupCountInRound(round, playersPerGroupCount);
                     _tournamentService.Save();
-
-                    _createdRounds.Add(round);
-                    bool addedValidRound = round != null;
-
-                    if (addedValidRound)
-                    {
-                        _createdGroups.AddRange(round.Groups);
-                    }
-
-                    round = tournament.GetFirstRound();
-                    _createdGroups.Clear();
-                    while (round != null)
-                    {
-                        _createdGroups.AddRange(round.Groups);
-                        round = round.GetNextRound();
-                    }
                 }
             }
-        }
-
-        [Given(@"fetching tournament by tournament name: ""(.*)""")]
-        [When(@"fetching tournament by tournament name: ""(.*)""")]
-        public Tournament GivenFetchingTournamentByTournamentName(string name)
-        {
-            _fetchedTournaments.Add(_tournamentService.GetTournamentByName(name));
-            return _fetchedTournaments.Last();
         }
 
         [Given(@"betters places match bets")]
@@ -191,12 +125,14 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         {
             foreach (TableRow row in table.Rows)
             {
-                TestUtilities.ParseBetterMatchBetPlacements(row, out string betterName, out int _, out int groupIndex, out int matchIndex, out string playerName);
+                TestUtilities.ParseBetterMatchBetPlacements(row, out string betterName, out int roundIndex, out int groupIndex, out int matchIndex, out string playerName);
 
-                GroupBase group = _createdGroups[groupIndex];
+                Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
+                RoundBase round = tournament.Rounds[roundIndex];
+                GroupBase group = round.Groups[groupIndex];
                 Match match = group.Matches[matchIndex];
 
-                _tournamentService.BetterPlacesMatchBetOnMatch(group.Round.Tournament.Id, match.Id, betterName, playerName);
+                _tournamentService.BetterPlacesMatchBetOnMatch(tournament.Id, match.Id, betterName, playerName);
                 _tournamentService.Save();
             }
         }
@@ -207,19 +143,10 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         {
             foreach (TableRow row in table.Rows)
             {
-                TestUtilities.ParseTargetGroupToPlay(row, out int tournamentIndex, out int roundIndex, out int groupIndex);
-
-                bool tournamentIndexIsValid = _createdTournaments.Count > tournamentIndex;
-                bool roundIndexIsValid = _createdTournaments[tournamentIndex].Rounds.Count > roundIndex;
-                bool groupIndexIsValid = _createdTournaments[tournamentIndex].Rounds[roundIndex].Groups.Count > groupIndex;
-
-                if (!tournamentIndexIsValid || !roundIndexIsValid || !groupIndexIsValid)
-                {
-                    throw new IndexOutOfRangeException("Tournament, round, or group with given index does not exist");
-                }
+                TestUtilities.ParseTargetGroupToPlay(row, out int _, out int roundIndex, out int groupIndex);
 
                 SystemTimeMocker.Reset();
-                Tournament tournament = _createdTournaments[tournamentIndex];
+                Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
                 RoundBase round = tournament.Rounds[roundIndex];
                 GroupBase group = round.Groups[groupIndex];
 
@@ -249,7 +176,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [Then(@"better standings in tournament (.*) from first to last looks like this")]
         public void GivenBetterStandingsInTournamentFromFirstToLastLooksLikeThis(int tournamentIndex, Table table)
         {
-            Tournament tournament = _createdTournaments[tournamentIndex];
+            Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
 
             List<StandingsEntry<Better>> betterStandings = tournament.GetBetterStandings();
 
@@ -277,7 +204,9 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             {
                 TestUtilities.ParseScoreAddedToMatchPlayer(row, out int roundIndex, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
 
-                GroupBase group = _createdGroups[groupIndex];
+                Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
+                RoundBase round = tournament.Rounds[roundIndex];
+                GroupBase group = round.Groups[groupIndex];
                 Match match = group.Matches[matchIndex];
 
                 SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);

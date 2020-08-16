@@ -1,4 +1,4 @@
-Feature: FetchTest
+﻿Feature: FetchTest
 	Makes sure a tournament is still intact after being played to completion, stored in database, and fetched from database. 
 
 @FetchTestTag
@@ -108,19 +108,19 @@ Scenario: Can fetch completed tournament in correct way
 		# Bet on first set of matches in first dual tournament group
 		And betters places match bets
 			| Better name | Round index | Group index | Match index | Player name |
-			| Stålberto   | 1           | 2           | 0           | Bomber      |
-			| Stålberto   | 1           | 2           | 1           | Rain        |
-			| Bönis       | 1           | 2           | 0           | Maru        |
-			| Bönis       | 1           | 2           | 1           | Stork       |
-			| Guggelito   | 1           | 2           | 0           | Bomber      |
-			| Guggelito   | 1           | 2           | 1           | Rain        |
-			| Kimmieboi   | 1           | 2           | 0           | Maru        |
-			| Kimmieboi   | 1           | 2           | 1           | Stork       |
+			| Stålberto   | 1           | 0           | 0           | Bomber      |
+			| Stålberto   | 1           | 0           | 1           | Rain        |
+			| Bönis       | 1           | 0           | 0           | Maru        |
+			| Bönis       | 1           | 0           | 1           | Stork       |
+			| Guggelito   | 1           | 0           | 0           | Bomber      |
+			| Guggelito   | 1           | 0           | 1           | Rain        |
+			| Kimmieboi   | 1           | 0           | 0           | Maru        |
+			| Kimmieboi   | 1           | 0           | 1           | Stork       |
 		# Play first set of matches in first dual tournament group
 		And score is added to players in given matches in groups
-			| Group index | Match index | Scoring player | Added score |
-			| 2           | 0           | Bomber         | 2           |
-			| 2           | 1           | Rain           | 2           |
+			| Round index | Group index | Match index | Scoring player | Added score |
+			| 1           | 0           | 0           | Bomber         | 2           |
+			| 1           | 0           | 1           | Rain           | 2           |
 		And better standings in tournament 0 from first to last looks like this
 			| Better name | Points |
 			| Stålberto   | 13     |
@@ -131,19 +131,19 @@ Scenario: Can fetch completed tournament in correct way
 		# Bet on winners and losers matches in first dual tournament group
 		And betters places match bets
 			| Better name | Round index | Group index | Match index | Player name |
-			| Stålberto   | 1           | 2           | 2           | Rain        |
-			| Stålberto   | 1           | 2           | 3           | Stork       |
-			| Bönis       | 1           | 2           | 2           | Bomber      |
-			| Bönis       | 1           | 2           | 3           | Maru        |
-			| Guggelito   | 1           | 2           | 2           | Bomber      |
-			| Guggelito   | 1           | 2           | 3           | Stork       |
-			| Kimmieboi   | 1           | 2           | 2           | Bomber      |
-			| Kimmieboi   | 1           | 2           | 3           | Maru        |
+			| Stålberto   | 1           | 0           | 2           | Rain        |
+			| Stålberto   | 1           | 0           | 3           | Stork       |
+			| Bönis       | 1           | 0           | 2           | Bomber      |
+			| Bönis       | 1           | 0           | 3           | Maru        |
+			| Guggelito   | 1           | 0           | 2           | Bomber      |
+			| Guggelito   | 1           | 0           | 3           | Stork       |
+			| Kimmieboi   | 1           | 0           | 2           | Bomber      |
+			| Kimmieboi   | 1           | 0           | 3           | Maru        |
 		# Play winners and losers matches in first dual tournament group
 		And score is added to players in given matches in groups
-			| Group index | Match index | Scoring player | Added score |
-			| 2           | 2           | Bomber         | 2           |
-			| 2           | 3           | Maru           | 2           |
+			| Round index | Group index | Match index | Scoring player | Added score |
+			| 1           | 0           | 2           | Bomber         | 2           |
+			| 1           | 0           | 3           | Maru           | 2           |
 		And better standings in tournament 0 from first to last looks like this
 			| Better name | Points |
 			| Kimmieboi   | 15     |
@@ -154,14 +154,14 @@ Scenario: Can fetch completed tournament in correct way
 		# Bet on decider match in first dual tournament group
 		And betters places match bets
 			| Better name | Round index | Group index | Match index | Player name |
-			| Stålberto   | 1           | 2           | 4           | Maru        |
-			| Bönis       | 1           | 2           | 4           | Rain        |
-			| Guggelito   | 1           | 2           | 4           | Maru        |
-			| Kimmieboi   | 1           | 2           | 4           | Rain        |
+			| Stålberto   | 1           | 0           | 4           | Maru        |
+			| Bönis       | 1           | 0           | 4           | Rain        |
+			| Guggelito   | 1           | 0           | 4           | Maru        |
+			| Kimmieboi   | 1           | 0           | 4           | Rain        |
 		# Play decider match in first dual tournament group
 		And score is added to players in given matches in groups
-			| Group index | Match index | Scoring player | Added score |
-			| 2           | 4           | Maru           | 2           |
+			| Round index | Group index | Match index | Scoring player | Added score |
+			| 1           | 0           | 4           | Maru           | 2           |
 		And better standings in tournament 0 from first to last looks like this
 			| Better name | Points |
 			| Kimmieboi   | 15     |
@@ -172,19 +172,19 @@ Scenario: Can fetch completed tournament in correct way
 		# Bet on first set of matches in second dual tournament group
 		And betters places match bets
 			| Better name | Round index | Group index | Match index | Player name |
-			| Stålberto   | 1           | 3           | 0           | Cure        |
-			| Stålberto   | 1           | 3           | 1           | Stephano    |
-			| Bönis       | 1           | 3           | 0           | FanTaSy     |
-			| Bönis       | 1           | 3           | 1           | Thorzain    |
-			| Guggelito   | 1           | 3           | 0           | FanTaSy     |
-			| Guggelito   | 1           | 3           | 1           | Thorzain    |
-			| Kimmieboi   | 1           | 3           | 0           | FanTaSy     |
-			| Kimmieboi   | 1           | 3           | 1           | Stephano    |
+			| Stålberto   | 1           | 1           | 0           | Cure        |
+			| Stålberto   | 1           | 1           | 1           | Stephano    |
+			| Bönis       | 1           | 1           | 0           | FanTaSy     |
+			| Bönis       | 1           | 1           | 1           | Thorzain    |
+			| Guggelito   | 1           | 1           | 0           | FanTaSy     |
+			| Guggelito   | 1           | 1           | 1           | Thorzain    |
+			| Kimmieboi   | 1           | 1           | 0           | FanTaSy     |
+			| Kimmieboi   | 1           | 1           | 1           | Stephano    |
 		# Play first set of matches in second dual tournament group
 		And score is added to players in given matches in groups
-			| Group index | Match index | Scoring player | Added score |
-			| 3           | 0           | Cure           | 2           |
-			| 3           | 1           | Stephano       | 2           |
+			| Round index | Group index | Match index | Scoring player | Added score |
+			| 1           | 1           | 0           | Cure           | 2           |
+			| 1           | 1           | 1           | Stephano       | 2           |
 		And better standings in tournament 0 from first to last looks like this
 			| Better name | Points |
 			| Stålberto   | 16     |
@@ -195,19 +195,19 @@ Scenario: Can fetch completed tournament in correct way
 		# Bet on winners and losers matches in second dual tournament group
 		And betters places match bets
 			| Better name | Round index | Group index | Match index | Player name |
-			| Stålberto   | 1           | 3           | 2           | Stephano    |
-			| Stålberto   | 1           | 3           | 3           | Thorzain    |
-			| Bönis       | 1           | 3           | 2           | Cure        |
-			| Bönis       | 1           | 3           | 3           | FanTaSy     |
-			| Guggelito   | 1           | 3           | 2           | Stephano    |
-			| Guggelito   | 1           | 3           | 3           | FanTaSy     |
-			| Kimmieboi   | 1           | 3           | 2           | Cure        |
-			| Kimmieboi   | 1           | 3           | 3           | Thorzain    |
+			| Stålberto   | 1           | 1           | 2           | Stephano    |
+			| Stålberto   | 1           | 1           | 3           | Thorzain    |
+			| Bönis       | 1           | 1           | 2           | Cure        |
+			| Bönis       | 1           | 1           | 3           | FanTaSy     |
+			| Guggelito   | 1           | 1           | 2           | Stephano    |
+			| Guggelito   | 1           | 1           | 3           | FanTaSy     |
+			| Kimmieboi   | 1           | 1           | 2           | Cure        |
+			| Kimmieboi   | 1           | 1           | 3           | Thorzain    |
 		# Play winners and losers matches in second dual tournament groups
 		And score is added to players in given matches in groups
-			| Group index | Match index | Scoring player | Added score |
-			| 3           | 2           | Cure           | 2           |
-			| 3           | 3           | FanTaSy        | 2           |
+			| Round index | Group index | Match index | Scoring player | Added score |
+			| 1           | 1           | 2           | Cure           | 2           |
+			| 1           | 1           | 3           | FanTaSy        | 2           |
 		And better standings in tournament 0 from first to last looks like this
 			| Better name | Points |
 			| Kimmieboi   | 17     |
@@ -218,14 +218,14 @@ Scenario: Can fetch completed tournament in correct way
 		# Bet on decider match in second dual tournament group
 		And betters places match bets
 			| Better name | Round index | Group index | Match index | Player name |
-			| Stålberto   | 1           | 3           | 4           | Stephano    |
-			| Bönis       | 1           | 3           | 4           | FanTaSy     |
-			| Guggelito   | 1           | 3           | 4           | FanTaSy     |
-			| Kimmieboi   | 1           | 3           | 4           | Stephano    |
+			| Stålberto   | 1           | 1           | 4           | Stephano    |
+			| Bönis       | 1           | 1           | 4           | FanTaSy     |
+			| Guggelito   | 1           | 1           | 4           | FanTaSy     |
+			| Kimmieboi   | 1           | 1           | 4           | Stephano    |
 		# Play decider match in second dual tournament group
 		And score is added to players in given matches in groups
-			| Group index | Match index | Scoring player | Added score |
-			| 3           | 4           | FanTaSy        | 2           |
+			| Round index | Group index | Match index | Scoring player | Added score |
+			| 1           | 1           | 4           | FanTaSy        | 2           |
 		And better standings in tournament 0 from first to last looks like this
 			| Better name | Points |
 			| Kimmieboi   | 17     |
@@ -237,19 +237,19 @@ Scenario: Can fetch completed tournament in correct way
 		# Bet on semifinal matches in bracket group
 		And betters places match bets
 			| Better name | Round index | Group index | Match index | Player name |
-			| Stålberto   | 2           | 4           | 0           | Maru        |
-			| Stålberto   | 2           | 4           | 1           | Cure        |
-			| Bönis       | 2           | 4           | 0           | Bomber      |
-			| Bönis       | 2           | 4           | 1           | Cure        |
-			| Guggelito   | 2           | 4           | 0           | Bomber      |
-			| Guggelito   | 2           | 4           | 1           | Cure        |
-			| Kimmieboi   | 2           | 4           | 0           | Bomber      |
-			| Kimmieboi   | 2           | 4           | 1           | FanTaSy     |
+			| Stålberto   | 2           | 0           | 0           | Maru        |
+			| Stålberto   | 2           | 0           | 1           | Cure        |
+			| Bönis       | 2           | 0           | 0           | Bomber      |
+			| Bönis       | 2           | 0           | 1           | Cure        |
+			| Guggelito   | 2           | 0           | 0           | Bomber      |
+			| Guggelito   | 2           | 0           | 1           | Cure        |
+			| Kimmieboi   | 2           | 0           | 0           | Bomber      |
+			| Kimmieboi   | 2           | 0           | 1           | FanTaSy     |
 		# Play semifinal matches in bracket group
 		And score is added to players in given matches in groups
-			| Group index | Match index | Scoring player | Added score |
-			| 4           | 0           | Bomber         | 2           |
-			| 4           | 1           | Cure           | 2           |
+			| Round index | Group index | Match index | Scoring player | Added score |
+			| 2           | 0           | 0           | Bomber         | 2           |
+			| 2           | 0           | 1           | Cure           | 2           |
 		And better standings in tournament 0 from first to last looks like this
 			| Better name | Points |
 			| Kimmieboi   | 18     |
@@ -260,21 +260,20 @@ Scenario: Can fetch completed tournament in correct way
 		# Bet on final match in bracket group
 		And betters places match bets
 			| Better name | Round index | Group index | Match index | Player name |
-			| Stålberto   | 2           | 4           | 2           | Bomber      |
-			| Bönis       | 2           | 4           | 2           | Cure        |
-			| Guggelito   | 2           | 4           | 2           | Cure        |
-			| Kimmieboi   | 2           | 4           | 2           | Bomber      |
+			| Stålberto   | 2           | 0           | 2           | Bomber      |
+			| Bönis       | 2           | 0           | 2           | Cure        |
+			| Guggelito   | 2           | 0           | 2           | Cure        |
+			| Kimmieboi   | 2           | 0           | 2           | Bomber      |
 		# Play final match in bracket group
 		And score is added to players in given matches in groups
-			| Group index | Match index | Scoring player | Added score |
-			| 4           | 2           | Bomber         | 2           |
+			| Round index | Group index | Match index | Scoring player | Added score |
+			| 2           | 0           | 2           | Bomber         | 2           |
 		And better standings in tournament 0 from first to last looks like this
 			| Better name | Points |
 			| Kimmieboi   | 19     |
 			| Stålberto   | 18     |
 			| Bönis       | 17     |
 			| Guggelito   | 15     |
-	When fetching tournament by tournament name: "Homestory Cup XX"
 	Then fetched tournament 0 should contain rounds
 		| Round type      |
 		| Round robin     |
