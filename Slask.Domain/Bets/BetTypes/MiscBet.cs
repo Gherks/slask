@@ -1,4 +1,6 @@
-﻿namespace Slask.Domain.Bets.BetTypes
+﻿using Slask.Domain.ObjectState;
+
+namespace Slask.Domain.Bets.BetTypes
 {
     public class MiscBet : BetBase
     {
@@ -17,7 +19,8 @@
 
             return new MiscBet
             {
-                Player = player
+                Player = player,
+                ObjectState = ObjectStateEnum.Added
             };
         }
 

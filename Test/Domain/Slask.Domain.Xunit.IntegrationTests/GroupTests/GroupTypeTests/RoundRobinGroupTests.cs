@@ -78,7 +78,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
                 match.Player1.IncreaseScore(2);
             }
 
-            group.GetPlayState().Should().Be(PlayState.Ongoing);
+            group.GetPlayState().Should().Be(PlayStateEnum.Ongoing);
         }
 
         [Fact]

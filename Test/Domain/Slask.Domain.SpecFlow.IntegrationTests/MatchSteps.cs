@@ -63,7 +63,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
         [Then(@"match (.*) in group (.*) should be in state ""(.*)""")]
         public void ThenMatchInGroupShouldBeInState(int matchIndex, int groupIndex, string playStateString)
         {
-            PlayState playState = ParsePlayStateString(playStateString);
+            PlayStateEnum playState = ParsePlayStateString(playStateString);
 
             GroupBase group = createdGroups[groupIndex];
             Match match = group.Matches[matchIndex];

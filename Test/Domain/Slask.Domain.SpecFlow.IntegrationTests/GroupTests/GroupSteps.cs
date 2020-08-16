@@ -118,7 +118,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.GroupTests
         {
             GroupBase group = createdGroups[groupIndex];
 
-            PlayState playState = ParsePlayStateString(playStateString);
+            PlayStateEnum playState = ParsePlayStateString(playStateString);
 
             group.GetPlayState().Should().Be(playState);
         }

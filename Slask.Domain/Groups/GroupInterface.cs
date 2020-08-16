@@ -18,7 +18,7 @@ namespace Slask.Domain.Groups
         public List<StandingsEntry<PlayerReference>> ChoosenTyingPlayerEntries { get; }
 
         bool AddPlayerReferences(List<PlayerReference> playerReferences);
-        PlayState GetPlayState();
+        PlayStateEnum GetPlayState();
         bool ConstructGroupLayout(int playersPerGroupCount);
         bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences);
         bool NewDateTimeIsValid(Match match, DateTime dateTime);

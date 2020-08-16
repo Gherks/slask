@@ -70,8 +70,8 @@ namespace Slask.Domain.Groups.GroupUtility
 
         private static bool EitherPlayersGroupHasBegun(Player player1, Player player2)
         {
-            bool player1MatchHasBegun = player1.Match.Group.GetPlayState() != PlayState.NotBegun;
-            bool player2MatchHasBegun = player2.Match.Group.GetPlayState() != PlayState.NotBegun;
+            bool player1MatchHasBegun = player1.Match.Group.GetPlayState() != PlayStateEnum.NotBegun;
+            bool player2MatchHasBegun = player2.Match.Group.GetPlayState() != PlayStateEnum.NotBegun;
 
             return player1MatchHasBegun || player2MatchHasBegun;
         }

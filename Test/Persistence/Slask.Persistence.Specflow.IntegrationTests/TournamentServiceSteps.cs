@@ -3,6 +3,8 @@ using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
+using Slask.Domain.Utilities;
+using Slask.Domain.Utilities.StandingsSolvers;
 using Slask.Persistence.Services;
 using Slask.TestCore;
 using System;
@@ -27,8 +29,8 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         protected readonly List<Better> _fetchedBetters;
         protected readonly List<RoundBase> _createdRounds;
         protected readonly List<RoundBase> _fetchedRounds;
-        //protected readonly List<GroupBase> _createdGroups;
-        //protected readonly List<GroupBase> _fetchedGroups;
+        protected readonly List<GroupBase> _createdGroups;
+        protected readonly List<GroupBase> _fetchedGroups;
         protected readonly List<PlayerReference> _createdPlayerReferences;
         protected readonly List<PlayerReference> _fetchedPlayerReferences;
 
@@ -41,8 +43,8 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             _fetchedBetters = new List<Better>();
             _createdRounds = new List<RoundBase>();
             _fetchedRounds = new List<RoundBase>();
-            //_createdGroups = new List<GroupBase>();
-            //_fetchedGroups = new List<GroupBase>();
+            _createdGroups = new List<GroupBase>();
+            _fetchedGroups = new List<GroupBase>();
             _createdPlayerReferences = new List<PlayerReference>();
             _fetchedPlayerReferences = new List<PlayerReference>();
         }
@@ -72,17 +74,15 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             foreach (string userName in userNames)
             {
                 _createdUsers.Add(_userService.CreateUser(userName));
-                _userService.Save();
             }
+            _userService.Save();
 
             Tournament tournament = GivenATournamentNamedHasBeenCreated(tournamentName);
 
             foreach (User user in _createdUsers)
             {
                 _tournamentService.AddBetterToTournament(tournament, user);
-                _tournamentService.Save();
             }
-
             _tournamentService.Save();
 
             return tournament;
@@ -98,38 +98,19 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
             foreach (string playerName in playerNames)
             {
-                _tournamentService.Save();
                 _tournamentService.RegisterPlayerReference(tournament, playerName);
-                _tournamentService.Save();
             }
 
-            //round = round.Tournament.GetFirstRound();
+            _tournamentService.Save();
 
-            //_createdGroups.Clear();
-            //while (round != null)
-            //{
-            //    _createdGroups.AddRange(round.Groups);
-            //    round = round.GetNextRound();
-            //}
+            RoundBase round = tournament.GetFirstRound();
+            _createdGroups.Clear();
+            while (round != null)
+            {
+                _createdGroups.AddRange(round.Groups);
+                round = round.GetNextRound();
+            }
         }
-
-
-        //[Given(@"a tournament named ""(.*)"" with player references ""(.*)"" added to it")]
-        //[When(@"a tournament named ""(.*)"" with player references ""(.*)"" added to it")]
-        //public Tournament GivenATournamentNamedWithPlayerReferencesAddedToIt(string tournamentName, string commaSeparatedPlayerNames)
-        //{
-        //    Tournament tournament = GivenATournamentNamedHasBeenCreated(tournamentName);
-        //    List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
-
-        //    RoundBase bracketRound = tournament.AddBracketRound();
-
-        //    foreach (string playerName in playerNames)
-        //    {
-        //        _createdPlayerReferences.Add(bracketRound.RegisterPlayerReference(playerName));
-        //    }
-
-        //    return tournament;
-        //}
 
         [Given(@"tournament (.*) adds rounds")]
         [When(@"tournament (.*) adds rounds")]
@@ -157,7 +138,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                     }
                     else if (type == "DUALTOURNAMENT")
                     {
-                        round =  _tournamentService.AddDualTournamentRoundToTournament(tournament);
+                        round = _tournamentService.AddDualTournamentRoundToTournament(tournament);
                     }
                     else if (type == "ROUNDROBIN")
                     {
@@ -177,13 +158,21 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                     _tournamentService.SetPlayersPerGroupCountInRound(round, playersPerGroupCount);
                     _tournamentService.Save();
 
-                    //_createdRounds.Add(round);
-                    //bool addedValidRound = round != null;
+                    _createdRounds.Add(round);
+                    bool addedValidRound = round != null;
 
-                    //if (addedValidRound)
-                    //{
-                    //    _createdGroups.AddRange(round.Groups);
-                    //}
+                    if (addedValidRound)
+                    {
+                        _createdGroups.AddRange(round.Groups);
+                    }
+
+                    round = tournament.GetFirstRound();
+                    _createdGroups.Clear();
+                    while (round != null)
+                    {
+                        _createdGroups.AddRange(round.Groups);
+                        round = round.GetNextRound();
+                    }
                 }
             }
         }
@@ -227,6 +216,116 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
         }
 
+        [Given(@"betters places match bets")]
+        [When(@"betters places match bets")]
+        public void GivenBettersPlacesMatchBets(Table table)
+        {
+            foreach (TableRow row in table.Rows)
+            {
+                TestUtilities.ParseBetterMatchBetPlacements(row, out string betterName, out int _, out int groupIndex, out int matchIndex, out string playerName);
+
+                GroupBase group = _createdGroups[groupIndex];
+                Match match = group.Matches[matchIndex];
+
+                _tournamentService.BetterPlacesMatchBetOnMatch(group.Round.Tournament.Id, match.Id, betterName, playerName);
+                _tournamentService.Save();
+            }
+        }
+
+        [Given(@"groups within tournament is played out")]
+        [When(@"groups within tournament is played out")]
+        public void GivenGroupsWithinTournamentIsPlayedOut(Table table)
+        {
+            foreach (TableRow row in table.Rows)
+            {
+                TestUtilities.ParseTargetGroupToPlay(row, out int tournamentIndex, out int roundIndex, out int groupIndex);
+
+                bool tournamentIndexIsValid = _createdTournaments.Count > tournamentIndex;
+                bool roundIndexIsValid = _createdTournaments[tournamentIndex].Rounds.Count > roundIndex;
+                bool groupIndexIsValid = _createdTournaments[tournamentIndex].Rounds[roundIndex].Groups.Count > groupIndex;
+
+                if (!tournamentIndexIsValid || !roundIndexIsValid || !groupIndexIsValid)
+                {
+                    throw new IndexOutOfRangeException("Tournament, round, or group with given index does not exist");
+                }
+
+                SystemTimeMocker.Reset();
+                Tournament tournament = _createdTournaments[tournamentIndex];
+                RoundBase round = tournament.Rounds[roundIndex];
+                GroupBase group = round.Groups[groupIndex];
+
+                while (group.GetPlayState() != PlayStateEnum.Finished)
+                {
+                    foreach (Match match in group.Matches)
+                    {
+                        if (match.IsReady() && match.GetPlayState() == PlayStateEnum.NotBegun)
+                        {
+                            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+                            break;
+                        }
+                    }
+
+                    bool playedMatchesSuccessfully = PlayAvailableMatches(group);
+
+                    if (!playedMatchesSuccessfully)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
+        [Given(@"better standings in tournament (.*) from first to last looks like this")]
+        [When(@"better standings in tournament (.*) from first to last looks like this")]
+        [Then(@"better standings in tournament (.*) from first to last looks like this")]
+        public void GivenBetterStandingsInTournamentFromFirstToLastLooksLikeThis(int tournamentIndex, Table table)
+        {
+            Tournament tournament = _createdTournaments[tournamentIndex];
+
+            List<StandingsEntry<Better>> betterStandings = tournament.GetBetterStandings();
+
+            betterStandings.Should().HaveCount(table.Rows.Count);
+
+            for (int index = 0; index < table.Rows.Count; ++index)
+            {
+                TestUtilities.ParseBetterStandings(table.Rows[index], out string betterName, out int points);
+
+                betterStandings[index].Object.User.Name.Should().Be(betterName);
+                betterStandings[index].Points.Should().Be(points);
+            }
+        }
+
+        [Given(@"score is added to players in given matches in groups")]
+        [When(@"score is added to players in given matches in groups")]
+        public void GivenScoreIsAddedToPlayersInGivenMatchesInGroups(Table table)
+        {
+            if (table == null)
+            {
+                throw new ArgumentNullException(nameof(table));
+            }
+
+            foreach (TableRow row in table.Rows)
+            {
+                TestUtilities.ParseSoreAddedToMatchPlayer(row, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
+
+                GroupBase group = _createdGroups[groupIndex];
+                Match match = group.Matches[matchIndex];
+
+                SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+
+                Player player = match.FindPlayer(scoringPlayer);
+
+                if (player != null)
+                {
+                    player.IncreaseScore(scoreAdded);
+                }
+                else
+                {
+                    throw new Exception("Invalid player name in given match within given group");
+                }
+            }
+        }
+
         [When(@"tournament (.*) is renamed to: ""(.*)""")]
         public void WhenTournamentIsRenamedTo(int tournamentIndex, string newName)
         {
@@ -243,35 +342,6 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             _fetchedBetters.Clear();
             _fetchedBetters.AddRange(_tournamentService.GetBettersByTournamentId(tournamentId));
         }
-
-        //[When(@"fetching betters from tournament by tournament name: ""(.*)""")]
-        //public void FetchingBettersFromTournamentByTournamentName(string tournamentName)
-        //{
-        //    _fetchedBetters = _tournamentService.GetBettersByTournamentName(tournamentName);
-        //}
-
-        //[When(@"fetching player references from tournament (.*) by tournament id")]
-        //public void WhenFetchingPlayerReferencesFromTournamentByTournamentId(int tournamentIndex)
-        //{
-        //    Tournament tournament = _createdTournaments[tournamentIndex];
-        //    List<PlayerReference> playerReferences = _tournamentService.GetPlayerReferencesByTournamentId(tournament.Id);
-
-        //    foreach (PlayerReference playerReference in playerReferences)
-        //    {
-        //        _fetchedPlayerReferences.Add(playerReference);
-        //    }
-        //}
-
-        //[When(@"fetching player references from tournament by tournament name: ""(.*)""")]
-        //public void WhenFetchingPlayerReferencesFromTournamentByTournamentName(string tournamentName)
-        //{
-        //    List<PlayerReference> playerReferences = _tournamentService.GetPlayerReferencesByTournamentName(tournamentName);
-
-        //    foreach (PlayerReference playerReference in playerReferences)
-        //    {
-        //        _fetchedPlayerReferences.Add(playerReference);
-        //    }
-        //}
 
         [Then(@"tournament (.*) should be valid with name: ""(.*)""")]
         public void ThenTournamentShouldBeValidWithName(int tournamentIndex, string correctName)
@@ -370,7 +440,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
         }
 
-        protected static void CheckTournamentValidity(Tournament tournament, string correctName)
+        private static void CheckTournamentValidity(Tournament tournament, string correctName)
         {
             if (tournament == null)
             {
@@ -382,6 +452,40 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             tournament.Name.Should().Be(correctName);
             tournament.Rounds.Should().BeEmpty();
             tournament.Betters.Should().BeEmpty();
+        }
+
+        private bool PlayAvailableMatches(GroupBase group)
+        {
+            foreach (Match match in group.Matches)
+            {
+                int winningScore = (int)Math.Ceiling(match.BestOf / 2.0);
+
+                bool matchShouldHaveStarted = match.StartDateTime < SystemTime.Now;
+                bool matchIsNotFinished = match.GetPlayState() != PlayStateEnum.Finished;
+
+                if (matchShouldHaveStarted && matchIsNotFinished)
+                {
+                    // Give points to player with name that precedes the other alphabetically
+                    bool increasePlayer1Score = match.Player1.Name.CompareTo(match.Player2.Name) <= 0;
+                    bool scoreIncreased;
+
+                    if (increasePlayer1Score)
+                    {
+                        scoreIncreased = match.Player1.IncreaseScore(winningScore);
+                    }
+                    else
+                    {
+                        scoreIncreased = match.Player2.IncreaseScore(winningScore);
+                    }
+
+                    if (!scoreIncreased)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
     }
 }

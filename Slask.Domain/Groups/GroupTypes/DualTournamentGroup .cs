@@ -87,6 +87,8 @@ namespace Slask.Domain.Groups.GroupTypes
         public override bool ConstructGroupLayout(int playersPerGroupCount)
         {
             ChangeMatchCountTo(_matchCapacity);
+            MarkAsModified();
+
             return true;
         }
 
@@ -109,7 +111,7 @@ namespace Slask.Domain.Groups.GroupTypes
 
             if (matchIsOneOfFirstPairMatches)
             {
-                return GetMatch1().GetPlayState() == PlayState.Finished && GetMatch2().GetPlayState() == PlayState.Finished;
+                return GetMatch1().GetPlayState() == PlayStateEnum.Finished && GetMatch2().GetPlayState() == PlayStateEnum.Finished;
             }
 
             return false;
@@ -121,7 +123,7 @@ namespace Slask.Domain.Groups.GroupTypes
 
             if (matchIsOneOfSecondPairMatches)
             {
-                return GetWinnersMatch().GetPlayState() == PlayState.Finished && GetLosersMatch().GetPlayState() == PlayState.Finished;
+                return GetWinnersMatch().GetPlayState() == PlayStateEnum.Finished && GetLosersMatch().GetPlayState() == PlayStateEnum.Finished;
             }
 
             return false;

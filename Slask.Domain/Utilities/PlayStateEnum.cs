@@ -1,6 +1,6 @@
 ﻿namespace Slask.Domain.Utilities
 {
-    public enum PlayState
+    public enum PlayStateEnum
     {
         NotBegun,
         Ongoing,

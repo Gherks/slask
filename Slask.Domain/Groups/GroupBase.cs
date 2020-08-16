@@ -1,4 +1,6 @@
+using Slask.Domain.Bets;
 using Slask.Domain.Bets.BetTypes;
+using Slask.Domain.ObjectState;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
@@ -9,13 +11,14 @@ using System.Linq;
 
 namespace Slask.Domain.Groups
 {
-    public partial class GroupBase : GroupInterface
+    public partial class GroupBase : ObjectStateBase, GroupInterface
     {
         protected GroupBase()
         {
             Matches = new List<Match>();
             PlayerReferences = new List<PlayerReference>();
             ChoosenTyingPlayerEntries = new List<StandingsEntry<PlayerReference>>();
+            ObjectState = ObjectStateEnum.Added;
         }
 
         public Guid Id { get; protected set; }
@@ -29,7 +32,7 @@ namespace Slask.Domain.Groups
 
         public bool AddPlayerReferences(List<PlayerReference> playerReferences)
         {
-            bool parentRoundHasStarted = Round.GetPlayState() != PlayState.NotBegun;
+            bool parentRoundHasStarted = Round.GetPlayState() != PlayStateEnum.NotBegun;
 
             if (parentRoundHasStarted)
             {
@@ -42,22 +45,24 @@ namespace Slask.Domain.Groups
             if (successfullyFilledGroup)
             {
                 PlayerReferences = playerReferences;
+                MarkAsModified();
+
                 return true;
             }
 
             return false;
         }
 
-        public PlayState GetPlayState()
+        public PlayStateEnum GetPlayState()
         {
-            bool noGroupHasBegun = AllMatchesPlayStatesAre(PlayState.NotBegun);
+            bool noGroupHasBegun = AllMatchesPlayStatesAre(PlayStateEnum.NotBegun);
 
             if (noGroupHasBegun)
             {
-                return PlayState.NotBegun;
+                return PlayStateEnum.NotBegun;
             }
 
-            bool allMatchesHasFinished = AllMatchesPlayStatesAre(PlayState.Finished);
+            bool allMatchesHasFinished = AllMatchesPlayStatesAre(PlayStateEnum.Finished);
 
             if (allMatchesHasFinished)
             {
@@ -65,23 +70,23 @@ namespace Slask.Domain.Groups
                 {
                     if (HasSolvedTie())
                     {
-                        return PlayState.Finished;
+                        return PlayStateEnum.Finished;
                     }
                     else
                     {
-                        return PlayState.Ongoing;
+                        return PlayStateEnum.Ongoing;
                     }
                 }
                 else
                 {
-                    return PlayState.Finished;
+                    return PlayStateEnum.Finished;
                 }
             }
 
-            return PlayState.Ongoing;
+            return PlayStateEnum.Ongoing;
         }
 
-        private bool AllMatchesPlayStatesAre(PlayState playState)
+        private bool AllMatchesPlayStatesAre(PlayStateEnum playState)
         {
             foreach (Match match in Matches)
             {
@@ -116,7 +121,7 @@ namespace Slask.Domain.Groups
 
         public List<StandingsEntry<PlayerReference>> FindProblematiclyTyingPlayers()
         {
-            bool notAllMatchesHasBeenPlayed = !AllMatchesPlayStatesAre(PlayState.Finished);
+            bool notAllMatchesHasBeenPlayed = !AllMatchesPlayStatesAre(PlayStateEnum.Finished);
 
             if (notAllMatchesHasBeenPlayed)
             {
@@ -215,11 +220,14 @@ namespace Slask.Domain.Groups
             {
                 Matches.Add(Match.Create(this));
             }
+
+            MarkAsModified();
         }
 
         protected void AssignDefaultName()
         {
             Name = "Group " + Labeler.GetLabelForIndex(Round.Groups.Count);
+            MarkAsModified();
         }
 
         internal void RemoveAllMatchBetsOnMatch(Match match)
@@ -232,7 +240,10 @@ namespace Slask.Domain.Groups
                     {
                         if (matchBet.Match.Id == match.Id)
                         {
-                            better.Bets.Remove(better.Bets[betIndex--]);
+                            BetBase bet = better.Bets[betIndex--];
+
+                            better.Bets.Remove(bet);
+                            bet.MarkForDeletion();
                         }
                     }
                 }

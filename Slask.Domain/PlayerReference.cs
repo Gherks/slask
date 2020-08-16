@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Slask.Domain.ObjectState;
+using System;
 
 namespace Slask.Domain
 {
-    public class PlayerReference
+    public class PlayerReference : ObjectStateBase
     {
         private PlayerReference()
         {
@@ -32,7 +33,8 @@ namespace Slask.Domain
                     Id = Guid.NewGuid(),
                     Name = name,
                     TournamentId = tournament.Id,
-                    Tournament = tournament
+                    Tournament = tournament,
+                    ObjectState = ObjectStateEnum.Added
                 };
 
                 return playerReference;
@@ -52,6 +54,7 @@ namespace Slask.Domain
                 if (newNameIsntAlreadyInUse)
                 {
                     Name = name;
+                    MarkAsModified();
                 }
             }
         }

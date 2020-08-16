@@ -3,6 +3,7 @@ using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.SpecFlow.IntegrationTests.GroupTests;
 using Slask.Domain.Utilities.StandingsSolvers;
+using Slask.TestCore;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
 
@@ -22,7 +23,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
         {
             foreach (TableRow row in table.Rows)
             {
-                ParseBetterMatchBetPlacements(row, out string betterName, out int roundIndex, out int groupIndex, out int matchIndex, out string playerName);
+                TestUtilities.ParseBetterMatchBetPlacements(row, out string betterName, out int roundIndex, out int groupIndex, out int matchIndex, out string playerName);
 
                 RoundBase round = createdRounds[roundIndex];
                 GroupBase group = createdGroups[groupIndex];
@@ -57,69 +58,11 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
-                ParseBetterStandings(table.Rows[index], out string betterName, out int points);
+                TestUtilities.ParseBetterStandings(table.Rows[index], out string betterName, out int points);
 
                 betterStandings[index].Object.User.Name.Should().Be(betterName);
                 betterStandings[index].Points.Should().Be(points);
             }
-        }
-
-        private void ParseBetterMatchBetPlacements(TableRow row, out string betterName, out int roundIndex, out int groupIndex, out int matchIndex, out string playerName)
-        {
-            betterName = "";
-            roundIndex = -1;
-            groupIndex = -1;
-            matchIndex = -1;
-            playerName = "";
-
-            if (row.ContainsKey("Better name"))
-            {
-                betterName = row["Better name"];
-            }
-
-            if (row.ContainsKey("Round index"))
-            {
-                int.TryParse(row["Round index"], out roundIndex);
-            }
-
-            roundIndex.Should().BeGreaterOrEqualTo(0);
-
-            if (row.ContainsKey("Group index"))
-            {
-                int.TryParse(row["Group index"], out groupIndex);
-            }
-
-            groupIndex.Should().BeGreaterOrEqualTo(0);
-
-            if (row.ContainsKey("Match index"))
-            {
-                int.TryParse(row["Match index"], out matchIndex);
-            }
-
-            matchIndex.Should().BeGreaterOrEqualTo(0);
-
-            if (row.ContainsKey("Player name"))
-            {
-                playerName = row["Player name"];
-            }
-        }
-
-        private void ParseBetterStandings(TableRow row, out string betterName, out int points)
-        {
-            betterName = "";
-            points = -1;
-
-            if (row.ContainsKey("Better name"))
-            {
-                betterName = row["Better name"];
-            }
-
-            if (row.ContainsKey("Points"))
-            {
-                int.TryParse(row["Points"], out points);
-            }
-
-            points.Should().BeGreaterOrEqualTo(0);
         }
     }
 }

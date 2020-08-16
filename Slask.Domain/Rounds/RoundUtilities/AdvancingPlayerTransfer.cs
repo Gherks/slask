@@ -9,7 +9,7 @@ namespace Slask.Domain.Rounds.RoundUtilities
 
         public bool TransferToNextRound(RoundBase currentRound)
         {
-            bool roundHasFinished = currentRound.GetPlayState() == PlayState.Finished;
+            bool roundHasFinished = currentRound.GetPlayState() == PlayStateEnum.Finished;
 
             if (roundHasFinished)
             {

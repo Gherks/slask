@@ -33,7 +33,7 @@ namespace Slask.Domain.Rounds
         List<PlayerReference> GetAdvancingPlayerReferences();
         RoundBase GetNextRound();
         RoundBase GetPreviousRound();
-        PlayState GetPlayState();
+        PlayStateEnum GetPlayState();
         bool PlayerReferenceIsAdvancingPlayer(PlayerReference playerReference);
         void ReceiveTransferedPlayerReferences(AdvancingPlayerTransfer advancingPlayerTransfer);
     }

@@ -11,7 +11,7 @@ namespace Slask.Domain.Utilities
         {
             List<PlayerReference> advancingPlayers = new List<PlayerReference>();
 
-            if (round.GetPlayState() == PlayState.Finished)
+            if (round.GetPlayState() == PlayStateEnum.Finished)
             {
                 foreach (GroupBase group in round.Groups)
                 {
@@ -24,7 +24,7 @@ namespace Slask.Domain.Utilities
 
         public static List<PlayerReference> FetchFrom(GroupBase group)
         {
-            if (group.GetPlayState() == PlayState.Finished)
+            if (group.GetPlayState() == PlayStateEnum.Finished)
             {
                 PlayerStandingsSolver playerStandingsSolver = new PlayerStandingsSolver();
                 List<StandingsEntry<PlayerReference>> playerStandings = playerStandingsSolver.FetchFrom(group);

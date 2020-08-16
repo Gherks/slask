@@ -148,7 +148,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.RoundTests.RoundTypeTests
                 match.Player1.IncreaseScore(2);
             }
 
-            round.GetPlayState().Should().Be(PlayState.Ongoing);
+            round.GetPlayState().Should().Be(PlayStateEnum.Ongoing);
         }
 
         [Fact]

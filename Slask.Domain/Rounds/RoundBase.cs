@@ -1,5 +1,6 @@
 ﻿using Slask.Common;
 using Slask.Domain.Groups;
+using Slask.Domain.ObjectState;
 using Slask.Domain.Procedures.AdvancingPerGroupCount;
 using Slask.Domain.Procedures.PlayersPerGroupCount;
 using Slask.Domain.Rounds.RoundUtilities;
@@ -10,7 +11,7 @@ using System.Linq;
 
 namespace Slask.Domain.Rounds
 {
-    public class RoundBase : RoundInterface
+    public class RoundBase : ObjectStateBase, RoundInterface
     {
         protected RoundBase()
         {
@@ -18,6 +19,7 @@ namespace Slask.Domain.Rounds
             AdvancingPerGroupCount = 1;
             Groups = new List<GroupBase>();
             PlayerReferences = new List<PlayerReference>();
+            ObjectState = ObjectStateEnum.Added;
         }
 
         private PlayersPerGroupCountProcedure _playersPerGroupCountProcedure;
@@ -76,7 +78,7 @@ namespace Slask.Domain.Rounds
         public PlayerReference RegisterPlayerReference(string name)
         {
             bool roundIsFirstRound = IsFirstRound();
-            bool tournamentHasNotBegun = GetPlayState() == PlayState.NotBegun;
+            bool tournamentHasNotBegun = GetPlayState() == PlayStateEnum.NotBegun;
             bool nameIsNotRegistered = !PlayerReferences.Any(playerReference => playerReference.Name == name);
             bool nameIsNotEmpty = name.Length != 0;
 
@@ -94,7 +96,7 @@ namespace Slask.Domain.Rounds
         public bool ExcludePlayerReference(string name)
         {
             bool roundIsFirstRound = IsFirstRound();
-            bool tournamentHasNotBegun = GetPlayState() == PlayState.NotBegun;
+            bool tournamentHasNotBegun = GetPlayState() == PlayStateEnum.NotBegun;
             bool nameIsNotEmpty = name.Length != 0;
 
             if (roundIsFirstRound && tournamentHasNotBegun && nameIsNotEmpty)
@@ -126,6 +128,8 @@ namespace Slask.Domain.Rounds
             {
                 return nextRound.Construct();
             }
+
+            MarkAsModified();
 
             return true;
         }
@@ -235,7 +239,7 @@ namespace Slask.Domain.Rounds
 
         public List<PlayerReference> GetAdvancingPlayerReferences()
         {
-            if (GetPlayState() != PlayState.Finished)
+            if (GetPlayState() != PlayStateEnum.Finished)
             {
                 return null;
             }
@@ -245,7 +249,7 @@ namespace Slask.Domain.Rounds
 
         public bool PlayerReferenceIsAdvancingPlayer(PlayerReference playerReference)
         {
-            if (GetPlayState() != PlayState.Finished)
+            if (GetPlayState() != PlayStateEnum.Finished)
             {
                 return false;
             }
@@ -264,26 +268,26 @@ namespace Slask.Domain.Rounds
             return false;
         }
 
-        public PlayState GetPlayState()
+        public PlayStateEnum GetPlayState()
         {
-            bool noGroupHasBegun = AllGroupsPlayStatesAre(PlayState.NotBegun);
+            bool noGroupHasBegun = AllGroupsPlayStatesAre(PlayStateEnum.NotBegun);
 
             if (noGroupHasBegun)
             {
-                return PlayState.NotBegun;
+                return PlayStateEnum.NotBegun;
             }
 
-            bool allGroupsHasFinished = AllGroupsPlayStatesAre(PlayState.Finished);
+            bool allGroupsHasFinished = AllGroupsPlayStatesAre(PlayStateEnum.Finished);
 
             if (allGroupsHasFinished)
             {
-                return PlayState.Finished;
+                return PlayStateEnum.Finished;
             }
 
-            return PlayState.Ongoing;
+            return PlayStateEnum.Ongoing;
         }
 
-        private bool AllGroupsPlayStatesAre(PlayState playState)
+        private bool AllGroupsPlayStatesAre(PlayStateEnum playState)
         {
             foreach (GroupBase group in Groups)
             {
@@ -323,6 +327,7 @@ namespace Slask.Domain.Rounds
             {
                 PlayersPerGroupCount = newValue;
                 _playersPerGroupCountProcedure.ApplyPostAssignmentOperations(this);
+                MarkAsModified();
 
                 return true;
             }
@@ -336,6 +341,7 @@ namespace Slask.Domain.Rounds
             {
                 AdvancingPerGroupCount = newValue;
                 _advancingPerGroupCountProcedure.ApplyPostAssignmentOperations(this);
+                MarkAsModified();
 
                 return true;
             }
@@ -402,6 +408,11 @@ namespace Slask.Domain.Rounds
             int expectedParticipantCount = GetExpectedParticipantCount();
             int groupCount = (int)Math.Ceiling(expectedParticipantCount / (double)PlayersPerGroupCount);
 
+            foreach (GroupBase group in Groups)
+            {
+                group.MarkForDeletion();
+            }
+
             Groups.Clear();
 
             for (int groupIndex = 0; groupIndex < groupCount; ++groupIndex)
@@ -458,6 +469,7 @@ namespace Slask.Domain.Rounds
             Construct();
             FillGroupsWithPlayerReferences();
             Tournament.FindIssues();
+            MarkAsModified();
         }
     }
 }

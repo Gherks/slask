@@ -277,9 +277,9 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests
         [Fact]
         public void PlayStateIsEqualToNotBegunBeforeMactchHasStarted()
         {
-            PlayState playState = match.GetPlayState();
+            PlayStateEnum playState = match.GetPlayState();
 
-            playState.Should().Be(PlayState.NotBegun);
+            playState.Should().Be(PlayStateEnum.NotBegun);
         }
 
         [Fact]
@@ -288,9 +288,9 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore() - 1);
 
-            PlayState playState = match.GetPlayState();
+            PlayStateEnum playState = match.GetPlayState();
 
-            playState.Should().Be(PlayState.Ongoing);
+            playState.Should().Be(PlayStateEnum.Ongoing);
         }
 
         [Fact]
@@ -299,9 +299,9 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(GetWinningScore());
 
-            PlayState playState = match.GetPlayState();
+            PlayStateEnum playState = match.GetPlayState();
 
-            playState.Should().Be(PlayState.Finished);
+            playState.Should().Be(PlayStateEnum.Finished);
         }
 
         [Fact]

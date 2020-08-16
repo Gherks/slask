@@ -1,11 +1,12 @@
 ﻿using Slask.Domain.Bets;
 using Slask.Domain.Bets.BetTypes;
+using Slask.Domain.ObjectState;
 using System;
 using System.Collections.Generic;
 
 namespace Slask.Domain
 {
-    public class Better
+    public class Better : ObjectStateBase
     {
         private Better()
         {
@@ -30,7 +31,8 @@ namespace Slask.Domain
                 Id = Guid.NewGuid(),
                 User = user,
                 TournamentId = tournament.Id,
-                Tournament = tournament
+                Tournament = tournament,
+                ObjectState = ObjectStateEnum.Added
             };
         }
 
@@ -54,9 +56,12 @@ namespace Slask.Domain
                 if (matchBetForThisMatchAlreadyExists)
                 {
                     Bets.Remove(existingMatchBet);
+                    existingMatchBet.MarkForDeletion();
                 }
 
                 Bets.Add(newMatchBet);
+                MarkAsModified();
+
                 return true;
             }
 

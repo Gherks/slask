@@ -1,12 +1,13 @@
 using Slask.Common;
 using Slask.Domain.Groups;
+using Slask.Domain.ObjectState;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 
 namespace Slask.Domain
 {
-    public class Match
+    public class Match : ObjectStateBase
     {
         private Match()
         {
@@ -26,6 +27,7 @@ namespace Slask.Domain
         public Player Player1 { get { return Players[0]; } private set { } }
         public Player Player2 { get { return Players[1]; } private set { } }
 
+
         public static Match Create(GroupBase group)
         {
             bool groupIsInvalid = group == null;
@@ -42,7 +44,8 @@ namespace Slask.Domain
                 BestOf = 3,
                 StartDateTime = DateTime.MaxValue,
                 GroupId = group.Id,
-                Group = group
+                Group = group,
+                ObjectState = ObjectStateEnum.Added
             };
 
             return match;
@@ -50,13 +53,15 @@ namespace Slask.Domain
 
         public bool SetBestOf(int bestOf)
         {
-            bool matchHasNotBegun = GetPlayState() == PlayState.NotBegun;
+            bool matchHasNotBegun = GetPlayState() == PlayStateEnum.NotBegun;
             bool newBestOfIsUneven = bestOf % 2 != 0;
             bool bestOfIsGreaterThanZero = bestOf > 0;
 
             if (matchHasNotBegun && newBestOfIsUneven && bestOfIsGreaterThanZero)
             {
                 BestOf = bestOf;
+                MarkAsModified();
+
                 return true;
             }
 
@@ -70,6 +75,8 @@ namespace Slask.Domain
             if (newDateTimeIsValid)
             {
                 StartDateTime = dateTime;
+                MarkAsModified();
+
                 return true;
             }
 
@@ -82,6 +89,8 @@ namespace Slask.Domain
             {
                 CreatePlayerWithReference(0, player1Reference);
                 CreatePlayerWithReference(1, player2Reference);
+                MarkAsModified();
+
                 return true;
             }
 
@@ -98,12 +107,16 @@ namespace Slask.Domain
             if (Player1 == null)
             {
                 CreatePlayerWithReference(0, playerReference);
+                MarkAsModified();
+
                 return true;
             }
 
             if (Player2 == null)
             {
                 CreatePlayerWithReference(1, playerReference);
+                MarkAsModified();
+
                 return true;
             }
 
@@ -145,14 +158,14 @@ namespace Slask.Domain
             return Player1 != null && Player2 != null;
         }
 
-        public PlayState GetPlayState()
+        public PlayStateEnum GetPlayState()
         {
             if (StartDateTime > SystemTime.Now)
             {
-                return PlayState.NotBegun;
+                return PlayStateEnum.NotBegun;
             }
 
-            return AnyPlayerHasWon() ? PlayState.Finished : PlayState.Ongoing;
+            return AnyPlayerHasWon() ? PlayStateEnum.Finished : PlayStateEnum.Ongoing;
         }
 
         public Player GetWinningPlayer()
@@ -177,9 +190,11 @@ namespace Slask.Domain
 
         private bool CreatePlayerWithReference(int playerIndex, PlayerReference playerReference)
         {
-            if (GetPlayState() == PlayState.NotBegun)
+            if (GetPlayState() == PlayStateEnum.NotBegun)
             {
                 Players[playerIndex] = Player.Create(this, playerReference);
+                MarkAsModified();
+
                 return true;
             }
 

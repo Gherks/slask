@@ -1,4 +1,5 @@
-﻿using Slask.Domain.Utilities;
+﻿using Slask.Domain.ObjectState;
+using Slask.Domain.Utilities;
 using System;
 
 namespace Slask.Domain.Bets.BetTypes
@@ -13,28 +14,6 @@ namespace Slask.Domain.Bets.BetTypes
         public Match Match { get; private set; }
         public Guid PlayerId { get; private set; }
         public Player Player { get; private set; }
-
-        public override bool IsWon()
-        {
-            bool anyParameterIsInvalid = !ParametersAreValid(Better, Match, Player);
-
-            if (anyParameterIsInvalid)
-            {
-                return false;
-            }
-
-            bool notFinished = Match.GetPlayState() != PlayState.Finished;
-
-            if (notFinished)
-            {
-                return false;
-            }
-
-            Player winningPlayer = Match.GetWinningPlayer();
-
-            bool betIsWon = Player.Id == winningPlayer.Id;
-            return betIsWon;
-        }
 
         public static MatchBet Create(Better better, Match match, Player player)
         {
@@ -60,8 +39,31 @@ namespace Slask.Domain.Bets.BetTypes
                 MatchId = match.Id,
                 Match = match,
                 PlayerId = player.Id,
-                Player = player
+                Player = player,
+                ObjectState = ObjectStateEnum.Added
             };
+        }
+
+        public override bool IsWon()
+        {
+            bool anyParameterIsInvalid = !ParametersAreValid(Better, Match, Player);
+
+            if (anyParameterIsInvalid)
+            {
+                return false;
+            }
+
+            bool notFinished = Match.GetPlayState() != PlayStateEnum.Finished;
+
+            if (notFinished)
+            {
+                return false;
+            }
+
+            Player winningPlayer = Match.GetWinningPlayer();
+
+            bool betIsWon = Player.Id == winningPlayer.Id;
+            return betIsWon;
         }
 
         private static bool ParametersAreValid(Better better, Match match, Player player)
@@ -111,7 +113,7 @@ namespace Slask.Domain.Bets.BetTypes
                 return false;
             }
 
-            bool matchHasBegun = match.GetPlayState() != PlayState.NotBegun;
+            bool matchHasBegun = match.GetPlayState() != PlayStateEnum.NotBegun;
 
             if (matchHasBegun)
             {

@@ -1,10 +1,11 @@
-﻿using Slask.Domain.Rounds.RoundUtilities;
+﻿using Slask.Domain.ObjectState;
+using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
 
 namespace Slask.Domain
 {
-    public class Player
+    public class Player : ObjectStateBase
     {
         private Player()
         {
@@ -36,7 +37,8 @@ namespace Slask.Domain
                 PlayerReference = playerReference,
                 Score = 0,
                 MatchId = match.Id,
-                Match = match
+                Match = match,
+                ObjectState = ObjectStateEnum.Added
             };
         }
 
@@ -47,16 +49,18 @@ namespace Slask.Domain
                 Score += value;
                 Match.Group.OnMatchScoreIncreased(Match);
 
-                bool groupJustFinished = Match.Group.GetPlayState() == PlayState.Finished;
+                bool groupJustFinished = Match.Group.GetPlayState() == PlayStateEnum.Finished;
 
                 if (groupJustFinished)
                 {
-                    if (Match.Group.Round.GetPlayState() == PlayState.Finished)
+                    if (Match.Group.Round.GetPlayState() == PlayStateEnum.Finished)
                     {
                         AdvancingPlayerTransfer advancingPlayerTransfer = new AdvancingPlayerTransfer();
                         advancingPlayerTransfer.TransferToNextRound(Match.Group.Round);
                     }
                 }
+
+                MarkAsModified();
 
                 return true;
             }
@@ -70,6 +74,9 @@ namespace Slask.Domain
             {
                 Score -= value;
                 Score = Math.Max(Score, 0);
+
+                MarkAsModified();
+
                 return true;
             }
 
@@ -79,7 +86,7 @@ namespace Slask.Domain
         private bool CanChangeScore()
         {
             bool matchIsReady = Match.IsReady();
-            bool matchIsOngoing = Match.GetPlayState() == PlayState.Ongoing;
+            bool matchIsOngoing = Match.GetPlayState() == PlayStateEnum.Ongoing;
             bool tournamentHasNoIssues = !Match.Group.Round.Tournament.HasIssues();
 
             return matchIsReady && matchIsOngoing && tournamentHasNoIssues;

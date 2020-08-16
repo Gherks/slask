@@ -58,6 +58,8 @@ namespace Slask.Domain.Groups.GroupTypes
         public override bool ConstructGroupLayout(int playersPerGroupCount)
         {
             Matches = RoundRobinGroupLayoutAssembler.ConstructMathes(playersPerGroupCount, this);
+            MarkAsModified();
+
             return true;
         }
 

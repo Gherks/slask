@@ -8,7 +8,7 @@ namespace Slask.Domain.Procedures.PlayersPerGroupCount
     {
         public override bool NewValueValid(int inValue, out int outValue, RoundBase parent)
         {
-            bool tournamentHasNotBegun = parent.Tournament.GetPlayState() == PlayState.NotBegun;
+            bool tournamentHasNotBegun = parent.Tournament.GetPlayState() == PlayStateEnum.NotBegun;
 
             if (tournamentHasNotBegun)
             {

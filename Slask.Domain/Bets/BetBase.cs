@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Slask.Domain.ObjectState;
+using System;
 
 namespace Slask.Domain.Bets
 {
-    public class BetBase : BetInterface
+    public class BetBase : ObjectStateBase, BetInterface
     {
         protected BetBase()
         {

@@ -164,6 +164,60 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
         }
 
         [Fact]
+        public void CanRemoveBetterFromTournamentById()
+        {
+            InitializeUsersAndBetters();
+            _tournament.Betters.Should().HaveCount(3);
+
+            List<Better> betters = _tournamentService.GetBettersByTournamentName(_tournament.Name);
+            bool removalResult = _tournamentService.RemoveBetterFromTournamentById(_tournament, betters.First().Id);
+            _tournamentService.Save();
+
+            removalResult.Should().BeTrue();
+            _tournament.Betters.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public void CanRemoveBetterFromTournamentByName()
+        {
+            InitializeUsersAndBetters();
+
+            _tournament.Betters.Should().HaveCount(3);
+
+            bool removalResult = _tournamentService.RemoveBetterFromTournamentByName(_tournament, "Stålberto");
+            _tournamentService.Save();
+
+            removalResult.Should().BeTrue();
+            _tournament.Betters.Should().HaveCount(2);
+        }
+
+        [Fact]
+        public void CannotRemoveNonexistingBetterFromTournamentById()
+        {
+            InitializeUsersAndBetters();
+            _tournament.Betters.Should().HaveCount(3);
+
+            bool removalResult = _tournamentService.RemoveBetterFromTournamentById(_tournament, Guid.NewGuid());
+            _tournamentService.Save();
+
+            removalResult.Should().BeFalse();
+            _tournament.Betters.Should().HaveCount(3);
+        }
+
+        [Fact]
+        public void CannotRemoveNonexistingBetterFromTournamentByName()
+        {
+            InitializeUsersAndBetters();
+            _tournament.Betters.Should().HaveCount(3);
+
+            bool removalResult = _tournamentService.RemoveBetterFromTournamentByName(_tournament, "Kimmieboi");
+            _tournamentService.Save();
+
+            removalResult.Should().BeFalse();
+            _tournament.Betters.Should().HaveCount(3);
+        }
+
+        [Fact]
         public void CanGetEmptyPlayerReferencesListInRoundWithoutGroup()
         {
             InitializeUsersAndBetters();

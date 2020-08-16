@@ -13,7 +13,7 @@ namespace Slask.Domain.Groups.GroupTypes
         {
         }
 
-        public BracketNodeSystem BracketNodeSystem;
+        public BracketNodeSystem BracketNodeSystem { get; private set; }
 
         public static BracketGroup Create(BracketRound round)
         {
@@ -98,7 +98,7 @@ namespace Slask.Domain.Groups.GroupTypes
 
             BracketNode finalNode = BracketNodeSystem.FinalNode;
 
-            bool matchIsFinished = match.GetPlayState() == PlayState.Finished;
+            bool matchIsFinished = match.GetPlayState() == PlayStateEnum.Finished;
             bool matchIsNotFinal = match.Id != finalNode.Match.Id;
 
             if (matchIsFinished && matchIsNotFinal)
@@ -107,6 +107,7 @@ namespace Slask.Domain.Groups.GroupTypes
                 BracketNode parentNode = bracketNode.Parent;
 
                 parentNode.Match.AddPlayer(match.GetWinningPlayer().PlayerReference);
+                MarkAsModified();
             }
         }
 

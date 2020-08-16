@@ -31,7 +31,7 @@ namespace Slask.Domain
             return new Tournament
             {
                 Id = Guid.NewGuid(),
-                Name = name
+                Name = name,
             };
         }
 
@@ -100,7 +100,7 @@ namespace Slask.Domain
         public bool RemoveRound(RoundBase round)
         {
             bool soughtRoundIsValid = round != null;
-            bool tournamentHasNotBegun = GetFirstRound().GetPlayState() == PlayState.NotBegun;
+            bool tournamentHasNotBegun = GetFirstRound().GetPlayState() == PlayStateEnum.NotBegun;
 
             if (soughtRoundIsValid && tournamentHasNotBegun)
             {
@@ -120,8 +120,19 @@ namespace Slask.Domain
             }
 
             Betters.Add(Better.Create(user, this));
-
             return Betters.Last();
+        }
+
+        public bool RemoveBetter(Better better)
+        {
+            bool betterWasRemoved = Betters.Remove(better);
+
+            if (betterWasRemoved)
+            {
+                better.MarkForDeletion();
+            }
+
+            return betterWasRemoved;
         }
 
         public void FindIssues()
@@ -205,18 +216,18 @@ namespace Slask.Domain
             return Rounds.First().PlayerReferences;
         }
 
-        public PlayState GetPlayState()
+        public PlayStateEnum GetPlayState()
         {
-            bool hasNotBegun = Rounds.First().GetPlayState() == PlayState.NotBegun;
+            bool hasNotBegun = Rounds.First().GetPlayState() == PlayStateEnum.NotBegun;
 
             if (hasNotBegun)
             {
-                return PlayState.NotBegun;
+                return PlayStateEnum.NotBegun;
             }
 
-            bool lastRoundIsFinished = Rounds.Last().GetPlayState() == PlayState.Finished;
+            bool lastRoundIsFinished = Rounds.Last().GetPlayState() == PlayStateEnum.Finished;
 
-            return lastRoundIsFinished ? PlayState.Finished : PlayState.Ongoing;
+            return lastRoundIsFinished ? PlayStateEnum.Finished : PlayStateEnum.Ongoing;
         }
 
         public List<StandingsEntry<Better>> GetBetterStandings()
@@ -232,7 +243,6 @@ namespace Slask.Domain
                 Rounds.Add(round);
                 round.Construct();
                 FindIssues();
-
                 return true;
             }
 
@@ -248,7 +258,7 @@ namespace Slask.Domain
                 return true;
             }
 
-            bool tournamentHasNotBegun = Rounds.First().GetPlayState() == PlayState.NotBegun;
+            bool tournamentHasNotBegun = Rounds.First().GetPlayState() == PlayStateEnum.NotBegun;
 
             return tournamentHasNotBegun;
         }
@@ -271,8 +281,9 @@ namespace Slask.Domain
 
                 if (removalSuccessful)
                 {
-                    bool stillContainsRounds = Rounds.Count > 0;
+                    round.MarkForDeletion();
 
+                    bool stillContainsRounds = Rounds.Count > 0;
                     if (stillContainsRounds)
                     {
                         RoundBase firstRound = GetFirstRound();

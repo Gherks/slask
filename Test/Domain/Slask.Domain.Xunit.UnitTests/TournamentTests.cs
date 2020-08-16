@@ -123,6 +123,15 @@ namespace Slask.Domain.Xunit.UnitTests
         }
 
         [Fact]
+        public void CanRemoveBetterFromTournament()
+        {
+            bool removalResult = tournament.RemoveBetter(better);
+
+            removalResult.Should().BeTrue();
+            tournament.Betters.Should().HaveCount(0);
+        }
+
+        [Fact]
         public void TournamentKeepsRoundsThatWasSuccessfullyCreated()
         {
             tournament.Rounds.Should().HaveCount(1);

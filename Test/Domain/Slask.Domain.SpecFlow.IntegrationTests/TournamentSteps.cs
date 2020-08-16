@@ -183,11 +183,11 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
                 RoundBase round = tournament.Rounds[roundIndex];
                 GroupBase group = round.Groups[groupIndex];
 
-                while (group.GetPlayState() != PlayState.Finished)
+                while (group.GetPlayState() != PlayStateEnum.Finished)
                 {
                     foreach (Match match in group.Matches)
                     {
-                        if (match.IsReady() && match.GetPlayState() == PlayState.NotBegun)
+                        if (match.IsReady() && match.GetPlayState() == PlayStateEnum.NotBegun)
                         {
                             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
                             break;
@@ -231,7 +231,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
                 RoundBase round = tournament.Rounds[roundIndex];
                 GroupBase group = round.Groups[groupIndex];
 
-                while (group.GetPlayState() != PlayState.Finished)
+                while (group.GetPlayState() != PlayStateEnum.Finished)
                 {
                     bool tournamentHasBetters = tournament.Betters.Count > 0;
                     if (tournamentHasBetters)
@@ -241,7 +241,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
 
                     foreach (Match match in group.Matches)
                     {
-                        if (match.IsReady() && match.GetPlayState() == PlayState.NotBegun)
+                        if (match.IsReady() && match.GetPlayState() == PlayStateEnum.NotBegun)
                         {
                             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
                             break;
@@ -302,7 +302,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
         {
             Tournament tournament = createdTournaments[tournamentIndex];
 
-            PlayState playState = ParsePlayStateString(playStateString);
+            PlayStateEnum playState = ParsePlayStateString(playStateString);
 
             tournament.GetPlayState().Should().Be(playState);
         }
@@ -314,7 +314,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
                 int winningScore = (int)Math.Ceiling(match.BestOf / 2.0);
 
                 bool matchShouldHaveStarted = match.StartDateTime < SystemTime.Now;
-                bool matchIsNotFinished = match.GetPlayState() != PlayState.Finished;
+                bool matchIsNotFinished = match.GetPlayState() != PlayStateEnum.Finished;
 
                 if (matchShouldHaveStarted && matchIsNotFinished)
                 {
@@ -341,21 +341,21 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
             return true;
         }
 
-        protected PlayState ParsePlayStateString(string playStateString)
+        protected PlayStateEnum ParsePlayStateString(string playStateString)
         {
             playStateString = StringUtility.ToUpperNoSpaces(playStateString);
 
             if (playStateString.Contains("NOTBEGUN", StringComparison.CurrentCulture))
             {
-                return PlayState.NotBegun;
+                return PlayStateEnum.NotBegun;
             }
             else if (playStateString.Contains("ONGOING", StringComparison.CurrentCulture))
             {
-                return PlayState.Ongoing;
+                return PlayStateEnum.Ongoing;
             }
             else if (playStateString.Contains("FINISHED", StringComparison.CurrentCulture))
             {
-                return PlayState.Finished;
+                return PlayStateEnum.Finished;
             }
 
             throw new NotImplementedException();
@@ -368,7 +368,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
 
             foreach (Domain.Match match in group.Matches)
             {
-                if (match.GetPlayState() != PlayState.NotBegun)
+                if (match.GetPlayState() != PlayStateEnum.NotBegun)
                 {
                     continue;
                 }

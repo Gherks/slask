@@ -75,5 +75,83 @@ namespace Slask.TestCore
                 int.TryParse(row["Group index"], out groupIndex);
             }
         }
+
+        public static void ParseBetterMatchBetPlacements(TableRow row, out string betterName, out int roundIndex, out int groupIndex, out int matchIndex, out string playerName)
+        {
+            betterName = "";
+            roundIndex = -1;
+            groupIndex = -1;
+            matchIndex = -1;
+            playerName = "";
+
+            if (row.ContainsKey("Better name"))
+            {
+                betterName = row["Better name"];
+            }
+
+            if (row.ContainsKey("Round index"))
+            {
+                int.TryParse(row["Round index"], out roundIndex);
+            }
+
+            if (row.ContainsKey("Group index"))
+            {
+                int.TryParse(row["Group index"], out groupIndex);
+            }
+
+            if (row.ContainsKey("Match index"))
+            {
+                int.TryParse(row["Match index"], out matchIndex);
+            }
+
+            if (row.ContainsKey("Player name"))
+            {
+                playerName = row["Player name"];
+            }
+        }
+
+        public static void ParseBetterStandings(TableRow row, out string betterName, out int points)
+        {
+            betterName = "";
+            points = -1;
+
+            if (row.ContainsKey("Better name"))
+            {
+                betterName = row["Better name"];
+            }
+
+            if (row.ContainsKey("Points"))
+            {
+                int.TryParse(row["Points"], out points);
+            }
+        }
+
+        public static void ParseSoreAddedToMatchPlayer(TableRow row, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded)
+        {
+            groupIndex = 0;
+            matchIndex = 0;
+            scoringPlayer = "";
+            scoreAdded = 0;
+
+            if (row.ContainsKey("Group index"))
+            {
+                int.TryParse(row["Group index"], out groupIndex);
+            }
+
+            if (row.ContainsKey("Match index"))
+            {
+                int.TryParse(row["Match index"], out matchIndex);
+            }
+
+            if (row.ContainsKey("Scoring player"))
+            {
+                scoringPlayer = row["Scoring player"];
+            }
+
+            if (row.ContainsKey("Added score"))
+            {
+                int.TryParse(row["Added score"], out scoreAdded);
+            }
+        }
     }
 }

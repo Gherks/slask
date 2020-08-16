@@ -1,4 +1,5 @@
-using Slask.Domain;
+﻿using Slask.Domain;
+using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
 using System;
@@ -129,46 +130,49 @@ namespace Slask.Persistence.Services
 
             if (better != null)
             {
-                _slaskContext.Add(better);
+                _slaskContext.Attach(better.User);
             }
 
             return better;
         }
 
-        public BracketRound AddBracketRoundToTournament(Tournament tournament)
+        public bool RemoveBetterFromTournamentById(Tournament tournament, Guid betterId)
         {
-            BracketRound round = tournament.AddBracketRound();
+            Better better = tournament.GetBetterById(betterId);
 
-            if (round != null)
+            if (better != null)
             {
-                _slaskContext.Add(round);
+                return tournament.RemoveBetter(better);
             }
 
-            return round;
+            return false;
+        }
+
+        public bool RemoveBetterFromTournamentByName(Tournament tournament, string betterName)
+        {
+            Better better = tournament.GetBetterByName(betterName);
+
+            if (better != null)
+            {
+                return tournament.RemoveBetter(better);
+            }
+
+            return false;
+        }
+
+        public BracketRound AddBracketRoundToTournament(Tournament tournament)
+        {
+            return tournament.AddBracketRound();
         }
 
         public DualTournamentRound AddDualTournamentRoundToTournament(Tournament tournament)
         {
-            DualTournamentRound round = tournament.AddDualTournamentRound();
-
-            if (round != null)
-            {
-                _slaskContext.Add(round);
-            }
-
-            return round;
+            return tournament.AddDualTournamentRound();
         }
 
         public RoundRobinRound AddRoundRobinRoundToTournament(Tournament tournament)
         {
-            RoundRobinRound round = tournament.AddRoundRobinRound();
-
-            if (round != null)
-            {
-                _slaskContext.Add(round);
-            }
-
-            return round;
+            return tournament.AddRoundRobinRound();
         }
 
         public PlayerReference RegisterPlayerReference(Tournament tournament, string name)
@@ -178,31 +182,68 @@ namespace Slask.Persistence.Services
 
             if (firstRound != null)
             {
-                _slaskContext.RemoveRange(firstRound.Groups);
                 playerReference = firstRound.RegisterPlayerReference(name);
-                _slaskContext.AddRange(firstRound.Groups);
-
-                if (playerReference != null)
-                {
-                    _slaskContext.Add(playerReference);
-                }
             }
 
             return playerReference;
         }
 
-        public void RenameRoundInTournament(RoundBase round, string name)
+        public bool RenameRoundInTournament(RoundBase round, string name)
         {
-            round.RenameTo(name);
+            return round.RenameTo(name);
         }
 
-        public void SetPlayersPerGroupCountInRound(RoundBase round, int count)
+        public bool SetAdvancingPerGroupCountInRound(RoundBase round, int count)
         {
-            _slaskContext.RemoveRange(round.Groups);
+            return round.SetAdvancingPerGroupCount(count);
+        }
 
-            round.SetPlayersPerGroupCount(count);
+        public bool SetPlayersPerGroupCountInRound(RoundBase round, int count)
+        {
+            return round.SetPlayersPerGroupCount(count);
+        }
 
-            _slaskContext.AddRange(round.Groups);
+        public bool BetterPlacesMatchBetOnMatch(Guid tournamentId, Guid matchId, string betterName, string playerName)
+        {
+            Tournament tournament = GetTournamentById(tournamentId);
+
+            if (tournament == null)
+            {
+                /* LOG Issue: Could not place match bet; tournament with id '{tournamentId}' does not exist. */
+                return false;
+            }
+
+            Better better = tournament.GetBetterByName(betterName);
+
+            if (better == null)
+            {
+                /* LOG Issue: Could not place match bet; better with name '{betterName}' does not exist in tournament. */
+                return false;
+            }
+
+            foreach (RoundBase round in tournament.Rounds)
+            {
+                foreach (GroupBase group in round.Groups)
+                {
+                    foreach (Match match in group.Matches)
+                    {
+                        if (match.Id == matchId)
+                        {
+                            Player player = match.FindPlayer(playerName);
+
+                            if (player == null)
+                            {
+                                /* LOG Issue: Could not place match bet; sought player is not participating in sought match. */
+                                return false;
+                            }
+
+                            return better.PlaceMatchBet(match, player);
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
 
         public void Save()
