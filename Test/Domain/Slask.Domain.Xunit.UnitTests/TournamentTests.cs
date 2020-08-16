@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -27,12 +28,14 @@ namespace Slask.Domain.Xunit.UnitTests
         public void CanCreateTournament()
         {
             string tournamentName = "ASUS ROG 2012";
+            int acceptableInaccuracy = 2000;
 
             Tournament tournament = Tournament.Create(tournamentName);
 
             tournament.Should().NotBeNull();
             tournament.Id.Should().NotBeEmpty();
             tournament.Name.Should().Be(tournamentName);
+            tournament.Created.Should().BeCloseTo(DateTime.Now, acceptableInaccuracy);
             tournament.Rounds.Should().BeEmpty();
             tournament.Betters.Should().BeEmpty();
         }
