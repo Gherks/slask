@@ -7,6 +7,7 @@ using Slask.TestCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Xunit;
 
 namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
@@ -99,6 +100,57 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
             bool renameResult = _tournamentService.RenameTournament(Guid.NewGuid(), "BHA Open 2019");
 
             renameResult.Should().BeFalse();
+        }
+
+        [Fact]
+        public void CanGetListOfSeveralTournaments()
+        {
+            List<string> tournamentNames = new List<string>() { _tournament.Name, "WCS 2019", "BHA Cup", "DH Masters" };
+
+            foreach (string tournamentName in tournamentNames)
+            {
+                _tournamentService.CreateTournament(tournamentName);
+            }
+            _tournamentService.Save();
+
+            IEnumerable<Tournament> tournaments = _tournamentService.GetTournaments();
+
+            tournaments.Should().HaveCount(tournamentNames.Count);
+            foreach (string tournamentName in tournamentNames)
+            {
+                tournaments.FirstOrDefault(tournament => tournament.Name == tournamentName).Should().NotBeNull();
+            }
+        }
+
+        [Fact]
+        public void CanGetCertainRangeOfCreatedTournaments()
+        {
+            List<string> tournamentNames = new List<string>() { _tournament.Name };
+            for(int index = 1; index < 30; ++index)
+            {
+                tournamentNames.Add("Tourney " + index.ToString());
+            }
+
+            foreach (string tournamentName in tournamentNames)
+            {
+                _tournamentService.CreateTournament(tournamentName);
+
+                // Wait a bit between creation just to make sure the created date has some space between each tournament
+                Thread.Sleep(100);
+            }
+            _tournamentService.Save();
+
+            int startIndex = 15;
+            int grabCount = 6;
+
+            List<Tournament> tournaments = _tournamentService.GetTournaments(startIndex, grabCount).ToList();
+
+            tournaments.Should().HaveCount(grabCount);
+            for(int index = 0; index < tournaments.Count; ++index)
+            {
+                string expectedName = "Tourney " + (startIndex + index).ToString();
+                tournaments[index].Name.Should().Be(expectedName);
+            }
         }
 
         [Fact]
