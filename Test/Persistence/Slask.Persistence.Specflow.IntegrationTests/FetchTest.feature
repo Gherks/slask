@@ -1,4 +1,4 @@
-﻿Feature: FetchTest
+Feature: FetchTest
 	Makes sure a tournament is still intact after being played to completion, stored in database, and fetched from database. 
 
 @FetchTestTag
@@ -10,6 +10,7 @@ Scenario: Can fetch completed tournament in correct way
 			| Dual tournament | 2                         | 4                       |
 			| Bracket         | 1                         | 4                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure" is registered to tournament 0
+		# ROUND ROBIN ROUND BEGINS
 		And betters places match bets
 			| Better name | Round index | Group index | Match index | Player name |
 			| Stålberto   | 0           | 0           | 0           | Maru        |
@@ -103,6 +104,7 @@ Scenario: Can fetch completed tournament in correct way
 			| Bönis       | 10     |
 			| Guggelito   | 7      |
 
+		# DUAL TOURNAMENT ROUND BEGINS
 		# Bet on first set of matches in first dual tournament group
 		And betters places match bets
 			| Better name | Round index | Group index | Match index | Player name |
@@ -231,6 +233,7 @@ Scenario: Can fetch completed tournament in correct way
 			| Bönis       | 15     |
 			| Guggelito   | 13     |
 		
+		# BRACKET ROUND BEGINS
 		# Bet on semifinal matches in bracket group
 		And betters places match bets
 			| Better name | Round index | Group index | Match index | Player name |
