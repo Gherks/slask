@@ -31,7 +31,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
 
             foreach (TableRow row in table.Rows)
             {
-                TestUtilities.ParseSoreAddedToMatchPlayer(row, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
+                TestUtilities.ParseScoreAddedToMatchPlayer(row, out int _, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
 
                 GroupBase group = createdGroups[groupIndex];
                 Match match = group.Matches[matchIndex];

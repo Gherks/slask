@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
@@ -275,7 +275,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
             foreach (TableRow row in table.Rows)
             {
-                TestUtilities.ParseSoreAddedToMatchPlayer(row, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
+                TestUtilities.ParseScoreAddedToMatchPlayer(row, out int roundIndex, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
 
                 GroupBase group = _createdGroups[groupIndex];
                 Match match = group.Matches[matchIndex];

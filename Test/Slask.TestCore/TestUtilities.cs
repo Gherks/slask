@@ -126,12 +126,18 @@ namespace Slask.TestCore
             }
         }
 
-        public static void ParseSoreAddedToMatchPlayer(TableRow row, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded)
+        public static void ParseScoreAddedToMatchPlayer(TableRow row, out int roundIndex, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded)
         {
+            roundIndex = 0;
             groupIndex = 0;
             matchIndex = 0;
             scoringPlayer = "";
             scoreAdded = 0;
+
+            if (row.ContainsKey("Round index"))
+            {
+                int.TryParse(row["Round index"], out roundIndex);
+            }
 
             if (row.ContainsKey("Group index"))
             {
