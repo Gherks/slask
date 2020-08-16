@@ -6,21 +6,21 @@ namespace Slask.TestCore
 {
     public static class InMemoryContextCreator
     {
-        public static SlaskContext Create(string givenDatabaseName = "")
+        public static SlaskContext Create(string specifiedDatabaseName = "")
         {
-            string databaseName = Guid.NewGuid().ToString();
-            bool givenDatabaseNotEmpty = givenDatabaseName.Length > 0;
-                
-            if (givenDatabaseNotEmpty)
+            string givenDatabaseName = Guid.NewGuid().ToString();
+
+            bool specifiedDatabaseNameNotEmpty = specifiedDatabaseName.Length > 0;                
+            if (specifiedDatabaseNameNotEmpty)
             {
-                databaseName = givenDatabaseName;
+                givenDatabaseName = specifiedDatabaseName;
             }
 
             return new SlaskContext(new DbContextOptionsBuilder()
                 .UseLoggerFactory(SlaskContext.DebugLoggerFactory)
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
-                .UseInMemoryDatabase(databaseName: databaseName)
+                .UseInMemoryDatabase(databaseName: givenDatabaseName)
                 .Options);
         }
     }
