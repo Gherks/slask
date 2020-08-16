@@ -13,16 +13,19 @@ namespace Slask.Persistence
     {
         public SlaskContext()
         {
+            this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
         public SlaskContext(DbContextOptions options)
             : base(options)
         {
+            this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
         public SlaskContext(DbContextOptions<SlaskContext> options)
             : base(options)
         {
+            this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
         public DbSet<User> Users { get; private set; }
