@@ -31,7 +31,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
         [Given(@"a tournament named ""(.*)"" has been created with users ""(.*)"" added to it")]
         [When(@"a tournament named ""(.*)"" has been created with users ""(.*)"" added to it")]
-        public Tournament GivenATournamentNamedWithUsersAddedToIt(string tournamentName, string commaSeparatedUserNames)
+        public void GivenATournamentNamedWithUsersAddedToIt(string tournamentName, string commaSeparatedUserNames)
         {
             List<string> userNames = StringUtility.ToStringList(commaSeparatedUserNames, ",");
             foreach (string userName in userNames)
@@ -48,8 +48,6 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                 _tournamentService.AddBetterToTournament(tournament, user);
             }
             _tournamentService.Save();
-
-            return tournament;
         }
 
         [Given(@"players ""(.*)"" is registered to tournament (.*)")]
@@ -58,7 +56,6 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         public void GivenPlayersIsRegisteredToRound(string commaSeparatedPlayerNames, int tournamentIndex)
         {
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
-            //Tournament tournament = _createdTournaments[tournamentIndex];
             Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
 
             foreach (string playerName in playerNames)
@@ -73,12 +70,6 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [When(@"tournament (.*) adds rounds")]
         public void GivenTournamentAddsRounds(int tournamentIndex, Table table)
         {
-            //if (_createdTournaments.Count <= tournamentIndex)
-            //{
-            //    throw new IndexOutOfRangeException("Given tournament index is out of bounds");
-            //}
-
-            //Tournament tournament = _createdTournaments[tournamentIndex];
             Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
 
             foreach (TableRow row in table.Rows)
