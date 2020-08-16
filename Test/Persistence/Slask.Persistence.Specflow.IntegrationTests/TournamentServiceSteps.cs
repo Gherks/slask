@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
@@ -206,7 +206,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
                 if (player != null)
                 {
-                    player.IncreaseScore(scoreAdded);
+                    _tournamentService.AddScoreToPlayerInMatch(tournament.Id, match.Id, player.Id, scoreAdded);
                 }
                 else
                 {
@@ -232,11 +232,11 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
                     if (increasePlayer1Score)
                     {
-                        scoreIncreased = match.Player1.IncreaseScore(winningScore);
+                        scoreIncreased = _tournamentService.AddScoreToPlayerInMatch(group.Round.Tournament.Id, match.Id, match.Player1.Id, winningScore);
                     }
                     else
                     {
-                        scoreIncreased = match.Player2.IncreaseScore(winningScore);
+                        scoreIncreased = _tournamentService.AddScoreToPlayerInMatch(group.Round.Tournament.Id, match.Id, match.Player2.Id, winningScore);
                     }
 
                     if (!scoreIncreased)

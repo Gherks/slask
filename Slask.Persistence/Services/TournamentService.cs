@@ -246,6 +246,41 @@ namespace Slask.Persistence.Services
             return false;
         }
 
+        public bool AddScoreToPlayerInMatch(Guid tournamentId, Guid matchId, Guid playerId, int score)
+        {
+            Tournament tournament = GetTournamentById(tournamentId);
+
+            if (tournament == null)
+            {
+                /* LOG Issue: Could not add score to player in match; tournament with id '{tournamentId}' does not exist. */
+                return false;
+            }
+
+            foreach (RoundBase round in tournament.Rounds)
+            {
+                foreach (GroupBase group in round.Groups)
+                {
+                    foreach (Match match in group.Matches)
+                    {
+                        if (match.Id == matchId)
+                        {
+                            Player player = match.FindPlayer(playerId);
+
+                            if (player == null)
+                            {
+                                /* LOG Issue: Could not add score to player in match; sought player is not participating in sought match. */
+                                return false;
+                            }
+
+                            return player.IncreaseScore(score);
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public void Save()
         {
             _slaskContext.SaveChanges();
