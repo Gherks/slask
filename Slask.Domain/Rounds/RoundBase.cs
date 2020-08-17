@@ -26,6 +26,7 @@ namespace Slask.Domain.Rounds
         private AdvancingPerGroupCountProcedure _advancingPerGroupCountProcedure;
 
         public Guid Id { get; protected set; }
+        public ContestTypeEnum ContestType { get; protected set; }
         public string Name { get; protected set; }
         public int PlayersPerGroupCount { get; protected set; }
         public int AdvancingPerGroupCount { get; protected set; }

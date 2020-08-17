@@ -2,6 +2,7 @@
 using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Procedures.AdvancingPerGroupCount;
 using Slask.Domain.Procedures.PlayersPerGroupCount;
+using Slask.Domain.Utilities;
 using System;
 
 namespace Slask.Domain.Rounds.RoundTypes
@@ -24,6 +25,7 @@ namespace Slask.Domain.Rounds.RoundTypes
             DualTournamentRound round = new DualTournamentRound
             {
                 Id = Guid.NewGuid(),
+                ContestType = ContestTypeEnum.DualTournament,
                 PlayersPerGroupCount = 4,
                 AdvancingPerGroupCount = 2,
                 TournamentId = tournament.Id,
