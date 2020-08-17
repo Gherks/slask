@@ -367,7 +367,7 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
 
             foreach (string playerName in playerNames)
             {
-                _tournamentService.RegisterPlayerReference(_tournament, playerName);
+                _tournamentService.AddPlayerReference(_tournament, playerName);
             }
 
             _tournamentService.Save();

@@ -59,7 +59,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
             foreach (string playerName in playerNames)
             {
-                _tournamentService.RegisterPlayerReference(tournament, playerName);
+                _tournamentService.AddPlayerReference(tournament, playerName);
             }
 
             _tournamentService.Save();

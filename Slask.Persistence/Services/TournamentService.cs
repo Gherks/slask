@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
@@ -206,7 +206,7 @@ namespace Slask.Persistence.Services
             return tournament.AddRoundRobinRound();
         }
 
-        public PlayerReference RegisterPlayerReference(Tournament tournament, string name)
+        public PlayerReference AddPlayerReference(Tournament tournament, string name)
         {
             PlayerReference playerReference = null;
             RoundBase firstRound = tournament.GetFirstRound();
