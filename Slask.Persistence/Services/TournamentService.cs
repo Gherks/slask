@@ -79,14 +79,13 @@ namespace Slask.Persistence.Services
                 .Include(tournament => tournament.Rounds)
                     .ThenInclude(round => round.PlayerReferences)
                 .Include(tournament => tournament.Rounds)
-                    .ThenInclude(round => round.PlayerReferences)
-                .Include(tournament => tournament.Rounds)
                     .ThenInclude(round => round.Groups)
                         .ThenInclude(group => group.Matches)
                 .FirstOrDefault();
 
             if (tournament != null)
             {
+                tournament.ResetObjectStatesOnAllEntities();
                 tournament.SortEntities();
                 tournament.FindIssues();
             }
@@ -102,8 +101,6 @@ namespace Slask.Persistence.Services
                     .ThenInclude(better => better.Bets)
                 .Include(tournament => tournament.Betters)
                     .ThenInclude(better => better.User)
-                .Include(tournament => tournament.Rounds)
-                    .ThenInclude(round => round.PlayerReferences)
                 .Include(tournament => tournament.Rounds)
                     .ThenInclude(round => round.PlayerReferences)
                 .Include(tournament => tournament.Rounds)
