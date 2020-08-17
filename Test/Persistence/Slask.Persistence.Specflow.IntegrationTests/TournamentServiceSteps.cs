@@ -9,7 +9,6 @@ using Slask.Persistence.Services;
 using Slask.TestCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TechTalk.SpecFlow;
 
 namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
@@ -20,13 +19,17 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
     }
 
-    public class TournamentServiceStepDefinitions : UserServiceStepDefinitions
+    public class TournamentServiceStepDefinitions
     {
+        private readonly string testDatabaseName;
+
         protected readonly TournamentService _tournamentService;
 
         public TournamentServiceStepDefinitions()
         {
-            _tournamentService = new TournamentService(InMemoryContextCreator.Create("TestInMemoryDB"));
+            testDatabaseName = Guid.NewGuid().ToString();
+
+            _tournamentService = CreateTournamentService();
         }
 
         [Given(@"a tournament named ""(.*)"" has been created with users ""(.*)"" added to it")]
@@ -34,20 +37,28 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         public void GivenATournamentNamedWithUsersAddedToIt(string tournamentName, string commaSeparatedUserNames)
         {
             List<string> userNames = StringUtility.ToStringList(commaSeparatedUserNames, ",");
-            foreach (string userName in userNames)
-            {
-                _createdUsers.Add(_userService.CreateUser(userName));
-            }
-            _userService.Save();
 
-            Tournament tournament = _tournamentService.CreateTournament(tournamentName);
-            _tournamentService.Save();
-
-            foreach (User user in _createdUsers)
+            using (UserService userService = CreateUserService())
             {
-                _tournamentService.AddBetterToTournament(tournament, user);
+                foreach (string userName in userNames)
+                {
+                    userService.CreateUser(userName);
+                }
+                userService.Save();
+
+                using (TournamentService tournamentService = CreateTournamentService())
+                {
+                    Tournament tournament = tournamentService.CreateTournament(tournamentName);
+
+                    foreach (string userName in userNames)
+                    {
+                        User user = userService.GetUserByName(userName);
+                        tournamentService.AddBetterToTournament(tournament, user);
+                    }
+
+                    tournamentService.Save();
+                }
             }
-            _tournamentService.Save();
         }
 
         [Given(@"players ""(.*)"" is registered to tournament (.*)")]
@@ -250,6 +261,16 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             _tournamentService.Save();
 
             return true;
+        }
+
+        private UserService CreateUserService()
+        {
+            return new UserService(InMemoryContextCreator.Create(testDatabaseName));
+        }
+
+        private TournamentService CreateTournamentService()
+        {
+            return new TournamentService(InMemoryContextCreator.Create(testDatabaseName));
         }
     }
 }
