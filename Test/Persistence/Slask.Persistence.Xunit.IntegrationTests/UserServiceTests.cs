@@ -9,11 +9,11 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
 {
     public class UserServiceTests
     {
-        private readonly UserService userService;
+        private readonly string testDatabaseName;
 
         public UserServiceTests()
         {
-            userService = new UserService(InMemoryContextCreator.Create());
+            testDatabaseName = Guid.NewGuid().ToString();
         }
 
         [Fact]
@@ -21,33 +21,42 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
         {
             string userName = "Guggelito";
 
-            User user = userService.CreateUser(userName);
-            userService.Save();
+            using (UserService userService = CreateUserService())
+            {
+                User user = userService.CreateUser(userName);
+                userService.Save();
 
-            user.Should().NotBeNull();
-            user.Id.Should().NotBeEmpty();
-            user.Name.Should().Be(userName);
+                user.Should().NotBeNull();
+                user.Id.Should().NotBeEmpty();
+                user.Name.Should().Be(userName);
+            }
         }
 
         [Fact]
         public void CannotCreateUserWithEmptyName()
         {
-            User user = userService.CreateUser("");
-            userService.Save();
+            using (UserService userService = CreateUserService())
+            {
+                User user = userService.CreateUser("");
+                userService.Save();
 
-            user.Should().BeNull();
+                user.Should().BeNull();
+            }
         }
 
         [Fact]
         public void CannotCreateUserWithNameAlreadyInUseNoMatterLetterCasing()
         {
-            User createdUser = userService.CreateUser("Stålberto");
-            userService.Save();
+            using (UserService userService = CreateUserService())
+            {
+                User createdUser = userService.CreateUser("Stålberto");
+                userService.Save();
 
-            User duplicateUser = userService.CreateUser(createdUser.Name.ToUpper());
-            userService.Save();
+                User duplicateUser = userService.CreateUser(createdUser.Name.ToUpper());
+                userService.Save();
 
-            duplicateUser.Should().BeNull();
+                duplicateUser.Should().BeNull();
+            }
         }
 
         [Fact]
@@ -56,11 +65,14 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
             string username1 = "Stålberto";
             string username2 = "Guggelito";
 
-            User user = userService.CreateUser(username1);
-            userService.Save();
+            using (UserService userService = CreateUserService())
+            {
+                User user = userService.CreateUser(username1);
+                userService.Save();
 
-            userService.RenameUser(user.Id, username2);
-            user.Name.Should().Be(username2);
+                userService.RenameUser(user.Id, username2);
+                user.Name.Should().Be(username2);
+            }
         }
 
         [Fact]
@@ -69,20 +81,23 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
             string username1 = "Stålberto";
             string username2 = "Guggelito";
 
-            User user1 = userService.CreateUser(username1);
-            User user2 = userService.CreateUser(username2);
-            userService.Save();
+            using (UserService userService = CreateUserService())
+            {
+                User user1 = userService.CreateUser(username1);
+                User user2 = userService.CreateUser(username2);
+                userService.Save();
 
-            userService.RenameUser(user2.Id, username1.ToUpper());
-            userService.Save();
+                userService.RenameUser(user2.Id, username1.ToUpper());
+                userService.Save();
 
-            User after_renamed_user1 = userService.GetUserById(user1.Id);
-            User after_renamed_user2 = userService.GetUserById(user2.Id);
+                User after_renamed_user1 = userService.GetUserById(user1.Id);
+                User after_renamed_user2 = userService.GetUserById(user2.Id);
 
-            after_renamed_user1.Id.Should().Be(user1.Id);
-            after_renamed_user1.Name.Should().Be(username1);
-            after_renamed_user2.Id.Should().Be(user2.Id);
-            after_renamed_user2.Name.Should().Be(username2);
+                after_renamed_user1.Id.Should().Be(user1.Id);
+                after_renamed_user1.Name.Should().Be(username1);
+                after_renamed_user2.Id.Should().Be(user2.Id);
+                after_renamed_user2.Name.Should().Be(username2);
+            }
         }
 
         [Fact]
@@ -91,60 +106,80 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
             string username1 = "Stålberto";
             string username2 = "Guggelito";
 
-            User user1 = userService.CreateUser(username1);
-            User user2 = userService.CreateUser(username2);
-            userService.Save();
+            using (UserService userService = CreateUserService())
+            {
+                User user1 = userService.CreateUser(username1);
+                User user2 = userService.CreateUser(username2);
+                userService.Save();
 
-            userService.RenameUser(user2.Id, username1 + " ");
-            userService.Save();
+                userService.RenameUser(user2.Id, username1 + " ");
+                userService.Save();
 
-            User after_renamed_user1 = userService.GetUserById(user1.Id);
-            User after_renamed_user2 = userService.GetUserById(user2.Id);
+                User after_renamed_user1 = userService.GetUserById(user1.Id);
+                User after_renamed_user2 = userService.GetUserById(user2.Id);
 
-            after_renamed_user1.Id.Should().Be(user1.Id);
-            after_renamed_user1.Name.Should().Be(username1);
-            after_renamed_user2.Id.Should().Be(user2.Id);
-            after_renamed_user2.Name.Should().Be(username2);
+                after_renamed_user1.Id.Should().Be(user1.Id);
+                after_renamed_user1.Name.Should().Be(username1);
+                after_renamed_user2.Id.Should().Be(user2.Id);
+                after_renamed_user2.Name.Should().Be(username2);
+            }
         }
 
         [Fact]
         public void CanFetchUserById()
         {
-            User createdUser = userService.CreateUser("Stålberto");
-            userService.Save();
+            using (UserService userService = CreateUserService())
+            {
+                User createdUser = userService.CreateUser("Stålberto");
+                userService.Save();
 
-            User fetchedUser = userService.GetUserById(createdUser.Id);
-            fetchedUser.Id.Should().Be(createdUser.Id);
-            fetchedUser.Name.Should().Be(createdUser.Name);
+                User fetchedUser = userService.GetUserById(createdUser.Id);
+                fetchedUser.Id.Should().Be(createdUser.Id);
+                fetchedUser.Name.Should().Be(createdUser.Name);
+            }
         }
 
         [Fact]
         public void ReturnsNullWhenFetchingNonexistentUserById()
         {
-            User fetchedUser = userService.GetUserById(Guid.NewGuid());
+            using (UserService userService = CreateUserService())
+            {
+                User fetchedUser = userService.GetUserById(Guid.NewGuid());
 
-            fetchedUser.Should().BeNull();
+                fetchedUser.Should().BeNull();
+            }
         }
 
         [Fact]
         public void CanFetchUserByNameNoMatterLetterCasing()
         {
-            User createdUser = userService.CreateUser("Stålberto");
-            userService.Save();
+            using (UserService userService = CreateUserService())
+            {
+                User createdUser = userService.CreateUser("Stålberto");
+                userService.Save();
 
-            User fetchedUser = userService.GetUserByName(createdUser.Name.ToUpper());
+                User fetchedUser = userService.GetUserByName(createdUser.Name.ToUpper());
 
-            fetchedUser.Should().NotBeNull();
-            fetchedUser.Id.Should().Be(createdUser.Id);
-            fetchedUser.Name.Should().Be(createdUser.Name);
+                fetchedUser.Should().NotBeNull();
+                fetchedUser.Id.Should().Be(createdUser.Id);
+                fetchedUser.Name.Should().Be(createdUser.Name);
+            }
         }
 
         [Fact]
         public void ReturnsNullWhenFetchingNonexistentUserByName()
         {
-            User fetchedUser = userService.GetUserByName("my-god-thats-jason-bourne");
+            using (UserService userService = CreateUserService())
+            {
+                User fetchedUser = userService.GetUserByName("my-god-thats-jason-bourne");
 
-            fetchedUser.Should().BeNull();
+                fetchedUser.Should().BeNull();
+            }
+        }
+
+        private UserService CreateUserService()
+        {
+            return new UserService(InMemoryContextCreator.Create(testDatabaseName));
         }
     }
 }
