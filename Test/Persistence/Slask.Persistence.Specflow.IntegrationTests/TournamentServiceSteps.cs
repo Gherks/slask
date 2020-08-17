@@ -67,14 +67,17 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         {
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
-            Tournament tournament = _tournamentService.GetTournamentByName(tournamentName);
-
-            foreach (string playerName in playerNames)
+            using (TournamentService tournamentService = CreateTournamentService())
             {
-                _tournamentService.AddPlayerReference(tournament, playerName);
-            }
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
 
-            _tournamentService.Save();
+                foreach (string playerName in playerNames)
+                {
+                    tournamentService.AddPlayerReference(tournament, playerName);
+                }
+
+                tournamentService.Save();
+            }
         }
 
         [Given(@"tournament named ""(.*)"" adds rounds")]

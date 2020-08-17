@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Slask.Domain;
 using Slask.Domain.Bets;
@@ -61,17 +61,26 @@ namespace Slask.Persistence
 
         public override int SaveChanges()
         {
-            FixEntityStates();
+            UpdateSortOrders();
+            UpdateEntityStates();
+
             return base.SaveChanges();
         }
 
-        private void FixEntityStates()
+        private void UpdateEntityStates()
         {
             foreach (var entry in ChangeTracker.Entries<ObjectStateInterface>())
             {
-                ObjectStateInterface entity = entry.Entity;
-                entry.State = ConvertState(entity.ObjectState);
-                entity.ResetObjectState();
+                entry.State = ConvertState(entry.Entity.ObjectState);
+                entry.Entity.ResetObjectState();
+            }
+        }
+
+        private void UpdateSortOrders()
+        {
+            foreach (var entry in ChangeTracker.Entries<SortableInterface>())
+            {
+                entry.Entity.UpdateSortOrder();
             }
         }
 

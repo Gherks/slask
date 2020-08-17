@@ -1,4 +1,6 @@
-﻿using Slask.Domain.Rounds;
+﻿using Slask.Domain.Bets;
+using Slask.Domain.Groups;
+using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
@@ -138,6 +140,63 @@ namespace Slask.Domain
             }
 
             return betterWasRemoved;
+        }
+
+        public void ResetObjectStatesOnAllEntities()
+        {
+            foreach(Better better in Betters)
+            {
+                better.ResetObjectState();
+
+                foreach(BetBase bet in better.Bets)
+                {
+                    bet.ResetObjectState();
+                }
+            }
+
+            RoundBase firstRound = GetFirstRound();
+            if (firstRound != null)
+            {
+                foreach (PlayerReference playerReference in GetFirstRound().PlayerReferences)
+                {
+                    playerReference.ResetObjectState();
+                }
+            }
+
+            foreach(RoundBase round in Rounds)
+            {
+                round.ResetObjectState();
+
+                foreach(GroupBase group in round.Groups)
+                {
+                    group.ResetObjectState();
+
+                    foreach(Match match in group.Matches)
+                    {
+                        match.ResetObjectState();
+
+                        if (match.Player1 != null)
+                        {
+                            match.Player1.ResetObjectState();
+                        }
+
+                        if (match.Player2 != null)
+                        {
+                            match.Player2.ResetObjectState();
+                        }
+                    }
+                }
+            }
+        }
+
+        public void SortEntities()
+        {
+            Rounds = Rounds.OrderBy(round => round.SortOrder).ToList();
+
+            foreach (RoundBase round in Rounds)
+            {
+                round.SortEntities();
+            }
         }
 
         public void FindIssues()

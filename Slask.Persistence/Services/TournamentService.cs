@@ -87,6 +87,7 @@ namespace Slask.Persistence.Services
 
             if (tournament != null)
             {
+                tournament.SortEntities();
                 tournament.FindIssues();
             }
 
@@ -112,6 +113,8 @@ namespace Slask.Persistence.Services
 
             if (tournament != null)
             {
+                tournament.ResetObjectStatesOnAllEntities();
+                tournament.SortEntities();
                 tournament.FindIssues();
             }
 

@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Slask.Domain.Rounds
 {
-    public class RoundBase : ObjectStateBase, RoundInterface
+    public class RoundBase : ObjectStateBase, RoundInterface, SortableInterface
     {
         protected RoundBase()
         {
@@ -28,6 +28,7 @@ namespace Slask.Domain.Rounds
 
         public Guid Id { get; private set; }
         public ContestTypeEnum ContestType { get; protected set; }
+        public int SortOrder { get; private set; }
         public string Name { get; protected set; }
         public int PlayersPerGroupCount { get; protected set; }
         public int AdvancingPerGroupCount { get; protected set; }
@@ -349,6 +350,38 @@ namespace Slask.Domain.Rounds
             }
 
             return false;
+        }
+
+        public void UpdateSortOrder()
+        {
+            if (ObjectState == ObjectStateEnum.Deleted)
+            {
+                return;
+            }
+
+            for (int index = 0; index < Tournament.Rounds.Count; ++index)
+            {
+                if (Tournament.Rounds[index].Id == Id)
+                {
+                    if (SortOrder != index)
+                    {
+                        MarkAsModified();
+                    }
+
+                    SortOrder = index;
+                    return;
+                }
+            }
+        }
+
+        public void SortEntities()
+        {
+            //Groups = Groups.OrderBy(group => group.SortOrder).ToList();
+
+            foreach (GroupBase group in Groups)
+            {
+                //group.SortEntities();
+            }
         }
 
         public bool HasProblematicTie()
