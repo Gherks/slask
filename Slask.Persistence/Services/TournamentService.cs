@@ -10,13 +10,17 @@ using System.Linq;
 
 namespace Slask.Persistence.Services
 {
-    public class TournamentService : TournamentServiceInterface
+    public class TournamentService : TournamentServiceInterface, IDisposable
     {
         private readonly SlaskContext _slaskContext;
 
         public TournamentService(SlaskContext slaskContext)
         {
             _slaskContext = slaskContext;
+        }
+
+        public void Dispose()
+        {
         }
 
         public Tournament CreateTournament(string name)
@@ -69,7 +73,13 @@ namespace Slask.Persistence.Services
             Tournament tournament = _slaskContext.Tournaments
                 .Where(tournament => tournament.Id == id)
                 .Include(tournament => tournament.Betters)
+                    .ThenInclude(better => better.Bets)
+                .Include(tournament => tournament.Betters)
+                    .ThenInclude(better => better.User)
                 .Include(tournament => tournament.Rounds)
+                    .ThenInclude(round => round.PlayerReferences)
+                .Include(tournament => tournament.Rounds)
+                    .ThenInclude(round => round.Groups)
                 .FirstOrDefault();
 
             if (tournament != null)
@@ -85,7 +95,13 @@ namespace Slask.Persistence.Services
             Tournament tournament = _slaskContext.Tournaments
                 .Where(tournament => tournament.Name.ToLower() == name.ToLower())
                 .Include(tournament => tournament.Betters)
+                    .ThenInclude(better => better.Bets)
+                .Include(tournament => tournament.Betters)
+                    .ThenInclude(better => better.User)
                 .Include(tournament => tournament.Rounds)
+                    .ThenInclude(round => round.PlayerReferences)
+                .Include(tournament => tournament.Rounds)
+                    .ThenInclude(round => round.Groups)
                 .FirstOrDefault();
 
             if (tournament != null)
@@ -162,7 +178,7 @@ namespace Slask.Persistence.Services
 
             if (better != null)
             {
-                _slaskContext.Add(better.User);
+                _slaskContext.Attach(better.User);
             }
 
             return better;

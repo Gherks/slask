@@ -4,13 +4,17 @@ using System.Linq;
 
 namespace Slask.Persistence.Services
 {
-    public class UserService : UserServiceInterface
+    public class UserService : UserServiceInterface, IDisposable
     {
         private SlaskContext _slaskContext;
 
         public UserService(SlaskContext slaskContext)
         {
             _slaskContext = slaskContext;
+        }
+
+        public void Dispose()
+        {
         }
 
         public User CreateUser(string name)
