@@ -111,9 +111,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                     }
 
                     _tournamentService.RenameRoundInTournament(round, name);
-                    _tournamentService.Save();
                     _tournamentService.SetAdvancingPerGroupCountInRound(round, advancingCount);
-                    _tournamentService.Save();
                     _tournamentService.SetPlayersPerGroupCountInRound(round, playersPerGroupCount);
                     _tournamentService.Save();
                 }
