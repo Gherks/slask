@@ -61,12 +61,13 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
         }
 
-        [Given(@"players ""(.*)"" is registered to tournament (.*)")]
-        [When(@"players ""(.*)"" is registered to tournament (.*)")]
-        public void GivenPlayersIsRegisteredToRound(string commaSeparatedPlayerNames, int tournamentIndex)
+        [Given(@"players ""(.*)"" is registered to tournament named ""(.*)""")]
+        [When(@"players ""(.*)"" is registered to tournament named ""(.*)""")]
+        public void GivenPlayersIsRegisteredToRound(string commaSeparatedPlayerNames, string tournamentName)
         {
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
-            Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
+
+            Tournament tournament = _tournamentService.GetTournamentByName(tournamentName);
 
             foreach (string playerName in playerNames)
             {
@@ -76,11 +77,11 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             _tournamentService.Save();
         }
 
-        [Given(@"tournament (.*) adds rounds")]
-        [When(@"tournament (.*) adds rounds")]
-        public void GivenTournamentAddsRounds(int tournamentIndex, Table table)
+        [Given(@"tournament named ""(.*)"" adds rounds")]
+        [When(@"tournament named ""(.*)"" adds rounds")]
+        public void GivenTournamentAddsRounds(string tournamentName, Table table)
         {
-            Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
+            Tournament tournament = _tournamentService.GetTournamentByName(tournamentName);
 
             foreach (TableRow row in table.Rows)
             {
@@ -118,15 +119,15 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
         }
 
-        [Given(@"betters places match bets")]
-        [When(@"betters places match bets")]
-        public void GivenBettersPlacesMatchBets(Table table)
+        [Given(@"betters places match bets in tournament named ""(.*)""")]
+        [When(@"betters places match bets in tournament named ""(.*)""")]
+        public void GivenBettersPlacesMatchBets(string tournamentName, Table table)
         {
             foreach (TableRow row in table.Rows)
             {
                 TestUtilities.ParseBetterMatchBetPlacements(row, out string betterName, out int roundIndex, out int groupIndex, out int matchIndex, out string playerName);
 
-                Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
+                Tournament tournament = _tournamentService.GetTournamentByName(tournamentName);
                 RoundBase round = tournament.Rounds[roundIndex];
                 GroupBase group = round.Groups[groupIndex];
                 Match match = group.Matches[matchIndex];
@@ -136,16 +137,16 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
         }
 
-        [Given(@"groups within tournament is played out")]
-        [When(@"groups within tournament is played out")]
-        public void GivenGroupsWithinTournamentIsPlayedOut(Table table)
+        [Given(@"groups within tournament named ""(.*)"" is played out")]
+        [When(@"groups within tournament named ""(.*)"" is played out")]
+        public void GivenGroupsWithinTournamentIsPlayedOut(string tournamentName, Table table)
         {
             foreach (TableRow row in table.Rows)
             {
                 TestUtilities.ParseTargetGroupToPlay(row, out int _, out int roundIndex, out int groupIndex);
 
                 SystemTimeMocker.Reset();
-                Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
+                Tournament tournament = _tournamentService.GetTournamentByName(tournamentName);
                 RoundBase round = tournament.Rounds[roundIndex];
                 GroupBase group = round.Groups[groupIndex];
 
@@ -171,11 +172,11 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
         }
 
-        [Given(@"better standings in tournament (.*) from first to last looks like this")]
-        [When(@"better standings in tournament (.*) from first to last looks like this")]
-        public void GivenBetterStandingsInTournamentFromFirstToLastLooksLikeThis(int tournamentIndex, Table table)
+        [Given(@"better standings in tournament named ""(.*)"" from first to last looks like this")]
+        [When(@"better standings in tournament named ""(.*)"" from first to last looks like this")]
+        public void GivenBetterStandingsInTournamentFromFirstToLastLooksLikeThis(string tournamentName, Table table)
         {
-            Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
+            Tournament tournament = _tournamentService.GetTournamentByName(tournamentName);
 
             List<StandingsEntry<Better>> betterStandings = tournament.GetBetterStandings();
 
@@ -190,9 +191,9 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
         }
 
-        [Given(@"score is added to players in given matches in groups")]
-        [When(@"score is added to players in given matches in groups")]
-        public void GivenScoreIsAddedToPlayersInGivenMatchesInGroups(Table table)
+        [Given(@"score is added to players in given matches within groups in tournament named ""(.*)""")]
+        [When(@"score is added to players in given matches within groups in tournament named ""(.*)""")]
+        public void GivenScoreIsAddedToPlayersInGivenMatchesInGroups(string tournamentName, Table table)
         {
             if (table == null)
             {
@@ -203,7 +204,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             {
                 TestUtilities.ParseScoreAddedToMatchPlayer(row, out int roundIndex, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
 
-                Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
+                Tournament tournament = _tournamentService.GetTournamentByName(tournamentName);
                 RoundBase round = tournament.Rounds[roundIndex];
                 GroupBase group = round.Groups[groupIndex];
                 Match match = group.Matches[matchIndex];

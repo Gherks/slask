@@ -4,14 +4,14 @@
 @FetchTestTag
 Scenario: Can fetch completed tournament in correct way
 	Given a tournament named "Homestory Cup XX" has been created with users "Stålberto, Bönis, Guggelito, Kimmieboi" added to it
-		And tournament 0 adds rounds
+		And tournament named "Homestory Cup XX" adds rounds
 			| Round type      | Advancing per group count | Players per group count |
 			| Round robin     | 4                         | 5                       |
 			| Dual tournament | 2                         | 4                       |
 			| Bracket         | 1                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure" is registered to tournament 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure" is registered to tournament named "Homestory Cup XX"
 		# ROUND ROBIN ROUND BEGINS
-		And betters places match bets
+		And betters places match bets in tournament named "Homestory Cup XX"
 			| Better name | Round index | Group index | Match index | Player name |
 			| Stålberto   | 0           | 0           | 0           | Maru        |
 			| Stålberto   | 0           | 0           | 1           | Bomber      |
@@ -93,11 +93,11 @@ Scenario: Can fetch completed tournament in correct way
 			| Kimmieboi   | 0           | 1           | 7           | FanTaSy     |
 			| Kimmieboi   | 0           | 1           | 8           | FanTaSy     |
 			| Kimmieboi   | 0           | 1           | 9           | TY          |
-		And groups within tournament is played out
+		And groups within tournament named "Homestory Cup XX" is played out
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 			| 0                | 0           | 1           |
-		And better standings in tournament 0 from first to last looks like this
+		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
 			| Better name | Points |
 			| Kimmieboi   | 13     |
 			| Stålberto   | 11     |
@@ -106,7 +106,7 @@ Scenario: Can fetch completed tournament in correct way
 
 		# DUAL TOURNAMENT ROUND BEGINS
 		# Bet on first set of matches in first dual tournament group
-		And betters places match bets
+		And betters places match bets in tournament named "Homestory Cup XX"
 			| Better name | Round index | Group index | Match index | Player name |
 			| Stålberto   | 1           | 0           | 0           | Bomber      |
 			| Stålberto   | 1           | 0           | 1           | Rain        |
@@ -117,11 +117,11 @@ Scenario: Can fetch completed tournament in correct way
 			| Kimmieboi   | 1           | 0           | 0           | Maru        |
 			| Kimmieboi   | 1           | 0           | 1           | Stork       |
 		# Play first set of matches in first dual tournament group
-		And score is added to players in given matches in groups
+		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
 			| Round index | Group index | Match index | Scoring player | Added score |
 			| 1           | 0           | 0           | Bomber         | 2           |
 			| 1           | 0           | 1           | Rain           | 2           |
-		And better standings in tournament 0 from first to last looks like this
+		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
 			| Better name | Points |
 			| Stålberto   | 13     |
 			| Kimmieboi   | 13     |
@@ -129,7 +129,7 @@ Scenario: Can fetch completed tournament in correct way
 			| Guggelito   | 9      |
 
 		# Bet on winners and losers matches in first dual tournament group
-		And betters places match bets
+		And betters places match bets in tournament named "Homestory Cup XX"
 			| Better name | Round index | Group index | Match index | Player name |
 			| Stålberto   | 1           | 0           | 2           | Rain        |
 			| Stålberto   | 1           | 0           | 3           | Stork       |
@@ -140,11 +140,11 @@ Scenario: Can fetch completed tournament in correct way
 			| Kimmieboi   | 1           | 0           | 2           | Bomber      |
 			| Kimmieboi   | 1           | 0           | 3           | Maru        |
 		# Play winners and losers matches in first dual tournament group
-		And score is added to players in given matches in groups
+		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
 			| Round index | Group index | Match index | Scoring player | Added score |
 			| 1           | 0           | 2           | Bomber         | 2           |
 			| 1           | 0           | 3           | Maru           | 2           |
-		And better standings in tournament 0 from first to last looks like this
+		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
 			| Better name | Points |
 			| Kimmieboi   | 15     |
 			| Stålberto   | 13     |
@@ -152,17 +152,17 @@ Scenario: Can fetch completed tournament in correct way
 			| Guggelito   | 10     |
 
 		# Bet on decider match in first dual tournament group
-		And betters places match bets
+		And betters places match bets in tournament named "Homestory Cup XX"
 			| Better name | Round index | Group index | Match index | Player name |
 			| Stålberto   | 1           | 0           | 4           | Maru        |
 			| Bönis       | 1           | 0           | 4           | Rain        |
 			| Guggelito   | 1           | 0           | 4           | Maru        |
 			| Kimmieboi   | 1           | 0           | 4           | Rain        |
 		# Play decider match in first dual tournament group
-		And score is added to players in given matches in groups
+		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
 			| Round index | Group index | Match index | Scoring player | Added score |
 			| 1           | 0           | 4           | Maru           | 2           |
-		And better standings in tournament 0 from first to last looks like this
+		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
 			| Better name | Points |
 			| Kimmieboi   | 15     |
 			| Stålberto   | 14     |
@@ -170,7 +170,7 @@ Scenario: Can fetch completed tournament in correct way
 			| Guggelito   | 11     |
 
 		# Bet on first set of matches in second dual tournament group
-		And betters places match bets
+		And betters places match bets in tournament named "Homestory Cup XX"
 			| Better name | Round index | Group index | Match index | Player name |
 			| Stålberto   | 1           | 1           | 0           | Cure        |
 			| Stålberto   | 1           | 1           | 1           | Stephano    |
@@ -181,11 +181,11 @@ Scenario: Can fetch completed tournament in correct way
 			| Kimmieboi   | 1           | 1           | 0           | FanTaSy     |
 			| Kimmieboi   | 1           | 1           | 1           | Stephano    |
 		# Play first set of matches in second dual tournament group
-		And score is added to players in given matches in groups
+		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
 			| Round index | Group index | Match index | Scoring player | Added score |
 			| 1           | 1           | 0           | Cure           | 2           |
 			| 1           | 1           | 1           | Stephano       | 2           |
-		And better standings in tournament 0 from first to last looks like this
+		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
 			| Better name | Points |
 			| Stålberto   | 16     |
 			| Kimmieboi   | 16     |
@@ -193,7 +193,7 @@ Scenario: Can fetch completed tournament in correct way
 			| Guggelito   | 11     |
 
 		# Bet on winners and losers matches in second dual tournament group
-		And betters places match bets
+		And betters places match bets in tournament named "Homestory Cup XX"
 			| Better name | Round index | Group index | Match index | Player name |
 			| Stålberto   | 1           | 1           | 2           | Stephano    |
 			| Stålberto   | 1           | 1           | 3           | Thorzain    |
@@ -204,11 +204,11 @@ Scenario: Can fetch completed tournament in correct way
 			| Kimmieboi   | 1           | 1           | 2           | Cure        |
 			| Kimmieboi   | 1           | 1           | 3           | Thorzain    |
 		# Play winners and losers matches in second dual tournament groups
-		And score is added to players in given matches in groups
+		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
 			| Round index | Group index | Match index | Scoring player | Added score |
 			| 1           | 1           | 2           | Cure           | 2           |
 			| 1           | 1           | 3           | FanTaSy        | 2           |
-		And better standings in tournament 0 from first to last looks like this
+		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
 			| Better name | Points |
 			| Kimmieboi   | 17     |
 			| Stålberto   | 16     |
@@ -216,17 +216,17 @@ Scenario: Can fetch completed tournament in correct way
 			| Guggelito   | 12     |
 			
 		# Bet on decider match in second dual tournament group
-		And betters places match bets
+		And betters places match bets in tournament named "Homestory Cup XX"
 			| Better name | Round index | Group index | Match index | Player name |
 			| Stålberto   | 1           | 1           | 4           | Stephano    |
 			| Bönis       | 1           | 1           | 4           | FanTaSy     |
 			| Guggelito   | 1           | 1           | 4           | FanTaSy     |
 			| Kimmieboi   | 1           | 1           | 4           | Stephano    |
 		# Play decider match in second dual tournament group
-		And score is added to players in given matches in groups
+		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
 			| Round index | Group index | Match index | Scoring player | Added score |
 			| 1           | 1           | 4           | FanTaSy        | 2           |
-		And better standings in tournament 0 from first to last looks like this
+		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
 			| Better name | Points |
 			| Kimmieboi   | 17     |
 			| Stålberto   | 16     |
@@ -235,7 +235,7 @@ Scenario: Can fetch completed tournament in correct way
 		
 		# BRACKET ROUND BEGINS
 		# Bet on semifinal matches in bracket group
-		And betters places match bets
+		And betters places match bets in tournament named "Homestory Cup XX"
 			| Better name | Round index | Group index | Match index | Player name |
 			| Stålberto   | 2           | 0           | 0           | Maru        |
 			| Stålberto   | 2           | 0           | 1           | Cure        |
@@ -246,11 +246,11 @@ Scenario: Can fetch completed tournament in correct way
 			| Kimmieboi   | 2           | 0           | 0           | Bomber      |
 			| Kimmieboi   | 2           | 0           | 1           | FanTaSy     |
 		# Play semifinal matches in bracket group
-		And score is added to players in given matches in groups
+		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
 			| Round index | Group index | Match index | Scoring player | Added score |
 			| 2           | 0           | 0           | Bomber         | 2           |
 			| 2           | 0           | 1           | Cure           | 2           |
-		And better standings in tournament 0 from first to last looks like this
+		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
 			| Better name | Points |
 			| Kimmieboi   | 18     |
 			| Stålberto   | 17     |
@@ -258,17 +258,17 @@ Scenario: Can fetch completed tournament in correct way
 			| Guggelito   | 15     |
 		
 		# Bet on final match in bracket group
-		And betters places match bets
+		And betters places match bets in tournament named "Homestory Cup XX"
 			| Better name | Round index | Group index | Match index | Player name |
 			| Stålberto   | 2           | 0           | 2           | Bomber      |
 			| Bönis       | 2           | 0           | 2           | Cure        |
 			| Guggelito   | 2           | 0           | 2           | Cure        |
 			| Kimmieboi   | 2           | 0           | 2           | Bomber      |
 		# Play final match in bracket group
-		And score is added to players in given matches in groups
+		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
 			| Round index | Group index | Match index | Scoring player | Added score |
 			| 2           | 0           | 2           | Bomber         | 2           |
-		And better standings in tournament 0 from first to last looks like this
+		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
 			| Better name | Points |
 			| Kimmieboi   | 19     |
 			| Stålberto   | 18     |
