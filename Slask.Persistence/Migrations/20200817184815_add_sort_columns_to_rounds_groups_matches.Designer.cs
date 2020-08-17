@@ -3,15 +3,18 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Slask.Domain.Utilities;
 using Slask.Persistence;
 
 namespace Slask.Persistence.Migrations
 {
     [DbContext(typeof(SlaskContext))]
-    partial class SlaskContextModelSnapshot : ModelSnapshot
+    [Migration("20200817184815_add_sort_columns_to_rounds_groups_matches")]
+    partial class add_sort_columns_to_rounds_groups_matches
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
