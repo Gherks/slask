@@ -2,15 +2,16 @@
 {
     public enum ContestTypeEnum
     {
-        Bracket,
-        DualTournament,
-        RoundRobin
+        None = 0,
+        Bracket = 1,
+        DualTournament = 2,
+        RoundRobin = 3
     }
 
     public enum PlayStateEnum
     {
-        NotBegun,
-        Ongoing,
-        Finished
+        NotBegun = 0,
+        Ongoing = 1,
+        Finished = 2
     }
 }
