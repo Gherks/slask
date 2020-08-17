@@ -162,7 +162,7 @@ namespace Slask.Persistence.Services
 
             if (better != null)
             {
-                _slaskContext.Attach(better.User);
+                _slaskContext.Add(better.User);
             }
 
             return better;
