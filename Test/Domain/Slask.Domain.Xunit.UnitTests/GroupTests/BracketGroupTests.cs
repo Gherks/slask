@@ -34,7 +34,6 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
             bracketGroup.Should().NotBeNull();
             bracketGroup.Id.Should().NotBeEmpty();
             bracketGroup.Matches.Should().BeEmpty();
-            bracketGroup.PlayerReferences.Should().BeEmpty();
             bracketGroup.RoundId.Should().Be(bracketRound.Id);
             bracketGroup.Round.Should().Be(bracketRound);
             bracketGroup.BracketNodeSystem.Should().BeNull();

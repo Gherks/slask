@@ -14,10 +14,10 @@ namespace Slask.Domain.Groups
         public Guid RoundId { get; }
         public RoundBase Round { get; }
 
-        public List<PlayerReference> PlayerReferences { get; }
         public List<StandingsEntry<PlayerReference>> ChoosenTyingPlayerEntries { get; }
 
         bool AddPlayerReferences(List<PlayerReference> playerReferences);
+        List<PlayerReference> GetPlayerReferences();
         PlayStateEnum GetPlayState();
         bool ConstructGroupLayout(int playersPerGroupCount);
         bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences);

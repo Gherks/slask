@@ -72,11 +72,13 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.GroupTests
             GroupBase group = createdGroups[groupIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
-            group.PlayerReferences.Should().HaveCount(playerNames.Count);
+            List<PlayerReference> playerReferences = group.GetPlayerReferences();
+
+            playerReferences.Should().HaveCount(playerNames.Count);
 
             foreach (string playerName in playerNames)
             {
-                group.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+                playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
             }
         }
 

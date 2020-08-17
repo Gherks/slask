@@ -9,8 +9,9 @@ namespace Slask.Domain.Utilities.StandingsSolvers
         protected override List<StandingsEntry<PlayerReference>> CreateStandingsList(GroupBase group)
         {
             List<StandingsEntry<PlayerReference>> playerStandings = new List<StandingsEntry<PlayerReference>>();
+            List<PlayerReference> playerReferences = group.GetPlayerReferences();
 
-            foreach (PlayerReference participant in group.PlayerReferences)
+            foreach (PlayerReference participant in playerReferences)
             {
                 playerStandings.Add(StandingsEntry<PlayerReference>.Create(participant));
             }

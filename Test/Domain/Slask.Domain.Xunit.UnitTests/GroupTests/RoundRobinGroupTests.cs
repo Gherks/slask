@@ -27,7 +27,6 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
             roundRobinGroup.Should().NotBeNull();
             roundRobinGroup.Id.Should().NotBeEmpty();
             roundRobinGroup.Matches.Should().BeEmpty();
-            roundRobinGroup.PlayerReferences.Should().BeEmpty();
             roundRobinGroup.RoundId.Should().Be(roundRobinRound.Id);
             roundRobinGroup.Round.Should().Be(roundRobinRound);
         }

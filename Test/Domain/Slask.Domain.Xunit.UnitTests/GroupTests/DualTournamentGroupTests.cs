@@ -26,7 +26,6 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
             dualTournamenGroup.Should().NotBeNull();
             dualTournamenGroup.Id.Should().NotBeEmpty();
             dualTournamenGroup.Matches.Should().BeEmpty();
-            dualTournamenGroup.PlayerReferences.Should().BeEmpty();
             dualTournamenGroup.RoundId.Should().Be(dualTournamentRound.Id);
             dualTournamenGroup.Round.Should().Be(dualTournamentRound);
         }
@@ -62,12 +61,13 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
             List<string> playerNames = new List<string> { "Maru", "Stork", "Taeja", "Rain", "Bomber" };
 
             DualTournamentGroup dualTournamentGroup = RegisterPlayers(playerNames);
+            List<PlayerReference> playerReferences = dualTournamentGroup.GetPlayerReferences();
 
-            dualTournamentGroup.PlayerReferences.Single(playerReference => playerReference.Name == playerNames[0]).Should().NotBeNull();
-            dualTournamentGroup.PlayerReferences.Single(playerReference => playerReference.Name == playerNames[1]).Should().NotBeNull();
-            dualTournamentGroup.PlayerReferences.Single(playerReference => playerReference.Name == playerNames[2]).Should().NotBeNull();
-            dualTournamentGroup.PlayerReferences.Single(playerReference => playerReference.Name == playerNames[3]).Should().NotBeNull();
-            dualTournamentGroup.PlayerReferences.SingleOrDefault(playerReference => playerReference.Name == playerNames[4]).Should().BeNull();
+            playerReferences.Single(playerReference => playerReference.Name == playerNames[0]).Should().NotBeNull();
+            playerReferences.Single(playerReference => playerReference.Name == playerNames[1]).Should().NotBeNull();
+            playerReferences.Single(playerReference => playerReference.Name == playerNames[2]).Should().NotBeNull();
+            playerReferences.Single(playerReference => playerReference.Name == playerNames[3]).Should().NotBeNull();
+            playerReferences.SingleOrDefault(playerReference => playerReference.Name == playerNames[4]).Should().BeNull();
 
             dualTournamentGroup.Matches.Should().HaveCount(5);
 

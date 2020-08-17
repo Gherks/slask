@@ -119,7 +119,6 @@ namespace Slask.Persistence
 
             modelBuilder.Entity<RoundBase>().Ignore(round => round.ObjectState);
 
-            modelBuilder.Entity<GroupBase>().Ignore(group => group.PlayerReferences);
             modelBuilder.Entity<GroupBase>().Ignore(group => group.ChoosenTyingPlayerEntries);
             modelBuilder.Entity<GroupBase>().Ignore(group => group.ObjectState);
 

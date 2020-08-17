@@ -16,7 +16,6 @@ namespace Slask.Domain.Groups
         protected GroupBase()
         {
             Matches = new List<Match>();
-            PlayerReferences = new List<PlayerReference>();
             ChoosenTyingPlayerEntries = new List<StandingsEntry<PlayerReference>>();
             ObjectState = ObjectStateEnum.Added;
         }
@@ -28,7 +27,6 @@ namespace Slask.Domain.Groups
         public Guid RoundId { get; protected set; }
         public RoundBase Round { get; protected set; }
 
-        public List<PlayerReference> PlayerReferences { get; private set; }
         public List<StandingsEntry<PlayerReference>> ChoosenTyingPlayerEntries { get; private set; }
 
         public bool AddPlayerReferences(List<PlayerReference> playerReferences)
@@ -45,13 +43,33 @@ namespace Slask.Domain.Groups
 
             if (successfullyFilledGroup)
             {
-                PlayerReferences = playerReferences;
                 MarkAsModified();
-
                 return true;
             }
 
             return false;
+        }
+
+        public List<PlayerReference> GetPlayerReferences()
+        {
+            Dictionary<Guid, PlayerReference> playerReferenceDictionary = new Dictionary<Guid, PlayerReference>();
+
+            foreach (Match match in Matches)
+            {
+                if (match.Player1 != null)
+                {
+                    PlayerReference playerReference = match.Player1.PlayerReference;
+                    playerReferenceDictionary[playerReference.Id] = playerReference;
+                }
+
+                if (match.Player2 != null)
+                {
+                    PlayerReference playerReference = match.Player2.PlayerReference;
+                    playerReferenceDictionary[playerReference.Id] = playerReference;
+                }
+            }
+
+            return playerReferenceDictionary.Values.ToList();
         }
 
         public PlayStateEnum GetPlayState()
