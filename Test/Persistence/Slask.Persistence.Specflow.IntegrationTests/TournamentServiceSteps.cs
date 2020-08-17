@@ -129,17 +129,20 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [When(@"betters places match bets in tournament named ""(.*)""")]
         public void GivenBettersPlacesMatchBets(string tournamentName, Table table)
         {
-            foreach (TableRow row in table.Rows)
+            using (TournamentService tournamentService = CreateTournamentService())
             {
-                TestUtilities.ParseBetterMatchBetPlacements(row, out string betterName, out int roundIndex, out int groupIndex, out int matchIndex, out string playerName);
+                foreach (TableRow row in table.Rows)
+                {
+                    TestUtilities.ParseBetterMatchBetPlacements(row, out string betterName, out int roundIndex, out int groupIndex, out int matchIndex, out string playerName);
 
-                Tournament tournament = _tournamentService.GetTournamentByName(tournamentName);
-                RoundBase round = tournament.Rounds[roundIndex];
-                GroupBase group = round.Groups[groupIndex];
-                Match match = group.Matches[matchIndex];
+                    Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                    RoundBase round = tournament.Rounds[roundIndex];
+                    GroupBase group = round.Groups[groupIndex];
+                    Match match = group.Matches[matchIndex];
 
-                _tournamentService.BetterPlacesMatchBetOnMatch(tournament.Id, match.Id, betterName, playerName);
-                _tournamentService.Save();
+                    tournamentService.BetterPlacesMatchBetOnMatch(tournament.Id, match.Id, betterName, playerName);
+                    tournamentService.Save();
+                }
             }
         }
 
