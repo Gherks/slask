@@ -25,6 +25,7 @@ namespace Slask.Domain.Groups.GroupTypes
             BracketGroup group = new BracketGroup
             {
                 Id = Guid.NewGuid(),
+                ContestType = ContestTypeEnum.Bracket,
                 RoundId = round.Id,
                 Round = round
             };

@@ -22,6 +22,7 @@ namespace Slask.Domain.Groups
         }
 
         public Guid Id { get; protected set; }
+        public ContestTypeEnum ContestType { get; protected set; }
         public string Name { get; protected set; }
         public List<Match> Matches { get; protected set; }
         public Guid RoundId { get; protected set; }

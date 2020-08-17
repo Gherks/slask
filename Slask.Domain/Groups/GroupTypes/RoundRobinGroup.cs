@@ -1,5 +1,6 @@
 using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds.RoundTypes;
+using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 
@@ -27,6 +28,7 @@ namespace Slask.Domain.Groups.GroupTypes
             RoundRobinGroup group = new RoundRobinGroup()
             {
                 Id = Guid.NewGuid(),
+                ContestType = ContestTypeEnum.RoundRobin,
                 RoundId = round.Id,
                 Round = round
             };
