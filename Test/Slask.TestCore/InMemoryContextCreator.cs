@@ -10,7 +10,7 @@ namespace Slask.TestCore
         {
             string givenDatabaseName = Guid.NewGuid().ToString();
 
-            bool specifiedDatabaseNameNotEmpty = specifiedDatabaseName.Length > 0;                
+            bool specifiedDatabaseNameNotEmpty = specifiedDatabaseName.Length > 0;
             if (specifiedDatabaseNameNotEmpty)
             {
                 givenDatabaseName = specifiedDatabaseName;
