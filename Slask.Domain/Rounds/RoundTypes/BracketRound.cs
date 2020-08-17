@@ -1,4 +1,4 @@
-using Slask.Domain.Groups;
+﻿using Slask.Domain.Groups;
 using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Procedures.AdvancingPerGroupCount;
 using Slask.Domain.Procedures.PlayersPerGroupCount;
@@ -25,7 +25,6 @@ namespace Slask.Domain.Rounds.RoundTypes
 
             BracketRound round = new BracketRound
             {
-                Id = Guid.NewGuid(),
                 ContestType = ContestTypeEnum.Bracket,
                 PlayersPerGroupCount = 2,
                 AdvancingPerGroupCount = 1,

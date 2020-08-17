@@ -1,4 +1,4 @@
-﻿using Slask.Common;
+using Slask.Common;
 using Slask.Domain.Groups;
 using Slask.Domain.ObjectState;
 using Slask.Domain.Procedures.AdvancingPerGroupCount;
@@ -15,6 +15,7 @@ namespace Slask.Domain.Rounds
     {
         protected RoundBase()
         {
+            Id = Guid.NewGuid();
             PlayersPerGroupCount = 2;
             AdvancingPerGroupCount = 1;
             Groups = new List<GroupBase>();
@@ -25,7 +26,7 @@ namespace Slask.Domain.Rounds
         private PlayersPerGroupCountProcedure _playersPerGroupCountProcedure;
         private AdvancingPerGroupCountProcedure _advancingPerGroupCountProcedure;
 
-        public Guid Id { get; protected set; }
+        public Guid Id { get; private set; }
         public ContestTypeEnum ContestType { get; protected set; }
         public string Name { get; protected set; }
         public int PlayersPerGroupCount { get; protected set; }

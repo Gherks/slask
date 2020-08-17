@@ -1,4 +1,4 @@
-using Slask.Domain.Groups;
+﻿using Slask.Domain.Groups;
 using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Procedures.AdvancingPerGroupCount;
 using Slask.Domain.Procedures.PlayersPerGroupCount;
@@ -25,7 +25,6 @@ namespace Slask.Domain.Rounds.RoundTypes
 
             RoundRobinRound round = new RoundRobinRound
             {
-                Id = Guid.NewGuid(),
                 ContestType = ContestTypeEnum.RoundRobin,
                 PlayersPerGroupCount = 2,
                 AdvancingPerGroupCount = 1,
