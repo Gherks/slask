@@ -26,7 +26,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
         public TournamentServiceStepDefinitions()
         {
-            _tournamentService = new TournamentService(InMemoryContextCreator.Create());
+            _tournamentService = new TournamentService(InMemoryContextCreator.Create("TestInMemoryDB"));
         }
 
         [Given(@"a tournament named ""(.*)"" has been created with users ""(.*)"" added to it")]
