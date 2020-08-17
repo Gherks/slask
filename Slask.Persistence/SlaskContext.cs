@@ -101,7 +101,12 @@ namespace Slask.Persistence
                 .HasValue<DualTournamentRound>(ContestTypeEnum.DualTournament)
                 .HasValue<RoundRobinRound>(ContestTypeEnum.RoundRobin);
 
-            modelBuilder.Entity<GroupBase>().ToTable("Group");
+            modelBuilder.Entity<GroupBase>().ToTable("Group")
+                .HasDiscriminator<ContestTypeEnum>("ContestType")
+                .HasValue<GroupBase>(ContestTypeEnum.None)
+                .HasValue<BracketGroup>(ContestTypeEnum.Bracket)
+                .HasValue<DualTournamentGroup>(ContestTypeEnum.DualTournament)
+                .HasValue<RoundRobinGroup>(ContestTypeEnum.RoundRobin);
         }
 
         private void SetupTables(ModelBuilder modelBuilder)
