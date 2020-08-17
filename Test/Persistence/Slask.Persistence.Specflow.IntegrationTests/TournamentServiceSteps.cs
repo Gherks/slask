@@ -61,25 +61,6 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
         }
 
-        [Given(@"players ""(.*)"" is registered to tournament named ""(.*)""")]
-        [When(@"players ""(.*)"" is registered to tournament named ""(.*)""")]
-        public void GivenPlayersIsRegisteredToRound(string commaSeparatedPlayerNames, string tournamentName)
-        {
-            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
-
-            using (TournamentService tournamentService = CreateTournamentService())
-            {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
-
-                foreach (string playerName in playerNames)
-                {
-                    tournamentService.AddPlayerReference(tournament, playerName);
-                }
-
-                tournamentService.Save();
-            }
-        }
-
         [Given(@"tournament named ""(.*)"" adds rounds")]
         [When(@"tournament named ""(.*)"" adds rounds")]
         public void GivenTournamentAddsRounds(string tournamentName, Table table)
@@ -122,6 +103,25 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                         tournamentService.Save();
                     }
                 }
+            }
+        }
+
+        [Given(@"players ""(.*)"" is registered to tournament named ""(.*)""")]
+        [When(@"players ""(.*)"" is registered to tournament named ""(.*)""")]
+        public void GivenPlayersIsRegisteredToRound(string commaSeparatedPlayerNames, string tournamentName)
+        {
+            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+
+                foreach (string playerName in playerNames)
+                {
+                    tournamentService.AddPlayerReference(tournament, playerName);
+                }
+
+                tournamentService.Save();
             }
         }
 
