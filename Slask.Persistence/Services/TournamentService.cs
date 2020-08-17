@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Slask.Domain;
+using Slask.Domain.Bets.BetTypes;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
@@ -268,7 +269,9 @@ namespace Slask.Persistence.Services
                                 return false;
                             }
 
-                            return better.PlaceMatchBet(match, player);
+                            MatchBet matchBet = better.PlaceMatchBet(match, player);
+
+                            return matchBet != null;
                         }
                     }
                 }

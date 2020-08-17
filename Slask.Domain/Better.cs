@@ -36,13 +36,13 @@ namespace Slask.Domain
             };
         }
 
-        public bool PlaceMatchBet(Match match, Player player)
+        public MatchBet PlaceMatchBet(Match match, Player player)
         {
             bool anyParameterIsInvalid = !PlaceMatchBetParametersAreValid(match, player);
 
             if (anyParameterIsInvalid)
             {
-                return false;
+                return null;
             }
 
             MatchBet newMatchBet = MatchBet.Create(this, match, player);
@@ -61,11 +61,9 @@ namespace Slask.Domain
 
                 Bets.Add(newMatchBet);
                 MarkAsModified();
-
-                return true;
             }
 
-            return false;
+            return newMatchBet;
         }
 
         private MatchBet FindMatchBet(Match match)

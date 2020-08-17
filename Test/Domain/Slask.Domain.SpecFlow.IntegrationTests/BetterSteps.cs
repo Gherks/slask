@@ -40,7 +40,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
                     better.Should().NotBeNull();
                     player.Should().NotBeNull();
 
-                    better.PlaceMatchBet(match, player).Should().BeTrue();
+                    better.PlaceMatchBet(match, player).Should().NotBeNull();
                 }
             }
         }
