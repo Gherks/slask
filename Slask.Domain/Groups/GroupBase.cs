@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Slask.Domain.Groups
 {
-    public partial class GroupBase : ObjectStateBase, GroupInterface
+    public partial class GroupBase : ObjectStateBase, GroupInterface, SortableInterface
     {
         protected GroupBase()
         {
@@ -22,6 +22,7 @@ namespace Slask.Domain.Groups
 
         public Guid Id { get; protected set; }
         public ContestTypeEnum ContestType { get; protected set; }
+        public int SortOrder { get; private set; }
         public string Name { get; protected set; }
         public List<Match> Matches { get; protected set; }
         public Guid RoundId { get; protected set; }
@@ -288,6 +289,33 @@ namespace Slask.Domain.Groups
             }
 
             return false;
+        }
+
+        public void UpdateSortOrder()
+        {
+            if (ObjectState == ObjectStateEnum.Deleted)
+            {
+                return;
+            }
+
+            for (int index = 0; index < Round.Groups.Count; ++index)
+            {
+                if (Round.Groups[index].Id == Id)
+                {
+                    if (SortOrder != index)
+                    {
+                        MarkAsModified();
+                    }
+
+                    SortOrder = index;
+                    return;
+                }
+            }
+        }
+
+        public void SortEntities()
+        {
+            Matches = Matches.OrderBy(match => match.SortOrder).ToList();
         }
     }
 }

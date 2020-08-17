@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Slask.Domain
 {
-    public class Match : ObjectStateBase
+    public class Match : ObjectStateBase, SortableInterface
     {
         private Match()
         {
@@ -17,6 +17,7 @@ namespace Slask.Domain
         }
 
         public Guid Id { get; private set; }
+        public int SortOrder { get; private set; }
         public int BestOf { get; protected set; }
         public DateTime StartDateTime { get; private set; }
         private List<Player> Players { get; set; }
@@ -211,6 +212,28 @@ namespace Slask.Domain
             }
 
             return false;
+        }
+
+        public void UpdateSortOrder()
+        {
+            if (ObjectState == ObjectStateEnum.Deleted)
+            {
+                return;
+            }
+
+            for (int index = 0; index < Group.Matches.Count; ++index)
+            {
+                if (Group.Matches[index].Id == Id)
+                {
+                    if (SortOrder != index)
+                    {
+                        MarkAsModified();
+                    }
+
+                    SortOrder = index;
+                    return;
+                }
+            }
         }
     }
 }

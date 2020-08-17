@@ -376,11 +376,11 @@ namespace Slask.Domain.Rounds
 
         public void SortEntities()
         {
-            //Groups = Groups.OrderBy(group => group.SortOrder).ToList();
+            Groups = Groups.OrderBy(group => group.SortOrder).ToList();
 
             foreach (GroupBase group in Groups)
             {
-                //group.SortEntities();
+                group.SortEntities();
             }
         }
 
