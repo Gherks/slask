@@ -1,4 +1,4 @@
-﻿using Slask.Domain.Groups;
+using Slask.Domain.Groups;
 using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Procedures.AdvancingPerGroupCount;
 using Slask.Domain.Procedures.PlayersPerGroupCount;
@@ -11,6 +11,7 @@ namespace Slask.Domain.Rounds.RoundTypes
     {
         private DualTournamentRound()
         {
+            AssignProcedures(new ImmutablePlayersPerGroupCountProcedure(), new ImmutableAdvancingPerGroupCountProcedure());
         }
 
         public static DualTournamentRound Create(Tournament tournament)
@@ -33,7 +34,6 @@ namespace Slask.Domain.Rounds.RoundTypes
             };
 
             round.AssignDefaultName();
-            round.AssignProcedures(new ImmutablePlayersPerGroupCountProcedure(), new ImmutableAdvancingPerGroupCountProcedure());
 
             return round;
         }
