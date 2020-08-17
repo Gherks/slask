@@ -84,40 +84,43 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [When(@"tournament named ""(.*)"" adds rounds")]
         public void GivenTournamentAddsRounds(string tournamentName, Table table)
         {
-            Tournament tournament = _tournamentService.GetTournamentByName(tournamentName);
-
-            foreach (TableRow row in table.Rows)
+            using (TournamentService tournamentService = CreateTournamentService())
             {
-                TestUtilities.ParseRoundTable(row, out string type, out string name, out int advancingCount, out int playersPerGroupCount);
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
 
-                if (type.Length > 0)
+                foreach (TableRow row in table.Rows)
                 {
-                    type = TestUtilities.ParseRoundGroupTypeString(type);
-                    RoundBase round = null;
+                    TestUtilities.ParseRoundTable(row, out string type, out string name, out int advancingCount, out int playersPerGroupCount);
 
-                    if (type == "BRACKET")
+                    if (type.Length > 0)
                     {
-                        round = _tournamentService.AddBracketRoundToTournament(tournament);
-                    }
-                    else if (type == "DUALTOURNAMENT")
-                    {
-                        round = _tournamentService.AddDualTournamentRoundToTournament(tournament);
-                    }
-                    else if (type == "ROUNDROBIN")
-                    {
-                        round = _tournamentService.AddRoundRobinRoundToTournament(tournament);
-                    }
-                    _tournamentService.Save();
+                        type = TestUtilities.ParseRoundGroupTypeString(type);
+                        RoundBase round = null;
 
-                    if (round == null)
-                    {
-                        return;
-                    }
+                        if (type == "BRACKET")
+                        {
+                            round = tournamentService.AddBracketRoundToTournament(tournament);
+                        }
+                        else if (type == "DUALTOURNAMENT")
+                        {
+                            round = tournamentService.AddDualTournamentRoundToTournament(tournament);
+                        }
+                        else if (type == "ROUNDROBIN")
+                        {
+                            round = tournamentService.AddRoundRobinRoundToTournament(tournament);
+                        }
+                        tournamentService.Save();
 
-                    _tournamentService.RenameRoundInTournament(round, name);
-                    _tournamentService.SetAdvancingPerGroupCountInRound(round, advancingCount);
-                    _tournamentService.SetPlayersPerGroupCountInRound(round, playersPerGroupCount);
-                    _tournamentService.Save();
+                        if (round == null)
+                        {
+                            return;
+                        }
+
+                        tournamentService.RenameRoundInTournament(round, name);
+                        tournamentService.SetAdvancingPerGroupCountInRound(round, advancingCount);
+                        tournamentService.SetPlayersPerGroupCountInRound(round, playersPerGroupCount);
+                        tournamentService.Save();
+                    }
                 }
             }
         }
