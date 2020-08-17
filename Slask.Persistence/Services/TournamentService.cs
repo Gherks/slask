@@ -61,7 +61,7 @@ namespace Slask.Persistence.Services
             int controlledStartIndex = Math.Max(0, startIndex);
             int controlledCount = Math.Max(0, count);
 
-            return _slaskContext.Tournaments.Skip(controlledStartIndex).Take(controlledCount);
+            return _slaskContext.Tournaments.Skip(controlledStartIndex).Take(controlledCount).AsNoTracking();
         }
 
         public Tournament GetTournamentById(Guid id)
