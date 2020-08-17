@@ -6,6 +6,8 @@ using Slask.Domain.Groups;
 using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.ObjectState;
 using Slask.Domain.Rounds;
+using Slask.Domain.Rounds.RoundTypes;
+using Slask.Domain.Utilities;
 
 namespace Slask.Persistence
 {
@@ -53,32 +55,8 @@ namespace Slask.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<RoundBase>().ToTable("Round");
-            modelBuilder.Entity<GroupBase>().ToTable("Group");
-            modelBuilder.Entity<BetBase>().ToTable("Bet");
-
-            modelBuilder.Entity<Tournament>().Ignore(tournament => tournament.TournamentIssueReporter);
-
-            modelBuilder.Entity<Better>().Ignore(better => better.ObjectState);
-
-            modelBuilder.Entity<PlayerReference>().Ignore(playerReference => playerReference.ObjectState);
-
-            modelBuilder.Entity<RoundBase>().Ignore(round => round.ObjectState);
-
-            modelBuilder.Entity<GroupBase>().Ignore(group => group.PlayerReferences);
-            modelBuilder.Entity<GroupBase>().Ignore(group => group.ChoosenTyingPlayerEntries);
-            modelBuilder.Entity<GroupBase>().Ignore(group => group.ObjectState);
-
-            modelBuilder.Entity<BracketGroup>().Ignore(bracketGroup => bracketGroup.BracketNodeSystem);
-
-            modelBuilder.Entity<Match>().Ignore(match => match.Player1);
-            modelBuilder.Entity<Match>().Ignore(match => match.Player2);
-            modelBuilder.Entity<Match>().Ignore(match => match.ObjectState);
-
-            modelBuilder.Entity<Player>().Ignore(player => player.Name);
-            modelBuilder.Entity<Player>().Ignore(player => player.ObjectState);
-
-            modelBuilder.Entity<BetBase>().Ignore(bet => bet.ObjectState);
+            SetupTables(modelBuilder);
+            SetupIgnoredProperties(modelBuilder);
         }
 
         public override int SaveChanges()
@@ -110,6 +88,46 @@ namespace Slask.Persistence
                 default:
                     return EntityState.Unchanged;
             }
+        }
+
+        private void SetupIgnoredProperties(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<BetBase>().ToTable("Bet");
+
+            modelBuilder.Entity<RoundBase>().ToTable("Round")
+                .HasDiscriminator<ContestTypeEnum>("ContestType")
+                .HasValue<RoundBase>(ContestTypeEnum.None)
+                .HasValue<BracketRound>(ContestTypeEnum.Bracket)
+                .HasValue<DualTournamentRound>(ContestTypeEnum.DualTournament)
+                .HasValue<RoundRobinRound>(ContestTypeEnum.RoundRobin);
+
+            modelBuilder.Entity<GroupBase>().ToTable("Group");
+        }
+
+        private void SetupTables(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Tournament>().Ignore(tournament => tournament.TournamentIssueReporter);
+
+            modelBuilder.Entity<Better>().Ignore(better => better.ObjectState);
+
+            modelBuilder.Entity<PlayerReference>().Ignore(playerReference => playerReference.ObjectState);
+
+            modelBuilder.Entity<RoundBase>().Ignore(round => round.ObjectState);
+
+            modelBuilder.Entity<GroupBase>().Ignore(group => group.PlayerReferences);
+            modelBuilder.Entity<GroupBase>().Ignore(group => group.ChoosenTyingPlayerEntries);
+            modelBuilder.Entity<GroupBase>().Ignore(group => group.ObjectState);
+
+            modelBuilder.Entity<BracketGroup>().Ignore(bracketGroup => bracketGroup.BracketNodeSystem);
+
+            modelBuilder.Entity<Match>().Ignore(match => match.Player1);
+            modelBuilder.Entity<Match>().Ignore(match => match.Player2);
+            modelBuilder.Entity<Match>().Ignore(match => match.ObjectState);
+
+            modelBuilder.Entity<Player>().Ignore(player => player.Name);
+            modelBuilder.Entity<Player>().Ignore(player => player.ObjectState);
+
+            modelBuilder.Entity<BetBase>().Ignore(bet => bet.ObjectState);
         }
     }
 }
