@@ -53,10 +53,11 @@ namespace Slask.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
+            SetupRelationships(modelBuilder);
             SetupTables(modelBuilder);
             SetupIgnoredProperties(modelBuilder);
+
+            base.OnModelCreating(modelBuilder);
         }
 
         public override int SaveChanges()
@@ -97,6 +98,21 @@ namespace Slask.Persistence
                 default:
                     return EntityState.Unchanged;
             }
+        }
+
+        private void SetupRelationships(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Match>()
+                .HasOne(match => match.Player1)
+                .WithOne()
+                .HasForeignKey<Match>(match => match.Player1Id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Match>()
+                .HasOne(match => match.Player2)
+                .WithOne()
+                .HasForeignKey<Match>(match => match.Player2Id)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         private void SetupIgnoredProperties(ModelBuilder modelBuilder)
