@@ -2,7 +2,7 @@
 {
     public abstract class ObjectStateBase : ObjectStateInterface
     {
-        public ObjectStateEnum ObjectState { get; protected set; }
+        public ObjectStateEnum ObjectState { get; private set; }
 
         public ObjectStateBase()
         {
