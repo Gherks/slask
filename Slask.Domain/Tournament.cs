@@ -1,4 +1,4 @@
-﻿using Slask.Domain.Bets;
+using Slask.Domain.Bets;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
@@ -167,7 +167,12 @@ namespace Slask.Domain
             {
                 round.ResetObjectState();
 
-                foreach(GroupBase group in round.Groups)
+                foreach (PlayerReference playerReference in round.PlayerReferences)
+                {
+                    playerReference.ResetObjectState();
+                }
+
+                foreach (GroupBase group in round.Groups)
                 {
                     group.ResetObjectState();
 
