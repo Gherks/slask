@@ -4,7 +4,8 @@
     {
         public ObjectStateEnum ObjectState { get; }
 
-        public void ResetObjectState();
         public void MarkForDeletion();
+        public void MarkAsModified();
+        public void ResetObjectState();
     }
 }
