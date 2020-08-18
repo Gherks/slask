@@ -1,4 +1,4 @@
-﻿using Slask.Domain.ObjectState;
+using Slask.Domain.ObjectState;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
@@ -9,6 +9,8 @@ namespace Slask.Domain
     {
         private Player()
         {
+            Id = Guid.NewGuid();
+            Score = 0;
         }
 
         public Guid Id { get; private set; }
@@ -33,9 +35,7 @@ namespace Slask.Domain
 
             return new Player
             {
-                Id = Guid.NewGuid(),
                 PlayerReference = playerReference,
-                Score = 0,
                 MatchId = match.Id,
                 Match = match,
                 ObjectState = ObjectStateEnum.Added

@@ -17,6 +17,7 @@ namespace Slask.Domain
         {
             _created = DateTime.Now;
 
+            Id = Guid.NewGuid();
             Rounds = new List<RoundBase>();
             Betters = new List<Better>();
             TournamentIssueReporter = new TournamentIssueReporter();
@@ -37,8 +38,7 @@ namespace Slask.Domain
         {
             return new Tournament
             {
-                Id = Guid.NewGuid(),
-                Name = name,
+                Name = name
             };
         }
 

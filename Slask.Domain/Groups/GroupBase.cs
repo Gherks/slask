@@ -15,12 +15,13 @@ namespace Slask.Domain.Groups
     {
         protected GroupBase()
         {
+            Id = Guid.NewGuid();
             Matches = new List<Match>();
             ChoosenTyingPlayerEntries = new List<StandingsEntry<PlayerReference>>();
             ObjectState = ObjectStateEnum.Added;
         }
 
-        public Guid Id { get; protected set; }
+        public Guid Id { get; private set; }
         public ContestTypeEnum ContestType { get; protected set; }
         public int SortOrder { get; private set; }
         public string Name { get; protected set; }

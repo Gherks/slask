@@ -23,7 +23,6 @@ namespace Slask.Domain.Groups.GroupTypes
 
             DualTournamentGroup group = new DualTournamentGroup
             {
-                Id = Guid.NewGuid(),
                 ContestType = ContestTypeEnum.DualTournament,
                 RoundId = round.Id,
                 Round = round

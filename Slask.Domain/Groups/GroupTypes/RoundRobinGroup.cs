@@ -27,7 +27,6 @@ namespace Slask.Domain.Groups.GroupTypes
 
             RoundRobinGroup group = new RoundRobinGroup()
             {
-                Id = Guid.NewGuid(),
                 ContestType = ContestTypeEnum.RoundRobin,
                 RoundId = round.Id,
                 Round = round

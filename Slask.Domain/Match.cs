@@ -11,6 +11,9 @@ namespace Slask.Domain
     {
         private Match()
         {
+            Id = Guid.NewGuid();
+            BestOf = 3;
+
             Players = new List<Player>();
             Players.Add(null);
             Players.Add(null);
@@ -41,8 +44,6 @@ namespace Slask.Domain
 
             Match match = new Match()
             {
-                Id = Guid.NewGuid(),
-                BestOf = 3,
                 StartDateTime = DateTime.MaxValue,
                 GroupId = group.Id,
                 Group = group,

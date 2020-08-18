@@ -33,7 +33,6 @@ namespace Slask.Domain.Bets.BetTypes
 
             return new MatchBet
             {
-                Id = Guid.NewGuid(),
                 BetterId = better.Id,
                 Better = better,
                 MatchId = match.Id,

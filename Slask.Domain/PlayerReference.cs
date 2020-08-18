@@ -1,4 +1,4 @@
-﻿using Slask.Domain.ObjectState;
+using Slask.Domain.ObjectState;
 using System;
 
 namespace Slask.Domain
@@ -7,6 +7,7 @@ namespace Slask.Domain
     {
         private PlayerReference()
         {
+            Id = Guid.NewGuid();
         }
 
         public Guid Id { get; private set; }
@@ -30,7 +31,6 @@ namespace Slask.Domain
             {
                 PlayerReference playerReference = new PlayerReference
                 {
-                    Id = Guid.NewGuid(),
                     Name = name,
                     TournamentId = tournament.Id,
                     Tournament = tournament,

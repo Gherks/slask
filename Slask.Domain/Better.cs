@@ -1,4 +1,4 @@
-﻿using Slask.Domain.Bets;
+using Slask.Domain.Bets;
 using Slask.Domain.Bets.BetTypes;
 using Slask.Domain.ObjectState;
 using System;
@@ -10,6 +10,7 @@ namespace Slask.Domain
     {
         private Better()
         {
+            Id = Guid.NewGuid();
             Bets = new List<BetBase>();
         }
 
@@ -28,7 +29,6 @@ namespace Slask.Domain
 
             return new Better
             {
-                Id = Guid.NewGuid(),
                 User = user,
                 TournamentId = tournament.Id,
                 Tournament = tournament,

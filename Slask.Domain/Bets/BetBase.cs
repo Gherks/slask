@@ -7,9 +7,10 @@ namespace Slask.Domain.Bets
     {
         protected BetBase()
         {
+            Id = Guid.NewGuid();
         }
 
-        public Guid Id { get; protected set; }
+        public Guid Id { get; private set; }
         public Guid BetterId { get; protected set; }
         public Better Better { get; protected set; }
 
