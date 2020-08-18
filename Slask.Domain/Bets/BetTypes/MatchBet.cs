@@ -38,8 +38,7 @@ namespace Slask.Domain.Bets.BetTypes
                 MatchId = match.Id,
                 Match = match,
                 PlayerId = player.Id,
-                Player = player,
-                ObjectState = ObjectStateEnum.Added
+                Player = player
             };
         }
 

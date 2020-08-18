@@ -19,8 +19,7 @@ namespace Slask.Domain.Bets.BetTypes
 
             return new MiscBet
             {
-                Player = player,
-                ObjectState = ObjectStateEnum.Added
+                Player = player
             };
         }
 

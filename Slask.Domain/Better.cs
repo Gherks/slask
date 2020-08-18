@@ -1,4 +1,4 @@
-using Slask.Domain.Bets;
+﻿using Slask.Domain.Bets;
 using Slask.Domain.Bets.BetTypes;
 using Slask.Domain.ObjectState;
 using System;
@@ -31,8 +31,7 @@ namespace Slask.Domain
             {
                 User = user,
                 TournamentId = tournament.Id,
-                Tournament = tournament,
-                ObjectState = ObjectStateEnum.Added
+                Tournament = tournament
             };
         }
 

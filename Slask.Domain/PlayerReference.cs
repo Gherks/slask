@@ -1,4 +1,4 @@
-using Slask.Domain.ObjectState;
+﻿using Slask.Domain.ObjectState;
 using System;
 
 namespace Slask.Domain
@@ -33,8 +33,7 @@ namespace Slask.Domain
                 {
                     Name = name,
                     TournamentId = tournament.Id,
-                    Tournament = tournament,
-                    ObjectState = ObjectStateEnum.Added
+                    Tournament = tournament
                 };
 
                 return playerReference;

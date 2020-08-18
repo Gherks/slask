@@ -4,6 +4,11 @@
     {
         public ObjectStateEnum ObjectState { get; protected set; }
 
+        public ObjectStateBase()
+        {
+            ObjectState = ObjectStateEnum.Added;
+        }
+
         public void MarkForDeletion()
         {
             ObjectState = ObjectStateEnum.Deleted;

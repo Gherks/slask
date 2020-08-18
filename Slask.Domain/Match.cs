@@ -46,8 +46,7 @@ namespace Slask.Domain
             {
                 StartDateTime = DateTime.MaxValue,
                 GroupId = group.Id,
-                Group = group,
-                ObjectState = ObjectStateEnum.Added
+                Group = group
             };
 
             return match;

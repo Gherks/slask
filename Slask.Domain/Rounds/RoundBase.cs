@@ -20,7 +20,6 @@ namespace Slask.Domain.Rounds
             AdvancingPerGroupCount = 1;
             Groups = new List<GroupBase>();
             PlayerReferences = new List<PlayerReference>();
-            ObjectState = ObjectStateEnum.Added;
         }
 
         private PlayersPerGroupCountProcedure _playersPerGroupCountProcedure;

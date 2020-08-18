@@ -18,7 +18,6 @@ namespace Slask.Domain.Groups
             Id = Guid.NewGuid();
             Matches = new List<Match>();
             ChoosenTyingPlayerEntries = new List<StandingsEntry<PlayerReference>>();
-            ObjectState = ObjectStateEnum.Added;
         }
 
         public Guid Id { get; private set; }

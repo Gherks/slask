@@ -1,4 +1,4 @@
-using Slask.Domain.ObjectState;
+﻿using Slask.Domain.ObjectState;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
@@ -37,8 +37,7 @@ namespace Slask.Domain
             {
                 PlayerReference = playerReference,
                 MatchId = match.Id,
-                Match = match,
-                ObjectState = ObjectStateEnum.Added
+                Match = match
             };
         }
 
