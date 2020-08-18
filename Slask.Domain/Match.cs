@@ -13,23 +13,18 @@ namespace Slask.Domain
         {
             Id = Guid.NewGuid();
             BestOf = 3;
-
-            Players = new List<Player>();
-            Players.Add(null);
-            Players.Add(null);
         }
 
         public Guid Id { get; private set; }
         public int SortOrder { get; private set; }
         public int BestOf { get; protected set; }
         public DateTime StartDateTime { get; private set; }
-        private List<Player> Players { get; set; }
+        public Guid Player1Id { get; private set; }
+        public Player Player1 { get; private set; }
+        public Guid Player2Id { get; private set; }
+        public Player Player2 { get; private set; }
         public Guid GroupId { get; private set; }
         public GroupBase Group { get; private set; }
-
-        // Ignored by SlaskContext
-        public Player Player1 { get { return Players[0]; } private set { } }
-        public Player Player2 { get { return Players[1]; } private set { } }
 
 
         public static Match Create(GroupBase group)
@@ -193,7 +188,16 @@ namespace Slask.Domain
         {
             if (GetPlayState() == PlayStateEnum.NotBegun)
             {
-                Players[playerIndex] = Player.Create(this, playerReference);
+                if(playerIndex == 0)
+                {
+                    Player1 = Player.Create(this, playerReference);
+                    Player1Id = Player1.Id;
+                }
+                else
+                {
+                    Player2 = Player.Create(this, playerReference);
+                    Player2Id = Player2.Id;
+                }
                 MarkAsModified();
 
                 return true;

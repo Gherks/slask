@@ -133,8 +133,6 @@ namespace Slask.Persistence
 
             modelBuilder.Entity<BracketGroup>().Ignore(bracketGroup => bracketGroup.BracketNodeSystem);
 
-            modelBuilder.Entity<Match>().Ignore(match => match.Player1);
-            modelBuilder.Entity<Match>().Ignore(match => match.Player2);
             modelBuilder.Entity<Match>().Ignore(match => match.ObjectState);
 
             modelBuilder.Entity<Player>().Ignore(player => player.Name);
