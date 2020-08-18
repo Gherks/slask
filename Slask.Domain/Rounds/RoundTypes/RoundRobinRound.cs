@@ -11,6 +11,9 @@ namespace Slask.Domain.Rounds.RoundTypes
     {
         private RoundRobinRound()
         {
+            PlayersPerGroupCount = 2;
+            AdvancingPerGroupCount = 1;
+
             AssignProcedures(new MutablePlayersPerGroupCountProcedure(), new MutableAdvancingPerGroupCountProcedure());
         }
 
@@ -26,8 +29,6 @@ namespace Slask.Domain.Rounds.RoundTypes
             RoundRobinRound round = new RoundRobinRound
             {
                 ContestType = ContestTypeEnum.RoundRobin,
-                PlayersPerGroupCount = 2,
-                AdvancingPerGroupCount = 1,
                 TournamentId = tournament.Id,
                 Tournament = tournament
             };

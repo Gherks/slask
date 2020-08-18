@@ -11,6 +11,9 @@ namespace Slask.Domain.Rounds.RoundTypes
     {
         private DualTournamentRound()
         {
+            PlayersPerGroupCount = 4;
+            AdvancingPerGroupCount = 2;
+
             AssignProcedures(new ImmutablePlayersPerGroupCountProcedure(), new ImmutableAdvancingPerGroupCountProcedure());
         }
 
@@ -26,8 +29,6 @@ namespace Slask.Domain.Rounds.RoundTypes
             DualTournamentRound round = new DualTournamentRound
             {
                 ContestType = ContestTypeEnum.DualTournament,
-                PlayersPerGroupCount = 4,
-                AdvancingPerGroupCount = 2,
                 TournamentId = tournament.Id,
                 Tournament = tournament
             };
