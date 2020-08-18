@@ -150,32 +150,35 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [When(@"groups within tournament named ""(.*)"" is played out")]
         public void GivenGroupsWithinTournamentIsPlayedOut(string tournamentName, Table table)
         {
-            foreach (TableRow row in table.Rows)
+            using (TournamentService tournamentService = CreateTournamentService())
             {
-                TestUtilities.ParseTargetGroupToPlay(row, out int _, out int roundIndex, out int groupIndex);
-
-                SystemTimeMocker.Reset();
-                Tournament tournament = _tournamentService.GetTournamentByName(tournamentName);
-                RoundBase round = tournament.Rounds[roundIndex];
-                GroupBase group = round.Groups[groupIndex];
-
-                while (group.GetPlayState() != PlayStateEnum.Finished)
+                foreach (TableRow row in table.Rows)
                 {
-                    foreach (Match match in group.Matches)
+                    TestUtilities.ParseTargetGroupToPlay(row, out int _, out int roundIndex, out int groupIndex);
+
+                    SystemTimeMocker.Reset();
+                    Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                    RoundBase round = tournament.Rounds[roundIndex];
+                    GroupBase group = round.Groups[groupIndex];
+
+                    while (group.GetPlayState() != PlayStateEnum.Finished)
                     {
-                        if (match.IsReady() && match.GetPlayState() == PlayStateEnum.NotBegun)
+                        foreach (Match match in group.Matches)
                         {
-                            SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+                            if (match.IsReady() && match.GetPlayState() == PlayStateEnum.NotBegun)
+                            {
+                                SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+                                break;
+                            }
+                        }
+
+                        bool playedMatchesSuccessfully = PlayAvailableMatches(group);
+                        tournamentService.Save();
+
+                        if (!playedMatchesSuccessfully)
+                        {
                             break;
                         }
-                    }
-
-                    bool playedMatchesSuccessfully = PlayAvailableMatches(group);
-                    _tournamentService.Save();
-
-                    if (!playedMatchesSuccessfully)
-                    {
-                        break;
                     }
                 }
             }
@@ -237,36 +240,39 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
         private bool PlayAvailableMatches(GroupBase group)
         {
-            foreach (Match match in group.Matches)
+            using (TournamentService tournamentService = CreateTournamentService())
             {
-                int winningScore = (int)Math.Ceiling(match.BestOf / 2.0);
-
-                bool matchShouldHaveStarted = match.StartDateTime < SystemTime.Now;
-                bool matchIsNotFinished = match.GetPlayState() != PlayStateEnum.Finished;
-
-                if (matchShouldHaveStarted && matchIsNotFinished)
+                foreach (Match match in group.Matches)
                 {
-                    // Give points to player with name that precedes the other alphabetically
-                    bool increasePlayer1Score = match.Player1.Name.CompareTo(match.Player2.Name) <= 0;
-                    bool scoreIncreased;
+                    int winningScore = (int)Math.Ceiling(match.BestOf / 2.0);
 
-                    if (increasePlayer1Score)
-                    {
-                        scoreIncreased = _tournamentService.AddScoreToPlayerInMatch(group.Round.Tournament.Id, match.Id, match.Player1.Id, winningScore);
-                    }
-                    else
-                    {
-                        scoreIncreased = _tournamentService.AddScoreToPlayerInMatch(group.Round.Tournament.Id, match.Id, match.Player2.Id, winningScore);
-                    }
+                    bool matchShouldHaveStarted = match.StartDateTime < SystemTime.Now;
+                    bool matchIsNotFinished = match.GetPlayState() != PlayStateEnum.Finished;
 
-                    if (!scoreIncreased)
+                    if (matchShouldHaveStarted && matchIsNotFinished)
                     {
-                        return false;
+                        // Give points to player with name that precedes the other alphabetically
+                        bool increasePlayer1Score = match.Player1.Name.CompareTo(match.Player2.Name) <= 0;
+                        bool scoreIncreased;
+
+                        if (increasePlayer1Score)
+                        {
+                            scoreIncreased = tournamentService.AddScoreToPlayerInMatch(group.Round.Tournament.Id, match.Id, match.Player1.Id, winningScore);
+                        }
+                        else
+                        {
+                            scoreIncreased = tournamentService.AddScoreToPlayerInMatch(group.Round.Tournament.Id, match.Id, match.Player2.Id, winningScore);
+                        }
+
+                        if (!scoreIncreased)
+                        {
+                            return false;
+                        }
                     }
                 }
-            }
 
-            _tournamentService.Save();
+                tournamentService.Save();
+            }
 
             return true;
         }
