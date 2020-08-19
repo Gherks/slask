@@ -40,15 +40,10 @@ namespace Slask.Domain.Groups
                 return false;
             }
 
-            bool successfullyFilledGroup = FillMatchesWithPlayerReferences(playerReferences);
+            FillMatchesWithPlayerReferences(playerReferences);
+            MarkAsModified();
 
-            if (successfullyFilledGroup)
-            {
-                MarkAsModified();
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
         public List<PlayerReference> GetPlayerReferences()
@@ -124,7 +119,7 @@ namespace Slask.Domain.Groups
             throw new NotImplementedException();
         }
 
-        public virtual bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
+        public virtual void FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
         {
             throw new NotImplementedException();
         }

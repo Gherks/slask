@@ -1,4 +1,4 @@
-﻿using Slask.Domain.Rounds.RoundTypes;
+using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
@@ -92,7 +92,7 @@ namespace Slask.Domain.Groups.GroupTypes
             return true;
         }
 
-        public override bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
+        public override void FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
         {
             PlayerReference participant1 = playerReferences.Count > 0 ? playerReferences[0] : null;
             PlayerReference participant2 = playerReferences.Count > 1 ? playerReferences[1] : null;
@@ -101,8 +101,6 @@ namespace Slask.Domain.Groups.GroupTypes
 
             Matches[0].SetPlayers(participant1, participant2);
             Matches[1].SetPlayers(participant3, participant4);
-
-            return true;
         }
 
         private bool FirstMatchPairHasPlayed(Match match)

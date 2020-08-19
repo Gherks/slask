@@ -64,10 +64,9 @@ namespace Slask.Domain.Groups.GroupTypes
             return true;
         }
 
-        public override bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
+        public override void FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
         {
             RoundRobinGroupLayoutAssembler.AssignPlayersToMatches(playerReferences, Matches);
-            return true;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Slask.Domain.Groups
         List<PlayerReference> GetPlayerReferences();
         PlayStateEnum GetPlayState();
         bool ConstructGroupLayout(int playersPerGroupCount);
-        bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences);
+        void FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences);
         bool NewDateTimeIsValid(Match match, DateTime dateTime);
         bool HasProblematicTie();
         List<StandingsEntry<PlayerReference>> FindProblematiclyTyingPlayers();
