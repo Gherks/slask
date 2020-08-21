@@ -1,12 +1,16 @@
-﻿using System;
+﻿using Slask.Domain.Utilities;
+using System;
 
 namespace Slask.Domain.Bets
 {
     public interface BetInterface
     {
-        Better Better { get; }
-        Guid BetterId { get; }
         Guid Id { get; }
+        BetTypeEnum BetType { get; }
+        Guid BetterId { get; }
+        Better Better { get; }
+        Guid MatchId { get; }
+        Guid PlayerId { get; }
 
         public bool IsWon();
     }

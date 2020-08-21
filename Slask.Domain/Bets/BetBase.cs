@@ -1,9 +1,10 @@
 ﻿using Slask.Domain.ObjectState;
+using Slask.Domain.Utilities;
 using System;
 
 namespace Slask.Domain.Bets
 {
-    public class BetBase : ObjectStateBase, BetInterface
+    public abstract class BetBase : ObjectStateBase, BetInterface
     {
         protected BetBase()
         {
@@ -11,12 +12,12 @@ namespace Slask.Domain.Bets
         }
 
         public Guid Id { get; private set; }
+        public BetTypeEnum BetType { get; protected set; }
         public Guid BetterId { get; protected set; }
         public Better Better { get; protected set; }
+        public Guid MatchId { get; protected set; }
+        public Guid PlayerId { get; protected set; }
 
-        public virtual bool IsWon()
-        {
-            return false;
-        }
+        public abstract bool IsWon();
     }
 }
