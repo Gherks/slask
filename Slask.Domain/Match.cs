@@ -47,6 +47,13 @@ namespace Slask.Domain
             return match;
         }
 
+        public override void MarkForDeletion()
+        {
+            base.MarkForDeletion();
+            Player1.MarkForDeletion();
+            Player2.MarkForDeletion();
+        }
+
         public bool SetBestOf(int bestOf)
         {
             bool matchHasNotBegun = GetPlayState() == PlayStateEnum.NotBegun;

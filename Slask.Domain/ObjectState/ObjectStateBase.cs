@@ -9,7 +9,7 @@
             ObjectState = ObjectStateEnum.Added;
         }
 
-        public void MarkForDeletion()
+        public virtual void MarkForDeletion()
         {
             ObjectState = ObjectStateEnum.Deleted;
         }
