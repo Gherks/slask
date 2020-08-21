@@ -305,6 +305,7 @@ namespace Slask.Domain.Rounds
         public void ReceiveTransferedPlayerReferences(AdvancingPlayerTransfer advancingPlayerTransfer)
         {
             PlayerReferences = advancingPlayerTransfer.PlayerReferences;
+            MarkAsModified();
 
             int perGroupCount = PlayerReferences.Count / Groups.Count;
             int playerReferenceIndex = 0;
@@ -315,8 +316,10 @@ namespace Slask.Domain.Rounds
 
                 for (int perGroupIndex = 0; perGroupIndex < perGroupCount; ++perGroupIndex)
                 {
-                    playerReferences.Add(PlayerReferences[playerReferenceIndex]);
-                    playerReferenceIndex++;
+                    PlayerReference playerReference = PlayerReferences[playerReferenceIndex++];
+
+                    playerReferences.Add(playerReference);
+                    playerReference.MarkAsModified();
                 }
 
                 group.AddPlayerReferences(playerReferences);
@@ -445,6 +448,11 @@ namespace Slask.Domain.Rounds
             foreach (GroupBase group in Groups)
             {
                 group.MarkForDeletion();
+
+                foreach (Match match in group.Matches)
+                {
+                    match.MarkForDeletion();
+                }
             }
 
             Groups.Clear();
