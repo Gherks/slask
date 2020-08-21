@@ -151,7 +151,6 @@ namespace Slask.Persistence
 
             modelBuilder.Entity<Match>().Ignore(match => match.ObjectState);
 
-            modelBuilder.Entity<Player>().Ignore(player => player.Name);
             modelBuilder.Entity<Player>().Ignore(player => player.ObjectState);
 
             modelBuilder.Entity<BetBase>().Ignore(bet => bet.ObjectState);
