@@ -30,7 +30,9 @@ namespace Slask.Domain.Utilities.StandingsSolvers
                     continue;
                 }
 
-                StandingsEntry<PlayerReference> playerStandingEntry = playerStandings.Find(player => player.Object.Name == winner.PlayerReference.Name);
+                string winnerName = winner.GetName();
+
+                StandingsEntry<PlayerReference> playerStandingEntry = playerStandings.Find(player => player.Object.Name == winnerName);
 
                 if (playerStandingEntry == null)
                 {

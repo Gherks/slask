@@ -56,11 +56,11 @@ namespace Slask.Domain.Groups.GroupUtility
                 return;
             }
 
-            bool groupContainsOnePlayerReferences = playerReferences.Count == 1;
+            bool groupContainsOnePlayerReference = playerReferences.Count == 1;
 
-            if (groupContainsOnePlayerReferences)
+            if (groupContainsOnePlayerReference)
             {
-                matches.First().SetPlayers(playerReferences.First(), null);
+                matches.First().AssignPlayerReferenceToFirstAvailablePlayer(playerReferences.First().Id);
                 return;
             }
 
@@ -122,7 +122,7 @@ namespace Slask.Domain.Groups.GroupUtility
             {
                 for (int index = 0; index < numMatchesPerRound; ++index)
                 {
-                    matches[matchCounter++].SetPlayers(playerReferences[index], playerReferences[index + numMatchesPerRound]);
+                    matches[matchCounter++].AssignPlayerReferencesToPlayers(playerReferences[index].Id, playerReferences[index + numMatchesPerRound].Id);
                 }
 
                 if (matchCounter >= matches.Count)
@@ -151,7 +151,7 @@ namespace Slask.Domain.Groups.GroupUtility
             {
                 for (int index = 0; index < numMatchesPerRound; ++index)
                 {
-                    matches[matchCounter++].SetPlayers(playerReferences[index], playerReferences[index + numMatchesPerRound + 1]);
+                    matches[matchCounter++].AssignPlayerReferencesToPlayers(playerReferences[index].Id, playerReferences[index + numMatchesPerRound + 1].Id);
                 }
 
                 if (matchCounter >= matches.Count)

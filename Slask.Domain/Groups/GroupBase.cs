@@ -46,26 +46,43 @@ namespace Slask.Domain.Groups
             return true;
         }
 
-        public List<PlayerReference> GetPlayerReferences()
+        public List<Guid> GetPlayerReferenceIds()
         {
-            Dictionary<Guid, PlayerReference> playerReferenceDictionary = new Dictionary<Guid, PlayerReference>();
+            HashSet<Guid> playerReferenceIds = new HashSet<Guid>();
 
             foreach (Match match in Matches)
             {
-                if (match.Player1 != null)
+                if (match.Player1.PlayerReferenceId != Guid.Empty)
                 {
-                    PlayerReference playerReference = match.Player1.PlayerReference;
-                    playerReferenceDictionary[playerReference.Id] = playerReference;
+                    playerReferenceIds.Add(match.Player1.PlayerReferenceId);
                 }
 
-                if (match.Player2 != null)
+                if (match.Player2.PlayerReferenceId != Guid.Empty)
                 {
-                    PlayerReference playerReference = match.Player2.PlayerReference;
-                    playerReferenceDictionary[playerReference.Id] = playerReference;
+                    playerReferenceIds.Add(match.Player2.PlayerReferenceId);
                 }
             }
 
-            return playerReferenceDictionary.Values.ToList();
+            return playerReferenceIds.ToList();
+        }
+
+        public List<PlayerReference> GetPlayerReferences()
+        {
+            List<PlayerReference> playerReferences = new List<PlayerReference>();
+
+            foreach (Guid playerReferenceId in GetPlayerReferenceIds())
+            {
+                foreach (PlayerReference playerReference in Round.PlayerReferences)
+                {
+                    if (playerReferenceId == playerReference.Id)
+                    {
+                        playerReferences.Add(playerReference);
+                        break;
+                    }
+                }
+            }
+
+            return playerReferences;
         }
 
         public PlayStateEnum GetPlayState()

@@ -1,4 +1,4 @@
-using Slask.Domain.Groups.GroupUtility;
+﻿using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
 using System;
@@ -106,8 +106,7 @@ namespace Slask.Domain.Groups.GroupTypes
                 BracketNode bracketNode = finalNode.GetBracketNodeByMatchId(match.Id);
                 BracketNode parentNode = bracketNode.Parent;
 
-                parentNode.Match.AddPlayer(match.GetWinningPlayer().PlayerReference);
-                MarkAsModified();
+                parentNode.Match.AssignPlayerReferenceToFirstAvailablePlayer(match.GetWinningPlayer().PlayerReferenceId);
             }
         }
 
@@ -137,13 +136,17 @@ namespace Slask.Domain.Groups.GroupTypes
                     playerReference1 = playerReferences[matchIndex * 2];
                     playerReference2 = playerReferences[matchIndex * 2 + 1];
 
-                    Matches[matchIndex].SetPlayers(playerReference1, playerReference2);
+                    Matches[matchIndex].AssignPlayerReferencesToPlayers(playerReference1.Id, playerReference2.Id);
                 }
                 catch
                 {
-                    if (playerReference1 != null || playerReference2 != null)
+                    bool anyPlayerReferenceIsValid = playerReference1 != null || playerReference2 != null;
+                    if (anyPlayerReferenceIsValid)
                     {
-                        Matches[matchIndex].SetPlayers(playerReference1, playerReference2);
+                        Guid playerReference1Id = playerReference1 != null ? playerReference1.Id : Guid.Empty;
+                        Guid playerReference2Id = playerReference2 != null ? playerReference2.Id : Guid.Empty;
+
+                        Matches[matchIndex].AssignPlayerReferencesToPlayers(playerReference1Id, playerReference2Id);
                     }
                     return;
                 }
