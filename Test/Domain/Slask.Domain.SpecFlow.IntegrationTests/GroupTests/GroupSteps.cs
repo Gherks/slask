@@ -97,20 +97,20 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.GroupTests
 
                 if (player1Name.Length > 0)
                 {
-                    group.Matches[matchIndex].Player1.Name.Should().Be(player1Name);
+                    group.Matches[matchIndex].Player1.GetName().Should().Be(player1Name);
                 }
                 else
                 {
-                    group.Matches[matchIndex].Player1.Should().BeNull();
+                    group.Matches[matchIndex].Player1.PlayerReferenceId.Should().BeEmpty();
                 }
 
                 if (player2Name.Length > 0)
                 {
-                    group.Matches[matchIndex].Player2.Name.Should().Be(player2Name);
+                    group.Matches[matchIndex].Player2.GetName().Should().Be(player2Name);
                 }
                 else
                 {
-                    group.Matches[matchIndex].Player2.Should().BeNull();
+                    group.Matches[matchIndex].Player2.PlayerReferenceId.Should().BeEmpty();
                 }
             }
         }

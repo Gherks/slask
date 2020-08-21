@@ -111,8 +111,8 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
             group.HasProblematicTie().Should().BeTrue();
             group.HasSolvedTie().Should().BeTrue();
 
-            bracketRound.Groups.First().Matches[0].Player1.Name.Should().Be("Taeja");
-            bracketRound.Groups.First().Matches[0].Player2.Name.Should().Be("Stork");
+            bracketRound.Groups.First().Matches[0].Player1.GetName().Should().Be("Taeja");
+            bracketRound.Groups.First().Matches[0].Player2.GetName().Should().Be("Stork");
         }
 
         [Fact]

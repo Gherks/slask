@@ -45,8 +45,8 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
             RegisterFirstTwoPlayers();
 
             bracketGroup.Matches.Should().HaveCount(1);
-            bracketGroup.Matches.FirstOrDefault(match => match.Player1.Name == firstPlayerName).Should().NotBeNull();
-            bracketGroup.Matches.FirstOrDefault(match => match.Player2.Name == secondPlayerName).Should().NotBeNull();
+            bracketGroup.Matches.FirstOrDefault(match => match.Player1.GetName() == firstPlayerName).Should().NotBeNull();
+            bracketGroup.Matches.FirstOrDefault(match => match.Player2.GetName() == secondPlayerName).Should().NotBeNull();
         }
 
         [Fact]
@@ -68,26 +68,26 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
                 match.Should().NotBeNull();
             }
 
-            bracketGroup.Matches[0].Player1.Name.Should().Be(playerNames[0]);
-            bracketGroup.Matches[0].Player2.Name.Should().Be(playerNames[1]);
+            bracketGroup.Matches[0].Player1.GetName().Should().Be(playerNames[0]);
+            bracketGroup.Matches[0].Player2.GetName().Should().Be(playerNames[1]);
 
-            bracketGroup.Matches[1].Player1.Name.Should().Be(playerNames[2]);
-            bracketGroup.Matches[1].Player2.Name.Should().Be(playerNames[3]);
+            bracketGroup.Matches[1].Player1.GetName().Should().Be(playerNames[2]);
+            bracketGroup.Matches[1].Player2.GetName().Should().Be(playerNames[3]);
 
-            bracketGroup.Matches[2].Player1.Name.Should().Be(playerNames[4]);
-            bracketGroup.Matches[2].Player2.Name.Should().Be(playerNames[5]);
+            bracketGroup.Matches[2].Player1.GetName().Should().Be(playerNames[4]);
+            bracketGroup.Matches[2].Player2.GetName().Should().Be(playerNames[5]);
 
-            bracketGroup.Matches[3].Player1.Name.Should().Be(playerNames[6]);
-            bracketGroup.Matches[3].Player2.Name.Should().Be(playerNames[7]);
+            bracketGroup.Matches[3].Player1.GetName().Should().Be(playerNames[6]);
+            bracketGroup.Matches[3].Player2.GetName().Should().Be(playerNames[7]);
 
-            bracketGroup.Matches[4].Player1.Should().BeNull();
-            bracketGroup.Matches[4].Player2.Should().BeNull();
+            bracketGroup.Matches[4].Player1.PlayerReferenceId.Should().BeEmpty();
+            bracketGroup.Matches[4].Player2.PlayerReferenceId.Should().BeEmpty();
 
-            bracketGroup.Matches[5].Player1.Should().BeNull();
-            bracketGroup.Matches[5].Player2.Should().BeNull();
+            bracketGroup.Matches[5].Player1.PlayerReferenceId.Should().BeEmpty();
+            bracketGroup.Matches[5].Player2.PlayerReferenceId.Should().BeEmpty();
 
-            bracketGroup.Matches[6].Player1.Should().BeNull();
-            bracketGroup.Matches[6].Player2.Should().BeNull();
+            bracketGroup.Matches[6].Player1.PlayerReferenceId.Should().BeEmpty();
+            bracketGroup.Matches[6].Player2.PlayerReferenceId.Should().BeEmpty();
         }
 
         [Fact]
@@ -109,23 +109,23 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
                 match.Should().NotBeNull();
             }
 
-            bracketGroup.Matches[0].Player1.Name.Should().Be(playerNames[0]);
-            bracketGroup.Matches[0].Player2.Name.Should().Be(playerNames[1]);
+            bracketGroup.Matches[0].Player1.GetName().Should().Be(playerNames[0]);
+            bracketGroup.Matches[0].Player2.GetName().Should().Be(playerNames[1]);
 
-            bracketGroup.Matches[1].Player1.Name.Should().Be(playerNames[2]);
-            bracketGroup.Matches[1].Player2.Name.Should().Be(playerNames[3]);
+            bracketGroup.Matches[1].Player1.GetName().Should().Be(playerNames[2]);
+            bracketGroup.Matches[1].Player2.GetName().Should().Be(playerNames[3]);
 
-            bracketGroup.Matches[2].Player1.Name.Should().Be(playerNames[4]);
-            bracketGroup.Matches[2].Player2.Name.Should().Be(playerNames[5]);
+            bracketGroup.Matches[2].Player1.GetName().Should().Be(playerNames[4]);
+            bracketGroup.Matches[2].Player2.GetName().Should().Be(playerNames[5]);
 
-            bracketGroup.Matches[3].Player1.Name.Should().Be(playerNames[6]);
-            bracketGroup.Matches[3].Player2.Should().BeNull();
+            bracketGroup.Matches[3].Player1.GetName().Should().Be(playerNames[6]);
+            bracketGroup.Matches[3].Player2.PlayerReferenceId.Should().BeEmpty();
 
-            bracketGroup.Matches[4].Player1.Should().BeNull();
-            bracketGroup.Matches[4].Player2.Should().BeNull();
+            bracketGroup.Matches[4].Player1.PlayerReferenceId.Should().BeEmpty();
+            bracketGroup.Matches[4].Player2.PlayerReferenceId.Should().BeEmpty();
 
-            bracketGroup.Matches[5].Player1.Should().BeNull();
-            bracketGroup.Matches[5].Player2.Should().BeNull();
+            bracketGroup.Matches[5].Player1.PlayerReferenceId.Should().BeEmpty();
+            bracketGroup.Matches[5].Player2.PlayerReferenceId.Should().BeEmpty();
         }
 
         [Fact]

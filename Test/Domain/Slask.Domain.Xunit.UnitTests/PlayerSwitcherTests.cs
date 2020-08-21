@@ -34,10 +34,10 @@ namespace Slask.Domain.Xunit.UnitTests
             bool result = PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
 
             result.Should().BeFalse();
-            firstMatch.Player1.PlayerReference.Should().Be(maruPlayerReference);
-            firstMatch.Player2.PlayerReference.Should().Be(storkPlayerReference);
-            secondMatch.Player1.PlayerReference.Should().Be(taejaPlayerReference);
-            secondMatch.Player2.Should().Be(null);
+            firstMatch.Player1.PlayerReferenceId.Should().Be(maruPlayerReference.Id);
+            firstMatch.Player2.PlayerReferenceId.Should().Be(storkPlayerReference.Id);
+            secondMatch.Player1.PlayerReferenceId.Should().Be(taejaPlayerReference.Id);
+            secondMatch.Player2.PlayerReferenceId.Should().BeEmpty();
         }
     }
 }

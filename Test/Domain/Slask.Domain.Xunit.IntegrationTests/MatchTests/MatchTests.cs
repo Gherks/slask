@@ -39,10 +39,8 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests
         {
             match.Should().NotBeNull();
             match.BestOf.Should().Be(3);
-            match.Player1.Should().NotBeNull();
-            match.Player1.Name.Should().Be(firstPlayerName);
-            match.Player2.Should().NotBeNull();
-            match.Player2.Name.Should().Be(secondPlayerName);
+            match.Player1.GetName().Should().Be(firstPlayerName);
+            match.Player2.GetName().Should().Be(secondPlayerName);
             match.StartDateTime.Should().NotBeBefore(SystemTime.Now);
             match.GroupId.Should().Be(bracketGroup.Id);
             match.Group.Should().Be(bracketGroup);
@@ -111,10 +109,10 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests
 
             Match match = bracketRound.Groups.First().Matches.First();
 
-            match.SetPlayers(playerReference, playerReference);
+            match.AssignPlayerReferencesToPlayers(playerReference.Id, playerReference.Id);
 
-            match.Player1.PlayerReference.Should().Be(playerReference);
-            match.Player2.Should().BeNull();
+            match.Player1.PlayerReferenceId.Should().Be(playerReference.Id);
+            match.Player2.PlayerReferenceId.Should().BeEmpty();
         }
 
         [Fact]
@@ -123,24 +121,24 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests
             PlayerReference taejaPlayerReference = PlayerReference.Create("Taeja", tournament);
             PlayerReference rainPlayerReference = PlayerReference.Create("Rain", tournament);
 
-            match.SetPlayers(taejaPlayerReference, rainPlayerReference);
+            match.AssignPlayerReferencesToPlayers(taejaPlayerReference.Id, rainPlayerReference.Id);
 
-            match.Player1.PlayerReference.Should().Be(taejaPlayerReference);
-            match.Player2.PlayerReference.Should().Be(rainPlayerReference);
+            match.Player1.PlayerReferenceId.Should().Be(taejaPlayerReference.Id);
+            match.Player2.PlayerReferenceId.Should().Be(rainPlayerReference.Id);
         }
 
         [Fact]
         public void CannotAssignSamePlayerReferenceAsBothPlayersInMatch()
         {
-            PlayerReference firstPlayerReference = match.Player1.PlayerReference;
-            PlayerReference secondPlayerReference = match.Player2.PlayerReference;
+            Guid firstPlayerReferenceId = match.Player1.PlayerReferenceId;
+            Guid secondPlayerReferenceId = match.Player2.PlayerReferenceId;
 
             PlayerReference playerReference = PlayerReference.Create("Taeja", tournament);
 
-            match.SetPlayers(playerReference, playerReference);
+            match.AssignPlayerReferencesToPlayers(playerReference.Id, playerReference.Id);
 
-            match.Player1.PlayerReference.Should().Be(firstPlayerReference);
-            match.Player2.PlayerReference.Should().Be(secondPlayerReference);
+            match.Player1.PlayerReferenceId.Should().Be(firstPlayerReferenceId);
+            match.Player2.PlayerReferenceId.Should().Be(secondPlayerReferenceId);
         }
 
         [Fact]
@@ -149,63 +147,63 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests
             PlayerReference maruPlayerReference = PlayerReference.Create("Maru", tournament);
             PlayerReference storkPlayerReference = PlayerReference.Create("Stork", tournament);
 
-            match.SetPlayers(maruPlayerReference, storkPlayerReference);
-            match.SetPlayers(null, storkPlayerReference);
+            match.AssignPlayerReferencesToPlayers(maruPlayerReference.Id, storkPlayerReference.Id);
+            match.AssignPlayerReferencesToPlayers(Guid.Empty, storkPlayerReference.Id);
 
-            match.Player1.Should().BeNull();
-            match.Player2.PlayerReference.Should().Be(storkPlayerReference);
+            match.Player1.PlayerReferenceId.Should().BeEmpty();
+            match.Player2.PlayerReferenceId.Should().Be(storkPlayerReference.Id);
 
-            match.SetPlayers(maruPlayerReference, storkPlayerReference);
-            match.SetPlayers(maruPlayerReference, null);
+            match.AssignPlayerReferencesToPlayers(maruPlayerReference.Id, storkPlayerReference.Id);
+            match.AssignPlayerReferencesToPlayers(maruPlayerReference.Id, Guid.Empty);
 
-            match.Player1.PlayerReference.Should().Be(maruPlayerReference);
-            match.Player2.Should().BeNull();
+            match.Player1.PlayerReferenceId.Should().Be(maruPlayerReference.Id);
+            match.Player2.PlayerReferenceId.Should().BeEmpty();
         }
 
         [Fact]
         public void CanAssignNullPlayerReferenceToBothPlayersInMatch()
         {
-            match.SetPlayers(null, null);
+            match.AssignPlayerReferencesToPlayers(Guid.Empty, Guid.Empty);
 
-            match.Player1.Should().Be(null);
-            match.Player2.Should().Be(null);
+            match.Player1.PlayerReferenceId.Should().BeEmpty();
+            match.Player2.PlayerReferenceId.Should().BeEmpty();
         }
 
         [Fact]
         public void MatchIsReadyWhenPlayerReferencesHasBeenAssignedToPlayers()
         {
             match.IsReady().Should().BeTrue();
-            match.Player1.PlayerReference.Should().NotBeNull();
-            match.Player2.PlayerReference.Should().NotBeNull();
+            match.Player1.PlayerReferenceId.Should().NotBeEmpty();
+            match.Player2.PlayerReferenceId.Should().NotBeEmpty();
         }
 
         [Fact]
         public void MatchIsNotReadyWhenNoPlayerReferenceHasBeenAssignedToMatch()
         {
-            match.SetPlayers(null, null);
+            match.AssignPlayerReferencesToPlayers(Guid.Empty, Guid.Empty);
 
             match.IsReady().Should().BeFalse();
-            match.Player1.Should().BeNull();
-            match.Player2.Should().BeNull();
+            match.Player1.PlayerReferenceId.Should().BeEmpty();
+            match.Player2.PlayerReferenceId.Should().BeEmpty();
         }
 
         [Fact]
         public void MatchIsNotReadyWhenEitherPlayerReferenceHasBeenAssignedNull()
         {
-            PlayerReference firstPlayerReference = match.Player1.PlayerReference;
-            PlayerReference secondPlayerReference = match.Player2.PlayerReference;
+            Guid firstPlayerReferenceId = match.Player1.PlayerReferenceId;
+            Guid secondPlayerReferenceId = match.Player2.PlayerReferenceId;
 
-            match.SetPlayers(firstPlayerReference, null);
-
-            match.IsReady().Should().BeFalse();
-            match.Player1.PlayerReference.Should().Be(firstPlayerReference);
-            match.Player2.Should().BeNull();
-
-            match.SetPlayers(null, secondPlayerReference);
+            match.AssignPlayerReferencesToPlayers(firstPlayerReferenceId, Guid.Empty);
 
             match.IsReady().Should().BeFalse();
-            match.Player1.Should().BeNull();
-            match.Player2.PlayerReference.Should().Be(secondPlayerReference);
+            match.Player1.PlayerReferenceId.Should().Be(firstPlayerReferenceId);
+            match.Player2.PlayerReferenceId.Should().BeEmpty();
+
+            match.AssignPlayerReferencesToPlayers(Guid.Empty, secondPlayerReferenceId);
+
+            match.IsReady().Should().BeFalse();
+            match.Player1.PlayerReferenceId.Should().BeEmpty();
+            match.Player2.PlayerReferenceId.Should().Be(secondPlayerReferenceId);
         }
 
         [Fact]
@@ -216,11 +214,11 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests
 
             firstFoundPlayer.Should().NotBeNull();
             firstFoundPlayer.Id.Should().Be(match.Player1.Id);
-            firstFoundPlayer.Name.Should().Be(firstPlayerName);
+            firstFoundPlayer.GetName().Should().Be(firstPlayerName);
 
             secondFoundPlayer.Should().NotBeNull();
             secondFoundPlayer.Id.Should().Be(match.Player2.Id);
-            secondFoundPlayer.Name.Should().Be(secondPlayerName);
+            secondFoundPlayer.GetName().Should().Be(secondPlayerName);
         }
 
         [Fact]
@@ -231,11 +229,11 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests
 
             firstFoundPlayer.Should().NotBeNull();
             firstFoundPlayer.Id.Should().Be(match.Player1.Id);
-            firstFoundPlayer.Name.Should().Be(match.Player1.Name);
+            firstFoundPlayer.GetName().Should().Be(match.Player1.GetName());
 
             secondFoundPlayer.Should().NotBeNull();
             secondFoundPlayer.Id.Should().Be(match.Player2.Id);
-            secondFoundPlayer.Name.Should().Be(match.Player2.Name);
+            secondFoundPlayer.GetName().Should().Be(match.Player2.GetName());
         }
 
         [Fact]
@@ -389,12 +387,12 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests
         {
             PlayerReference playerReference = PlayerReference.Create("Taeja", tournament);
 
-            match.AddPlayer(playerReference);
+            match.AssignPlayerReferenceToFirstAvailablePlayer(playerReference.Id);
 
-            match.Player1.Should().NotBeNull();
-            match.Player1.Name.Should().Be(firstPlayerName);
-            match.Player2.Should().NotBeNull();
-            match.Player2.Name.Should().Be(secondPlayerName);
+            match.Player1.PlayerReferenceId.Should().NotBeEmpty();
+            match.Player1.GetName().Should().Be(firstPlayerName);
+            match.Player2.PlayerReferenceId.Should().NotBeEmpty();
+            match.Player2.GetName().Should().Be(secondPlayerName);
         }
 
         private int GetWinningScore()

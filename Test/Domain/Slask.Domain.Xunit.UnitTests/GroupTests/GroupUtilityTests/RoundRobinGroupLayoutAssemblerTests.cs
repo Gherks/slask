@@ -2,6 +2,7 @@
 using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds.RoundTypes;
+using System;
 using System.Collections.Generic;
 using Xunit;
 
@@ -13,6 +14,15 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests.GroupUtilityTests
         private readonly RoundRobinRound roundRobinRound;
         private readonly RoundRobinGroup roundRobinGroup;
         private readonly List<PlayerReference> playerReferences;
+
+        private readonly Guid maruId;
+        private readonly Guid storkId;
+        private readonly Guid taejaId;
+        private readonly Guid rainId;
+        private readonly Guid bomberId;
+        private readonly Guid fantasyId;
+        private readonly Guid stephanoId;
+        private readonly Guid thorzainId;
 
         public RoundRobinGroupLayoutAssemblerTests()
         {
@@ -29,6 +39,15 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests.GroupUtilityTests
             playerReferences.Add(PlayerReference.Create("FanTaSy", tournament));
             playerReferences.Add(PlayerReference.Create("Stephano", tournament));
             playerReferences.Add(PlayerReference.Create("Thorzain", tournament));
+
+            maruId = playerReferences[0].Id;
+            storkId = playerReferences[1].Id;
+            taejaId = playerReferences[2].Id;
+            rainId = playerReferences[3].Id;
+            bomberId = playerReferences[4].Id;
+            fantasyId = playerReferences[5].Id;
+            stephanoId = playerReferences[6].Id;
+            thorzainId = playerReferences[7].Id;
         }
 
         [Fact]
@@ -136,14 +155,14 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests.GroupUtilityTests
 
             for (; index < validMatchesCount; ++index)
             {
-                matches[index].Player1.Should().NotBeNull();
-                matches[index].Player2.Should().NotBeNull();
+                matches[index].Player1.PlayerReferenceId.Should().NotBeEmpty();
+                matches[index].Player2.PlayerReferenceId.Should().NotBeEmpty();
             }
 
             for (; index < matches.Count; ++index)
             {
-                matches[index].Player1.Should().BeNull();
-                matches[index].Player2.Should().BeNull();
+                matches[index].Player1.PlayerReferenceId.Should().BeEmpty();
+                matches[index].Player2.PlayerReferenceId.Should().BeEmpty();
             }
         }
 
@@ -157,282 +176,282 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests.GroupUtilityTests
 
             foreach (Match match in matches)
             {
-                match.Player1.Should().BeNull();
-                match.Player2.Should().BeNull();
+                match.Player1.PlayerReferenceId.Should().BeEmpty();
+                match.Player2.PlayerReferenceId.Should().BeEmpty();
             }
         }
 
         private void RunTestsWithTwoPlayers(List<Match> matches)
         {
-            matches[0].Player1.Name.Should().Be("Maru");
-            matches[0].Player2.Name.Should().Be("Stork");
+            matches[0].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[0].Player2.PlayerReferenceId.Should().Be(storkId);
         }
 
         private void RunTestsWithThreePlayers(List<Match> matches)
         {
-            matches[0].Player1.Name.Should().Be("Maru");
-            matches[0].Player2.Name.Should().Be("Taeja");
+            matches[0].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[0].Player2.PlayerReferenceId.Should().Be(taejaId);
 
-            matches[1].Player1.Name.Should().Be("Taeja");
-            matches[1].Player2.Name.Should().Be("Stork");
+            matches[1].Player1.PlayerReferenceId.Should().Be(taejaId);
+            matches[1].Player2.PlayerReferenceId.Should().Be(storkId);
 
-            matches[2].Player1.Name.Should().Be("Stork");
-            matches[2].Player2.Name.Should().Be("Maru");
+            matches[2].Player1.PlayerReferenceId.Should().Be(storkId);
+            matches[2].Player2.PlayerReferenceId.Should().Be(maruId);
         }
 
         private void RunTestsWithFourPlayers(List<Match> matches)
         {
-            matches[0].Player1.Name.Should().Be("Maru");
-            matches[0].Player2.Name.Should().Be("Taeja");
+            matches[0].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[0].Player2.PlayerReferenceId.Should().Be(taejaId);
 
-            matches[1].Player1.Name.Should().Be("Stork");
-            matches[1].Player2.Name.Should().Be("Rain");
+            matches[1].Player1.PlayerReferenceId.Should().Be(storkId);
+            matches[1].Player2.PlayerReferenceId.Should().Be(rainId);
 
-            matches[2].Player1.Name.Should().Be("Maru");
-            matches[2].Player2.Name.Should().Be("Rain");
+            matches[2].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[2].Player2.PlayerReferenceId.Should().Be(rainId);
 
-            matches[3].Player1.Name.Should().Be("Taeja");
-            matches[3].Player2.Name.Should().Be("Stork");
+            matches[3].Player1.PlayerReferenceId.Should().Be(taejaId);
+            matches[3].Player2.PlayerReferenceId.Should().Be(storkId);
 
-            matches[4].Player1.Name.Should().Be("Maru");
-            matches[4].Player2.Name.Should().Be("Stork");
+            matches[4].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[4].Player2.PlayerReferenceId.Should().Be(storkId);
 
-            matches[5].Player1.Name.Should().Be("Rain");
-            matches[5].Player2.Name.Should().Be("Taeja");
+            matches[5].Player1.PlayerReferenceId.Should().Be(rainId);
+            matches[5].Player2.PlayerReferenceId.Should().Be(taejaId);
         }
 
         private void RunTestsWithFivePlayers(List<Match> matches)
         {
-            matches[0].Player1.Name.Should().Be("Maru");
-            matches[0].Player2.Name.Should().Be("Rain");
+            matches[0].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[0].Player2.PlayerReferenceId.Should().Be(rainId);
 
-            matches[1].Player1.Name.Should().Be("Stork");
-            matches[1].Player2.Name.Should().Be("Bomber");
+            matches[1].Player1.PlayerReferenceId.Should().Be(storkId);
+            matches[1].Player2.PlayerReferenceId.Should().Be(bomberId);
 
-            matches[2].Player1.Name.Should().Be("Rain");
-            matches[2].Player2.Name.Should().Be("Bomber");
+            matches[2].Player1.PlayerReferenceId.Should().Be(rainId);
+            matches[2].Player2.PlayerReferenceId.Should().Be(bomberId);
 
-            matches[3].Player1.Name.Should().Be("Maru");
-            matches[3].Player2.Name.Should().Be("Taeja");
+            matches[3].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[3].Player2.PlayerReferenceId.Should().Be(taejaId);
 
-            matches[4].Player1.Name.Should().Be("Bomber");
-            matches[4].Player2.Name.Should().Be("Taeja");
+            matches[4].Player1.PlayerReferenceId.Should().Be(bomberId);
+            matches[4].Player2.PlayerReferenceId.Should().Be(taejaId);
 
-            matches[5].Player1.Name.Should().Be("Rain");
-            matches[5].Player2.Name.Should().Be("Stork");
+            matches[5].Player1.PlayerReferenceId.Should().Be(rainId);
+            matches[5].Player2.PlayerReferenceId.Should().Be(storkId);
 
-            matches[6].Player1.Name.Should().Be("Taeja");
-            matches[6].Player2.Name.Should().Be("Stork");
+            matches[6].Player1.PlayerReferenceId.Should().Be(taejaId);
+            matches[6].Player2.PlayerReferenceId.Should().Be(storkId);
 
-            matches[7].Player1.Name.Should().Be("Bomber");
-            matches[7].Player2.Name.Should().Be("Maru");
+            matches[7].Player1.PlayerReferenceId.Should().Be(bomberId);
+            matches[7].Player2.PlayerReferenceId.Should().Be(maruId);
 
-            matches[8].Player1.Name.Should().Be("Stork");
-            matches[8].Player2.Name.Should().Be("Maru");
+            matches[8].Player1.PlayerReferenceId.Should().Be(storkId);
+            matches[8].Player2.PlayerReferenceId.Should().Be(maruId);
 
-            matches[9].Player1.Name.Should().Be("Taeja");
-            matches[9].Player2.Name.Should().Be("Rain");
+            matches[9].Player1.PlayerReferenceId.Should().Be(taejaId);
+            matches[9].Player2.PlayerReferenceId.Should().Be(rainId);
         }
 
         private void RunTestsWithSixPlayers(List<Match> matches)
         {
-            matches[0].Player1.Name.Should().Be("Maru");
-            matches[0].Player2.Name.Should().Be("Rain");
+            matches[0].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[0].Player2.PlayerReferenceId.Should().Be(rainId);
 
-            matches[1].Player1.Name.Should().Be("Stork");
-            matches[1].Player2.Name.Should().Be("Bomber");
+            matches[1].Player1.PlayerReferenceId.Should().Be(storkId);
+            matches[1].Player2.PlayerReferenceId.Should().Be(bomberId);
 
-            matches[2].Player1.Name.Should().Be("Taeja");
-            matches[2].Player2.Name.Should().Be("FanTaSy");
+            matches[2].Player1.PlayerReferenceId.Should().Be(taejaId);
+            matches[2].Player2.PlayerReferenceId.Should().Be(fantasyId);
 
-            matches[3].Player1.Name.Should().Be("Maru");
-            matches[3].Player2.Name.Should().Be("Bomber");
+            matches[3].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[3].Player2.PlayerReferenceId.Should().Be(bomberId);
 
-            matches[4].Player1.Name.Should().Be("Rain");
-            matches[4].Player2.Name.Should().Be("FanTaSy");
+            matches[4].Player1.PlayerReferenceId.Should().Be(rainId);
+            matches[4].Player2.PlayerReferenceId.Should().Be(fantasyId);
 
-            matches[5].Player1.Name.Should().Be("Stork");
-            matches[5].Player2.Name.Should().Be("Taeja");
+            matches[5].Player1.PlayerReferenceId.Should().Be(storkId);
+            matches[5].Player2.PlayerReferenceId.Should().Be(taejaId);
 
-            matches[6].Player1.Name.Should().Be("Maru");
-            matches[6].Player2.Name.Should().Be("FanTaSy");
+            matches[6].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[6].Player2.PlayerReferenceId.Should().Be(fantasyId);
 
-            matches[7].Player1.Name.Should().Be("Bomber");
-            matches[7].Player2.Name.Should().Be("Taeja");
+            matches[7].Player1.PlayerReferenceId.Should().Be(bomberId);
+            matches[7].Player2.PlayerReferenceId.Should().Be(taejaId);
 
-            matches[8].Player1.Name.Should().Be("Rain");
-            matches[8].Player2.Name.Should().Be("Stork");
+            matches[8].Player1.PlayerReferenceId.Should().Be(rainId);
+            matches[8].Player2.PlayerReferenceId.Should().Be(storkId);
 
-            matches[9].Player1.Name.Should().Be("Maru");
-            matches[9].Player2.Name.Should().Be("Taeja");
+            matches[9].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[9].Player2.PlayerReferenceId.Should().Be(taejaId);
 
-            matches[10].Player1.Name.Should().Be("FanTaSy");
-            matches[10].Player2.Name.Should().Be("Stork");
+            matches[10].Player1.PlayerReferenceId.Should().Be(fantasyId);
+            matches[10].Player2.PlayerReferenceId.Should().Be(storkId);
 
-            matches[11].Player1.Name.Should().Be("Bomber");
-            matches[11].Player2.Name.Should().Be("Rain");
+            matches[11].Player1.PlayerReferenceId.Should().Be(bomberId);
+            matches[11].Player2.PlayerReferenceId.Should().Be(rainId);
 
-            matches[12].Player1.Name.Should().Be("Maru");
-            matches[12].Player2.Name.Should().Be("Stork");
+            matches[12].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[12].Player2.PlayerReferenceId.Should().Be(storkId);
 
-            matches[13].Player1.Name.Should().Be("Taeja");
-            matches[13].Player2.Name.Should().Be("Rain");
+            matches[13].Player1.PlayerReferenceId.Should().Be(taejaId);
+            matches[13].Player2.PlayerReferenceId.Should().Be(rainId);
 
-            matches[14].Player1.Name.Should().Be("FanTaSy");
-            matches[14].Player2.Name.Should().Be("Bomber");
+            matches[14].Player1.PlayerReferenceId.Should().Be(fantasyId);
+            matches[14].Player2.PlayerReferenceId.Should().Be(bomberId);
         }
 
         private void RunTestsWithSevenPlayers(List<Match> matches)
         {
-            matches[0].Player1.Name.Should().Be("Maru");
-            matches[0].Player2.Name.Should().Be("Bomber");
+            matches[0].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[0].Player2.PlayerReferenceId.Should().Be(bomberId);
 
-            matches[1].Player1.Name.Should().Be("Stork");
-            matches[1].Player2.Name.Should().Be("FanTaSy");
+            matches[1].Player1.PlayerReferenceId.Should().Be(storkId);
+            matches[1].Player2.PlayerReferenceId.Should().Be(fantasyId);
 
-            matches[2].Player1.Name.Should().Be("Taeja");
-            matches[2].Player2.Name.Should().Be("Stephano");
+            matches[2].Player1.PlayerReferenceId.Should().Be(taejaId);
+            matches[2].Player2.PlayerReferenceId.Should().Be(stephanoId);
 
-            matches[3].Player1.Name.Should().Be("Bomber");
-            matches[3].Player2.Name.Should().Be("FanTaSy");
+            matches[3].Player1.PlayerReferenceId.Should().Be(bomberId);
+            matches[3].Player2.PlayerReferenceId.Should().Be(fantasyId);
 
-            matches[4].Player1.Name.Should().Be("Maru");
-            matches[4].Player2.Name.Should().Be("Stephano");
+            matches[4].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[4].Player2.PlayerReferenceId.Should().Be(stephanoId);
 
-            matches[5].Player1.Name.Should().Be("Stork");
-            matches[5].Player2.Name.Should().Be("Rain");
+            matches[5].Player1.PlayerReferenceId.Should().Be(storkId);
+            matches[5].Player2.PlayerReferenceId.Should().Be(rainId);
 
-            matches[6].Player1.Name.Should().Be("FanTaSy");
-            matches[6].Player2.Name.Should().Be("Stephano");
+            matches[6].Player1.PlayerReferenceId.Should().Be(fantasyId);
+            matches[6].Player2.PlayerReferenceId.Should().Be(stephanoId);
 
-            matches[7].Player1.Name.Should().Be("Bomber");
-            matches[7].Player2.Name.Should().Be("Rain");
+            matches[7].Player1.PlayerReferenceId.Should().Be(bomberId);
+            matches[7].Player2.PlayerReferenceId.Should().Be(rainId);
 
-            matches[8].Player1.Name.Should().Be("Maru");
-            matches[8].Player2.Name.Should().Be("Taeja");
+            matches[8].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[8].Player2.PlayerReferenceId.Should().Be(taejaId);
 
-            matches[9].Player1.Name.Should().Be("Stephano");
-            matches[9].Player2.Name.Should().Be("Rain");
+            matches[9].Player1.PlayerReferenceId.Should().Be(stephanoId);
+            matches[9].Player2.PlayerReferenceId.Should().Be(rainId);
 
-            matches[10].Player1.Name.Should().Be("FanTaSy");
-            matches[10].Player2.Name.Should().Be("Taeja");
+            matches[10].Player1.PlayerReferenceId.Should().Be(fantasyId);
+            matches[10].Player2.PlayerReferenceId.Should().Be(taejaId);
 
-            matches[11].Player1.Name.Should().Be("Bomber");
-            matches[11].Player2.Name.Should().Be("Stork");
+            matches[11].Player1.PlayerReferenceId.Should().Be(bomberId);
+            matches[11].Player2.PlayerReferenceId.Should().Be(storkId);
 
-            matches[12].Player1.Name.Should().Be("Rain");
-            matches[12].Player2.Name.Should().Be("Taeja");
+            matches[12].Player1.PlayerReferenceId.Should().Be(rainId);
+            matches[12].Player2.PlayerReferenceId.Should().Be(taejaId);
 
-            matches[13].Player1.Name.Should().Be("Stephano");
-            matches[13].Player2.Name.Should().Be("Stork");
+            matches[13].Player1.PlayerReferenceId.Should().Be(stephanoId);
+            matches[13].Player2.PlayerReferenceId.Should().Be(storkId);
 
-            matches[14].Player1.Name.Should().Be("FanTaSy");
-            matches[14].Player2.Name.Should().Be("Maru");
+            matches[14].Player1.PlayerReferenceId.Should().Be(fantasyId);
+            matches[14].Player2.PlayerReferenceId.Should().Be(maruId);
 
-            matches[15].Player1.Name.Should().Be("Taeja");
-            matches[15].Player2.Name.Should().Be("Stork");
+            matches[15].Player1.PlayerReferenceId.Should().Be(taejaId);
+            matches[15].Player2.PlayerReferenceId.Should().Be(storkId);
 
-            matches[16].Player1.Name.Should().Be("Rain");
-            matches[16].Player2.Name.Should().Be("Maru");
+            matches[16].Player1.PlayerReferenceId.Should().Be(rainId);
+            matches[16].Player2.PlayerReferenceId.Should().Be(maruId);
 
-            matches[17].Player1.Name.Should().Be("Stephano");
-            matches[17].Player2.Name.Should().Be("Bomber");
+            matches[17].Player1.PlayerReferenceId.Should().Be(stephanoId);
+            matches[17].Player2.PlayerReferenceId.Should().Be(bomberId);
 
-            matches[18].Player1.Name.Should().Be("Stork");
-            matches[18].Player2.Name.Should().Be("Maru");
+            matches[18].Player1.PlayerReferenceId.Should().Be(storkId);
+            matches[18].Player2.PlayerReferenceId.Should().Be(maruId);
 
-            matches[19].Player1.Name.Should().Be("Taeja");
-            matches[19].Player2.Name.Should().Be("Bomber");
+            matches[19].Player1.PlayerReferenceId.Should().Be(taejaId);
+            matches[19].Player2.PlayerReferenceId.Should().Be(bomberId);
 
-            matches[20].Player1.Name.Should().Be("Rain");
-            matches[20].Player2.Name.Should().Be("FanTaSy");
+            matches[20].Player1.PlayerReferenceId.Should().Be(rainId);
+            matches[20].Player2.PlayerReferenceId.Should().Be(fantasyId);
         }
 
         private void RunTestsWithEightPlayers(List<Match> matches)
         {
-            matches[0].Player1.Name.Should().Be("Maru");
-            matches[0].Player2.Name.Should().Be("Bomber");
+            matches[0].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[0].Player2.PlayerReferenceId.Should().Be(bomberId);
 
-            matches[1].Player1.Name.Should().Be("Stork");
-            matches[1].Player2.Name.Should().Be("FanTaSy");
+            matches[1].Player1.PlayerReferenceId.Should().Be(storkId);
+            matches[1].Player2.PlayerReferenceId.Should().Be(fantasyId);
 
-            matches[2].Player1.Name.Should().Be("Taeja");
-            matches[2].Player2.Name.Should().Be("Stephano");
+            matches[2].Player1.PlayerReferenceId.Should().Be(taejaId);
+            matches[2].Player2.PlayerReferenceId.Should().Be(stephanoId);
 
-            matches[3].Player1.Name.Should().Be("Rain");
-            matches[3].Player2.Name.Should().Be("Thorzain");
+            matches[3].Player1.PlayerReferenceId.Should().Be(rainId);
+            matches[3].Player2.PlayerReferenceId.Should().Be(thorzainId);
 
-            matches[4].Player1.Name.Should().Be("Maru");
-            matches[4].Player2.Name.Should().Be("FanTaSy");
+            matches[4].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[4].Player2.PlayerReferenceId.Should().Be(fantasyId);
 
-            matches[5].Player1.Name.Should().Be("Bomber");
-            matches[5].Player2.Name.Should().Be("Stephano");
+            matches[5].Player1.PlayerReferenceId.Should().Be(bomberId);
+            matches[5].Player2.PlayerReferenceId.Should().Be(stephanoId);
 
-            matches[6].Player1.Name.Should().Be("Stork");
-            matches[6].Player2.Name.Should().Be("Thorzain");
+            matches[6].Player1.PlayerReferenceId.Should().Be(storkId);
+            matches[6].Player2.PlayerReferenceId.Should().Be(thorzainId);
 
-            matches[7].Player1.Name.Should().Be("Taeja");
-            matches[7].Player2.Name.Should().Be("Rain");
+            matches[7].Player1.PlayerReferenceId.Should().Be(taejaId);
+            matches[7].Player2.PlayerReferenceId.Should().Be(rainId);
 
-            matches[8].Player1.Name.Should().Be("Maru");
-            matches[8].Player2.Name.Should().Be("Stephano");
+            matches[8].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[8].Player2.PlayerReferenceId.Should().Be(stephanoId);
 
-            matches[9].Player1.Name.Should().Be("FanTaSy");
-            matches[9].Player2.Name.Should().Be("Thorzain");
+            matches[9].Player1.PlayerReferenceId.Should().Be(fantasyId);
+            matches[9].Player2.PlayerReferenceId.Should().Be(thorzainId);
 
-            matches[10].Player1.Name.Should().Be("Bomber");
-            matches[10].Player2.Name.Should().Be("Rain");
+            matches[10].Player1.PlayerReferenceId.Should().Be(bomberId);
+            matches[10].Player2.PlayerReferenceId.Should().Be(rainId);
 
-            matches[11].Player1.Name.Should().Be("Stork");
-            matches[11].Player2.Name.Should().Be("Taeja");
+            matches[11].Player1.PlayerReferenceId.Should().Be(storkId);
+            matches[11].Player2.PlayerReferenceId.Should().Be(taejaId);
 
-            matches[12].Player1.Name.Should().Be("Maru");
-            matches[12].Player2.Name.Should().Be("Thorzain");
+            matches[12].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[12].Player2.PlayerReferenceId.Should().Be(thorzainId);
 
-            matches[13].Player1.Name.Should().Be("Stephano");
-            matches[13].Player2.Name.Should().Be("Rain");
+            matches[13].Player1.PlayerReferenceId.Should().Be(stephanoId);
+            matches[13].Player2.PlayerReferenceId.Should().Be(rainId);
 
-            matches[14].Player1.Name.Should().Be("FanTaSy");
-            matches[14].Player2.Name.Should().Be("Taeja");
+            matches[14].Player1.PlayerReferenceId.Should().Be(fantasyId);
+            matches[14].Player2.PlayerReferenceId.Should().Be(taejaId);
 
-            matches[15].Player1.Name.Should().Be("Bomber");
-            matches[15].Player2.Name.Should().Be("Stork");
+            matches[15].Player1.PlayerReferenceId.Should().Be(bomberId);
+            matches[15].Player2.PlayerReferenceId.Should().Be(storkId);
 
-            matches[16].Player1.Name.Should().Be("Maru");
-            matches[16].Player2.Name.Should().Be("Rain");
+            matches[16].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[16].Player2.PlayerReferenceId.Should().Be(rainId);
 
-            matches[17].Player1.Name.Should().Be("Thorzain");
-            matches[17].Player2.Name.Should().Be("Taeja");
+            matches[17].Player1.PlayerReferenceId.Should().Be(thorzainId);
+            matches[17].Player2.PlayerReferenceId.Should().Be(taejaId);
 
-            matches[18].Player1.Name.Should().Be("Stephano");
-            matches[18].Player2.Name.Should().Be("Stork");
+            matches[18].Player1.PlayerReferenceId.Should().Be(stephanoId);
+            matches[18].Player2.PlayerReferenceId.Should().Be(storkId);
 
-            matches[19].Player1.Name.Should().Be("FanTaSy");
-            matches[19].Player2.Name.Should().Be("Bomber");
+            matches[19].Player1.PlayerReferenceId.Should().Be(fantasyId);
+            matches[19].Player2.PlayerReferenceId.Should().Be(bomberId);
 
-            matches[20].Player1.Name.Should().Be("Maru");
-            matches[20].Player2.Name.Should().Be("Taeja");
+            matches[20].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[20].Player2.PlayerReferenceId.Should().Be(taejaId);
 
-            matches[21].Player1.Name.Should().Be("Rain");
-            matches[21].Player2.Name.Should().Be("Stork");
+            matches[21].Player1.PlayerReferenceId.Should().Be(rainId);
+            matches[21].Player2.PlayerReferenceId.Should().Be(storkId);
 
-            matches[22].Player1.Name.Should().Be("Thorzain");
-            matches[22].Player2.Name.Should().Be("Bomber");
+            matches[22].Player1.PlayerReferenceId.Should().Be(thorzainId);
+            matches[22].Player2.PlayerReferenceId.Should().Be(bomberId);
 
-            matches[23].Player1.Name.Should().Be("Stephano");
-            matches[23].Player2.Name.Should().Be("FanTaSy");
+            matches[23].Player1.PlayerReferenceId.Should().Be(stephanoId);
+            matches[23].Player2.PlayerReferenceId.Should().Be(fantasyId);
 
-            matches[24].Player1.Name.Should().Be("Maru");
-            matches[24].Player2.Name.Should().Be("Stork");
+            matches[24].Player1.PlayerReferenceId.Should().Be(maruId);
+            matches[24].Player2.PlayerReferenceId.Should().Be(storkId);
 
-            matches[25].Player1.Name.Should().Be("Taeja");
-            matches[25].Player2.Name.Should().Be("Bomber");
+            matches[25].Player1.PlayerReferenceId.Should().Be(taejaId);
+            matches[25].Player2.PlayerReferenceId.Should().Be(bomberId);
 
-            matches[26].Player1.Name.Should().Be("Rain");
-            matches[26].Player2.Name.Should().Be("FanTaSy");
+            matches[26].Player1.PlayerReferenceId.Should().Be(rainId);
+            matches[26].Player2.PlayerReferenceId.Should().Be(fantasyId);
 
-            matches[27].Player1.Name.Should().Be("Thorzain");
-            matches[27].Player2.Name.Should().Be("Stephano");
+            matches[27].Player1.PlayerReferenceId.Should().Be(thorzainId);
+            matches[27].Player2.PlayerReferenceId.Should().Be(stephanoId);
         }
     }
 }

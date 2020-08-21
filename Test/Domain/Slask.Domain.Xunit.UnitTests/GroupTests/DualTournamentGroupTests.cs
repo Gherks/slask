@@ -39,20 +39,20 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
 
             dualTournamentGroup.Matches.Should().HaveCount(5);
 
-            dualTournamentGroup.Matches[0].Player1.Name.Should().Be(playerNames[0]);
-            dualTournamentGroup.Matches[0].Player2.Name.Should().Be(playerNames[1]);
+            dualTournamentGroup.Matches[0].Player1.GetName().Should().Be(playerNames[0]);
+            dualTournamentGroup.Matches[0].Player2.GetName().Should().Be(playerNames[1]);
 
-            dualTournamentGroup.Matches[1].Player1.Name.Should().Be(playerNames[2]);
-            dualTournamentGroup.Matches[1].Player2.Name.Should().Be(playerNames[3]);
+            dualTournamentGroup.Matches[1].Player1.GetName().Should().Be(playerNames[2]);
+            dualTournamentGroup.Matches[1].Player2.GetName().Should().Be(playerNames[3]);
 
-            dualTournamentGroup.Matches[2].Player1.Should().BeNull();
-            dualTournamentGroup.Matches[2].Player2.Should().BeNull();
+            dualTournamentGroup.Matches[2].Player1.PlayerReferenceId.Should().BeEmpty();
+            dualTournamentGroup.Matches[2].Player2.PlayerReferenceId.Should().BeEmpty();
 
-            dualTournamentGroup.Matches[3].Player1.Should().BeNull();
-            dualTournamentGroup.Matches[3].Player2.Should().BeNull();
+            dualTournamentGroup.Matches[3].Player1.PlayerReferenceId.Should().BeEmpty();
+            dualTournamentGroup.Matches[3].Player2.PlayerReferenceId.Should().BeEmpty();
 
-            dualTournamentGroup.Matches[4].Player1.Should().BeNull();
-            dualTournamentGroup.Matches[4].Player2.Should().BeNull();
+            dualTournamentGroup.Matches[4].Player1.PlayerReferenceId.Should().BeEmpty();
+            dualTournamentGroup.Matches[4].Player2.PlayerReferenceId.Should().BeEmpty();
         }
 
         [Fact]
@@ -71,20 +71,20 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
 
             dualTournamentGroup.Matches.Should().HaveCount(5);
 
-            dualTournamentGroup.Matches[0].Player1.Name.Should().NotBeNull();
-            dualTournamentGroup.Matches[0].Player2.Name.Should().NotBeNull();
+            dualTournamentGroup.Matches[0].Player1.GetName().Should().NotBeNullOrEmpty();
+            dualTournamentGroup.Matches[0].Player2.GetName().Should().NotBeNullOrEmpty();
 
-            dualTournamentGroup.Matches[1].Player1.Name.Should().NotBeNull();
-            dualTournamentGroup.Matches[1].Player2.Name.Should().NotBeNull();
+            dualTournamentGroup.Matches[1].Player1.GetName().Should().NotBeNullOrEmpty();
+            dualTournamentGroup.Matches[1].Player2.GetName().Should().NotBeNullOrEmpty();
 
-            dualTournamentGroup.Matches[2].Player1.Should().BeNull();
-            dualTournamentGroup.Matches[2].Player2.Should().BeNull();
+            dualTournamentGroup.Matches[2].Player1.PlayerReferenceId.Should().BeEmpty();
+            dualTournamentGroup.Matches[2].Player2.PlayerReferenceId.Should().BeEmpty();
 
-            dualTournamentGroup.Matches[3].Player1.Should().BeNull();
-            dualTournamentGroup.Matches[3].Player2.Should().BeNull();
+            dualTournamentGroup.Matches[3].Player1.PlayerReferenceId.Should().BeEmpty();
+            dualTournamentGroup.Matches[3].Player2.PlayerReferenceId.Should().BeEmpty();
 
-            dualTournamentGroup.Matches[4].Player1.Should().BeNull();
-            dualTournamentGroup.Matches[4].Player2.Should().BeNull();
+            dualTournamentGroup.Matches[4].Player1.PlayerReferenceId.Should().BeEmpty();
+            dualTournamentGroup.Matches[4].Player2.PlayerReferenceId.Should().BeEmpty();
         }
 
         private DualTournamentGroup RegisterPlayers(List<string> playerNames)

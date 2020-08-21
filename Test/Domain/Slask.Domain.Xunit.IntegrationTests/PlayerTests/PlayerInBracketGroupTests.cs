@@ -42,10 +42,10 @@ namespace Slask.Domain.Xunit.IntegrationTests.PlayerTests
         {
             player.Should().NotBeNull();
             player.Id.Should().NotBeEmpty();
-            player.PlayerReference.Name.Should().Be(playerNames.First());
             player.Score.Should().Be(0);
             player.MatchId.Should().Be(match.Id);
             player.Match.Should().Be(match);
+            player.GetName().Should().Be(playerNames.First());
         }
 
         [Fact]

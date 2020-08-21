@@ -30,12 +30,12 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.UtilityTests
         {
             foreach (Match match in group.Matches)
             {
-                if (match.Player1.Name == playerName)
+                if (match.Player1.GetName() == playerName)
                 {
                     return match.Player1;
                 }
 
-                if (match.Player2.Name == playerName)
+                if (match.Player2.GetName() == playerName)
                 {
                     return match.Player2;
                 }
