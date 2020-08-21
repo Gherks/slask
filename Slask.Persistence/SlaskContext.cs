@@ -115,7 +115,7 @@ namespace Slask.Persistence
                 .OnDelete(DeleteBehavior.Restrict);
         }
 
-        private void SetupIgnoredProperties(ModelBuilder modelBuilder)
+        private void SetupTables(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<BetBase>().ToTable("Bet");
 
@@ -134,7 +134,7 @@ namespace Slask.Persistence
                 .HasValue<RoundRobinGroup>(ContestTypeEnum.RoundRobin);
         }
 
-        private void SetupTables(ModelBuilder modelBuilder)
+        private void SetupIgnoredProperties(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Tournament>().Ignore(tournament => tournament.TournamentIssueReporter);
 
