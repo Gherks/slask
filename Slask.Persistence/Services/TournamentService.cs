@@ -316,6 +316,11 @@ namespace Slask.Persistence.Services
         {
             Tournament tournament = GetTournamentById(tournamentId);
 
+            return AddScoreToPlayerInMatch(tournament, matchId, playerId, score);
+        }
+
+        public bool AddScoreToPlayerInMatch(Tournament tournament, Guid matchId, Guid playerId, int score)
+        {
             if (tournament == null)
             {
                 /* LOG Issue: Could not add score to player in match; tournament with id '{tournamentId}' does not exist. */
