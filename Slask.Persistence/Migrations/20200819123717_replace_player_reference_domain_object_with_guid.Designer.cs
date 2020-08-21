@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Slask.Domain.Utilities;
 using Slask.Persistence;
@@ -10,9 +11,10 @@ using Slask.Persistence;
 namespace Slask.Persistence.Migrations
 {
     [DbContext(typeof(SlaskContext))]
-    partial class SlaskContextModelSnapshot : ModelSnapshot
+    [Migration("20200819123717_replace_player_reference_domain_object_with_guid")]
+    partial class replace_player_reference_domain_object_with_guid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,16 +28,7 @@ namespace Slask.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("BetType")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("BetterId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("MatchId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PlayerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -43,8 +36,6 @@ namespace Slask.Persistence.Migrations
                     b.HasIndex("BetterId");
 
                     b.ToTable("Bet");
-
-                    b.HasDiscriminator<int>("BetType").HasValue(0);
                 });
 
             modelBuilder.Entity("Slask.Domain.Better", b =>
@@ -240,20 +231,6 @@ namespace Slask.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Slask.Domain.Bets.BetTypes.MatchBet", b =>
-                {
-                    b.HasBaseType("Slask.Domain.Bets.BetBase");
-
-                    b.HasDiscriminator().HasValue(1);
-                });
-
-            modelBuilder.Entity("Slask.Domain.Bets.BetTypes.MiscellaneousBet", b =>
-                {
-                    b.HasBaseType("Slask.Domain.Bets.BetBase");
-
-                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Slask.Domain.Groups.GroupTypes.BracketGroup", b =>

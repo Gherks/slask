@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Slask.Domain.Utilities;
 using Slask.Persistence;
@@ -10,9 +11,10 @@ using Slask.Persistence;
 namespace Slask.Persistence.Migrations
 {
     [DbContext(typeof(SlaskContext))]
-    partial class SlaskContextModelSnapshot : ModelSnapshot
+    [Migration("20200821103546_add_discriminator_column_to_bets")]
+    partial class add_discriminator_column_to_bets
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
