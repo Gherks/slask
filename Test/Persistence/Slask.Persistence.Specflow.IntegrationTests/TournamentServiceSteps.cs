@@ -3,7 +3,6 @@ using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
-using Slask.Domain.Utilities;
 using Slask.Domain.Utilities.StandingsSolvers;
 using Slask.Persistence.Services;
 using Slask.TestCore;
@@ -23,13 +22,9 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
     {
         private readonly string testDatabaseName;
 
-        protected readonly TournamentService _tournamentService;
-
         public TournamentServiceStepDefinitions()
         {
             testDatabaseName = Guid.NewGuid().ToString();
-
-            _tournamentService = CreateTournamentService();
         }
 
         [Given(@"a tournament named ""(.*)"" has been created with users ""(.*)"" added to it")]
@@ -131,6 +126,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         {
             using (TournamentService tournamentService = CreateTournamentService())
             {
+                tournamentService.Save();
                 foreach (TableRow row in table.Rows)
                 {
                     TestUtilities.ParseBetterMatchBetPlacements(row, out string betterName, out int roundIndex, out int groupIndex, out int matchIndex, out string playerName);
@@ -161,25 +157,12 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                     RoundBase round = tournament.Rounds[roundIndex];
                     GroupBase group = round.Groups[groupIndex];
 
-                    while (group.GetPlayState() != PlayStateEnum.Finished)
+                    foreach (Match match in group.Matches)
                     {
-                        foreach (Match match in group.Matches)
-                        {
-                            if (match.IsReady() && match.GetPlayState() == PlayStateEnum.NotBegun)
-                            {
-                                SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-                                break;
-                            }
-                        }
-
-                        bool playedMatchesSuccessfully = PlayAvailableMatches(group);
-                        tournamentService.Save();
-
-                        if (!playedMatchesSuccessfully)
-                        {
-                            break;
-                        }
+                        PlayMatch(tournamentService, match);
                     }
+
+                    tournamentService.Save();
                 }
             }
         }
@@ -188,7 +171,11 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [When(@"better standings in tournament named ""(.*)"" from first to last looks like this")]
         public void GivenBetterStandingsInTournamentFromFirstToLastLooksLikeThis(string tournamentName, Table table)
         {
-            Tournament tournament = _tournamentService.GetTournamentByName(tournamentName);
+            Tournament tournament;
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                tournament = tournamentService.GetTournamentByName(tournamentName);
+            }
 
             List<StandingsEntry<Better>> betterStandings = tournament.GetBetterStandings();
 
@@ -212,77 +199,63 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                 throw new ArgumentNullException(nameof(table));
             }
 
-            foreach (TableRow row in table.Rows)
-            {
-                TestUtilities.ParseScoreAddedToMatchPlayer(row, out int roundIndex, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
-
-                Tournament tournament = _tournamentService.GetTournamentByName(tournamentName);
-                RoundBase round = tournament.Rounds[roundIndex];
-                GroupBase group = round.Groups[groupIndex];
-                Match match = group.Matches[matchIndex];
-
-                SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-
-                Player player = match.FindPlayer(scoringPlayer);
-
-                if (player != null)
-                {
-                    _tournamentService.AddScoreToPlayerInMatch(tournament.Id, match.Id, player.Id, scoreAdded);
-                }
-                else
-                {
-                    // LOG Error: Invalid player name in given match within given group
-                }
-            }
-
-            _tournamentService.Save();
-        }
-
-        private bool PlayAvailableMatches(GroupBase group)
-        {
             using (TournamentService tournamentService = CreateTournamentService())
             {
-                foreach (Match match in group.Matches)
+                foreach (TableRow row in table.Rows)
                 {
-                    int winningScore = (int)Math.Ceiling(match.BestOf / 2.0);
+                    TestUtilities.ParseScoreAddedToMatchPlayer(row, out int roundIndex, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
 
-                    bool matchShouldHaveStarted = match.StartDateTime < SystemTime.Now;
-                    bool matchIsNotFinished = match.GetPlayState() != PlayStateEnum.Finished;
+                    Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                    RoundBase round = tournament.Rounds[roundIndex];
+                    GroupBase group = round.Groups[groupIndex];
+                    Match match = group.Matches[matchIndex];
 
-                    if (matchShouldHaveStarted && matchIsNotFinished)
+                    SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+
+                    Player player = match.FindPlayer(scoringPlayer);
+
+                    if (player != null)
                     {
-                        // Give points to player with name that precedes the other alphabetically
-                        bool increasePlayer1Score = match.Player1.Name.CompareTo(match.Player2.Name) <= 0;
-                        bool scoreIncreased;
-
-                        if (increasePlayer1Score)
-                        {
-                            scoreIncreased = tournamentService.AddScoreToPlayerInMatch(group.Round.Tournament.Id, match.Id, match.Player1.Id, winningScore);
-                        }
-                        else
-                        {
-                            scoreIncreased = tournamentService.AddScoreToPlayerInMatch(group.Round.Tournament.Id, match.Id, match.Player2.Id, winningScore);
-                        }
-
-                        if (!scoreIncreased)
-                        {
-                            return false;
-                        }
+                        tournamentService.AddScoreToPlayerInMatch(tournament.Id, match.Id, player.Id, scoreAdded);
+                    }
+                    else
+                    {
+                        // LOG Error: Invalid player name in given match within given group
+                        throw new NotImplementedException();
                     }
                 }
 
                 tournamentService.Save();
             }
-
-            return true;
         }
 
-        private UserService CreateUserService()
+        private void PlayMatch(TournamentService tournamentService, Match match)
+        {
+            bool matchHaveNotStarted = match.StartDateTime > SystemTime.Now;
+
+            if (matchHaveNotStarted)
+            {
+                SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+            }
+
+            int winningScore = (int)Math.Ceiling(match.BestOf / 2.0);
+
+            // Give points to player with name that precedes the other alphabetically
+            bool increasePlayer1Score = match.Player1.GetName().CompareTo(match.Player2.GetName()) <= 0;
+
+            Guid tournamentId = match.Group.Round.Tournament.Id;
+            Guid scoringPlayerId = increasePlayer1Score ? match.Player1.Id : match.Player2.Id;
+
+            tournamentService.AddScoreToPlayerInMatch(tournamentId, match.Id, scoringPlayerId, winningScore);
+            tournamentService.Save();
+        }
+
+        protected UserService CreateUserService()
         {
             return new UserService(InMemoryContextCreator.Create(testDatabaseName));
         }
 
-        private TournamentService CreateTournamentService()
+        protected TournamentService CreateTournamentService()
         {
             return new TournamentService(InMemoryContextCreator.Create(testDatabaseName));
         }

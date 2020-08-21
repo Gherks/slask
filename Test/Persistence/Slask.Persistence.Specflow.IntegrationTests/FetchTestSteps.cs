@@ -5,6 +5,7 @@ using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
+using Slask.Persistence.Services;
 using Slask.TestCore;
 using TechTalk.SpecFlow;
 
@@ -21,7 +22,11 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [Then(@"fetched tournament (.*) should contain rounds")]
         public void ThenFetchedTournamentShouldContainRounds(int fetchedTournamentIndex, Table table)
         {
-            Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
+            Tournament tournament;
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                tournament = tournamentService.GetTournamentByName("Homestory Cup XX");
+            }
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
@@ -63,7 +68,11 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [Then(@"groups within round (.*) in fetched tournament (.*) is of type ""(.*)""")]
         public void ThenGroupsWithinRoundInFetchedTournamentIsOfType(int roundIndex, int fetchedTournamentIndex, string groupType)
         {
-            Tournament tournament = _tournamentService.GetTournamentByName("Homestory Cup XX");
+            Tournament tournament;
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                tournament = tournamentService.GetTournamentByName("Homestory Cup XX");
+            }
 
             RoundBase round = tournament.Rounds[roundIndex];
             groupType = TestUtilities.ParseRoundGroupTypeString(groupType);
