@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Slask.Domain;
 using Slask.Domain.Bets;
+using Slask.Domain.Bets.BetTypes;
 using Slask.Domain.Groups;
 using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.ObjectState;
@@ -117,8 +118,6 @@ namespace Slask.Persistence
 
         private void SetupTables(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BetBase>().ToTable("Bet");
-
             modelBuilder.Entity<RoundBase>().ToTable("Round")
                 .HasDiscriminator<ContestTypeEnum>("ContestType")
                 .HasValue<RoundBase>(ContestTypeEnum.None)
@@ -132,6 +131,12 @@ namespace Slask.Persistence
                 .HasValue<BracketGroup>(ContestTypeEnum.Bracket)
                 .HasValue<DualTournamentGroup>(ContestTypeEnum.DualTournament)
                 .HasValue<RoundRobinGroup>(ContestTypeEnum.RoundRobin);
+
+            modelBuilder.Entity<BetBase>().ToTable("Bet")
+                .HasDiscriminator<BetTypeEnum>("BetType")
+                .HasValue<BetBase>(BetTypeEnum.None)
+                .HasValue<MatchBet>(BetTypeEnum.MatchBet)
+                .HasValue<MiscellaneousBet>(BetTypeEnum.MiscellaneousBet);
         }
 
         private void SetupIgnoredProperties(ModelBuilder modelBuilder)
