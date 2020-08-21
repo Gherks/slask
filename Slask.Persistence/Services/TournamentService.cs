@@ -81,6 +81,11 @@ namespace Slask.Persistence.Services
                 .Include(tournament => tournament.Rounds)
                     .ThenInclude(round => round.Groups)
                         .ThenInclude(group => group.Matches)
+                            .ThenInclude(match => match.Player1)
+                .Include(tournament => tournament.Rounds)
+                    .ThenInclude(round => round.Groups)
+                        .ThenInclude(group => group.Matches)
+                            .ThenInclude(match => match.Player2)
                 .FirstOrDefault();
 
             if (tournament != null)
@@ -106,6 +111,11 @@ namespace Slask.Persistence.Services
                 .Include(tournament => tournament.Rounds)
                     .ThenInclude(round => round.Groups)
                         .ThenInclude(group => group.Matches)
+                            .ThenInclude(match => match.Player1)
+                .Include(tournament => tournament.Rounds)
+                    .ThenInclude(round => round.Groups)
+                        .ThenInclude(group => group.Matches)
+                            .ThenInclude(match => match.Player2)
                 .FirstOrDefault();
 
             if (tournament != null)
