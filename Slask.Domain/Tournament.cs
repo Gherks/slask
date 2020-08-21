@@ -229,6 +229,54 @@ namespace Slask.Domain
             return Rounds.FirstOrDefault(round => round.Name.ToLower() == name.ToLower());
         }
 
+        public GroupBase GetGroupByGroupId(Guid id)
+        {
+            foreach (RoundBase round in Rounds)
+            {
+                GroupBase group = round.Groups.FirstOrDefault(group => group.Id == id);
+
+                if (group != null)
+                {
+                    return group;
+                }
+            }
+
+            return null;
+        }
+
+        public GroupBase GetGroupByGroupName(string name)
+        {
+            foreach (RoundBase round in Rounds)
+            {
+                GroupBase group = round.Groups.FirstOrDefault(group => group.Name.ToLower() == name.ToLower());
+
+                if (group != null)
+                {
+                    return group;
+                }
+            }
+
+            return null;
+        }
+
+        public Match GetMatchByMatchId(Guid id)
+        {
+            foreach (RoundBase round in Rounds)
+            {
+                foreach (GroupBase group in round.Groups)
+                {
+                    Match match = group.Matches.FirstOrDefault(match => match.Id == id);
+
+                    if (match != null)
+                    {
+                        return match;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         public RoundBase GetFirstRound()
         {
             bool hasNoRounds = Rounds.Count == 0;
