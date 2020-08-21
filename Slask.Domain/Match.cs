@@ -3,7 +3,6 @@ using Slask.Domain.Groups;
 using Slask.Domain.ObjectState;
 using Slask.Domain.Utilities;
 using System;
-using System.Collections.Generic;
 
 namespace Slask.Domain
 {
@@ -13,6 +12,12 @@ namespace Slask.Domain
         {
             Id = Guid.NewGuid();
             BestOf = 3;
+
+            Player1 = Player.Create(this);
+            Player1Id = Player1.Id;
+
+            Player2 = Player.Create(this);
+            Player2Id = Player2.Id;
         }
 
         public Guid Id { get; private set; }
@@ -54,6 +59,28 @@ namespace Slask.Domain
             Player2.MarkForDeletion();
         }
 
+        public void UpdateSortOrder()
+        {
+            if (ObjectState == ObjectStateEnum.Deleted)
+            {
+                return;
+            }
+
+            for (int index = 0; index < Group.Matches.Count; ++index)
+            {
+                if (Group.Matches[index].Id == Id)
+                {
+                    if (SortOrder != index)
+                    {
+                        MarkAsModified();
+                    }
+
+                    SortOrder = index;
+                    return;
+                }
+            }
+        }
+
         public bool SetBestOf(int bestOf)
         {
             bool matchHasNotBegun = GetPlayState() == PlayStateEnum.NotBegun;
@@ -86,41 +113,47 @@ namespace Slask.Domain
             return false;
         }
 
-        public bool SetPlayers(PlayerReference player1Reference, PlayerReference player2Reference)
+        public bool AssignPlayerReferencesToPlayers(Guid player1ReferenceId, Guid player2ReferenceId)
         {
-            if (player1Reference == null || player2Reference == null || player1Reference.Id != player2Reference.Id)
-            {
-                CreatePlayerWithReference(0, player1Reference);
-                CreatePlayerWithReference(1, player2Reference);
-                MarkAsModified();
+            bool matchHasNotBegun = GetPlayState() == PlayStateEnum.NotBegun;
 
-                return true;
+            if (matchHasNotBegun)
+            {
+                bool anyPlayerReferenceIsInvalid = player1ReferenceId == Guid.Empty || player2ReferenceId == Guid.Empty;
+                bool bothPlayerReferencesDiffer = anyPlayerReferenceIsInvalid || player1ReferenceId != player2ReferenceId;
+
+                if (bothPlayerReferencesDiffer)
+                {
+                    Player1.AssignPlayerReference(player1ReferenceId);
+                    Player2.AssignPlayerReference(player2ReferenceId);
+
+                    return true;
+                }
             }
 
             return false;
         }
 
-        public bool AddPlayer(PlayerReference playerReference)
+        public bool AssignPlayerReferenceToFirstAvailablePlayer(Guid playerReferenceId)
         {
-            if (playerReference == null)
+            bool matchHasNotBegun = GetPlayState() == PlayStateEnum.NotBegun;
+            bool playerReferenceIsValid = playerReferenceId != Guid.Empty;
+
+            if (matchHasNotBegun && playerReferenceIsValid)
             {
-                throw new ArgumentNullException(nameof(playerReference));
-            }
+                bool firstPlayerHasNoPlayerReference = Player1.PlayerReferenceId == Guid.Empty;
+                if (firstPlayerHasNoPlayerReference)
+                {
+                    Player1.AssignPlayerReference(playerReferenceId);
+                    return true;
+                }
 
-            if (Player1 == null)
-            {
-                CreatePlayerWithReference(0, playerReference);
-                MarkAsModified();
-
-                return true;
-            }
-
-            if (Player2 == null)
-            {
-                CreatePlayerWithReference(1, playerReference);
-                MarkAsModified();
-
-                return true;
+                bool secondPlayerHasNoPlayerReference = Player2.PlayerReferenceId == Guid.Empty;
+                if (secondPlayerHasNoPlayerReference)
+                {
+                    Player2.AssignPlayerReference(playerReferenceId);
+                    return true;
+                }
             }
 
             return false;
@@ -143,12 +176,12 @@ namespace Slask.Domain
 
         public Player FindPlayer(string name)
         {
-            if (Player1 != null && Player1.Name == name)
+            if (Player1 != null && Player1.GetName() == name)
             {
                 return Player1;
             }
 
-            if (Player2 != null && Player2.Name == name)
+            if (Player2 != null && Player2.GetName() == name)
             {
                 return Player2;
             }
@@ -158,7 +191,7 @@ namespace Slask.Domain
 
         public bool IsReady()
         {
-            return Player1 != null && Player2 != null;
+            return Player1.PlayerReferenceId != Guid.Empty && Player2.PlayerReferenceId != Guid.Empty;
         }
 
         public PlayStateEnum GetPlayState()
@@ -191,28 +224,6 @@ namespace Slask.Domain
             return null;
         }
 
-        private bool CreatePlayerWithReference(int playerIndex, PlayerReference playerReference)
-        {
-            if (GetPlayState() == PlayStateEnum.NotBegun)
-            {
-                if(playerIndex == 0)
-                {
-                    Player1 = Player.Create(this, playerReference);
-                    Player1Id = Player1.Id;
-                }
-                else
-                {
-                    Player2 = Player.Create(this, playerReference);
-                    Player2Id = Player2.Id;
-                }
-                MarkAsModified();
-
-                return true;
-            }
-
-            return false;
-        }
-
         private bool AnyPlayerHasWon()
         {
             if (Player1 != null && Player2 != null)
@@ -223,28 +234,6 @@ namespace Slask.Domain
             }
 
             return false;
-        }
-
-        public void UpdateSortOrder()
-        {
-            if (ObjectState == ObjectStateEnum.Deleted)
-            {
-                return;
-            }
-
-            for (int index = 0; index < Group.Matches.Count; ++index)
-            {
-                if (Group.Matches[index].Id == Id)
-                {
-                    if (SortOrder != index)
-                    {
-                        MarkAsModified();
-                    }
-
-                    SortOrder = index;
-                    return;
-                }
-            }
         }
     }
 }
