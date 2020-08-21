@@ -169,7 +169,7 @@ namespace Slask.Common.Xunit.UnitTests
         {
             string transformedText = StringUtility.ToUpperNoSpaces(null);
 
-            transformedText.Should().Be(null);
+            transformedText.Should().BeNull();
         }
 
         [Fact]
