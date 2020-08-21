@@ -253,7 +253,7 @@ namespace Slask.Domain.Groups
                 {
                     if (better.Bets[betIndex] is MatchBet matchBet)
                     {
-                        if (matchBet.Match.Id == match.Id)
+                        if (matchBet.MatchId == match.Id)
                         {
                             BetBase bet = better.Bets[betIndex--];
 

@@ -1,7 +1,4 @@
-﻿// Feature suggestion: Add option that lets user set whether bet is removed or update to new user
-// when players are changed in match?
-
-using FluentAssertions;
+﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain.Bets.BetTypes;
 using Slask.Domain.Groups.GroupTypes;
@@ -41,11 +38,8 @@ namespace Slask.Domain.Xunit.UnitTests.BetTests
             matchBet.Should().NotBeNull();
             matchBet.Id.Should().NotBeEmpty();
             matchBet.BetterId.Should().Be(better.Id);
-            matchBet.Better.Should().Be(better);
             matchBet.MatchId.Should().Be(firstMatch.Id);
-            matchBet.Match.Should().Be(firstMatch);
             matchBet.PlayerId.Should().Be(firstMatch.Player1.Id);
-            matchBet.Player.Should().Be(firstMatch.Player1);
         }
 
         [Fact]

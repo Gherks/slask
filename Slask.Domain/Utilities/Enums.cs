@@ -8,6 +8,13 @@
         RoundRobin = 3
     }
 
+    public enum BetTypeEnum
+    {
+        None = 0,
+        MatchBet = 1,
+        MiscellaneousBet = 2
+    }
+
     public enum PlayStateEnum
     {
         NotBegun = 0,

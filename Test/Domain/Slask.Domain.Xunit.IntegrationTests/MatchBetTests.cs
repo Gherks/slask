@@ -186,11 +186,8 @@ namespace Slask.Domain.Xunit.IntegrationTests
         private void ValidateMatchBet(MatchBet matchBet, Better correctBetter, Match correctMatch, Player correctPlayer)
         {
             matchBet.BetterId.Should().Be(correctBetter.Id);
-            matchBet.Better.Should().Be(correctBetter);
             matchBet.MatchId.Should().Be(correctMatch.Id);
-            matchBet.Match.Should().Be(correctMatch);
             matchBet.PlayerId.Should().Be(correctPlayer.Id);
-            matchBet.Player.Should().Be(correctPlayer);
         }
     }
 }

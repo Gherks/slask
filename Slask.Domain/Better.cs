@@ -71,7 +71,7 @@ namespace Slask.Domain
             {
                 if (bet is MatchBet matchBet)
                 {
-                    if (matchBet.Match.Id == match.Id)
+                    if (matchBet.MatchId == match.Id)
                     {
                         return matchBet;
                     }
