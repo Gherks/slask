@@ -1,4 +1,4 @@
-﻿using Slask.Domain.Groups;
+using Slask.Domain.Groups;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
@@ -9,6 +9,7 @@ namespace Slask.Domain.Rounds
     public interface RoundInterface
     {
         Guid Id { get; }
+        ContestTypeEnum ContestType { get; }
         string Name { get; }
         int PlayersPerGroupCount { get; }
         int AdvancingPerGroupCount { get; }

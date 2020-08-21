@@ -11,6 +11,7 @@ namespace Slask.Domain.Groups.GroupTypes
     {
         private BracketGroup()
         {
+            ContestType = ContestTypeEnum.Bracket;
         }
 
         public BracketNodeSystem BracketNodeSystem { get; private set; }
@@ -24,7 +25,6 @@ namespace Slask.Domain.Groups.GroupTypes
 
             BracketGroup group = new BracketGroup
             {
-                ContestType = ContestTypeEnum.Bracket,
                 RoundId = round.Id,
                 Round = round
             };

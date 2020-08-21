@@ -10,6 +10,7 @@ namespace Slask.Domain.Groups.GroupTypes
     {
         private DualTournamentGroup()
         {
+            ContestType = ContestTypeEnum.DualTournament;
         }
 
         private const int _matchCapacity = 5;
@@ -23,7 +24,6 @@ namespace Slask.Domain.Groups.GroupTypes
 
             DualTournamentGroup group = new DualTournamentGroup
             {
-                ContestType = ContestTypeEnum.DualTournament,
                 RoundId = round.Id,
                 Round = round
             };

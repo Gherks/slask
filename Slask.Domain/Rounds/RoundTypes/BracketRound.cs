@@ -3,7 +3,6 @@ using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Procedures.AdvancingPerGroupCount;
 using Slask.Domain.Procedures.PlayersPerGroupCount;
 using Slask.Domain.Utilities;
-using System;
 
 namespace Slask.Domain.Rounds.RoundTypes
 {
@@ -11,6 +10,7 @@ namespace Slask.Domain.Rounds.RoundTypes
     {
         private BracketRound()
         {
+            ContestType = ContestTypeEnum.Bracket;
             PlayersPerGroupCount = 2;
             AdvancingPerGroupCount = 1;
 
@@ -28,7 +28,6 @@ namespace Slask.Domain.Rounds.RoundTypes
 
             BracketRound round = new BracketRound
             {
-                ContestType = ContestTypeEnum.Bracket,
                 TournamentId = tournament.Id,
                 Tournament = tournament
             };

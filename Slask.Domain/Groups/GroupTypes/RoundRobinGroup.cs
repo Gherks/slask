@@ -16,6 +16,7 @@ namespace Slask.Domain.Groups.GroupTypes
     {
         private RoundRobinGroup()
         {
+            ContestType = ContestTypeEnum.RoundRobin;
         }
 
         public static RoundRobinGroup Create(RoundRobinRound round)
@@ -27,7 +28,6 @@ namespace Slask.Domain.Groups.GroupTypes
 
             RoundRobinGroup group = new RoundRobinGroup()
             {
-                ContestType = ContestTypeEnum.RoundRobin,
                 RoundId = round.Id,
                 Round = round
             };

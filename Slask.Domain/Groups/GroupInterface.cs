@@ -9,6 +9,7 @@ namespace Slask.Domain.Groups
     public interface GroupInterface
     {
         Guid Id { get; }
+        ContestTypeEnum ContestType { get; }
         string Name { get; }
         List<Match> Matches { get; }
         public Guid RoundId { get; }
