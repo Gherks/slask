@@ -144,11 +144,11 @@ namespace Slask.Domain
 
         public void ResetObjectStatesOnAllEntities()
         {
-            foreach(Better better in Betters)
+            foreach (Better better in Betters)
             {
                 better.ResetObjectState();
 
-                foreach(BetBase bet in better.Bets)
+                foreach (BetBase bet in better.Bets)
                 {
                     bet.ResetObjectState();
                 }
@@ -163,7 +163,7 @@ namespace Slask.Domain
                 }
             }
 
-            foreach(RoundBase round in Rounds)
+            foreach (RoundBase round in Rounds)
             {
                 round.ResetObjectState();
 
@@ -176,7 +176,7 @@ namespace Slask.Domain
                 {
                     group.ResetObjectState();
 
-                    foreach(Match match in group.Matches)
+                    foreach (Match match in group.Matches)
                     {
                         match.ResetObjectState();
 
