@@ -105,7 +105,7 @@ namespace Slask.Domain
         {
             if (PlayerReferenceId != Guid.Empty)
             {
-                foreach (PlayerReference playerReference in Match.Group.Round.PlayerReferences)
+                foreach (PlayerReference playerReference in Match.Group.Round.Tournament.PlayerReferences)
                 {
                     if (playerReference.Id == PlayerReferenceId)
                     {

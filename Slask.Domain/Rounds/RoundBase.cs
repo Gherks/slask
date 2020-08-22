@@ -19,7 +19,6 @@ namespace Slask.Domain.Rounds
             PlayersPerGroupCount = 2;
             AdvancingPerGroupCount = 1;
             Groups = new List<GroupBase>();
-            PlayerReferences = new List<PlayerReference>();
         }
 
         private PlayersPerGroupCountProcedure _playersPerGroupCountProcedure;
@@ -32,7 +31,6 @@ namespace Slask.Domain.Rounds
         public int PlayersPerGroupCount { get; protected set; }
         public int AdvancingPerGroupCount { get; protected set; }
         public List<GroupBase> Groups { get; protected set; }
-        public List<PlayerReference> PlayerReferences { get; protected set; }
         public Guid TournamentId { get; protected set; }
         public Tournament Tournament { get; protected set; }
 
@@ -42,7 +40,7 @@ namespace Slask.Domain.Rounds
 
             if (IsFirstRound())
             {
-                participants = PlayerReferences.Count;
+                participants = Tournament.PlayerReferences.Count;
             }
             else
             {
@@ -75,47 +73,6 @@ namespace Slask.Domain.Rounds
 
             Name = name;
             return true;
-        }
-
-        public PlayerReference RegisterPlayerReference(string name)
-        {
-            bool roundIsFirstRound = IsFirstRound();
-            bool tournamentHasNotBegun = GetPlayState() == PlayStateEnum.NotBegun;
-            bool nameIsNotRegistered = !PlayerReferences.Any(playerReference => playerReference.Name == name);
-            bool nameIsNotEmpty = name.Length != 0;
-
-            if (roundIsFirstRound && tournamentHasNotBegun && nameIsNotRegistered && nameIsNotEmpty)
-            {
-                PlayerReferences.Add(PlayerReference.Create(name, Tournament));
-                OnPlayerReferencesChanged();
-
-                return PlayerReferences.Last();
-            }
-
-            return null;
-        }
-
-        public bool ExcludePlayerReference(string name)
-        {
-            bool roundIsFirstRound = IsFirstRound();
-            bool tournamentHasNotBegun = GetPlayState() == PlayStateEnum.NotBegun;
-            bool nameIsNotEmpty = name.Length != 0;
-
-            if (roundIsFirstRound && tournamentHasNotBegun && nameIsNotEmpty)
-            {
-                PlayerReference playerReference = PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == name);
-                bool playerReferenceExistInRound = playerReference != null;
-
-                if (playerReferenceExistInRound)
-                {
-                    PlayerReferences.Remove(PlayerReference.Create(name, Tournament));
-                    OnPlayerReferencesChanged();
-
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         public bool Construct()
@@ -504,14 +461,6 @@ namespace Slask.Domain.Rounds
                     startTime = startTime.AddHours(1);
                 }
             }
-        }
-
-        private void OnPlayerReferencesChanged()
-        {
-            Construct();
-            FillGroupsWithPlayerReferences();
-            Tournament.FindIssues();
-            MarkAsModified();
         }
     }
 }

@@ -70,23 +70,9 @@ namespace Slask.Persistence.Services
 
         public Tournament GetTournamentById(Guid id)
         {
-            Tournament tournament = _slaskContext.Tournaments
-                .Where(tournament => tournament.Id == id)
-                .Include(tournament => tournament.Betters)
-                    .ThenInclude(better => better.Bets)
-                .Include(tournament => tournament.Betters)
-                    .ThenInclude(better => better.User)
-                .Include(tournament => tournament.Rounds)
-                    .ThenInclude(round => round.PlayerReferences)
-                .Include(tournament => tournament.Rounds)
-                    .ThenInclude(round => round.Groups)
-                        .ThenInclude(group => group.Matches)
-                            .ThenInclude(match => match.Player1)
-                .Include(tournament => tournament.Rounds)
-                    .ThenInclude(round => round.Groups)
-                        .ThenInclude(group => group.Matches)
-                            .ThenInclude(match => match.Player2)
-                .FirstOrDefault();
+            IQueryable<Tournament> tournamentQuery = _slaskContext.Tournaments.Where(tournament => tournament.Id == id);
+
+            Tournament tournament = GetTournamentWithComponentsFromQuery(tournamentQuery).FirstOrDefault();
 
             if (tournament != null)
             {
@@ -100,23 +86,9 @@ namespace Slask.Persistence.Services
 
         public Tournament GetTournamentByName(string name)
         {
-            Tournament tournament = _slaskContext.Tournaments
-                .Where(tournament => tournament.Name.ToLower() == name.ToLower())
-                .Include(tournament => tournament.Betters)
-                    .ThenInclude(better => better.Bets)
-                .Include(tournament => tournament.Betters)
-                    .ThenInclude(better => better.User)
-                .Include(tournament => tournament.Rounds)
-                    .ThenInclude(round => round.PlayerReferences)
-                .Include(tournament => tournament.Rounds)
-                    .ThenInclude(round => round.Groups)
-                        .ThenInclude(group => group.Matches)
-                            .ThenInclude(match => match.Player1)
-                .Include(tournament => tournament.Rounds)
-                    .ThenInclude(round => round.Groups)
-                        .ThenInclude(group => group.Matches)
-                            .ThenInclude(match => match.Player2)
-                .FirstOrDefault();
+            IQueryable<Tournament> tournamentQuery = _slaskContext.Tournaments.Where(tournament => tournament.Name.ToLower() == name.ToLower());
+
+            Tournament tournament = GetTournamentWithComponentsFromQuery(tournamentQuery).FirstOrDefault();
 
             if (tournament != null)
             {
@@ -126,6 +98,25 @@ namespace Slask.Persistence.Services
             }
 
             return tournament;
+        }
+
+        private IQueryable<Tournament> GetTournamentWithComponentsFromQuery(IQueryable<Tournament> tournamentQuery)
+        {
+            return tournamentQuery
+                .Include(tournament => tournament.PlayerReferences)
+                .Include(tournament => tournament.Betters)
+                    .ThenInclude(better => better.Bets)
+                .Include(tournament => tournament.Betters)
+                    .ThenInclude(better => better.User)
+                .Include(tournament => tournament.Rounds)
+                .Include(tournament => tournament.Rounds)
+                    .ThenInclude(round => round.Groups)
+                        .ThenInclude(group => group.Matches)
+                            .ThenInclude(match => match.Player1)
+                .Include(tournament => tournament.Rounds)
+                    .ThenInclude(round => round.Groups)
+                        .ThenInclude(group => group.Matches)
+                            .ThenInclude(match => match.Player2);
         }
 
         public List<PlayerReference> GetPlayerReferencesByTournamentId(Guid id)
@@ -140,7 +131,7 @@ namespace Slask.Persistence.Services
                 return null;
             }
 
-            return tournament.GetPlayerReferences();
+            return tournament.PlayerReferences;
         }
 
         public List<PlayerReference> GetPlayerReferencesByTournamentName(string name)
@@ -155,7 +146,7 @@ namespace Slask.Persistence.Services
                 return null;
             }
 
-            return tournament.GetPlayerReferences();
+            return tournament.PlayerReferences;
         }
 
         public List<Better> GetBettersByTournamentId(Guid id)
@@ -241,15 +232,7 @@ namespace Slask.Persistence.Services
 
         public PlayerReference AddPlayerReference(Tournament tournament, string name)
         {
-            PlayerReference playerReference = null;
-            RoundBase firstRound = tournament.GetFirstRound();
-
-            if (firstRound != null)
-            {
-                playerReference = firstRound.RegisterPlayerReference(name);
-            }
-
-            return playerReference;
+            return tournament.RegisterPlayerReference(name);
         }
 
         public bool RenameRoundInTournament(RoundBase round, string name)

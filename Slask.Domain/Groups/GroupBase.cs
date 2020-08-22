@@ -72,7 +72,7 @@ namespace Slask.Domain.Groups
 
             foreach (Guid playerReferenceId in GetPlayerReferenceIds())
             {
-                foreach (PlayerReference playerReference in Round.PlayerReferences)
+                foreach (PlayerReference playerReference in Round.Tournament.PlayerReferences)
                 {
                     if (playerReferenceId == playerReference.Id)
                     {

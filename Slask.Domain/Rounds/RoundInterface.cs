@@ -14,14 +14,11 @@ namespace Slask.Domain.Rounds
         int PlayersPerGroupCount { get; }
         int AdvancingPerGroupCount { get; }
         List<GroupBase> Groups { get; }
-        List<PlayerReference> PlayerReferences { get; }
         Guid TournamentId { get; }
         Tournament Tournament { get; }
 
         int GetExpectedParticipantCount();
         bool RenameTo(string name);
-        PlayerReference RegisterPlayerReference(string name);
-        bool ExcludePlayerReference(string name);
         bool Construct();
         bool FillGroupsWithPlayerReferences();
         bool SetPlayersPerGroupCount(int count);

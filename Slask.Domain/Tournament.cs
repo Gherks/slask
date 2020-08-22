@@ -19,6 +19,7 @@ namespace Slask.Domain
 
             Id = Guid.NewGuid();
             Rounds = new List<RoundBase>();
+            PlayerReferences = new List<PlayerReference>();
             Betters = new List<Better>();
             TournamentIssueReporter = new TournamentIssueReporter();
         }
@@ -29,6 +30,7 @@ namespace Slask.Domain
         public string Name { get; private set; }
         public DateTime Created { get { return _created; } private set { } }
         public List<RoundBase> Rounds { get; private set; }
+        public List<PlayerReference> PlayerReferences { get; private set; }
         public List<Better> Betters { get; private set; }
 
         // Ignored by SlaskContext
@@ -117,6 +119,45 @@ namespace Slask.Domain
             return false;
         }
 
+        public PlayerReference RegisterPlayerReference(string name)
+        {
+            bool tournamentHasNotBegun = GetPlayState() == PlayStateEnum.NotBegun;
+            bool nameIsNotRegistered = !PlayerReferences.Any(playerReference => playerReference.Name == name);
+            bool nameIsNotEmpty = name.Length != 0;
+
+            if (tournamentHasNotBegun && nameIsNotRegistered && nameIsNotEmpty)
+            {
+                PlayerReferences.Add(PlayerReference.Create(name, this));
+                OnPlayerReferencesChanged();
+
+                return PlayerReferences.Last();
+            }
+
+            return null;
+        }
+
+        public bool ExcludePlayerReference(string name)
+        {
+            bool tournamentHasNotBegun = GetPlayState() == PlayStateEnum.NotBegun;
+            bool nameIsNotEmpty = name.Length != 0;
+
+            if (tournamentHasNotBegun && nameIsNotEmpty)
+            {
+                PlayerReference playerReference = PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == name);
+                bool playerReferenceExistInRound = playerReference != null;
+
+                if (playerReferenceExistInRound)
+                {
+                    PlayerReferences.Remove(PlayerReference.Create(name, this));
+                    OnPlayerReferencesChanged();
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public Better AddBetter(User user)
         {
             bool betterAlreadyExists = GetBetterByName(user.Name) != null;
@@ -144,6 +185,11 @@ namespace Slask.Domain
 
         public void ResetObjectStatesOnAllEntities()
         {
+            foreach (PlayerReference playerReference in PlayerReferences)
+            {
+                playerReference.ResetObjectState();
+            }
+
             foreach (Better better in Betters)
             {
                 better.ResetObjectState();
@@ -154,23 +200,9 @@ namespace Slask.Domain
                 }
             }
 
-            RoundBase firstRound = GetFirstRound();
-            if (firstRound != null)
-            {
-                foreach (PlayerReference playerReference in GetFirstRound().PlayerReferences)
-                {
-                    playerReference.ResetObjectState();
-                }
-            }
-
             foreach (RoundBase round in Rounds)
             {
                 round.ResetObjectState();
-
-                foreach (PlayerReference playerReference in round.PlayerReferences)
-                {
-                    playerReference.ResetObjectState();
-                }
 
                 foreach (GroupBase group in round.Groups)
                 {
@@ -386,14 +418,6 @@ namespace Slask.Domain
 
             if (containsSoughtRound)
             {
-                bool soughtRoundIsTheFirstOne = GetFirstRound().Id == round.Id;
-                List<PlayerReference> playerReferences = new List<PlayerReference>();
-
-                if (soughtRoundIsTheFirstOne)
-                {
-                    playerReferences = round.PlayerReferences;
-                }
-
                 bool removalSuccessful = Rounds.Remove(round);
 
                 if (removalSuccessful)
@@ -403,14 +427,7 @@ namespace Slask.Domain
                     bool stillContainsRounds = Rounds.Count > 0;
                     if (stillContainsRounds)
                     {
-                        RoundBase firstRound = GetFirstRound();
-
-                        foreach (PlayerReference playerReference in playerReferences)
-                        {
-                            firstRound.RegisterPlayerReference(playerReference.Name);
-                        }
-
-                        firstRound.Construct();
+                        GetFirstRound().Construct();
                     }
 
                     FindIssues();
@@ -418,6 +435,15 @@ namespace Slask.Domain
             }
 
             return false;
+        }
+
+        private void OnPlayerReferencesChanged()
+        {
+            RoundBase firstRound = GetFirstRound();
+            firstRound.Construct();
+            firstRound.FillGroupsWithPlayerReferences();
+
+            FindIssues();
         }
     }
 }
