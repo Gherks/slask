@@ -7,7 +7,7 @@ Scenario: Can switch player with other player in same bracket group
 		And tournament 0 adds rounds
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain" is registered to tournament 0
 	When player "Maru" in group 0 and player "Taeja" in group 0 switches matches
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
@@ -19,7 +19,7 @@ Scenario: Can switch player with other player in same dual tournament group
 		And tournament 0 adds rounds
 			| Round type      | Advancing per group count | Players per group count |
 			| Dual tournament | 2                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain" is registered to tournament 0
 	When player "Maru" in group 0 and player "Taeja" in group 0 switches matches
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
@@ -31,7 +31,7 @@ Scenario: Cannot switch player with other player in same round robin group
 		And tournament 0 adds rounds
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 1                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain" is registered to tournament 0
 	When player "Maru" in group 0 and player "Taeja" in group 0 switches matches
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
@@ -47,7 +47,7 @@ Scenario: Can switch player with other player that resides in different groups w
 		And tournament 0 adds rounds
 			| Round type  | Advancing per group count | Players per group count |
 			| Bracket     | 1                         | 2                       |
-		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain" is registered to tournament 0
 	When player "Maru" in group 0 and player "Taeja" in group 1 switches matches
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
@@ -61,7 +61,7 @@ Scenario: Can switch player with other player that resides in different groups w
 		And tournament 0 adds rounds
 			| Round type      | Advancing per group count | Players per group count |
 			| Dual tournament | 2                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 	When player "Maru" in group 0 and player "Thorzain" in group 1 switches matches
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
@@ -77,7 +77,7 @@ Scenario: Cannot switch player with other player that resides in different group
 		And tournament 0 adds rounds
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 1                         | 2                       |
-		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain" is registered to tournament 0
 	When player "Maru" in group 0 and player "Taeja" in group 1 switches matches
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
@@ -92,7 +92,7 @@ Scenario: Cannot switch player that resides in a bracket group with player in di
 			| Round type      | Advancing per group count | Players per group count |
 			| Dual Tournament | 2                         | 4                       |
 			| Bracket         | 1                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -117,7 +117,7 @@ Scenario: Cannot switch player that resides in a dual tournament group with play
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 2                       |
 			| Bracket    | 1                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -148,7 +148,7 @@ Scenario: Cannot switch player that resides in a round robin group with player i
 			| Round type  | Advancing per group count | Players per group count |
 			| Bracket     | 1                         | 4                       |
 			| Round robin | 1                         | 2                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -171,7 +171,7 @@ Scenario: Cannot switch player with other player in same bracket group that has 
 		And tournament 0 adds rounds
 			| Round type  | Advancing per group count | Players per group count |
 			| Bracket     | 1                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -186,7 +186,7 @@ Scenario: Cannot switch player with other player in same dual tournament group t
 		And tournament 0 adds rounds
 			| Round type      | Advancing per group count | Players per group count |
 			| Dual tournament | 2                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -201,7 +201,7 @@ Scenario: Cannot switch player with other player in same round robin group that 
 		And tournament 0 adds rounds
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 1                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -220,7 +220,7 @@ Scenario: Cannot switch player with other player in different group within same 
 		And tournament 0 adds rounds
 			| Round type  | Advancing per group count | Players per group count |
 			| Bracket     | 1                         | 2                       |
-		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -237,7 +237,7 @@ Scenario: Cannot switch player with other player in different group within same 
 		And tournament 0 adds rounds
 			| Round type      | Advancing per group count | Players per group count |
 			| Dual tournament | 2                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -256,7 +256,7 @@ Scenario: Cannot switch player with other player in different group within same 
 		And tournament 0 adds rounds
 			| Round type      | Advancing per group count | Players per group count |
 			| Round robin     | 1                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |

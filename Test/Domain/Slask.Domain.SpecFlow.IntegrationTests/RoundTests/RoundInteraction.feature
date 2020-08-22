@@ -8,7 +8,7 @@ Scenario: Can fetch all winning players in a bracket round that contains several
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 4                       |
 			| Bracket    | 1                         | 2                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -21,7 +21,7 @@ Scenario: Cannot fetch winning players from bracket group in a bracket round tha
 		And tournament 0 adds rounds
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 4                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -34,7 +34,7 @@ Scenario: A bracket round with a predecessor bracket round is set up using only 
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 4                       |
 			| Bracket    | 1                         | 4                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth, Eleventh, Twelfth, Thirteenth, Fourteenth, Fifteenth, Sixteenth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth, Eleventh, Twelfth, Thirteenth, Fourteenth, Fifteenth, Sixteenth" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
@@ -53,7 +53,7 @@ Scenario: A bracket round with a predecessor dual tournament round is set up usi
 			| Round type      | Advancing per group count | Players per group count |
 			| Dual tournament | 2                         | 4                       |
 			| Bracket         | 1                         | 4                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
@@ -70,7 +70,7 @@ Scenario: A bracket round with a predecessor round robin round is set up using o
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 2                         | 5                       |
 			| Bracket     | 1                         | 4                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
@@ -89,7 +89,7 @@ Scenario: Can fetch all winning players in a dual tournament round that contains
 			| Round type      | Advancing per group count | Players per group count |
 			| Dual tournament | 2                         | 4                       |
 			| Bracket         | 1                         | 4                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -102,7 +102,7 @@ Scenario: Cannot fetch winning players from dual tournament group in a dual tour
 		And tournament 0 adds rounds
 			| Round type      | Advancing per group count | Players per group count |
 			| Dual tournament | 2                         | 4                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -116,7 +116,7 @@ Scenario: A dual tournament round with a predecessor bracket round is set up usi
 			| Bracket         | 1                         | 4                       |
 			| Dual tournament | 2                         | 4                       |
 			| Bracket         | 1                         | 2                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth, Eleventh, Twelfth, Thirteenth, Fourteenth, Fifteenth, Sixteenth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth, Eleventh, Twelfth, Thirteenth, Fourteenth, Fifteenth, Sixteenth" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
@@ -136,7 +136,7 @@ Scenario: A dual tournament round with a predecessor dual tournament round is se
 			| Dual tournament | 2                         | 4                       |
 			| Dual tournament | 2                         | 4                       |
 			| Bracket         | 1                         | 2                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
@@ -154,7 +154,7 @@ Scenario: A dual tournament round with a predecessor round robin round is set up
 			| Round robin     | 2                         | 5                       |
 			| Dual tournament | 1                         | 4                       |
 			| Bracket         | 1                         | 2                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
@@ -173,7 +173,7 @@ Scenario: Can fetch all winning players in a round robin round that contains sev
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 2                         | 4                       |
 			| Bracket     | 1                         | 4                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -187,7 +187,7 @@ Scenario: Cannot fetch winning players from round robin group in a round robin r
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 1                         | 2                       |
 			| Round robin | 1                         | 4                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -200,7 +200,7 @@ Scenario: A round robin round with a predecessor bracket round is set up using o
 			| Round type  | Advancing per group count | Players per group count |
 			| Bracket     | 1                         | 4                       |
 			| Round robin | 1                         | 4                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth, Eleventh, Twelfth, Thirteenth, Fourteenth, Fifteenth, Sixteenth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth, Eleventh, Twelfth, Thirteenth, Fourteenth, Fifteenth, Sixteenth" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
@@ -223,7 +223,7 @@ Scenario: A round robin round with a predecessor dual tournament round is set up
 			| Round type      | Advancing per group count | Players per group count |
 			| Dual tournament | 2                         | 4                       |
 			| Round robin     | 1                         | 4                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
@@ -244,7 +244,7 @@ Scenario: A round robin round with a predecessor round robin round is set up usi
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 2                         | 5                       |
 			| Round robin | 1                         | 4                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth, Tenth" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |

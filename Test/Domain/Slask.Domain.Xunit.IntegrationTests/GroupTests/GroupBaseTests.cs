@@ -19,20 +19,20 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests
         [Fact]
         public void AddingSeveralRoundsYieldsRoundsWithExpectedNames()
         {
-            round.RegisterPlayerReference("Group A participant 1");
-            round.RegisterPlayerReference("Group A participant 2");
+            tournament.RegisterPlayerReference("Group A participant 1");
+            tournament.RegisterPlayerReference("Group A participant 2");
 
-            round.RegisterPlayerReference("Group B participant 1");
-            round.RegisterPlayerReference("Group B participant 2");
+            tournament.RegisterPlayerReference("Group B participant 1");
+            tournament.RegisterPlayerReference("Group B participant 2");
 
-            round.RegisterPlayerReference("Group C participant 1");
-            round.RegisterPlayerReference("Group C participant 2");
+            tournament.RegisterPlayerReference("Group C participant 1");
+            tournament.RegisterPlayerReference("Group C participant 2");
 
-            round.RegisterPlayerReference("Group D participant 1");
-            round.RegisterPlayerReference("Group D participant 2");
+            tournament.RegisterPlayerReference("Group D participant 1");
+            tournament.RegisterPlayerReference("Group D participant 2");
 
-            round.RegisterPlayerReference("Group E participant 1");
-            round.RegisterPlayerReference("Group E participant 2");
+            tournament.RegisterPlayerReference("Group E participant 1");
+            tournament.RegisterPlayerReference("Group E participant 2");
 
             round.Groups[0].Name.Should().Be("Group A");
             round.Groups[1].Name.Should().Be("Group B");
@@ -46,7 +46,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests
         {
             for (int index = 0; index < 60; ++index)
             {
-                round.RegisterPlayerReference("Participant" + index.ToString());
+                tournament.RegisterPlayerReference("Participant" + index.ToString());
             }
 
             round.Groups[26].Name.Should().Be("Group AA");

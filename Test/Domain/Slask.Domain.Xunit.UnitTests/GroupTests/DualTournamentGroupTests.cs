@@ -1,6 +1,7 @@
 using FluentAssertions;
 using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Rounds.RoundTypes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -35,7 +36,9 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
         {
             List<string> playerNames = new List<string> { "Maru", "Stork", "Taeja", "Rain" };
 
-            DualTournamentGroup dualTournamentGroup = RegisterPlayers(playerNames);
+            RegisterPlayers(playerNames);
+
+            DualTournamentGroup dualTournamentGroup = dualTournamentRound.Groups.First() as DualTournamentGroup;
 
             dualTournamentGroup.Matches.Should().HaveCount(5);
 
@@ -59,8 +62,9 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
         public void CannotAddMoreThanFourPlayerReferencesToGroup()
         {
             List<string> playerNames = new List<string> { "Maru", "Stork", "Taeja", "Rain", "Bomber" };
+            RegisterPlayers(playerNames);
 
-            DualTournamentGroup dualTournamentGroup = RegisterPlayers(playerNames);
+            DualTournamentGroup dualTournamentGroup = dualTournamentRound.Groups.First() as DualTournamentGroup;
             List<PlayerReference> playerReferences = dualTournamentGroup.GetPlayerReferences();
 
             playerReferences.Single(playerReference => playerReference.Name == playerNames[0]).Should().NotBeNull();
@@ -87,14 +91,12 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
             dualTournamentGroup.Matches[4].Player2.PlayerReferenceId.Should().BeEmpty();
         }
 
-        private DualTournamentGroup RegisterPlayers(List<string> playerNames)
+        private void RegisterPlayers(List<string> playerNames)
         {
             foreach (string playerName in playerNames)
             {
-                dualTournamentRound.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
-
-            return dualTournamentRound.Groups.First() as DualTournamentGroup;
         }
     }
 }

@@ -81,28 +81,28 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
 
             roundRobinRound.SetPlayersPerGroupCount(playerNames.Count);
 
-            roundRobinRound.RegisterPlayerReference(playerNames[0]).Should().NotBeNull();
+            tournament.RegisterPlayerReference(playerNames[0]).Should().NotBeNull();
             RunTestsWithOnePlayer(roundRobinRound.Groups.First());
 
-            roundRobinRound.RegisterPlayerReference(playerNames[1]).Should().NotBeNull();
+            tournament.RegisterPlayerReference(playerNames[1]).Should().NotBeNull();
             RunTestsWithTwoPlayers(roundRobinRound.Groups.First());
 
-            roundRobinRound.RegisterPlayerReference(playerNames[2]).Should().NotBeNull();
+            tournament.RegisterPlayerReference(playerNames[2]).Should().NotBeNull();
             RunTestsWithThreePlayers(roundRobinRound.Groups.First());
 
-            roundRobinRound.RegisterPlayerReference(playerNames[3]).Should().NotBeNull();
+            tournament.RegisterPlayerReference(playerNames[3]).Should().NotBeNull();
             RunTestsWithFourPlayers(roundRobinRound.Groups.First());
 
-            roundRobinRound.RegisterPlayerReference(playerNames[4]).Should().NotBeNull();
+            tournament.RegisterPlayerReference(playerNames[4]).Should().NotBeNull();
             RunTestsWithFivePlayers(roundRobinRound.Groups.First());
 
-            roundRobinRound.RegisterPlayerReference(playerNames[5]).Should().NotBeNull();
+            tournament.RegisterPlayerReference(playerNames[5]).Should().NotBeNull();
             RunTestsWithSixPlayers(roundRobinRound.Groups.First());
 
-            roundRobinRound.RegisterPlayerReference(playerNames[6]).Should().NotBeNull();
+            tournament.RegisterPlayerReference(playerNames[6]).Should().NotBeNull();
             RunTestsWithSevenPlayers(roundRobinRound.Groups.First());
 
-            roundRobinRound.RegisterPlayerReference(playerNames[7]).Should().NotBeNull();
+            tournament.RegisterPlayerReference(playerNames[7]).Should().NotBeNull();
             RunTestsWithEightPlayers(roundRobinRound.Groups.First());
         }
 
@@ -389,7 +389,7 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
         {
             foreach (string playerName in playerNames)
             {
-                roundRobinRound.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
 
             return roundRobinRound.Groups.First() as RoundRobinGroup;

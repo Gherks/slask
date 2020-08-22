@@ -7,7 +7,7 @@ Scenario: PlayState is set to NotBegun before any group has started
 		And tournament 0 adds rounds
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 4                       |
-	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 	Then play state of round 0 is set to "NotBegun"
 	
 Scenario: PlayState is set to Ongoing when at least one group has started but not all
@@ -16,7 +16,7 @@ Scenario: PlayState is set to Ongoing when at least one group has started but no
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 4                       |
 			| Bracket    | 1                         | 2                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
@@ -28,7 +28,7 @@ Scenario: PlayState set to Finished when all groups has finished
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 4                       |
 			| Bracket    | 1                         | 2                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 	When groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |

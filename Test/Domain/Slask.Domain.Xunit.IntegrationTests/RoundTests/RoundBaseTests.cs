@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
 using System.Collections.Generic;
@@ -181,7 +181,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.RoundTests
 
             foreach (string playerName in playerNames)
             {
-                round.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
 
             Match match = round.GetFirstMatch();
@@ -201,7 +201,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.RoundTests
 
             foreach (string playerName in playerNames)
             {
-                round.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
 
             Match match = round.GetLastMatch();

@@ -24,8 +24,8 @@ namespace Slask.Domain.Xunit.UnitTests.BetTests
             tournament = Tournament.Create("GSL 2019");
             better = tournament.AddBetter(user);
             round = tournament.AddBracketRound() as BracketRound;
-            round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Stork");
+            tournament.RegisterPlayerReference("Maru");
+            tournament.RegisterPlayerReference("Stork");
             group = round.Groups.First() as BracketGroup;
             firstMatch = group.Matches.First();
         }

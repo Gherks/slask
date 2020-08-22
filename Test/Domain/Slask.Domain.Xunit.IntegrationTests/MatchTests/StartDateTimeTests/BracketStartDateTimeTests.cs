@@ -34,7 +34,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests.StartDateTimeTests
 
             foreach (string playerName in playerNames)
             {
-                bracketRound.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
 
             BracketGroup bracketGroup = bracketRound.Groups.First() as BracketGroup;
@@ -64,7 +64,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests.StartDateTimeTests
 
             foreach (string playerName in playerNames)
             {
-                bracketRound.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
 
             BracketGroup bracketGroup = bracketRound.Groups.First() as BracketGroup;

@@ -22,9 +22,9 @@ namespace Slask.Domain.Xunit.UnitTests
         public void CannotSwitchPlacesOnPlayerReferenceWhenAnyPlayerIsNull()
         {
             bracketRound.SetPlayersPerGroupCount(4);
-            PlayerReference maruPlayerReference = bracketRound.RegisterPlayerReference("Maru");
-            PlayerReference storkPlayerReference = bracketRound.RegisterPlayerReference("Stork");
-            PlayerReference taejaPlayerReference = bracketRound.RegisterPlayerReference("Taeja");
+            PlayerReference maruPlayerReference = tournament.RegisterPlayerReference("Maru");
+            PlayerReference storkPlayerReference = tournament.RegisterPlayerReference("Stork");
+            PlayerReference taejaPlayerReference = tournament.RegisterPlayerReference("Taeja");
 
             BracketGroup group = bracketRound.Groups.First() as BracketGroup;
 

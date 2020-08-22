@@ -7,7 +7,7 @@ Scenario: Cannot reconfigure players per group count in round robin round when i
 		And tournament 0 adds rounds
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 1                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -19,7 +19,7 @@ Scenario: Cannot reconfigure advancing count in round robin round when it has st
 		And tournament 0 adds rounds
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 1                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -32,7 +32,7 @@ Scenario: PlayState is set to Ongoing when round has finished with a problematic
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 1                         | 3                       |
 			| Round robin | 1                         | 2                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -49,7 +49,7 @@ Scenario: Can detect several groups with problematic ties
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 1                         | 3                       |
 			| Round robin | 1                         | 2                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to tournament 0
 	When score is added to players in given matches in groups
 		| Group index | Match index | Scoring player | Added score |
 		| 0           | 0           | Maru           | 2           |
@@ -66,7 +66,7 @@ Scenario: Does not transfer any players to next round when group has problematic
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 1                         | 3                       |
 			| Round robin | 1                         | 2                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to tournament 0
 	When score is added to players in given matches in groups
 		| Group index | Match index | Scoring player | Added score |
 		| 0           | 0           | Maru           | 2           |
@@ -83,7 +83,7 @@ Scenario: Does not transfer any players to next round when group has problematic
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 2                         | 3                       |
 			| Bracket     | 1                         | 2                       |
-		And players "Maru, Stork, Taeja" is registered to round 0
+		And players "Maru, Stork, Taeja" is registered to tournament 0
 		And score is added to players in given matches in groups
 			| Group index | Match index | Scoring player | Added score |
 			| 0           | 0           | Maru           | 2           |

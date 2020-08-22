@@ -14,7 +14,7 @@ Scenario: Start time in matches in round robin groups is spaced with one hour up
 		And tournament 0 adds rounds
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 1                         | 8                       |
-	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 	Then minutes between matches in group 0 should be 60
 
 Scenario: Creates proper round robin layout upon group creation
@@ -22,7 +22,7 @@ Scenario: Creates proper round robin layout upon group creation
 		And tournament 0 adds rounds
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 1                         | 4                       |
-	When players "First, Second, Third, Fourth" is registered to round 0
+	When players "First, Second, Third, Fourth" is registered to tournament 0
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Third         |
@@ -38,7 +38,7 @@ Scenario: Round robin progression with four players goes as expected
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 2                         | 4                       |
 			| Round robin | 1                         | 2                       |
-		And players "First, Second, Third, Fourth" is registered to round 0
+		And players "First, Second, Third, Fourth" is registered to tournament 0
 	When groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
@@ -58,7 +58,7 @@ Scenario: Round robin progression with five players goes as expected
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 3                         | 5                       |
 			| Round robin | 1                         | 3                       |
-	And players "First, Second, Third, Fourth, Fifth" is registered to round 0
+	And players "First, Second, Third, Fourth, Fifth" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
@@ -82,7 +82,7 @@ Scenario: PlayState is set to Ongoing when group has finished with a problematic
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 1                         | 3                       |
 			| Round robin | 1                         | 2                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |

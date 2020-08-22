@@ -57,7 +57,7 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
 
             foreach (string playerName in playerNames)
             {
-                bracketRound.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
 
             BracketGroup bracketGroup = bracketRound.Groups.First() as BracketGroup;
@@ -98,7 +98,7 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
 
             foreach (string playerName in playerNames)
             {
-                bracketRound.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
 
             BracketGroup bracketGroup = bracketRound.Groups.First() as BracketGroup;
@@ -136,7 +136,7 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
 
             foreach (string playerName in playerNames)
             {
-                bracketRound.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
 
             bracketGroup = bracketRound.Groups.First() as BracketGroup;
@@ -172,7 +172,7 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
 
             foreach (string playerName in playerNames)
             {
-                bracketRound.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
 
             bracketGroup = bracketRound.Groups.First() as BracketGroup;
@@ -208,7 +208,7 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
 
             foreach (string playerName in playerNames)
             {
-                bracketRound.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
 
             bracketGroup = bracketRound.Groups.First() as BracketGroup;
@@ -233,8 +233,8 @@ namespace Slask.Domain.Xunit.UnitTests.GroupTests
 
         private void RegisterFirstTwoPlayers()
         {
-            firstPlayerReference = bracketRound.RegisterPlayerReference(firstPlayerName);
-            secondPlayerReference = bracketRound.RegisterPlayerReference(secondPlayerName);
+            firstPlayerReference = tournament.RegisterPlayerReference(firstPlayerName);
+            secondPlayerReference = tournament.RegisterPlayerReference(secondPlayerName);
             bracketGroup = bracketRound.Groups.First() as BracketGroup;
             match = bracketGroup.Matches.First();
         }

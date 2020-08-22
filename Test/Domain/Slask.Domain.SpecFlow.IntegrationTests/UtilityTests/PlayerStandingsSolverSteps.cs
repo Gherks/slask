@@ -3,6 +3,7 @@ using Slask.Common;
 using Slask.Domain.Groups;
 using Slask.Domain.SpecFlow.IntegrationTests.GroupTests;
 using Slask.Domain.Utilities.StandingsSolvers;
+using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
 
@@ -22,12 +23,10 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.UtilityTests
             GroupBase group = createdGroups[groupIndex];
             List<string> expectedPlayerNameOrder = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
-
             PlayerStandingsSolver playerStandingsSolver = new PlayerStandingsSolver();
             List<StandingsEntry<PlayerReference>> playerStandings = playerStandingsSolver.FetchFrom(group);
 
             playerStandings.Should().HaveCount(expectedPlayerNameOrder.Count);
-
             for (int index = 0; index < playerStandings.Count; ++index)
             {
                 playerStandings[index].Object.Name.Should().Be(expectedPlayerNameOrder[index]);

@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds.RoundTypes;
@@ -23,9 +23,9 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
         public void DoesNotFlagRoundAsProlematicTieWhenNoProblematicTieHappens()
         {
             round.SetPlayersPerGroupCount(3);
-            round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Stork");
-            round.RegisterPlayerReference("Taeja");
+            tournament.RegisterPlayerReference("Maru");
+            tournament.RegisterPlayerReference("Stork");
+            tournament.RegisterPlayerReference("Taeja");
 
             GroupBase group = round.Groups.First();
             Match match;
@@ -49,9 +49,9 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
         public void CanDetectWhenRoundRobinRoundContainsProblematicTie()
         {
             round.SetPlayersPerGroupCount(3);
-            round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Stork");
-            round.RegisterPlayerReference("Taeja");
+            tournament.RegisterPlayerReference("Maru");
+            tournament.RegisterPlayerReference("Stork");
+            tournament.RegisterPlayerReference("Taeja");
             GroupBase group = round.Groups.First();
 
             foreach (Match match in round.Groups.First().Matches)
@@ -67,9 +67,9 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
         public void RoundIsOngoingUntilTieIsSolved()
         {
             round.SetPlayersPerGroupCount(3);
-            round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Stork");
-            round.RegisterPlayerReference("Taeja");
+            tournament.RegisterPlayerReference("Maru");
+            tournament.RegisterPlayerReference("Stork");
+            tournament.RegisterPlayerReference("Taeja");
             GroupBase group = round.Groups.First();
 
             foreach (Match match in round.Groups.First().Matches)
@@ -86,9 +86,9 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
         {
             round.SetPlayersPerGroupCount(3);
             round.SetAdvancingPerGroupCount(2);
-            round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Stork");
-            round.RegisterPlayerReference("Taeja");
+            PlayerReference maruPlayerReference = tournament.RegisterPlayerReference("Maru");
+            PlayerReference storkPlayerReference = tournament.RegisterPlayerReference("Stork");
+            PlayerReference taejaPlayerReference = tournament.RegisterPlayerReference("Taeja");
 
             BracketRound bracketRound = tournament.AddBracketRound();
 
@@ -119,9 +119,9 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
         public void SolvingTieWhenThereIsNoTieDoesNothing()
         {
             round.SetPlayersPerGroupCount(3);
-            round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Stork");
-            round.RegisterPlayerReference("Taeja");
+            PlayerReference maruPlayerReference = tournament.RegisterPlayerReference("Maru");
+            PlayerReference storkPlayerReference = tournament.RegisterPlayerReference("Stork");
+            PlayerReference taejaPlayerReference = tournament.RegisterPlayerReference("Taeja");
 
             GroupBase group = round.Groups.First();
             Match match;

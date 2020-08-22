@@ -30,10 +30,10 @@ namespace Slask.Domain.Xunit.IntegrationTests.PlayerTests
 
             foreach (string playerName in playerNames)
             {
-                round.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
 
-            round.RegisterPlayerReference("Stork");
+            tournament.RegisterPlayerReference("Stork");
             group = round.Groups.First() as DualTournamentGroup;
             match = group.Matches.First();
             match.SetBestOf(5);

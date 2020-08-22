@@ -1,4 +1,4 @@
-﻿Feature: Group
+Feature: Group
 	Does a bunch of tests on Groups
 
 @GroupTag
@@ -7,7 +7,7 @@ Scenario: Player reference is added to tournament when new player is added to gr
 		And tournament 0 adds rounds
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 4                       |
-	When players "Maru, Stork, Taeja, Rain" is registered to round 0
+	When players "Maru, Stork, Taeja, Rain" is registered to tournament 0
 	Then tournament 0 should contain exactly these player references with names: "Maru, Stork, Taeja, Rain"
 
 Scenario: Cannot add new players to groups not within first round
@@ -26,7 +26,7 @@ Scenario: PlayState is set to NotBegun before any match has started
 		And tournament 0 adds rounds
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 4                       |
-	When players "Maru, Stork, Taeja, Rain" is registered to round 0
+	When players "Maru, Stork, Taeja, Rain" is registered to tournament 0
 	Then play state of group 0 is set to "NotBegun"
 	
 Scenario: PlayState is set to Ongoing when at least one match has started but not all
@@ -34,7 +34,7 @@ Scenario: PlayState is set to Ongoing when at least one match has started but no
 		And tournament 0 adds rounds
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain" is registered to tournament 0
 	When score is added to players in given matches in groups
 		| Group index | Match index | Scoring player | Added score |
 		| 0           | 0           | Maru           | 1           |
@@ -45,7 +45,7 @@ Scenario: PlayState set to Finished when all matches has finished
 		And tournament 0 adds rounds
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain" is registered to tournament 0
 	When score is added to players in given matches in groups
 		| Group index | Match index | Scoring player | Added score |
 		| 0           | 0           | Maru           | 2           |

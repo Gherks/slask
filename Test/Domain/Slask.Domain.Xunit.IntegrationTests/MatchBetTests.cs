@@ -23,8 +23,8 @@ namespace Slask.Domain.Xunit.IntegrationTests
             user = User.Create("Stålberto");
             tournament = Tournament.Create("GSL 2019");
             round = tournament.AddBracketRound();
-            round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Stork");
+            tournament.RegisterPlayerReference("Maru");
+            tournament.RegisterPlayerReference("Stork");
             group = round.Groups.First();
             match = group.Matches.First();
         }
@@ -67,7 +67,7 @@ namespace Slask.Domain.Xunit.IntegrationTests
         {
             Better better = tournament.AddBetter(user);
             round.SetPlayersPerGroupCount(3);
-            round.RegisterPlayerReference("Taeja");
+            tournament.RegisterPlayerReference("Taeja");
 
             group = round.Groups.First();
             Match incompleteMatch = group.Matches.Last();
@@ -82,8 +82,8 @@ namespace Slask.Domain.Xunit.IntegrationTests
         {
             Better better = tournament.AddBetter(user);
             round.SetPlayersPerGroupCount(2);
-            round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Taeja");
+            tournament.RegisterPlayerReference("Maru");
+            tournament.RegisterPlayerReference("Taeja");
 
             group = round.Groups.First();
             Match match = group.Matches.First();
@@ -98,7 +98,7 @@ namespace Slask.Domain.Xunit.IntegrationTests
         {
             Better better = tournament.AddBetter(user);
             round.SetPlayersPerGroupCount(3);
-            round.RegisterPlayerReference("Taeja");
+            tournament.RegisterPlayerReference("Taeja");
 
             group = round.Groups.First();
             Match incompleteMatch = group.Matches.Last();
@@ -168,8 +168,8 @@ namespace Slask.Domain.Xunit.IntegrationTests
             Better better = tournament.AddBetter(user);
 
             round.SetPlayersPerGroupCount(4);
-            round.RegisterPlayerReference("Taeja");
-            round.RegisterPlayerReference("Rain");
+            tournament.RegisterPlayerReference("Taeja");
+            tournament.RegisterPlayerReference("Rain");
             group = round.Groups.First();
 
             Match firstMatch = group.Matches[0];

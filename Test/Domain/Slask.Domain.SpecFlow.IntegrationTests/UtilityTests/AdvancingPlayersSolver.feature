@@ -8,7 +8,7 @@ Scenario: Can fetch advancing players from finished round
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 5                         | 8                       |
 			| Bracket     | 1                         | 5                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
@@ -20,7 +20,7 @@ Scenario: Can fetch advancing players from finished group
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 2                         | 4                       |
 			| Bracket     | 1                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
@@ -31,7 +31,7 @@ Scenario: Cannot fetch advancing players from round that is unfinished
 		And tournament 0 adds rounds
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 2                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |
@@ -42,7 +42,7 @@ Scenario: Cannot fetch advancing players from group that is unfinished
 		And tournament 0 adds rounds
 			| Round type  | Advancing per group count | Players per group count |
 			| Round robin | 2                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |

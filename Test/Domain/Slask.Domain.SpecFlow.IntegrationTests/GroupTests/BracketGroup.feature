@@ -14,7 +14,7 @@ Scenario: Start time in matches in bracket group is spaced with one hour upon cr
 		And tournament 0 adds rounds
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 8                       |
-	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 	Then minutes between matches in group 0 should be 60
 
 Scenario: Creates proper bracket layout upon group creation
@@ -38,7 +38,7 @@ Scenario: Creates proper bracket layout upon group creation
 		And tournament 0 adds rounds
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 8                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to tournament 0
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |
@@ -58,7 +58,7 @@ Scenario: When bracket has five participants the first match should contain two 
 		And tournament 0 adds rounds
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 5                       |
-	When players "First, Second, Third, Fourth, Fifth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth" is registered to tournament 0
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |
@@ -83,7 +83,7 @@ Scenario: When bracket has seven participants the third match should contain two
 		And tournament 0 adds rounds
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 7                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh" is registered to tournament 0
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |
@@ -112,7 +112,7 @@ Scenario: When bracket has nine participants the first match should contain two 
 		And tournament 0 adds rounds
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 9                       |
-	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth" is registered to round 0
+	When players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth, Ninth" is registered to tournament 0
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |
@@ -142,7 +142,7 @@ Scenario: Bracket progression goes as expected
 		And tournament 0 adds rounds
 			| Round type | Advancing per group count | Players per group count |
 			| Bracket    | 1                         | 8                       |
-		And players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to round 0
+		And players "First, Second, Third, Fourth, Fifth, Sixth, Seventh, Eighth" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |

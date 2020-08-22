@@ -60,7 +60,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests.StartDateTimeTests
         {
             foreach (string playerName in playerNames)
             {
-                roundRobinRound.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
 
             return roundRobinRound.Groups.First() as RoundRobinGroup;

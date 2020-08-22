@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
@@ -96,9 +96,9 @@ namespace Slask.Domain.Xunit.IntegrationTests.RoundTests.RoundTypeTests
         public void DoesNotFlagRoundAsProlematicTieWhenNoProblematicTieHappens()
         {
             round.SetPlayersPerGroupCount(3);
-            round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Stork");
-            round.RegisterPlayerReference("Taeja");
+            tournament.RegisterPlayerReference("Maru");
+            tournament.RegisterPlayerReference("Stork");
+            tournament.RegisterPlayerReference("Taeja");
 
             Match match;
 
@@ -121,9 +121,9 @@ namespace Slask.Domain.Xunit.IntegrationTests.RoundTests.RoundTypeTests
         public void CanDetectWhenRoundRobinRoundContainsProblematicTie()
         {
             round.SetPlayersPerGroupCount(3);
-            round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Stork");
-            round.RegisterPlayerReference("Taeja");
+            tournament.RegisterPlayerReference("Maru");
+            tournament.RegisterPlayerReference("Stork");
+            tournament.RegisterPlayerReference("Taeja");
 
             foreach (Match match in round.Groups.First().Matches)
             {
@@ -138,9 +138,9 @@ namespace Slask.Domain.Xunit.IntegrationTests.RoundTests.RoundTypeTests
         public void RoundIsOngoingUntilTieIsSolved()
         {
             round.SetPlayersPerGroupCount(3);
-            round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Stork");
-            round.RegisterPlayerReference("Taeja");
+            tournament.RegisterPlayerReference("Maru");
+            tournament.RegisterPlayerReference("Stork");
+            tournament.RegisterPlayerReference("Taeja");
 
             foreach (Match match in round.Groups.First().Matches)
             {
@@ -155,9 +155,9 @@ namespace Slask.Domain.Xunit.IntegrationTests.RoundTests.RoundTypeTests
         public void SolvingTieWhenThereIsNoTieDoesNothing()
         {
             round.SetPlayersPerGroupCount(3);
-            round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Stork");
-            round.RegisterPlayerReference("Taeja");
+            PlayerReference maruPlayerReference = tournament.RegisterPlayerReference("Maru");
+            PlayerReference storkPlayerReference = tournament.RegisterPlayerReference("Stork");
+            PlayerReference taejaPlayerReference = tournament.RegisterPlayerReference("Taeja");
 
             Match match;
 

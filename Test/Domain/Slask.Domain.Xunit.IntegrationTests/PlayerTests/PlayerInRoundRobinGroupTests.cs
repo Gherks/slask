@@ -27,7 +27,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.PlayerTests
 
             foreach (string playerName in playerNames)
             {
-                round.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
 
             group = round.Groups.First() as RoundRobinGroup;

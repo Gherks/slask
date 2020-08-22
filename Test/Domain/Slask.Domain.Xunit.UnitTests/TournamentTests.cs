@@ -63,9 +63,9 @@ namespace Slask.Domain.Xunit.UnitTests
         [Fact]
         public void CanGetPlayerReferenceInTournamentByPlayerId()
         {
-            PlayerReference playerReference = bracketRound.RegisterPlayerReference("Maru");
+            PlayerReference playerReference = tournament.RegisterPlayerReference("Maru");
 
-            PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByPlayerId(playerReference.Id);
+            PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceById(playerReference.Id);
 
             fetchedPlayerReference.Should().NotBeNull();
             fetchedPlayerReference.Id.Should().Be(playerReference.Id);
@@ -75,9 +75,9 @@ namespace Slask.Domain.Xunit.UnitTests
         [Fact]
         public void CanGetPlayerInTournamentByPlayerName()
         {
-            PlayerReference playerReference = bracketRound.RegisterPlayerReference("Maru");
+            PlayerReference playerReference = tournament.RegisterPlayerReference("Maru");
 
-            PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByPlayerName(playerReference.Name);
+            PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByName(playerReference.Name);
 
             fetchedPlayerReference.Should().NotBeNull();
             fetchedPlayerReference.Id.Should().Be(playerReference.Id);
@@ -168,43 +168,39 @@ namespace Slask.Domain.Xunit.UnitTests
 
             foreach (string playerName in playerNames)
             {
-                bracketRound.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
 
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferences();
-
-            playerReferences.Should().HaveCount(playerNames.Count);
+            tournament.PlayerReferences.Should().HaveCount(playerNames.Count);
             foreach (string playerName in playerNames)
             {
-                playerReferences.Single(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+                tournament.PlayerReferences.Single(playerReference => playerReference.Name == playerName).Should().NotBeNull();
             }
         }
 
         public void FetchingAllPlayerReferencesShouldNotYieldTwoPlayerReferencesWithSameName()
         {
             string playerName = "Maru";
-            bracketRound.RegisterPlayerReference(playerName);
-            bracketRound.RegisterPlayerReference(playerName);
+            tournament.RegisterPlayerReference(playerName);
+            tournament.RegisterPlayerReference(playerName);
 
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferences();
-
-            playerReferences.Should().HaveCount(1);
-            playerReferences.First().Name.Should().Be(playerName);
+            tournament.PlayerReferences.Should().HaveCount(1);
+            tournament.PlayerReferences.First().Name.Should().Be(playerName);
         }
 
         [Fact]
         public void FetchingAllPlayerRefencesShouldNotYieldRemovedPlayerReferences()
         {
             string playerName = "Maru";
-            bracketRound.RegisterPlayerReference(playerName);
+            tournament.RegisterPlayerReference(playerName);
 
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferences();
+            List<PlayerReference> playerReferences = tournament.PlayerReferences;
             playerReferences.Should().HaveCount(1);
             playerReferences.First().Name.Should().Be(playerName);
 
-            bracketRound.ExcludePlayerReference(playerName);
+            tournament.ExcludePlayerReference(playerName);
 
-            playerReferences = tournament.GetPlayerReferences();
+            playerReferences = tournament.PlayerReferences;
             playerReferences.Should().BeEmpty();
         }
 

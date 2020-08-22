@@ -65,7 +65,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests.StartDateTimeTests
         {
             foreach (string playerName in playerNames)
             {
-                dualTournamentRound.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
 
             return dualTournamentRound.Groups.First() as DualTournamentGroup;

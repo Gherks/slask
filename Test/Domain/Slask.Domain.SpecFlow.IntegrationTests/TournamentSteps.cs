@@ -120,20 +120,20 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
             createdRounds.AddRange(tournament.Rounds);
         }
 
-        [Given(@"players ""(.*)"" is registered to round (.*)")]
-        [When(@"players ""(.*)"" is registered to round (.*)")]
-        [Then(@"players ""(.*)"" is registered to round (.*)")]
-        public void GivenPlayersIsRegisteredToRound(string commaSeparatedPlayerNames, int roundIndex)
+        [Given(@"players ""(.*)"" is registered to tournament (.*)")]
+        [When(@"players ""(.*)"" is registered to tournament (.*)")]
+        [Then(@"players ""(.*)"" is registered to tournament (.*)")]
+        public void GivenPlayersIsRegisteredToRound(string commaSeparatedPlayerNames, int tournamentIndex)
         {
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
-            RoundBase round = createdRounds[roundIndex];
+            Tournament tournament = createdTournaments[tournamentIndex];
 
             foreach (string playerName in playerNames)
             {
-                round.RegisterPlayerReference(playerName);
+                tournament.RegisterPlayerReference(playerName);
             }
 
-            round = round.Tournament.GetFirstRound();
+            RoundBase round = tournament.GetFirstRound();
 
             createdGroups.Clear();
             while (round != null)
@@ -143,16 +143,16 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
             }
         }
 
-        [Given(@"players ""(.*)"" is excluded from round (.*)")]
-        [When(@"players ""(.*)"" is excluded from round (.*)")]
-        public void GivenPlayersIsExcludedFromRound(string commaSeparatedPlayerNames, int roundIndex)
+        [Given(@"players ""(.*)"" is excluded from tournament (.*)")]
+        [When(@"players ""(.*)"" is excluded from tournament (.*)")]
+        public void GivenPlayersIsExcludedFromRound(string commaSeparatedPlayerNames, int tournamentIndex)
         {
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
-            RoundBase round = createdRounds[roundIndex];
+            Tournament tournament = createdTournaments[tournamentIndex];
 
             foreach (string playerName in playerNames)
             {
-                round.ExcludePlayerReference(playerName);
+                tournament.ExcludePlayerReference(playerName);
             }
         }
 
@@ -273,7 +273,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
             Tournament tournament = createdTournaments[tournamentIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparetedPlayerNames, ",");
 
-            List<PlayerReference> playerReferences = tournament.GetPlayerReferences();
+            List<PlayerReference> playerReferences = tournament.PlayerReferences;
 
             playerReferences.Should().HaveCount(playerNames.Count);
 
@@ -289,11 +289,12 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
             RoundBase round = createdRounds[roundIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
-            round.PlayerReferences.Should().HaveCount(playerNames.Count);
+            List<PlayerReference> playerReferences = round.Tournament.GetPlayerReferencesByPlayerReferenceIds(round.GetPlayerReferenceIds());
 
-            for (int index = 0; index < round.PlayerReferences.Count; ++index)
+            playerReferences.Should().HaveCount(playerNames.Count);
+            for (int index = 0; index < playerReferences.Count; ++index)
             {
-                round.PlayerReferences[index].Name.Should().Be(playerNames[index]);
+                playerReferences[index].Name.Should().Be(playerNames[index]);
             }
         }
 

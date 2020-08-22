@@ -23,8 +23,8 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests
         {
             tournament = Tournament.Create("GSL 2019");
             bracketRound = tournament.AddBracketRound() as BracketRound;
-            bracketRound.RegisterPlayerReference(firstPlayerName);
-            bracketRound.RegisterPlayerReference(secondPlayerName);
+            tournament.RegisterPlayerReference(firstPlayerName);
+            tournament.RegisterPlayerReference(secondPlayerName);
             bracketGroup = bracketRound.Groups.First() as BracketGroup;
             match = bracketGroup.Matches.First();
         }
@@ -105,7 +105,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests
         {
             Tournament tournament = Tournament.Create("GSL 2019");
             BracketRound bracketRound = tournament.AddBracketRound() as BracketRound;
-            PlayerReference playerReference = bracketRound.RegisterPlayerReference(firstPlayerName);
+            PlayerReference playerReference = tournament.RegisterPlayerReference(firstPlayerName);
 
             Match match = bracketRound.Groups.First().Matches.First();
 

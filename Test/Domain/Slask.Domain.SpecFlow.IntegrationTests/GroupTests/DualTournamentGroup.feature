@@ -14,7 +14,7 @@ Scenario: Start time in matches in dual tournament group is spaced with one hour
 		And tournament 0 adds rounds
 			| Round type      | Advancing per group count | Players per group count |
 			| Dual tournament | 2                         | 4                       |
-	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to round 0
+	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 	Then minutes between matches in group 0 should be 60
 
 Scenario: Creates proper dual tournament layout upon group creation
@@ -29,7 +29,7 @@ Scenario: Creates proper dual tournament layout upon group creation
 		And tournament 0 adds rounds
 			| Round type      | Advancing per group count | Players per group count |
 			| Dual tournament | 2                         | 4                       |
-	When players "First, Second, Third, Fourth" is registered to round 0
+	When players "First, Second, Third, Fourth" is registered to tournament 0
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | First         | Second        |
@@ -48,7 +48,7 @@ Scenario: Dual tournament progression goes as expected
 			| Round type      | Advancing per group count | Players per group count |
 			| Dual tournament | 2                         | 4                       |
 			| Bracket         | 1                         | 2                       |
-		And players "First, Second, Third, Fourth" is registered to round 0
+		And players "First, Second, Third, Fourth" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
 		| 0                | 0           | 0           |

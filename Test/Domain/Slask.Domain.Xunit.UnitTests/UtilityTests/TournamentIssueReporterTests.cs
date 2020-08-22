@@ -19,8 +19,8 @@ namespace Slask.Domain.Xunit.UnitTests.UtilityTests
         {
             tournament = Tournament.Create("GSL 2019");
             round = tournament.AddBracketRound();
-            round.RegisterPlayerReference("Maru");
-            round.RegisterPlayerReference("Stork");
+            tournament.RegisterPlayerReference("Maru");
+            tournament.RegisterPlayerReference("Stork");
             group = round.Groups.First();
             match = group.Matches.First();
 
