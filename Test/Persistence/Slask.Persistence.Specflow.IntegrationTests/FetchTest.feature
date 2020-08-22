@@ -274,11 +274,11 @@ Scenario: Can fetch completed tournament in correct way
 			| Stålberto   | 18     |
 			| Bönis       | 17     |
 			| Guggelito   | 15     |
-	Then fetched tournament 0 should contain rounds
+	Then tournament named "Homestory Cup XX" should contain rounds
 		| Round type      |
 		| Round robin     |
 		| Dual tournament |
 		| Bracket         |
-		And groups within round 0 in fetched tournament 0 is of type "Round robin"
-		And groups within round 1 in fetched tournament 0 is of type "Dual tournament"
-		And groups within round 2 in fetched tournament 0 is of type "Bracket"
+		And groups within round 0 in tournament named "Homestory Cup XX" is of type "Round robin"
+		And groups within round 1 in tournament named "Homestory Cup XX" is of type "Dual tournament"
+		And groups within round 2 in tournament named "Homestory Cup XX" is of type "Bracket"

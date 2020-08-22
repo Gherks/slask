@@ -19,13 +19,13 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
     public class FetchTestStepDefinitions : TournamentServiceStepDefinitions
     {
-        [Then(@"fetched tournament (.*) should contain rounds")]
-        public void ThenFetchedTournamentShouldContainRounds(int fetchedTournamentIndex, Table table)
+        [Then(@"tournament named ""(.*)"" should contain rounds")]
+        public void ThenFetchedTournamentShouldContainRounds(string tournamentName, Table table)
         {
             Tournament tournament;
             using (TournamentService tournamentService = CreateTournamentService())
             {
-                tournament = tournamentService.GetTournamentByName("Homestory Cup XX");
+                tournament = tournamentService.GetTournamentByName(tournamentName);
             }
 
             for (int index = 0; index < table.Rows.Count; ++index)
@@ -65,13 +65,13 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
         }
 
-        [Then(@"groups within round (.*) in fetched tournament (.*) is of type ""(.*)""")]
-        public void ThenGroupsWithinRoundInFetchedTournamentIsOfType(int roundIndex, int fetchedTournamentIndex, string groupType)
+        [Then(@"groups within round (.*) in tournament named ""(.*)"" is of type ""(.*)""")]
+        public void ThenGroupsWithinRoundInFetchedTournamentIsOfType(int roundIndex, string tournamentName, string groupType)
         {
             Tournament tournament;
             using (TournamentService tournamentService = CreateTournamentService())
             {
-                tournament = tournamentService.GetTournamentByName("Homestory Cup XX");
+                tournament = tournamentService.GetTournamentByName(tournamentName);
             }
 
             RoundBase round = tournament.Rounds[roundIndex];
