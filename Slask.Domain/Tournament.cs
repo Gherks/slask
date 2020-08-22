@@ -335,12 +335,12 @@ namespace Slask.Domain
 
         public PlayerReference GetPlayerReferenceByPlayerId(Guid id)
         {
-            return GetPlayerReferences().FirstOrDefault(playerReference => playerReference.Id == id);
+            return PlayerReferences.FirstOrDefault(playerReference => playerReference.Id == id);
         }
 
         public PlayerReference GetPlayerReferenceByPlayerName(string name)
         {
-            return GetPlayerReferences().FirstOrDefault(playerReference => playerReference.Name == name);
+            return PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == name);
         }
 
         public Better GetBetterById(Guid id)
