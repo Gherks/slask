@@ -289,7 +289,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
             RoundBase round = createdRounds[roundIndex];
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
-            List<PlayerReference> playerReferences = round.Tournament.GetPlayerReferencesByPlayerReferenceIds(round.GetPlayerReferenceIds());
+            List<PlayerReference> playerReferences = round.Tournament.GetPlayerReferencesByIds(round.GetPlayerReferenceIds());
 
             playerReferences.Should().HaveCount(playerNames.Count);
             for (int index = 0; index < playerReferences.Count; ++index)

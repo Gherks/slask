@@ -343,6 +343,40 @@ namespace Slask.Domain
             return PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == name);
         }
 
+        public List<PlayerReference> GetPlayerReferencesByIds(List<Guid> playerReferenceIds)
+        {
+            List<PlayerReference> playerReferences = new List<PlayerReference>();
+
+            foreach (Guid playerReferenceId in playerReferenceIds)
+            {
+                PlayerReference playerReference = GetPlayerReferenceById(playerReferenceId);
+
+                if(playerReference != null)
+                {
+                    playerReferences.Add(playerReference);
+                }
+            }
+
+            return playerReferences;
+        }
+
+        public List<PlayerReference> GetPlayerReferencesByNames(List<string> playerReferenceNames)
+        {
+            List<PlayerReference> playerReferences = new List<PlayerReference>();
+
+            foreach (string playerReferenceName in playerReferenceNames)
+            {
+                PlayerReference playerReference = GetPlayerReferenceByName(playerReferenceName);
+
+                if (playerReference != null)
+                {
+                    playerReferences.Add(playerReference);
+                }
+            }
+
+            return playerReferences;
+        }
+
         public Better GetBetterById(Guid id)
         {
             return Betters.FirstOrDefault(better => better.Id == id);
@@ -351,18 +385,6 @@ namespace Slask.Domain
         public Better GetBetterByName(string name)
         {
             return Betters.FirstOrDefault(better => better.User.Name.ToLower() == name.ToLower());
-        }
-
-        public List<PlayerReference> GetPlayerReferences()
-        {
-            bool tournamentHasNoRounds = Rounds.Count == 0;
-
-            if (tournamentHasNoRounds)
-            {
-                return new List<PlayerReference>();
-            }
-
-            return Rounds.First().PlayerReferences;
         }
 
         public PlayStateEnum GetPlayState()
