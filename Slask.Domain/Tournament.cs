@@ -333,12 +333,12 @@ namespace Slask.Domain
             return Rounds.Last();
         }
 
-        public PlayerReference GetPlayerReferenceByPlayerId(Guid id)
+        public PlayerReference GetPlayerReferenceById(Guid id)
         {
             return PlayerReferences.FirstOrDefault(playerReference => playerReference.Id == id);
         }
 
-        public PlayerReference GetPlayerReferenceByPlayerName(string name)
+        public PlayerReference GetPlayerReferenceByName(string name)
         {
             return PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == name);
         }
