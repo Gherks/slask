@@ -1,6 +1,7 @@
 ﻿using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Utilities.StandingsSolvers;
+using System;
 using System.Collections.Generic;
 
 namespace Slask.Domain.Utilities
@@ -27,18 +28,18 @@ namespace Slask.Domain.Utilities
             if (group.GetPlayState() == PlayStateEnum.Finished)
             {
                 PlayerStandingsSolver playerStandingsSolver = new PlayerStandingsSolver();
-                List<StandingsEntry<PlayerReference>> playerStandings = playerStandingsSolver.FetchFrom(group);
-                playerStandings = FilterAdvancingPlayers(group, playerStandings);
+                List<StandingsEntry<PlayerReference>> playerReferences = playerStandingsSolver.FetchFrom(group);
+                playerReferences = FilterAdvancingPlayers(group, playerReferences);
 
                 if (group.HasProblematicTie())
                 {
-                    playerStandings = FilterTyingPlayers(group, playerStandings);
-                    playerStandings.AddRange(group.ChoosenTyingPlayerEntries);
+                    playerReferences = FilterTyingPlayers(group, playerReferences);
+                    playerReferences.AddRange(group.ChoosenTyingPlayerEntries);
                 }
 
                 List<PlayerReference> advancingPlayers = new List<PlayerReference>();
 
-                foreach (StandingsEntry<PlayerReference> entry in playerStandings)
+                foreach (StandingsEntry<PlayerReference> entry in playerReferences)
                 {
                     advancingPlayers.Add(entry.Object);
                 }
