@@ -1,4 +1,4 @@
-﻿using Slask.Domain.Groups.GroupUtility;
+using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
 using System;
@@ -94,6 +94,12 @@ namespace Slask.Domain.Groups.GroupTypes
             {
                 // LOG Error: Match does not exist in this group
                 return;
+            }
+
+            if (BracketNodeSystem == null)
+            {
+                BracketNodeSystem = new BracketNodeSystem();
+                BracketNodeSystem.Construct(Matches);
             }
 
             BracketNode finalNode = BracketNodeSystem.FinalNode;
