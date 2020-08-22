@@ -32,8 +32,6 @@ namespace Slask.Domain
         public List<RoundBase> Rounds { get; private set; }
         public List<PlayerReference> PlayerReferences { get; private set; }
         public List<Better> Betters { get; private set; }
-
-        // Ignored by SlaskContext
         public TournamentIssueReporter TournamentIssueReporter { get; private set; }
 
         public static Tournament Create(string name)
