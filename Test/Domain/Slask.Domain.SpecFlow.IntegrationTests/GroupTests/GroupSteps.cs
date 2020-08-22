@@ -75,7 +75,6 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.GroupTests
             List<PlayerReference> playerReferences = group.GetPlayerReferences();
 
             playerReferences.Should().HaveCount(playerNames.Count);
-
             foreach (string playerName in playerNames)
             {
                 playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
@@ -131,13 +130,12 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.GroupTests
             RoundBase round = createdRounds[roundIndex];
             List<string> expectedPlayerNameOrder = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
-            List<PlayerReference> playerStandings = AdvancingPlayersSolver.FetchFrom(round);
+            List<PlayerReference> playerReferences = AdvancingPlayersSolver.FetchFrom(round);
 
-            playerStandings.Should().HaveCount(expectedPlayerNameOrder.Count);
-
-            for (int index = 0; index < playerStandings.Count; ++index)
+            playerReferences.Should().HaveCount(expectedPlayerNameOrder.Count);
+            for (int index = 0; index < playerReferences.Count; ++index)
             {
-                playerStandings[index].Name.Should().Be(expectedPlayerNameOrder[index]);
+                playerReferences[index].Name.Should().Be(expectedPlayerNameOrder[index]);
             }
         }
 
@@ -147,13 +145,12 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.GroupTests
             GroupBase group = createdGroups[groupIndex];
             List<string> expectedPlayerNameOrder = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
-            List<PlayerReference> playerStandings = AdvancingPlayersSolver.FetchFrom(group);
+            List<PlayerReference> playerReferences = AdvancingPlayersSolver.FetchFrom(group);
 
-            playerStandings.Should().HaveCount(expectedPlayerNameOrder.Count);
-
-            for (int index = 0; index < playerStandings.Count; ++index)
+            playerReferences.Should().HaveCount(expectedPlayerNameOrder.Count);
+            for (int index = 0; index < playerReferences.Count; ++index)
             {
-                playerStandings[index].Name.Should().Be(expectedPlayerNameOrder[index]);
+                playerReferences[index].Name.Should().Be(expectedPlayerNameOrder[index]);
             }
         }
 

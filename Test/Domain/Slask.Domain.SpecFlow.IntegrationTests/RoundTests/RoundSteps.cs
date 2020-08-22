@@ -135,7 +135,6 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
             List<PlayerReference> playerReferences = AdvancingPlayersSolver.FetchFrom(group);
 
             playerReferences.Should().HaveCount(playerNames.Count);
-
             foreach (string playerName in playerNames)
             {
                 playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();

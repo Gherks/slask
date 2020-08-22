@@ -2,6 +2,7 @@
 using Slask.Common;
 using Slask.Domain.Rounds;
 using Slask.Domain.SpecFlow.IntegrationTests.GroupTests;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using TechTalk.SpecFlow;
@@ -75,13 +76,12 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
     {
         public static void FetchingAdvancingPlayersInRoundYieldsGivenPlayerNames(RoundBase round, List<string> playerNames)
         {
-            List<PlayerReference> fetchedPlayerReferences = round.GetAdvancingPlayerReferences();
+            List<PlayerReference> playerReferences = round.GetAdvancingPlayerReferences();
 
-            fetchedPlayerReferences.Should().HaveCount(playerNames.Count);
-
+            playerReferences.Should().HaveCount(playerNames.Count);
             foreach (string playerName in playerNames)
             {
-                fetchedPlayerReferences.SingleOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
+                playerReferences.SingleOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
             }
         }
 
