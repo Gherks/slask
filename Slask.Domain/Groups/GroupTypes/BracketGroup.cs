@@ -1,4 +1,4 @@
-using Slask.Domain.Groups.GroupUtility;
+﻿using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
 using System;
@@ -134,28 +134,13 @@ namespace Slask.Domain.Groups.GroupTypes
         {
             for (int matchIndex = 0; matchIndex < Matches.Count; ++matchIndex)
             {
-                PlayerReference playerReference1 = null;
-                PlayerReference playerReference2 = null;
+                int firstIndex = matchIndex * 2;
+                int secondIndex = matchIndex * 2 + 1;
 
-                try
-                {
-                    playerReference1 = playerReferences[matchIndex * 2];
-                    playerReference2 = playerReferences[matchIndex * 2 + 1];
+                Guid playerReference1Id = playerReferences.Count > firstIndex ? playerReferences[firstIndex].Id : Guid.Empty;
+                Guid playerReference2Id = playerReferences.Count > secondIndex ? playerReferences[secondIndex].Id : Guid.Empty;
 
-                    Matches[matchIndex].AssignPlayerReferencesToPlayers(playerReference1.Id, playerReference2.Id);
-                }
-                catch
-                {
-                    bool anyPlayerReferenceIsValid = playerReference1 != null || playerReference2 != null;
-                    if (anyPlayerReferenceIsValid)
-                    {
-                        Guid playerReference1Id = playerReference1 != null ? playerReference1.Id : Guid.Empty;
-                        Guid playerReference2Id = playerReference2 != null ? playerReference2.Id : Guid.Empty;
-
-                        Matches[matchIndex].AssignPlayerReferencesToPlayers(playerReference1Id, playerReference2Id);
-                    }
-                    return;
-                }
+                Matches[matchIndex].AssignPlayerReferencesToPlayers(playerReference1Id, playerReference2Id);
             }
         }
     }
