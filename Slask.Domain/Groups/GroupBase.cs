@@ -185,14 +185,21 @@ namespace Slask.Domain.Groups
             return problematicPlayers;
         }
 
-        public bool SolveTieByChoosing(string playerName)
+        public bool SolveTieByChoosing(Guid playerReferenceId)
+        {
+            PlayerReference playerReference = Round.Tournament.GetPlayerReferenceById(playerReferenceId);
+
+            return SolveTieByChoosing(playerReference);
+        }
+
+        public bool SolveTieByChoosing(PlayerReference playerReference)
         {
             List<StandingsEntry<PlayerReference>> tyingPlayers = FindProblematiclyTyingPlayers();
             bool hasTyingPlayers = tyingPlayers.Count > 0;
 
             if (hasTyingPlayers)
             {
-                bool playerChosen = ChooseTyingPlayer(playerName);
+                bool playerChosen = ChooseTyingPlayer(playerReference);
                 bool tieSolved = HasSolvedTie();
 
                 if (playerChosen && tieSolved)
@@ -282,13 +289,13 @@ namespace Slask.Domain.Groups
             }
         }
 
-        private bool ChooseTyingPlayer(string playerName)
+        private bool ChooseTyingPlayer(PlayerReference playerReference)
         {
             List<StandingsEntry<PlayerReference>> tyingPlayers = FindProblematiclyTyingPlayers();
 
             foreach (StandingsEntry<PlayerReference> entry in tyingPlayers)
             {
-                if (entry.Object.Name == playerName)
+                if (entry.Object.Id == playerReference.Id)
                 {
                     bool haveNotChosePlayerAlready = !ChoosenTyingPlayerEntries.Contains(entry);
 

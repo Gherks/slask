@@ -18,6 +18,7 @@ namespace Slask.Domain.Groups
         public List<StandingsEntry<PlayerReference>> ChoosenTyingPlayerEntries { get; }
 
         bool AddPlayerReferences(List<PlayerReference> playerReferences);
+        List<Guid> GetPlayerReferenceIds();
         List<PlayerReference> GetPlayerReferences();
         PlayStateEnum GetPlayState();
         bool ConstructGroupLayout(int playersPerGroupCount);
@@ -25,7 +26,7 @@ namespace Slask.Domain.Groups
         bool NewDateTimeIsValid(Match match, DateTime dateTime);
         bool HasProblematicTie();
         List<StandingsEntry<PlayerReference>> FindProblematiclyTyingPlayers();
-        bool SolveTieByChoosing(string playerName);
+        bool SolveTieByChoosing(PlayerReference playerReference);
         bool HasSolvedTie();
         void OnMatchScoreDecreased(Match match);
         void OnMatchScoreIncreased(Match match);

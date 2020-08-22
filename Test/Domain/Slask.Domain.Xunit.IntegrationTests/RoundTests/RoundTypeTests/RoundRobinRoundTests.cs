@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
@@ -173,7 +173,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.RoundTests.RoundTypeTests
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
             match.Player1.IncreaseScore(2);
 
-            round.Groups.First().SolveTieByChoosing("Maru");
+            round.Groups.First().SolveTieByChoosing(maruPlayerReference.Id);
 
             round.HasProblematicTie().Should().BeFalse();
             round.Groups.First().ChoosenTyingPlayerEntries.Should().BeEmpty();

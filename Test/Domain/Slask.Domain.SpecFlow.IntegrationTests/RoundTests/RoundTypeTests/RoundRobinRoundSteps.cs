@@ -31,7 +31,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests.RoundTypeTests
 
                     if (playerFound)
                     {
-                        group.SolveTieByChoosing(player.GetName());
+                        group.SolveTieByChoosing(player.PlayerReferenceId);
                         break;
                     }
                 }

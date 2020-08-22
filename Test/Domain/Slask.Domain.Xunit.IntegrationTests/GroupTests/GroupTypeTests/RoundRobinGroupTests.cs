@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds.RoundTypes;
@@ -102,11 +102,11 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
 
             group.HasProblematicTie().Should().BeTrue();
             group.HasSolvedTie().Should().BeFalse();
-            group.SolveTieByChoosing("Taeja").Should().BeFalse();
+            group.SolveTieByChoosing(taejaPlayerReference.Id).Should().BeFalse();
 
             group.HasProblematicTie().Should().BeTrue();
             group.HasSolvedTie().Should().BeFalse();
-            group.SolveTieByChoosing("Stork").Should().BeTrue();
+            group.SolveTieByChoosing(storkPlayerReference.Id).Should().BeTrue();
 
             group.HasProblematicTie().Should().BeTrue();
             group.HasSolvedTie().Should().BeTrue();
@@ -139,7 +139,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
             match.Player1.IncreaseScore(2);
 
             group.HasProblematicTie().Should().BeFalse();
-            group.SolveTieByChoosing("Maru").Should().BeFalse();
+            group.SolveTieByChoosing(maruPlayerReference.Id).Should().BeFalse();
         }
     }
 }
