@@ -1,4 +1,4 @@
-Feature: Group
+﻿Feature: Group
 	Does a bunch of tests on Groups
 
 @GroupTag
@@ -9,17 +9,6 @@ Scenario: Player reference is added to tournament when new player is added to gr
 			| Bracket    | 1                         | 4                       |
 	When players "Maru, Stork, Taeja, Rain" is registered to tournament 0
 	Then tournament 0 should contain exactly these player references with names: "Maru, Stork, Taeja, Rain"
-
-Scenario: Cannot add new players to groups not within first round
-	Given a tournament named "GSL 2019" has been created
-		And tournament 0 adds rounds
-			| Round type  | Advancing per group count | Players per group count |
-			| Round robin | 4                         | 4                       |
-			| Round robin | 4                         | 4                       |
-		And players "Maru, Stork, Taeja, Rain" is registered to round 0
-	When players "Bomber, FanTaSy, Stephano, Thorzain" is registered to round 1
-	Then group 0 should contain exactly these player references with names: "Maru, Stork, Taeja, Rain"
-		And group 1 should contain exactly these player references with names: ""
 
 Scenario: PlayState is set to NotBegun before any match has started
 	Given a tournament named "GSL 2019" has been created
