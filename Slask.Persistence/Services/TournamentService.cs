@@ -295,13 +295,6 @@ namespace Slask.Persistence.Services
             return false;
         }
 
-        public bool AddScoreToPlayerInMatch(Guid tournamentId, Guid matchId, Guid playerId, int score)
-        {
-            Tournament tournament = GetTournamentById(tournamentId);
-
-            return AddScoreToPlayerInMatch(tournament, matchId, playerId, score);
-        }
-
         public bool AddScoreToPlayerInMatch(Tournament tournament, Guid matchId, Guid playerId, int score)
         {
             if (tournament == null)
