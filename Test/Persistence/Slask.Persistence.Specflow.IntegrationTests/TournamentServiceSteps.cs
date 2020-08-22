@@ -201,11 +201,12 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
             using (TournamentService tournamentService = CreateTournamentService())
             {
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+
                 foreach (TableRow row in table.Rows)
                 {
                     TestUtilities.ParseScoreAddedToMatchPlayer(row, out int roundIndex, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
 
-                    Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
                     RoundBase round = tournament.Rounds[roundIndex];
                     GroupBase group = round.Groups[groupIndex];
                     Match match = group.Matches[matchIndex];
@@ -216,7 +217,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
                     if (player != null)
                     {
-                        tournamentService.AddScoreToPlayerInMatch(tournament.Id, match.Id, player.Id, scoreAdded);
+                        tournamentService.AddScoreToPlayerInMatch(tournament, match.Id, player.Id, scoreAdded);
                     }
                     else
                     {
@@ -243,10 +244,10 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             // Give points to player with name that precedes the other alphabetically
             bool increasePlayer1Score = match.Player1.GetName().CompareTo(match.Player2.GetName()) <= 0;
 
-            Guid tournamentId = match.Group.Round.Tournament.Id;
+            Tournament tournament = match.Group.Round.Tournament;
             Guid scoringPlayerId = increasePlayer1Score ? match.Player1.Id : match.Player2.Id;
 
-            tournamentService.AddScoreToPlayerInMatch(tournamentId, match.Id, scoringPlayerId, winningScore);
+            tournamentService.AddScoreToPlayerInMatch(tournament, match.Id, scoringPlayerId, winningScore);
             tournamentService.Save();
         }
 

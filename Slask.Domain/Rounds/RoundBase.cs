@@ -93,13 +93,8 @@ namespace Slask.Domain.Rounds
             return true;
         }
 
-        public bool FillGroupsWithPlayerReferences()
+        public void FillGroupsWithPlayerReferences()
         {
-            if (PlayerReferences.Count == 0)
-            {
-                return false;
-            }
-
             for (int groupIndex = 0; groupIndex < Groups.Count; ++groupIndex)
             {
                 int startPlayerReferenceIndex = groupIndex * PlayersPerGroupCount;
@@ -108,8 +103,30 @@ namespace Slask.Domain.Rounds
 
                 Groups[groupIndex].AddPlayerReferences(playerReferences);
             }
+        }
 
-            return true;
+        public List<Guid> GetPlayerReferenceIds()
+        {
+            List<Guid> playerReferenceIds = new List<Guid>();
+
+            foreach (GroupBase group in Groups)
+            {
+                playerReferenceIds.AddRange(group.GetPlayerReferenceIds());
+            }
+
+            return playerReferenceIds;
+        }
+
+        public List<PlayerReference> GetPlayerReferences()
+        {
+            List<PlayerReference> playerReferences = new List<PlayerReference>();
+
+            foreach (GroupBase group in Groups)
+            {
+                playerReferences.AddRange(group.GetPlayerReferences());
+            }
+
+            return playerReferences;
         }
 
         public bool IsFirstRound()
@@ -206,27 +223,6 @@ namespace Slask.Domain.Rounds
             return AdvancingPlayersSolver.FetchFrom(this);
         }
 
-        public bool PlayerReferenceIsAdvancingPlayer(PlayerReference playerReference)
-        {
-            if (GetPlayState() != PlayStateEnum.Finished)
-            {
-                return false;
-            }
-
-            foreach (GroupBase group in Groups)
-            {
-                foreach (PlayerReference advancingPlayerReference in AdvancingPlayersSolver.FetchFrom(group))
-                {
-                    if (playerReference.Id == advancingPlayerReference.Id)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
         public PlayStateEnum GetPlayState()
         {
             bool noGroupHasBegun = AllGroupsPlayStatesAre(PlayStateEnum.NotBegun);
@@ -261,10 +257,7 @@ namespace Slask.Domain.Rounds
 
         public void ReceiveTransferedPlayerReferences(AdvancingPlayerTransfer advancingPlayerTransfer)
         {
-            PlayerReferences = advancingPlayerTransfer.PlayerReferences;
-            MarkAsModified();
-
-            int perGroupCount = PlayerReferences.Count / Groups.Count;
+            int perGroupCount = advancingPlayerTransfer.PlayerReferences.Count / Groups.Count;
             int playerReferenceIndex = 0;
 
             foreach (GroupBase group in Groups)
@@ -273,14 +266,14 @@ namespace Slask.Domain.Rounds
 
                 for (int perGroupIndex = 0; perGroupIndex < perGroupCount; ++perGroupIndex)
                 {
-                    PlayerReference playerReference = PlayerReferences[playerReferenceIndex++];
-
+                    PlayerReference playerReference = advancingPlayerTransfer.PlayerReferences[playerReferenceIndex++];
                     playerReferences.Add(playerReference);
-                    playerReference.MarkAsModified();
                 }
 
                 group.AddPlayerReferences(playerReferences);
             }
+
+            MarkAsModified();
         }
 
         public bool SetPlayersPerGroupCount(int count)
@@ -423,21 +416,27 @@ namespace Slask.Domain.Rounds
             return true;
         }
 
-        private List<PlayerReference> GetNextGroupOfPlayers(int startPlayerReferenceIndex, int playerReferenceCount)
+        private List<PlayerReference> GetNextGroupOfPlayers(int startIndex, int count)
         {
-            List<PlayerReference> playerReferences = new List<PlayerReference>();
-
-            for (int playerReferenceIndex = startPlayerReferenceIndex; playerReferenceIndex < PlayerReferences.Count; ++playerReferenceIndex)
+            if (IsFirstRound())
             {
-                playerReferences.Add(PlayerReferences[playerReferenceIndex]);
+                count = Math.Min(startIndex + count, Tournament.PlayerReferences.Count) - startIndex;
+                return Tournament.PlayerReferences.GetRange(startIndex, count);
+            }
+            else
+            {
+                RoundBase previousRound = GetPreviousRound();
 
-                if (playerReferences.Count >= playerReferenceCount)
+                if (previousRound.GetPlayState() == PlayStateEnum.Finished)
                 {
-                    return playerReferences;
+                    List<PlayerReference> playerReferences = previousRound.GetAdvancingPlayerReferences();
+
+                    count = Math.Min(startIndex + count, playerReferences.Count) - startIndex;
+                    return playerReferences.GetRange(startIndex, count);
                 }
             }
 
-            return playerReferences;
+            return new List<PlayerReference>();
         }
 
         private void AssignDefaultStartTimeToMatchesInRound()

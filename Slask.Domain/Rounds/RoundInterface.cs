@@ -1,4 +1,4 @@
-using Slask.Domain.Groups;
+﻿using Slask.Domain.Groups;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
@@ -20,7 +20,7 @@ namespace Slask.Domain.Rounds
         int GetExpectedParticipantCount();
         bool RenameTo(string name);
         bool Construct();
-        bool FillGroupsWithPlayerReferences();
+        void FillGroupsWithPlayerReferences();
         bool SetPlayersPerGroupCount(int count);
         bool SetAdvancingPerGroupCount(int count);
         bool HasProblematicTie();
@@ -32,7 +32,6 @@ namespace Slask.Domain.Rounds
         RoundBase GetNextRound();
         RoundBase GetPreviousRound();
         PlayStateEnum GetPlayState();
-        bool PlayerReferenceIsAdvancingPlayer(PlayerReference playerReference);
         void ReceiveTransferedPlayerReferences(AdvancingPlayerTransfer advancingPlayerTransfer);
     }
 }
