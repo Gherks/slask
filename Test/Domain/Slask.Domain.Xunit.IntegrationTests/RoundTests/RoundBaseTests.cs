@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
 using System.Collections.Generic;
@@ -209,55 +209,6 @@ namespace Slask.Domain.Xunit.IntegrationTests.RoundTests
             match.Group.Should().Be(round.Groups[1]);
             match.Player1.GetName().Should().Be(playerNames[2]);
             match.Player2.GetName().Should().Be(playerNames[3]);
-        }
-
-        [Fact]
-        public void CanRegisterPlayerReferencesToFirstRound()
-        {
-            string playerName = "Maru";
-
-            RoundRobinRound round = tournament.AddRoundRobinRound();
-
-            PlayerReference playerReference = round.RegisterPlayerReference(playerName);
-
-            playerReference.Id.Should().NotBeEmpty();
-            playerReference.Name.Should().Be(playerName);
-            playerReference.TournamentId.Should().Be(round.TournamentId);
-            playerReference.Tournament.Should().Be(round.Tournament);
-
-            round.PlayerReferences.First().Should().Be(playerReference);
-        }
-
-        [Fact]
-        public void CannotRegisterPlayerReferencesToRoundsThatIsNotTheFirstOne()
-        {
-            string playerName = "Maru";
-            int roundCount = 5;
-
-            RoundRobinRound firstRound = tournament.AddRoundRobinRound();
-
-            for (int index = 1; index < roundCount; ++index)
-            {
-                RoundRobinRound round = tournament.AddRoundRobinRound();
-                PlayerReference playerReference = round.RegisterPlayerReference(playerName + index.ToString());
-
-                playerReference.Should().BeNull();
-                round.PlayerReferences.Should().BeEmpty();
-            }
-        }
-
-        [Fact]
-        public void CanExcludePlayerReferencesFromGroupsWithinFirstRound()
-        {
-            string playerName = "Maru";
-
-            RoundRobinRound round = tournament.AddRoundRobinRound();
-
-            round.RegisterPlayerReference(playerName);
-            bool exclusionResult = round.ExcludePlayerReference(playerName);
-
-            exclusionResult.Should().BeTrue();
-            round.PlayerReferences.Should().BeEmpty();
         }
     }
 }
