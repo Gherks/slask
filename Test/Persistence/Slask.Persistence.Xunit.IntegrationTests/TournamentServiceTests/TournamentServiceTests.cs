@@ -1,32 +1,16 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
-using Slask.Domain.Rounds.RoundTypes;
 using Slask.Persistence.Services;
-using Slask.TestCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Xunit;
 
-namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
+namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
 {
-    public class TournamentServiceTests
+    public class TournamentServiceTest : TournamentServiceTestBase
     {
-        private const string tournamentName = "GSL 2019";
-        private readonly string testDatabaseName;
-
-        public TournamentServiceTests()
-        {
-            testDatabaseName = Guid.NewGuid().ToString();
-
-            using (TournamentService tournamentService = CreateTournamentService())
-            {
-                tournamentService.CreateTournament(tournamentName);
-                tournamentService.Save();
-            }
-        }
-
         [Fact]
         public void CanCreateTournament()
         {
@@ -42,6 +26,39 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
         }
 
         [Fact]
+        public void CanRemoveTournamentById()
+        {
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+
+                bool removeResult = tournamentService.RemoveTournament(tournament.Id);
+                tournamentService.Save();
+
+                removeResult.Should().BeTrue();
+
+                tournament = tournamentService.GetTournamentByName(tournamentName);
+                tournament.Should().BeNull();
+            }
+        }
+
+        [Fact]
+        public void CanRemoveTournamentByName()
+        {
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+
+                bool removeResult = tournamentService.RemoveTournament(tournament.Name);
+                tournamentService.Save();
+                removeResult.Should().BeTrue();
+
+                tournament = tournamentService.GetTournamentByName(tournamentName);
+                tournament.Should().BeNull();
+            }
+        }
+
+        [Fact]
         public void CannotCreateTournamentWithNameAlreadyInUseNoMatterLetterCasing()
         {
             using (TournamentService tournamentService = CreateTournamentService())
@@ -49,12 +66,6 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
                 Tournament secondTournament = tournamentService.CreateTournament(tournamentName.ToUpper());
                 secondTournament.Should().BeNull();
             }
-        }
-
-        [Fact]
-        public void CanAddBettersToTournament()
-        {
-            InitializeUsersAndBetters();
         }
 
         [Fact]
@@ -194,6 +205,12 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
         }
 
         [Fact]
+        public void CanAddBettersToTournament()
+        {
+            InitializeUsersAndBetters();
+        }
+
+        [Fact]
         public void CanOnlyAddUserAsBetterOncePerTournament()
         {
             InitializeUsersAndBetters();
@@ -285,6 +302,12 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
             }
         }
 
+        //////////////[Fact]
+        //////////////public void CannotRemoveBetterFromTournamentThatHasStarted()
+        //////////////{
+        //////////////    throw new NotImplementedException();
+        //////////////}
+
         [Fact]
         public void CannotRemoveNonexistingBetterFromTournamentById()
         {
@@ -324,7 +347,7 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
         }
 
         [Fact]
-        public void CanGetEmptyPlayerReferencesListInRoundWithoutGroup()
+        public void CanGetEmptyPlayerReferencesListFromTournament()
         {
             InitializeUsersAndBetters();
 
@@ -341,9 +364,47 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
         }
 
         [Fact]
-        public void CanRegisterPlayerReferencesToRound()
+        public void CanRegisterPlayerReferencesToTournament()
         {
             InitializeRoundGroupAndPlayers();
+        }
+
+        [Fact]
+        public void CanExcludePlayerReferenceFromTournament()
+        {
+            InitializeRoundGroupAndPlayers();
+
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+
+                bool removeResult = tournamentService.ExcludePlayerReferenceFromTournament(tournament, playerNames[0]);
+                removeResult.Should().BeTrue();
+
+                tournamentService.ExcludePlayerReferenceFromTournament(tournament, playerNames[1]);
+                removeResult.Should().BeTrue();
+
+                tournamentService.Save();
+
+                playerNames.RemoveRange(0, 2);
+
+                tournament.PlayerReferences.Should().HaveCount(playerNames.Count);
+                foreach (string playerName in playerNames)
+                {
+                    tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName);
+                }
+            }
+
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+
+                tournament.PlayerReferences.Should().HaveCount(playerNames.Count);
+                foreach (string playerName in playerNames)
+                {
+                    tournament.PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName);
+                }
+            }
         }
 
         [Fact]
@@ -392,55 +453,7 @@ namespace Slask.Xunit.IntegrationTests.PersistenceTests.ServiceTests
             }
         }
 
-        private UserService CreateUserService()
-        {
-            return new UserService(InMemoryContextCreator.Create(testDatabaseName));
-        }
-
-        private TournamentService CreateTournamentService()
-        {
-            return new TournamentService(InMemoryContextCreator.Create(testDatabaseName));
-        }
-
-        private void InitializeUsersAndBetters()
-        {
-            using (UserService userService = CreateUserService())
-            {
-                userService.CreateUser("Stålberto");
-                userService.CreateUser("Bönis");
-                userService.CreateUser("Guggelito");
-                userService.Save();
-
-                using (TournamentService tournamentService = CreateTournamentService())
-                {
-                    Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
-
-                    tournamentService.AddBetterToTournament(tournament, userService.GetUserByName("Stålberto"));
-                    tournamentService.AddBetterToTournament(tournament, userService.GetUserByName("Bönis"));
-                    tournamentService.AddBetterToTournament(tournament, userService.GetUserByName("Guggelito"));
-                    tournamentService.Save();
-                }
-            }
-        }
-
-        private void InitializeRoundGroupAndPlayers()
-        {
-            List<string> playerNames = new List<string> { "Maru", "Stork", "Taeja", "Rain", "Bomber", "FanTaSy", "Stephano", "Thorzain" };
-
-            using (TournamentService tournamentService = CreateTournamentService())
-            {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
-
-                RoundRobinRound round = tournamentService.AddRoundRobinRoundToTournament(tournament);
-                tournamentService.SetPlayersPerGroupCountInRound(round, playerNames.Count);
-
-                foreach (string playerName in playerNames)
-                {
-                    tournamentService.RegisterPlayerReference(tournament, playerName);
-                }
-
-                tournamentService.Save();
-            }
-        }
+        //BetterPlacesMatchBetOnMatch
+        //AddScoreToPlayerInMatch
     }
 }
