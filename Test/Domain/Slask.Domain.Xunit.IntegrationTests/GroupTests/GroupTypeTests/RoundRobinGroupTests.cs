@@ -48,8 +48,8 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
         [Fact]
         public void CanDetectWhenRoundRobinRoundContainsProblematicTie()
         {
-            round.SetPlayersPerGroupCount(3);
             tournament.RegisterPlayerReference("Maru");
+            round.SetPlayersPerGroupCount(3);
             tournament.RegisterPlayerReference("Stork");
             tournament.RegisterPlayerReference("Taeja");
             GroupBase group = round.Groups.First();
@@ -66,9 +66,9 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
         [Fact]
         public void RoundIsOngoingUntilTieIsSolved()
         {
-            round.SetPlayersPerGroupCount(3);
             tournament.RegisterPlayerReference("Maru");
             tournament.RegisterPlayerReference("Stork");
+            round.SetPlayersPerGroupCount(3);
             tournament.RegisterPlayerReference("Taeja");
             GroupBase group = round.Groups.First();
 
@@ -84,10 +84,10 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
         [Fact]
         public void CanSolveTie()
         {
-            round.SetPlayersPerGroupCount(3);
-            round.SetAdvancingPerGroupCount(2);
             PlayerReference maruPlayerReference = tournament.RegisterPlayerReference("Maru");
+            round.SetPlayersPerGroupCount(3);
             PlayerReference storkPlayerReference = tournament.RegisterPlayerReference("Stork");
+            round.SetAdvancingPerGroupCount(2);
             PlayerReference taejaPlayerReference = tournament.RegisterPlayerReference("Taeja");
 
             BracketRound bracketRound = tournament.AddBracketRound();
@@ -118,10 +118,10 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
         [Fact]
         public void SolvingTieWhenThereIsNoTieDoesNothing()
         {
-            round.SetPlayersPerGroupCount(3);
             PlayerReference maruPlayerReference = tournament.RegisterPlayerReference("Maru");
             PlayerReference storkPlayerReference = tournament.RegisterPlayerReference("Stork");
             PlayerReference taejaPlayerReference = tournament.RegisterPlayerReference("Taeja");
+            round.SetPlayersPerGroupCount(3);
 
             GroupBase group = round.Groups.First();
             Match match;

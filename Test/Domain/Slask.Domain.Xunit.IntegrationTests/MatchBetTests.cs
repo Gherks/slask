@@ -81,8 +81,8 @@ namespace Slask.Domain.Xunit.IntegrationTests
         public void CannotPlaceMatchBetOnWithoutPlayer()
         {
             Better better = tournament.AddBetter(user);
-            round.SetPlayersPerGroupCount(2);
             tournament.RegisterPlayerReference("Maru");
+            round.SetPlayersPerGroupCount(2);
             tournament.RegisterPlayerReference("Taeja");
 
             group = round.Groups.First();
@@ -97,8 +97,8 @@ namespace Slask.Domain.Xunit.IntegrationTests
         public void CannotPlaceMatchBetOnMatchThatIsNotReady()
         {
             Better better = tournament.AddBetter(user);
-            round.SetPlayersPerGroupCount(3);
             tournament.RegisterPlayerReference("Taeja");
+            round.SetPlayersPerGroupCount(3);
 
             group = round.Groups.First();
             Match incompleteMatch = group.Matches.Last();
