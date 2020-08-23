@@ -1,7 +1,7 @@
-﻿Feature: FetchTest
+﻿Feature: CompletePlaythroughTest
 	Makes sure a tournament is still intact after being played to completion, stored in database, and fetched from database. 
 
-@FetchTestTag
+@CompletePlaythroughTestTag
 Scenario: Can fetch completed tournament in correct way
 	Given a tournament named "Homestory Cup XX" has been created with users "Stålberto, Bönis, Guggelito, Kimmieboi" added to it
 		And tournament named "Homestory Cup XX" adds rounds
