@@ -230,7 +230,7 @@ namespace Slask.Persistence.Services
             return tournament.AddRoundRobinRound();
         }
 
-        public PlayerReference AddPlayerReference(Tournament tournament, string name)
+        public PlayerReference RegisterPlayerReference(Tournament tournament, string name)
         {
             return tournament.RegisterPlayerReference(name);
         }
