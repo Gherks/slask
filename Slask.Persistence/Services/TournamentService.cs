@@ -38,6 +38,32 @@ namespace Slask.Persistence.Services
             return tournament;
         }
 
+        public bool RemoveTournament(Guid id)
+        {
+            Tournament tournament = GetTournamentById(id);
+
+            if (tournament != null)
+            {
+                _slaskContext.Remove(tournament);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool RemoveTournament(string name)
+        {
+            Tournament tournament = GetTournamentByName(name);
+
+            if (tournament != null)
+            {
+                _slaskContext.Remove(tournament);
+                return true;
+            }
+
+            return false;
+        }
+
         public bool RenameTournament(Guid id, string name)
         {
             name = name.Trim();
@@ -230,9 +256,38 @@ namespace Slask.Persistence.Services
             return tournament.AddRoundRobinRound();
         }
 
+        public bool RemoveRoundFromTournament(Tournament tournament, Guid roundId)
+        {
+            RoundBase roundToRemove = tournament.GetRoundByRoundId(roundId);
+
+            if (roundToRemove != null)
+            {
+                return tournament.RemoveRound(roundToRemove);
+            }
+
+            return false;
+        }
+
+        public bool RemoveRoundFromTournament(Tournament tournament, string roundName)
+        {
+            RoundBase roundToRemove = tournament.GetRoundByRoundName(roundName);
+
+            if (roundToRemove != null)
+            {
+                return tournament.RemoveRound(roundToRemove);
+            }
+
+            return false;
+        }
+
         public PlayerReference RegisterPlayerReference(Tournament tournament, string name)
         {
             return tournament.RegisterPlayerReference(name);
+        }
+
+        public bool ExcludePlayerReferenceFromTournament(Tournament tournament, string name)
+        {
+            return tournament.ExcludePlayerReference(name);
         }
 
         public bool RenameRoundInTournament(RoundBase round, string name)

@@ -146,9 +146,10 @@ namespace Slask.Domain
 
                 if (playerReferenceExistInRound)
                 {
-                    PlayerReferences.Remove(PlayerReference.Create(name, this));
-                    OnPlayerReferencesChanged();
+                    playerReference.MarkForDeletion();
+                    PlayerReferences.Remove(playerReference);
 
+                    OnPlayerReferencesChanged();
                     return true;
                 }
             }
@@ -451,6 +452,7 @@ namespace Slask.Domain
                     }
 
                     FindIssues();
+                    return true;
                 }
             }
 
