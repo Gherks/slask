@@ -10,8 +10,8 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
     public class TournamentServiceTestBase
     {
         protected const string tournamentName = "GSL 2019";
-        protected readonly List<string> playerNames = new List<string> 
-        { 
+        protected readonly List<string> playerNames = new List<string>
+        {
             "Maru",
             "Stork",
             "Taeja",
@@ -19,7 +19,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
             "Bomber",
             "FanTaSy",
             "Stephano",
-            "Thorzain" 
+            "Thorzain"
         };
 
         private readonly string testDatabaseName;

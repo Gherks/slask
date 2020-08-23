@@ -350,7 +350,7 @@ namespace Slask.Domain
             {
                 PlayerReference playerReference = GetPlayerReferenceById(playerReferenceId);
 
-                if(playerReference != null)
+                if (playerReference != null)
                 {
                     playerReferences.Add(playerReference);
                 }

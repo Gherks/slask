@@ -1,7 +1,6 @@
 ﻿using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Utilities.StandingsSolvers;
-using System;
 using System.Collections.Generic;
 
 namespace Slask.Domain.Utilities

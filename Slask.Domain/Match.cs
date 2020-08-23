@@ -119,7 +119,7 @@ namespace Slask.Domain
 
             if (matchHasNotBegun)
             {
-                bool anyPlayerReferenceIsInvalid = player1ReferenceId == Guid.Empty|| player2ReferenceId == Guid.Empty;
+                bool anyPlayerReferenceIsInvalid = player1ReferenceId == Guid.Empty || player2ReferenceId == Guid.Empty;
                 bool bothPlayerReferencesDiffer = anyPlayerReferenceIsInvalid || player1ReferenceId != player2ReferenceId;
 
                 if (bothPlayerReferencesDiffer)

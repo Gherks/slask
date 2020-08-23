@@ -3,7 +3,6 @@ using Slask.Common;
 using Slask.Domain.Groups;
 using Slask.Domain.SpecFlow.IntegrationTests.GroupTests;
 using Slask.Domain.Utilities.StandingsSolvers;
-using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
 

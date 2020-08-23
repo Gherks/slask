@@ -1,7 +1,5 @@
 ﻿using FluentAssertions;
-using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
-using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 

@@ -3,11 +3,9 @@ using Slask.Domain;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Persistence.Services;
-using Slask.TestCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Xunit;
 
 namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
@@ -187,7 +185,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
                 const int expectedAdvancingCount = 1;
 
                 bool changeResult = tournamentService.SetAdvancingPerGroupCountInRound(round, newAdvancingCount);
-                
+
                 changeResult.Should().BeFalse();
                 round.AdvancingPerGroupCount.Should().Be(expectedAdvancingCount);
             }
