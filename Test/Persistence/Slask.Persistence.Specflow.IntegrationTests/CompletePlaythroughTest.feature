@@ -2,7 +2,7 @@
 	Makes sure a tournament is still intact after being played to completion, stored in database, and fetched from database. 
 
 @CompletePlaythroughTestTag
-Scenario: Can fetch completed tournament in correct way
+Scenario: Tournament playthrough and fetching goes as expected
 	Given a tournament named "Homestory Cup XX" has been created with users "Stålberto, Bönis, Guggelito, Kimmieboi" added to it
 		And tournament named "Homestory Cup XX" adds rounds
 			| Round type      | Advancing per group count | Players per group count |
