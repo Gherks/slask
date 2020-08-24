@@ -5,10 +5,12 @@
 Scenario: As tournament is played, only the appropriate entities can be changed
 	Given a tournament named "Homestory Cup XX" has been created with users "" added to it
 		And tournament named "Homestory Cup XX" adds rounds
-			| Round type      | Advancing per group count | Players per group count |
-			| Round robin     | 4                         | 5                       |
-			| Dual tournament | 2                         | 4                       |
-			| Bracket         | 1                         | 4                       |
+			| Round type      | Round name   | Advancing per group count | Players per group count |
+			| Round robin     | Round Uno    | 4                         | 5                       |
+			| Round robin     | Round Dos    | 4                         | 4                       |
+			| Dual tournament | Round Tres   | 2                         | 4                       |
+			| Bracket         | Round Cuatro | 1                         | 4                       |
+		And round named "Round Dos" is removed from tournament named "Homestory Cup XX"
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure" is registered to tournament named "Homestory Cup XX"
 		# ROUND ROBIN ROUND BEGINS
 		And groups within tournament named "Homestory Cup XX" is played out
