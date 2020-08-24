@@ -98,17 +98,6 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
         }
 
-        [Given(@"round named ""(.*)"" is removed from tournament named ""(.*)""")]
-        [When(@"round named ""(.*)"" is removed from tournament named ""(.*)""")]
-        public void GivenRoundNamedIsRemovedFromTournamentNamed(string roundName, string tournamentName)
-        {
-            using (TournamentService tournamentService = CreateTournamentService())
-            {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
-                tournamentService.RemoveRoundFromTournament(tournament, roundName);
-            }
-        }
-
         [Given(@"players ""(.*)"" is registered to tournament named ""(.*)""")]
         [When(@"players ""(.*)"" is registered to tournament named ""(.*)""")]
         public void GivenPlayersIsRegisteredToRound(string commaSeparatedPlayerNames, string tournamentName)
