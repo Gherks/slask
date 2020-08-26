@@ -3,6 +3,8 @@ using Slask.Domain;
 using Slask.Persistence.Services;
 using Slask.TestCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Slask.Persistence.Xunit.IntegrationTests
@@ -126,6 +128,32 @@ namespace Slask.Persistence.Xunit.IntegrationTests
         }
 
         [Fact]
+        public void CanGetListOfAllUsers()
+        {
+            List<string> userNames = new List<string>() { "Stålberto", "Guggelito", "Bönis", "Kimmieboi" };
+
+            using (UserService userService = CreateUserService())
+            {
+                foreach (string userName in userNames)
+                {
+                    userService.CreateUser(userName);
+                }
+                userService.Save();
+            }
+
+            using (UserService userService = CreateUserService())
+            {
+                IEnumerable<User> users = userService.GetUsers();
+
+                users.Should().HaveCount(userNames.Count);
+                foreach (string userName in userNames)
+                {
+                    users.FirstOrDefault(user => user.Name == userName).Should().NotBeNull();
+                }
+            }
+        }
+
+        [Fact]
         public void CanFetchUserById()
         {
             using (UserService userService = CreateUserService())
@@ -136,17 +164,6 @@ namespace Slask.Persistence.Xunit.IntegrationTests
                 User fetchedUser = userService.GetUserById(createdUser.Id);
                 fetchedUser.Id.Should().Be(createdUser.Id);
                 fetchedUser.Name.Should().Be(createdUser.Name);
-            }
-        }
-
-        [Fact]
-        public void ReturnsNullWhenFetchingNonexistentUserById()
-        {
-            using (UserService userService = CreateUserService())
-            {
-                User fetchedUser = userService.GetUserById(Guid.NewGuid());
-
-                fetchedUser.Should().BeNull();
             }
         }
 
@@ -163,6 +180,17 @@ namespace Slask.Persistence.Xunit.IntegrationTests
                 fetchedUser.Should().NotBeNull();
                 fetchedUser.Id.Should().Be(createdUser.Id);
                 fetchedUser.Name.Should().Be(createdUser.Name);
+            }
+        }
+
+        [Fact]
+        public void ReturnsNullWhenFetchingNonexistentUserById()
+        {
+            using (UserService userService = CreateUserService())
+            {
+                User fetchedUser = userService.GetUserById(Guid.NewGuid());
+
+                fetchedUser.Should().BeNull();
             }
         }
 
