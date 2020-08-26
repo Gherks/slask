@@ -42,7 +42,7 @@ namespace Slask.Domain
             return fetchedPlayerReference;
         }
 
-        public void RenameTo(string name)
+        public bool RenameTo(string name)
         {
             name = name.Trim();
 
@@ -54,8 +54,12 @@ namespace Slask.Domain
                 {
                     Name = name;
                     MarkAsModified();
+
+                    return true;
                 }
             }
+
+            return false;
         }
     }
 }

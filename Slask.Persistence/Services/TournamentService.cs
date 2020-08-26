@@ -290,6 +290,11 @@ namespace Slask.Persistence.Services
             return tournament.ExcludePlayerReference(name);
         }
 
+        public bool RenamePlayerReferenceInTournament(PlayerReference playerReference, string name)
+        {
+            return playerReference.RenameTo(name);
+        }
+
         public bool RenameRoundInTournament(RoundBase round, string name)
         {
             return round.RenameTo(name);
