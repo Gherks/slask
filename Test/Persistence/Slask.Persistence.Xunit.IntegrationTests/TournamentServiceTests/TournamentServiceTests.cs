@@ -378,10 +378,10 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
             {
                 Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
 
-                bool removeResult = tournamentService.ExcludePlayerReferenceFromTournament(tournament, playerNames[0]);
+                bool removeResult = tournamentService.RemovePlayerReferenceFromTournament(tournament, playerNames[0]);
                 removeResult.Should().BeTrue();
 
-                tournamentService.ExcludePlayerReferenceFromTournament(tournament, playerNames[1]);
+                tournamentService.RemovePlayerReferenceFromTournament(tournament, playerNames[1]);
                 removeResult.Should().BeTrue();
 
                 tournamentService.Save();

@@ -280,12 +280,12 @@ namespace Slask.Persistence.Services
             return false;
         }
 
-        public PlayerReference RegisterPlayerReference(Tournament tournament, string name)
+        public PlayerReference AddPlayerReference(Tournament tournament, string name)
         {
             return tournament.RegisterPlayerReference(name);
         }
 
-        public bool ExcludePlayerReferenceFromTournament(Tournament tournament, string name)
+        public bool RemovePlayerReferenceFromTournament(Tournament tournament, string name)
         {
             return tournament.ExcludePlayerReference(name);
         }

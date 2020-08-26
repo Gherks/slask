@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
@@ -109,7 +109,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
                 foreach (string playerName in playerNames)
                 {
-                    tournamentService.RegisterPlayerReference(tournament, playerName);
+                    tournamentService.AddPlayerReference(tournament, playerName);
                 }
 
                 tournamentService.Save();
