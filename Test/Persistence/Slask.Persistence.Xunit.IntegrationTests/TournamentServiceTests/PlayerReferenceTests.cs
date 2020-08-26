@@ -73,6 +73,34 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
         }
 
         [Fact]
+        public void CanRenamePlayerReferenceInTournament()
+        {
+            InitializeRoundGroupAndPlayers();
+
+            string oldName = playerNames.First();
+            string newName = oldName + "-san";
+
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+
+                PlayerReference playerReference = tournament.GetPlayerReferenceByName(oldName);
+                tournamentService.RenamePlayerReferenceInTournament(playerReference, newName);
+                tournamentService.Save();
+            }
+
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+
+                PlayerReference playerReference = tournament.GetPlayerReferenceByName(newName);
+
+                playerReference.Should().NotBeNull();
+                playerReference.Name.Should().Be(newName);
+            }
+        }
+
+        [Fact]
         public void CanGetAllPlayerReferencesInTournamentByTournamentId()
         {
             InitializeRoundGroupAndPlayers();
