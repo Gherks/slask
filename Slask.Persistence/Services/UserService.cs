@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using Slask.Domain;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Slask.Persistence.Services
@@ -57,6 +59,11 @@ namespace Slask.Persistence.Services
 
             // LOG Error: Could not rename user - user not found.
             return false;
+        }
+
+        public IEnumerable<User> GetUsers()
+        {
+            return _slaskContext.Users.AsNoTracking();
         }
 
         public User GetUserByName(string name)
