@@ -64,7 +64,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
 
                 tournament.Rounds.Should().HaveCount(table.Rows.Count);
 
-                for(int rowIndex = 0; rowIndex < table.Rows.Count; ++rowIndex)
+                for (int rowIndex = 0; rowIndex < table.Rows.Count; ++rowIndex)
                 {
                     TableRow row = table.Rows[rowIndex];
                     RoundBase round = tournament.Rounds[rowIndex];
