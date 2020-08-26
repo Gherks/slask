@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Slask.Domain.Groups
 {
-    public partial class GroupBase : ObjectStateBase, GroupInterface, SortableInterface
+    public abstract class GroupBase : ObjectStateBase, GroupInterface, SortableInterface
     {
         protected GroupBase()
         {
@@ -131,20 +131,11 @@ namespace Slask.Domain.Groups
             return true;
         }
 
-        public virtual bool ConstructGroupLayout(int playersPerGroupCount)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract bool ConstructGroupLayout(int playersPerGroupCount);
 
-        public virtual void FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences);
 
-        public virtual bool NewDateTimeIsValid(Match match, DateTime dateTime)
-        {
-            return true;
-        }
+        public abstract bool NewDateTimeIsValid(Match match, DateTime dateTime);
 
         public bool HasProblematicTie()
         {

@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Slask.Domain.Rounds
 {
-    public class RoundBase : ObjectStateBase, RoundInterface, SortableInterface
+    public abstract class RoundBase : ObjectStateBase, RoundInterface, SortableInterface
     {
         protected RoundBase()
         {
@@ -384,11 +384,7 @@ namespace Slask.Domain.Rounds
             _advancingPerGroupCountProcedure = advancingPerGroupCountProcedure;
         }
 
-        protected virtual GroupBase AddGroup()
-        {
-            // LOG Error: Adding group using base, something went horribly wrong.
-            throw new NotImplementedException();
-        }
+        protected abstract GroupBase AddGroup();
 
         private bool ConstructGroups()
         {
