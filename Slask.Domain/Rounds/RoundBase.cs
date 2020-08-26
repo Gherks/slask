@@ -72,6 +72,8 @@ namespace Slask.Domain.Rounds
             }
 
             Name = name;
+            MarkAsModified();
+
             return true;
         }
 
