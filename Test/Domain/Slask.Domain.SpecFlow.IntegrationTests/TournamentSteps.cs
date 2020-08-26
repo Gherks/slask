@@ -68,22 +68,21 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
 
             foreach (TableRow row in table.Rows)
             {
-                TestUtilities.ParseRoundTable(row, out string type, out string name, out int advancingCount, out int playersPerGroupCount);
+                TestUtilities.ParseRoundTable(row, out ContestTypeEnum contestType, out string name, out int advancingCount, out int playersPerGroupCount);
 
-                if (type.Length > 0)
+                if (contestType != ContestTypeEnum.None)
                 {
-                    type = TestUtilities.ParseRoundGroupTypeString(type);
                     RoundBase round = null;
 
-                    if (type == "BRACKET")
+                    if (contestType == ContestTypeEnum.Bracket)
                     {
                         round = tournament.AddBracketRound();
                     }
-                    else if (type == "DUALTOURNAMENT")
+                    else if (contestType == ContestTypeEnum.DualTournament)
                     {
                         round = tournament.AddDualTournamentRound();
                     }
-                    else if (type == "ROUNDROBIN")
+                    else if (contestType == ContestTypeEnum.RoundRobin)
                     {
                         round = tournament.AddRoundRobinRound();
                     }

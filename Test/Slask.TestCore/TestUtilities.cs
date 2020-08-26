@@ -1,4 +1,5 @@
 ﻿using Slask.Common;
+using Slask.Domain.Utilities;
 using System;
 using TechTalk.SpecFlow;
 
@@ -6,16 +7,16 @@ namespace Slask.TestCore
 {
     public class TestUtilities
     {
-        public static void ParseRoundTable(TableRow row, out string roundType, out string name, out int advancingCount, out int playersPerGroupCount)
+        public static void ParseRoundTable(TableRow row, out ContestTypeEnum roundType, out string name, out int advancingCount, out int playersPerGroupCount)
         {
-            roundType = "";
+            roundType = ContestTypeEnum.None;
             name = "";
             advancingCount = 1;
             playersPerGroupCount = 2;
 
             if (row.ContainsKey("Round type"))
             {
-                roundType = row["Round type"];
+                roundType = ParseContestTypeString(row["Round type"]);
             }
 
             if (row.ContainsKey("Round name"))
@@ -34,24 +35,24 @@ namespace Slask.TestCore
             }
         }
 
-        public static string ParseRoundGroupTypeString(string type)
+        public static ContestTypeEnum ParseContestTypeString(string type)
         {
             type = StringUtility.ToUpperNoSpaces(type);
 
             if (type.Contains("BRACKET", StringComparison.CurrentCulture))
             {
-                return "BRACKET";
+                return ContestTypeEnum.Bracket;
             }
             else if (type.Contains("DUALTOURNAMENT", StringComparison.CurrentCulture))
             {
-                return "DUALTOURNAMENT";
+                return ContestTypeEnum.DualTournament;
             }
             else if (type.Contains("ROUNDROBIN", StringComparison.CurrentCulture))
             {
-                return "ROUNDROBIN";
+                return ContestTypeEnum.RoundRobin;
             }
 
-            return "";
+            return ContestTypeEnum.None;
         }
 
         public static void ParseTargetGroupToPlay(TableRow row, out int tournamentIndex, out int roundIndex, out int groupIndex)

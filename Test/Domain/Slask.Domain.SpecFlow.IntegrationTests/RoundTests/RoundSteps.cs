@@ -79,21 +79,21 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
-                TestUtilities.ParseRoundTable(table.Rows[index], out string roundType, out string name, out int advancingCount, out int playersPerGroupCount);
+                TestUtilities.ParseRoundTable(table.Rows[index], out ContestTypeEnum roundType, out string name, out int advancingCount, out int playersPerGroupCount);
 
                 RoundBase round = tournament.Rounds[index];
 
                 if (round is BracketRound bracketRound)
                 {
-                    roundType.Should().Be("Bracket");
+                    roundType.Should().Be(ContestTypeEnum.Bracket);
                 }
                 else if (round is DualTournamentRound dualTournamentRound)
                 {
-                    roundType.Should().Be("Dual tournament");
+                    roundType.Should().Be(ContestTypeEnum.DualTournament);
                 }
                 else if (round is RoundRobinRound roundRobinRound)
                 {
-                    roundType.Should().Be("Round robin");
+                    roundType.Should().Be(ContestTypeEnum.RoundRobin);
                 }
 
                 CheckRoundValidity(round, name, advancingCount, playersPerGroupCount);

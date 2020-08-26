@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
@@ -63,22 +63,21 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
                 foreach (TableRow row in table.Rows)
                 {
-                    TestUtilities.ParseRoundTable(row, out string type, out string name, out int advancingCount, out int playersPerGroupCount);
+                    TestUtilities.ParseRoundTable(row, out ContestTypeEnum contestType, out string name, out int advancingCount, out int playersPerGroupCount);
 
-                    if (type.Length > 0)
+                    if (contestType != ContestTypeEnum.None)
                     {
-                        type = TestUtilities.ParseRoundGroupTypeString(type);
                         RoundBase round = null;
 
-                        if (type == "BRACKET")
+                        if (contestType == ContestTypeEnum.Bracket)
                         {
                             round = tournamentService.AddBracketRoundToTournament(tournament);
                         }
-                        else if (type == "DUALTOURNAMENT")
+                        else if (contestType == ContestTypeEnum.DualTournament)
                         {
                             round = tournamentService.AddDualTournamentRoundToTournament(tournament);
                         }
-                        else if (type == "ROUNDROBIN")
+                        else if (contestType == ContestTypeEnum.RoundRobin)
                         {
                             round = tournamentService.AddRoundRobinRoundToTournament(tournament);
                         }
@@ -259,14 +258,13 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
-                TestUtilities.ParseRoundTable(table.Rows[index], out string roundType, out _, out _, out _);
+                TestUtilities.ParseRoundTable(table.Rows[index], out ContestTypeEnum contestType, out _, out _, out _);
 
-                if (roundType.Length > 0)
+                if (contestType != ContestTypeEnum.None)
                 {
-                    roundType = TestUtilities.ParseRoundGroupTypeString(roundType);
                     RoundBase round = tournament.Rounds[index];
 
-                    if (roundType == "BRACKET")
+                    if (contestType == ContestTypeEnum.Bracket)
                     {
                         round.ContestType.Should().Be(ContestTypeEnum.Bracket);
 
@@ -274,7 +272,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                         (round is DualTournamentRound).Should().BeFalse();
                         (round is RoundRobinRound).Should().BeFalse();
                     }
-                    else if (roundType == "DUALTOURNAMENT")
+                    else if (contestType == ContestTypeEnum.DualTournament)
                     {
                         round.ContestType.Should().Be(ContestTypeEnum.DualTournament);
 
@@ -282,7 +280,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                         (round is DualTournamentRound).Should().BeTrue();
                         (round is RoundRobinRound).Should().BeFalse();
                     }
-                    else if (roundType == "ROUNDROBIN")
+                    else if (contestType == ContestTypeEnum.RoundRobin)
                     {
                         round.ContestType.Should().Be(ContestTypeEnum.RoundRobin);
 
@@ -304,9 +302,9 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
 
             RoundBase round = tournament.Rounds[roundIndex];
-            groupType = TestUtilities.ParseRoundGroupTypeString(groupType);
+            ContestTypeEnum contestType = TestUtilities.ParseContestTypeString(groupType);
 
-            if (groupType == "BRACKET")
+            if (contestType == ContestTypeEnum.Bracket)
             {
                 foreach (GroupBase group in round.Groups)
                 {
@@ -317,7 +315,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                     (group is RoundRobinGroup).Should().BeFalse();
                 }
             }
-            else if (groupType == "DUALTOURNAMENT")
+            else if (contestType == ContestTypeEnum.DualTournament)
             {
                 foreach (GroupBase group in round.Groups)
                 {
@@ -328,7 +326,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                     (group is RoundRobinGroup).Should().BeFalse();
                 }
             }
-            else if (groupType == "ROUNDROBIN")
+            else if (contestType == ContestTypeEnum.RoundRobin)
             {
                 foreach (GroupBase group in round.Groups)
                 {

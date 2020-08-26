@@ -28,19 +28,19 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.GroupTests
         [Then(@"group (.*) should be valid of type ""(.*)""")]
         public void ThenGroupShouldBeValidOfType(int groupIndex, string roundType)
         {
-            string type = TestUtilities.ParseRoundGroupTypeString(roundType);
+            ContestTypeEnum contestType = TestUtilities.ParseContestTypeString(roundType);
 
             GroupBase group = createdGroups[groupIndex];
 
-            if (type == "BRACKET")
+            if (contestType == ContestTypeEnum.Bracket)
             {
                 CheckGroupValidity<BracketGroup>(group);
             }
-            else if (type == "DUALTOURNAMENT")
+            else if (contestType == ContestTypeEnum.DualTournament)
             {
                 CheckGroupValidity<DualTournamentGroup>(group);
             }
-            else if (type == "ROUNDROBIN")
+            else if (contestType == ContestTypeEnum.RoundRobin)
             {
                 CheckGroupValidity<RoundRobinGroup>(group);
             }
