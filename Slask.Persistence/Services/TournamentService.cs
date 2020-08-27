@@ -310,6 +310,16 @@ namespace Slask.Persistence.Services
             return round.SetPlayersPerGroupCount(count);
         }
 
+        public bool SetBestOfInMatch(Match match, int bestOf)
+        {
+            if (match != null)
+            {
+                return match.SetBestOf(bestOf);
+            }
+
+            return false;
+        }
+
         public bool BetterPlacesMatchBetOnMatch(Guid tournamentId, Guid matchId, string betterName, string playerName)
         {
             Tournament tournament = GetTournamentById(tournamentId);
