@@ -6,6 +6,8 @@ using Slask.Domain.Utilities;
 using Slask.Persistence.Services;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests;
 using Slask.TestCore;
+using System;
+using System.Collections.Generic;
 using TechTalk.SpecFlow;
 
 namespace Slask.Persistence.Specflow.IntegrationTests
@@ -13,6 +15,12 @@ namespace Slask.Persistence.Specflow.IntegrationTests
     [Binding, Scope(Feature = "ChangeTournamentSettings")]
     public class ChangeTournamentSettings : PersistenceSteps
     {
+        private readonly Dictionary<Guid, DateTime> oldMatchStartTimes;
+
+        public ChangeTournamentSettings()
+        {
+            oldMatchStartTimes = new Dictionary<Guid, DateTime>();
+        }
 
         [Given(@"round named ""(.*)"" is removed from tournament named ""(.*)""")]
         [When(@"round named ""(.*)"" is removed from tournament named ""(.*)""")]
@@ -25,8 +33,6 @@ namespace Slask.Persistence.Specflow.IntegrationTests
                 tournamentService.Save();
             }
         }
-
-
 
         [Given(@"round named ""(.*)"" changes advancing players per group count to ""(.*)"" in tournament named ""(.*)""")]
         [When(@"round named ""(.*)"" changes advancing players per group count to ""(.*)"" in tournament named ""(.*)""")]
@@ -66,7 +72,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
 
                 foreach (TableRow row in table.Rows)
                 {
-                    ParseMatchSelection(row, out int roundIndex, out int groupIndex, out int matchIndex, out int bestOf);
+                    ParseMatchBestOfSelection(row, out int roundIndex, out int groupIndex, out int matchIndex, out int bestOf);
 
                     RoundBase roundBase = tournament.Rounds[roundIndex];
                     GroupBase groupBase = roundBase.Groups[groupIndex];
@@ -79,8 +85,34 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             }
         }
 
-        [Then(@"matches in tournament named ""(.*)"" should be set to")]
-        public void ThenMatchesInTournamentNamedShouldBeSetTo(string tournamentName, Table table)
+        [When(@"move start time three hours forward for matches in tournament named ""(.*)""")]
+        public void WhenMoveStartTimeThreeHoursForwardForMatchesInTournamentNamed(string tournamentName, Table table)
+        {
+            const int addedHours = 3;
+
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+
+                foreach (TableRow row in table.Rows)
+                {
+                    ParseMatchBestOfSelection(row, out int roundIndex, out int groupIndex, out int matchIndex, out int _);
+
+                    RoundBase roundBase = tournament.Rounds[roundIndex];
+                    GroupBase groupBase = roundBase.Groups[groupIndex];
+                    Match match = groupBase.Matches[matchIndex];
+
+                    oldMatchStartTimes[match.Id] = match.StartDateTime;
+
+                    tournamentService.SetStartTimeForMatch(match, match.StartDateTime.AddHours(addedHours));
+                }
+
+                tournamentService.Save();
+            }
+        }
+
+        [Then(@"best of for matches in tournament named ""(.*)"" should be set to")]
+        public void ThenBestOfForMatchesInTournamentNamedShouldBeSetTo(string tournamentName, Table table)
         {
             using (TournamentService tournamentService = CreateTournamentService())
             {
@@ -88,7 +120,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
 
                 foreach (TableRow row in table.Rows)
                 {
-                    ParseMatchSelection(row, out int roundIndex, out int groupIndex, out int matchIndex, out int bestOf);
+                    ParseMatchBestOfSelection(row, out int roundIndex, out int groupIndex, out int matchIndex, out int bestOf);
 
                     RoundBase roundBase = tournament.Rounds[roundIndex];
                     GroupBase groupBase = roundBase.Groups[groupIndex];
@@ -123,7 +155,28 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             }
         }
 
-        public static void ParseMatchSelection(TableRow row, out int roundIndex, out int groupIndex, out int matchIndex, out int bestOf)
+        [Then(@"start time has been moved forward three hours for matches in tournament named ""(.*)""")]
+        public void ThenStartTimeHasBeenMovedForwardThreeHoursForMatchesInTournamentNamed(string tournamentName, Table table)
+        {
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+
+                foreach (TableRow row in table.Rows)
+                {
+                    ParseMatchBestOfSelection(row, out int roundIndex, out int groupIndex, out int matchIndex, out int _);
+
+                    RoundBase roundBase = tournament.Rounds[roundIndex];
+                    GroupBase groupBase = roundBase.Groups[groupIndex];
+                    Match match = groupBase.Matches[matchIndex];
+
+                    DateTime oldStartDateTime = oldMatchStartTimes[match.Id];
+                    match.StartDateTime.Should().BeCloseTo(oldStartDateTime.AddHours(3));
+                }
+            }
+        }
+
+        public static void ParseMatchBestOfSelection(TableRow row, out int roundIndex, out int groupIndex, out int matchIndex, out int bestOf)
         {
             roundIndex = -1;
             groupIndex = -1;
