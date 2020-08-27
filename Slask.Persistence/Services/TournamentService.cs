@@ -282,32 +282,62 @@ namespace Slask.Persistence.Services
 
         public PlayerReference AddPlayerReference(Tournament tournament, string name)
         {
-            return tournament.RegisterPlayerReference(name);
+            if (tournament != null)
+            {
+                return tournament.RegisterPlayerReference(name);
+            }
+
+            return null;
         }
 
         public bool RemovePlayerReferenceFromTournament(Tournament tournament, string name)
         {
-            return tournament.ExcludePlayerReference(name);
+            if (tournament != null)
+            {
+                return tournament.ExcludePlayerReference(name);
+            }
+
+            return false;
         }
 
         public bool RenamePlayerReferenceInTournament(PlayerReference playerReference, string name)
         {
-            return playerReference.RenameTo(name);
+            if (playerReference != null)
+            {
+                return playerReference.RenameTo(name);
+            }
+
+            return false;
         }
 
         public bool RenameRoundInTournament(RoundBase round, string name)
         {
-            return round.RenameTo(name);
+            if (round != null)
+            {
+                return round.RenameTo(name);
+            }
+
+            return false;
         }
 
         public bool SetAdvancingPerGroupCountInRound(RoundBase round, int count)
         {
-            return round.SetAdvancingPerGroupCount(count);
+            if (round != null)
+            {
+                return round.SetAdvancingPerGroupCount(count);
+            }
+
+            return false;
         }
 
         public bool SetPlayersPerGroupCountInRound(RoundBase round, int count)
         {
-            return round.SetPlayersPerGroupCount(count);
+            if (round != null)
+            {
+                return round.SetPlayersPerGroupCount(count);
+            }
+
+            return false;
         }
 
         public bool SetBestOfInMatch(Match match, int bestOf)
