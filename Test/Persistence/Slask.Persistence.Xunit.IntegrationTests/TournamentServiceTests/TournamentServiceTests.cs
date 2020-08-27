@@ -203,8 +203,5 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
                 tournament.Name.Should().Be(tournamentName);
             }
         }
-
-        //BetterPlacesMatchBetOnMatch
-        //AddScoreToPlayerInMatch
     }
 }
