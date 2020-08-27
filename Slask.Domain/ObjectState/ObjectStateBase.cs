@@ -1,4 +1,6 @@
-﻿namespace Slask.Domain.ObjectState
+﻿using Slask.Domain.Utilities;
+
+namespace Slask.Domain.ObjectState
 {
     public abstract class ObjectStateBase : ObjectStateInterface
     {
