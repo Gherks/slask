@@ -64,7 +64,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             {
                 Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
 
-                foreach(TableRow row in table.Rows)
+                foreach (TableRow row in table.Rows)
                 {
                     ParseMatchSelection(row, out int roundIndex, out int groupIndex, out int matchIndex, out int bestOf);
 
@@ -72,9 +72,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
                     GroupBase groupBase = roundBase.Groups[groupIndex];
                     Match match = groupBase.Matches[matchIndex];
 
-                    bool setResult = tournamentService.SetBestOfInMatch(match, bestOf);
-
-                    setResult.Should().BeTrue();
+                    tournamentService.SetBestOfInMatch(match, bestOf);
                 }
 
                 tournamentService.Save();
