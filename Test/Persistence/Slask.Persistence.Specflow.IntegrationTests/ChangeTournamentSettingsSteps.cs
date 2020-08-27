@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
 using Slask.Domain.Groups;
+using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds;
 using Slask.Domain.Utilities;
 using Slask.Persistence.Services;
@@ -82,6 +83,29 @@ namespace Slask.Persistence.Specflow.IntegrationTests
                 }
 
                 tournamentService.Save();
+            }
+        }
+
+        [Given(@"player layout for matches in tournament named ""(.*)"" looks like this")]
+        [When(@"player layout for matches in tournament named ""(.*)"" looks like this")]
+        [Then(@"player layout for matches in tournament named ""(.*)"" looks like this")]
+        public void GivenPlayerLayoutForMatchesInTournamentNamedLooksLikeThis(string tournamentName, Table table)
+        {
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+
+                foreach (TableRow row in table.Rows)
+                {
+                    ParseTableLayoutRow(row, out int roundIndex, out int groupIndex, out int matchIndex, out int playerIndex, out string playerName);
+
+                    RoundBase roundBase = tournament.Rounds[roundIndex];
+                    GroupBase groupBase = roundBase.Groups[groupIndex];
+                    Match match = groupBase.Matches[matchIndex];
+                    Player player = playerIndex == 0 ? match.Player1 : match.Player2;
+
+                    player.GetName().Should().Be(playerName);
+                }
             }
         }
 
@@ -176,7 +200,42 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             }
         }
 
-        public static void ParseMatchBestOfSelection(TableRow row, out int roundIndex, out int groupIndex, out int matchIndex, out int bestOf)
+        [When(@"matches in tournament named ""(.*)"" switches player references")]
+        public void WhenMatchesInTournamentNamedSwitchesPlayerReferences(string tournamentName, Table table)
+        {
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                
+                foreach (TableRow row in table.Rows)
+                {
+                    ParsePlayerSwitch(row, 
+                        out int roundIndex, 
+                        out int groupIndex1,
+                        out int matchIndex1,
+                        out string playerName1,
+                        out int groupIndex2,
+                        out int matchIndex2,
+                        out string playerName2);
+
+                    RoundBase roundBase = tournament.Rounds[roundIndex];
+
+                    GroupBase groupBase1 = roundBase.Groups[groupIndex1];
+                    Match match1 = groupBase1.Matches[matchIndex1];
+                    Player player1 = match1.FindPlayer(playerName1);
+
+                    GroupBase groupBase2 = roundBase.Groups[groupIndex2];
+                    Match match2 = groupBase2.Matches[matchIndex2];
+                    Player player2 = match2.FindPlayer(playerName2);
+
+                    tournamentService.SwitchPlayersInMatches(player1, player2);
+                }
+
+                tournamentService.Save();
+            }
+        }
+
+        private void ParseMatchBestOfSelection(TableRow row, out int roundIndex, out int groupIndex, out int matchIndex, out int bestOf)
         {
             roundIndex = -1;
             groupIndex = -1;
@@ -201,6 +260,86 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             if (row.ContainsKey("Best of"))
             {
                 int.TryParse(row["Best of"], out bestOf);
+            }
+        }
+
+        private void ParseTableLayoutRow(TableRow row, out int roundIndex, out int groupIndex, out int matchIndex, out int playerIndex, out string playerName)
+        {
+            roundIndex = -1;
+            groupIndex = -1;
+            matchIndex = -1;
+            playerIndex = -1;
+            playerName = "";
+
+            if (row.ContainsKey("Round index"))
+            {
+                int.TryParse(row["Round index"], out roundIndex);
+            }
+
+            if (row.ContainsKey("Group index"))
+            {
+                int.TryParse(row["Group index"], out groupIndex);
+            }
+
+            if (row.ContainsKey("Match index"))
+            {
+                int.TryParse(row["Match index"], out matchIndex);
+            }
+
+            if (row.ContainsKey("Player index"))
+            {
+                int.TryParse(row["Player index"], out playerIndex);
+            }
+
+            if (row.ContainsKey("Player name"))
+            {
+                playerName = row["Player name"];
+            }
+        }
+
+        private void ParsePlayerSwitch(TableRow row, out int roundIndex, out int groupIndex1, out int matchIndex1, out string playerName1, out int groupIndex2, out int matchIndex2, out string playerName2)
+        {
+            roundIndex = -1;
+            groupIndex1 = -1;
+            matchIndex1 = -1;
+            playerName1 = "";
+            groupIndex2 = -1;
+            matchIndex2 = -1;
+            playerName2 = "";
+
+            if (row.ContainsKey("Round index"))
+            {
+                int.TryParse(row["Round index"], out roundIndex);
+            }
+
+            if (row.ContainsKey("Group index 1"))
+            {
+                int.TryParse(row["Group index 1"], out groupIndex1);
+            }
+
+            if (row.ContainsKey("Match index 1"))
+            {
+                int.TryParse(row["Match index 1"], out matchIndex1);
+            }
+
+            if (row.ContainsKey("Player name 1"))
+            {
+                playerName1 = row["Player name 1"];
+            }
+
+            if (row.ContainsKey("Group index 2"))
+            {
+                int.TryParse(row["Group index 2"], out groupIndex2);
+            }
+
+            if (row.ContainsKey("Match index 2"))
+            {
+                int.TryParse(row["Match index 2"], out matchIndex2);
+            }
+
+            if (row.ContainsKey("Player name 2"))
+            {
+                playerName2 = row["Player name 2"];
             }
         }
     }
