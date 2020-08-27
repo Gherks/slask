@@ -160,6 +160,16 @@ namespace Slask.Persistence.Services
             return tournament.PlayerReferences;
         }
 
+        public bool SetStartTimeForMatch(Match match, DateTime dateTime)
+        {
+            if (match != null)
+            {
+                return match.SetStartDateTime(dateTime);
+            }
+
+            return false;
+        }
+
         public List<PlayerReference> GetPlayerReferencesByTournamentName(string name)
         {
             Tournament tournament = GetTournamentByName(name);
