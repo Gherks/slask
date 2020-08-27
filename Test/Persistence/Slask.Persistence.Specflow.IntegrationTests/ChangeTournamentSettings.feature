@@ -1,4 +1,4 @@
-Feature: ChangeTournamentSettings
+﻿Feature: ChangeTournamentSettings
 	Makes sure tournament entities can be changed when they are supposed to, and not change when they are not supposed to.
 
 @ChangeTournamentSettingsTag
@@ -13,8 +13,8 @@ Scenario: Can only remove a round before tournament has started
 		And round named "Round Dos" is removed from tournament named "Homestory Cup XX"
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure" is registered to tournament named "Homestory Cup XX"
 		And groups within tournament named "Homestory Cup XX" is played out
-			| Tournament index | Round index | Group index |
-			| 0                | 0           | 0           |
+			| Round index | Group index |
+			| 0           | 0           |
 	When round named "Round Uno" is removed from tournament named "Homestory Cup XX"
 		And round named "Round Cuatro" is removed from tournament named "Homestory Cup XX"
 	Then round layout in tournament named "Homestory Cup XX" is exactly as follows:
@@ -33,8 +33,8 @@ Scenario: Can only change advancing players per group count before tournament ha
 		And round named "Round Dos" changes players per group count to "4" in tournament named "Homestory Cup XX"
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure, Stats, Rogue" is registered to tournament named "Homestory Cup XX"
 		And groups within tournament named "Homestory Cup XX" is played out
-			| Tournament index | Round index | Group index |
-			| 0                | 0           | 0           |
+			| Round index | Group index |
+			| 0           | 0           |
 		And round named "Round Uno" changes advancing players per group count to "6" in tournament named "Homestory Cup XX"
 		And round named "Round Dos" changes players per group count to "8" in tournament named "Homestory Cup XX"
 	Then round layout in tournament named "Homestory Cup XX" is exactly as follows:
@@ -52,8 +52,8 @@ Scenario: Can only change players per group count before tournament has started
 		And round named "Round Dos" changes players per group count to "3" in tournament named "Homestory Cup XX"
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure, Stats, Rogue" is registered to tournament named "Homestory Cup XX"
 		And groups within tournament named "Homestory Cup XX" is played out
-			| Tournament index | Round index | Group index |
-			| 0                | 0           | 0           |
+			| Round index | Group index |
+			| 0           | 0           |
 		And round named "Round Uno" changes players per group count to "6" in tournament named "Homestory Cup XX"
 		And round named "Round Dos" changes players per group count to "2" in tournament named "Homestory Cup XX"
 	Then round layout in tournament named "Homestory Cup XX" is exactly as follows:
