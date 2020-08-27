@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Slask.Domain;
 using Slask.Domain.Bets.BetTypes;
 using Slask.Domain.Groups;
+using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
 using System;
@@ -403,6 +404,11 @@ namespace Slask.Persistence.Services
             }
 
             return false;
+        }
+
+        public bool SwitchPlayersInMatches(Player player1, Player player2)
+        {
+            return PlayerSwitcher.SwitchMatchesOn(player1, player2);
         }
 
         public bool AddScoreToPlayerInMatch(Tournament tournament, Guid matchId, Guid playerId, int score)
