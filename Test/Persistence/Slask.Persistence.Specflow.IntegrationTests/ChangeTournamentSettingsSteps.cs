@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
 using Slask.Domain.Groups;
-using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds;
 using Slask.Domain.Utilities;
 using Slask.Persistence.Services;
@@ -206,11 +205,11 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             using (TournamentService tournamentService = CreateTournamentService())
             {
                 Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
-                
+
                 foreach (TableRow row in table.Rows)
                 {
-                    ParsePlayerSwitch(row, 
-                        out int roundIndex, 
+                    ParsePlayerSwitch(row,
+                        out int roundIndex,
                         out int groupIndex1,
                         out int matchIndex1,
                         out string playerName1,
