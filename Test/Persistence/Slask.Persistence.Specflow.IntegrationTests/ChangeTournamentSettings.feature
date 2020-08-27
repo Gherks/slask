@@ -1,4 +1,4 @@
-﻿Feature: ChangeTournamentSettings
+Feature: ChangeTournamentSettings
 	Makes sure tournament entities can be changed when they are supposed to, and not change when they are not supposed to.
 
 @ChangeTournamentSettingsTag
@@ -80,6 +80,20 @@ Scenario: Can change best of settings in a match that has not started
 		| 0           | 0           | 0           | 3       |
 		| 0           | 1           | 0           | 5       |
 		| 0           | 1           | 1           | 3       |
+
+Scenario: Can change start time on match in tournament before it has started
+	Given a tournament named "Homestory Cup XX" has been created with users "" added to it
+		And tournament named "Homestory Cup XX" adds rounds
+			| Round type  | Round name | Advancing per group count | Players per group count |
+			| Round robin | Round Uno  | 2                         | 12                      |
+			| Bracket     | Round Dos  | 1                         | 2                       |
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure, Stats, Rogue" is registered to tournament named "Homestory Cup XX"
+	When move start time three hours forward for matches in tournament named "Homestory Cup XX"
+		| Round index | Group index | Match index |
+		| 0           | 0           | 0           |
+	Then start time has been moved forward three hours for matches in tournament named "Homestory Cup XX"
+		| Round index | Group index | Match index |
+		| 0           | 0           | 0           |
 
 
 #Scenario: As tournament is played, only the appropriate entities can be changed
