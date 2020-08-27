@@ -75,7 +75,7 @@ Scenario: Can change best of settings in a match that has not started
 		| Round index | Group index | Match index | Best of |
 		| 0           | 0           | 0           | 5       |
 		| 0           | 1           | 0           | 5       |
-	Then matches in tournament named "Homestory Cup XX" should be set to
+	Then best of for matches in tournament named "Homestory Cup XX" should be set to
 		| Round index | Group index | Match index | Best of |
 		| 0           | 0           | 0           | 3       |
 		| 0           | 1           | 0           | 5       |
