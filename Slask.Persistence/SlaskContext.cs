@@ -120,21 +120,18 @@ namespace Slask.Persistence
         {
             modelBuilder.Entity<RoundBase>().ToTable("Round")
                 .HasDiscriminator<ContestTypeEnum>("ContestType")
-                .HasValue<RoundBase>(ContestTypeEnum.None)
                 .HasValue<BracketRound>(ContestTypeEnum.Bracket)
                 .HasValue<DualTournamentRound>(ContestTypeEnum.DualTournament)
                 .HasValue<RoundRobinRound>(ContestTypeEnum.RoundRobin);
 
             modelBuilder.Entity<GroupBase>().ToTable("Group")
                 .HasDiscriminator<ContestTypeEnum>("ContestType")
-                .HasValue<GroupBase>(ContestTypeEnum.None)
                 .HasValue<BracketGroup>(ContestTypeEnum.Bracket)
                 .HasValue<DualTournamentGroup>(ContestTypeEnum.DualTournament)
                 .HasValue<RoundRobinGroup>(ContestTypeEnum.RoundRobin);
 
             modelBuilder.Entity<BetBase>().ToTable("Bet")
                 .HasDiscriminator<BetTypeEnum>("BetType")
-                .HasValue<BetBase>(BetTypeEnum.None)
                 .HasValue<MatchBet>(BetTypeEnum.MatchBet)
                 .HasValue<MiscellaneousBet>(BetTypeEnum.MiscellaneousBet);
         }
