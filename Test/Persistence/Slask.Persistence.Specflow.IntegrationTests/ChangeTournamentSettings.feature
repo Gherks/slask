@@ -1,4 +1,4 @@
-﻿Feature: ChangeTournamentSettings
+Feature: ChangeTournamentSettings
 	Makes sure tournament entities can be changed when they are supposed to, and not change when they are not supposed to.
 
 @ChangeTournamentSettingsTag
@@ -60,6 +60,26 @@ Scenario: Can only change players per group count before tournament has started
 		| Round type  | Round name | Advancing per group count | Players per group count |
 		| Bracket     | Round Uno  | 1                         | 4                       |
 		| Round robin | Round Dos  | 1                         | 3                       |
+
+Scenario: Can change best of settings in a match that has not started
+	Given a tournament named "Homestory Cup XX" has been created with users "" added to it
+		And tournament named "Homestory Cup XX" adds rounds
+			| Round type  | Round name | Advancing per group count | Players per group count |
+			| Bracket     | Round Uno  | 1                         | 6                       |
+			| Round robin | Round Dos  | 1                         | 2                       |
+		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure, Stats, Rogue" is registered to tournament named "Homestory Cup XX"
+		And groups within tournament named "Homestory Cup XX" is played out
+			| Round index | Group index |
+			| 0           | 0           |
+	When matches in tournament named "Homestory Cup XX" changes best of setting
+		| Round index | Group index | Match index | Best of |
+		| 0           | 1           | 0           | 5       |
+	Then matches in tournament named "Homestory Cup XX" should be set to
+		| Round index | Group index | Match index | Best of |
+		| 0           | 0           | 0           | 3       |
+		| 0           | 1           | 0           | 5       |
+		| 0           | 1           | 1           | 3       |
+
 
 #Scenario: As tournament is played, only the appropriate entities can be changed
 #	Given a tournament named "Homestory Cup XX" has been created with users "" added to it

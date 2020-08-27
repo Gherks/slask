@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
+using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Utilities;
 using Slask.Persistence.Services;
@@ -55,6 +56,51 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             }
         }
 
+        [Given(@"matches in tournament named ""(.*)"" changes best of setting")]
+        [When(@"matches in tournament named ""(.*)"" changes best of setting")]
+        public void WhenMatchesInTournamentNamedChangesBestOfSetting(string tournamentName, Table table)
+        {
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+
+                foreach(TableRow row in table.Rows)
+                {
+                    ParseMatchSelection(row, out int roundIndex, out int groupIndex, out int matchIndex, out int bestOf);
+
+                    RoundBase roundBase = tournament.Rounds[roundIndex];
+                    GroupBase groupBase = roundBase.Groups[groupIndex];
+                    Match match = groupBase.Matches[matchIndex];
+
+                    bool setResult = tournamentService.SetBestOfInMatch(match, bestOf);
+
+                    setResult.Should().BeTrue();
+                }
+
+                tournamentService.Save();
+            }
+        }
+
+        [Then(@"matches in tournament named ""(.*)"" should be set to")]
+        public void ThenMatchesInTournamentNamedShouldBeSetTo(string tournamentName, Table table)
+        {
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+
+                foreach (TableRow row in table.Rows)
+                {
+                    ParseMatchSelection(row, out int roundIndex, out int groupIndex, out int matchIndex, out int bestOf);
+
+                    RoundBase roundBase = tournament.Rounds[roundIndex];
+                    GroupBase groupBase = roundBase.Groups[groupIndex];
+                    Match match = groupBase.Matches[matchIndex];
+
+                    match.BestOf.Should().Be(bestOf);
+                }
+            }
+        }
+
         [Then(@"round layout in tournament named ""(.*)"" is exactly as follows:")]
         public void ThenRoundLayoutInTournamentNamedIsExactlyAsFollows(string tournamentName, Table table)
         {
@@ -76,6 +122,34 @@ namespace Slask.Persistence.Specflow.IntegrationTests
                     round.AdvancingPerGroupCount.Should().Be(advancingCount);
                     round.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
                 }
+            }
+        }
+
+        public static void ParseMatchSelection(TableRow row, out int roundIndex, out int groupIndex, out int matchIndex, out int bestOf)
+        {
+            roundIndex = -1;
+            groupIndex = -1;
+            matchIndex = -1;
+            bestOf = -1;
+
+            if (row.ContainsKey("Round index"))
+            {
+                int.TryParse(row["Round index"], out roundIndex);
+            }
+
+            if (row.ContainsKey("Group index"))
+            {
+                int.TryParse(row["Group index"], out groupIndex);
+            }
+
+            if (row.ContainsKey("Match index"))
+            {
+                int.TryParse(row["Match index"], out matchIndex);
+            }
+
+            if (row.ContainsKey("Best of"))
+            {
+                int.TryParse(row["Best of"], out bestOf);
             }
         }
     }
