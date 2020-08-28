@@ -411,6 +411,16 @@ namespace Slask.Persistence.Services
             return PlayerSwitcher.SwitchMatchesOn(player1, player2);
         }
 
+        public bool SolveTieByChoosingPlayerInGroup(GroupBase groupBase, Guid playerReferenceId)
+        {
+            return groupBase.SolveTieByChoosing(playerReferenceId);
+        }
+
+        public bool SolveTieByChoosingPlayerInGroup(GroupBase groupBase, PlayerReference playerReference)
+        {
+            return groupBase.SolveTieByChoosing(playerReference);
+        }
+
         public bool AddScoreToPlayerInMatch(Tournament tournament, Guid matchId, Guid playerId, int score)
         {
             if (tournament == null)
