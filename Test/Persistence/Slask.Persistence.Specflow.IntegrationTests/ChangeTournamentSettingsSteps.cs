@@ -1,4 +1,5 @@
-using FluentAssertions;
+﻿using FluentAssertions;
+using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
@@ -163,6 +164,29 @@ namespace Slask.Persistence.Specflow.IntegrationTests
                     Player player2 = match2.FindPlayer(playerName2);
 
                     tournamentService.SwitchPlayersInMatches(player1, player2);
+                }
+
+                tournamentService.Save();
+            }
+        }
+
+        [When(@"choosing players to solve tie in tournament named ""(.*)""")]
+        public void WhenChoosingPlayersToSolveTie(string tournamentName, Table table)
+        {
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+
+                foreach (TableRow row in table.Rows)
+                {
+                    ParseTieSolvingRow(row, out int roundIndex, out int groupIndex, out string playerName);
+
+                    RoundBase roundBase = tournament.Rounds[roundIndex];
+                    GroupBase groupBase = roundBase.Groups[groupIndex];
+
+                    PlayerReference playerReference = tournament.GetPlayerReferenceByName(playerName);
+
+                    tournamentService.SolveTieByChoosingPlayerInGroup(groupBase, playerReference);
                 }
 
                 tournamentService.Save();
@@ -339,6 +363,28 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             if (row.ContainsKey("Player name 2"))
             {
                 playerName2 = row["Player name 2"];
+            }
+        }
+
+        private void ParseTieSolvingRow(TableRow row, out int roundIndex, out int groupIndex, out string playerName)
+        {
+            roundIndex = -1;
+            groupIndex = -1;
+            playerName = "";
+
+            if (row.ContainsKey("Round index"))
+            {
+                int.TryParse(row["Round index"], out roundIndex);
+            }
+
+            if (row.ContainsKey("Group index"))
+            {
+                int.TryParse(row["Group index"], out groupIndex);
+            }
+
+            if (row.ContainsKey("Player name"))
+            {
+                playerName = row["Player name"];
             }
         }
     }

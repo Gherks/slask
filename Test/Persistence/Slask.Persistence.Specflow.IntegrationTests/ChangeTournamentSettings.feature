@@ -116,3 +116,24 @@ Scenario: Two different matches can switch player references with each other
 		| 0           | 0           | 0           | 1            | Stork       |
 		| 0           | 0           | 1           | 0            | Taeja       |
 		| 0           | 0           | 1           | 1            | Maru        |
+
+Scenario: Can solve a tie with tournament service
+	Given a tournament named "Homestory Cup XX" has been created with users "" added to it
+		And tournament named "Homestory Cup XX" adds rounds
+			| Round type  | Advancing per group count | Players per group count |
+			| Round robin | 2                         | 3                       |
+			| Bracket     | 1                         | 2                       |
+		And players "Maru, Stork, Taeja" is registered to tournament named "Homestory Cup XX"
+		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
+			| Round index | Group index | Match index | Scoring player | Added score |
+			| 0           | 0           | 0           | Maru           | 2           |
+			| 0           | 0           | 1           | Taeja          | 2           |
+			| 0           | 0           | 2           | Stork          | 2           |
+	When choosing players "Taeja, Stork" to solve tie in tournament named "Homestory Cup XX"
+         | Round index | Group index | Player name |
+         | 0           | 0           | Taeja       |
+         | 0           | 0           | Stork       |
+	Then player layout for matches in tournament named "Homestory Cup XX" looks like this
+         | Round index | Group index | Match index | Player index | Player name |
+         | 1           | 0           | 0           | 0            | Taeja       |
+         | 1           | 0           | 0           | 1            | Stork       |
