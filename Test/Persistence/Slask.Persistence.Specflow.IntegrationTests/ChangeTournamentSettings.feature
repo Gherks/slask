@@ -129,7 +129,7 @@ Scenario: Can solve a tie with tournament service
 			| 0           | 0           | 0           | Maru           | 2           |
 			| 0           | 0           | 1           | Taeja          | 2           |
 			| 0           | 0           | 2           | Stork          | 2           |
-	When choosing players "Taeja, Stork" to solve tie in tournament named "Homestory Cup XX"
+	When choosing players to solve tie in tournament named "Homestory Cup XX"
          | Round index | Group index | Player name |
          | 0           | 0           | Taeja       |
          | 0           | 0           | Stork       |
