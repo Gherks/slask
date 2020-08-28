@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
@@ -134,6 +134,41 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             }
         }
 
+        [When(@"matches in tournament named ""(.*)"" switches player references")]
+        public void WhenMatchesInTournamentNamedSwitchesPlayerReferences(string tournamentName, Table table)
+        {
+            using (TournamentService tournamentService = CreateTournamentService())
+            {
+                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+
+                foreach (TableRow row in table.Rows)
+                {
+                    ParsePlayerSwitch(row,
+                        out int roundIndex,
+                        out int groupIndex1,
+                        out int matchIndex1,
+                        out string playerName1,
+                        out int groupIndex2,
+                        out int matchIndex2,
+                        out string playerName2);
+
+                    RoundBase roundBase = tournament.Rounds[roundIndex];
+
+                    GroupBase groupBase1 = roundBase.Groups[groupIndex1];
+                    Match match1 = groupBase1.Matches[matchIndex1];
+                    Player player1 = match1.FindPlayer(playerName1);
+
+                    GroupBase groupBase2 = roundBase.Groups[groupIndex2];
+                    Match match2 = groupBase2.Matches[matchIndex2];
+                    Player player2 = match2.FindPlayer(playerName2);
+
+                    tournamentService.SwitchPlayersInMatches(player1, player2);
+                }
+
+                tournamentService.Save();
+            }
+        }
+
         [Then(@"best of for matches in tournament named ""(.*)"" should be set to")]
         public void ThenBestOfForMatchesInTournamentNamedShouldBeSetTo(string tournamentName, Table table)
         {
@@ -196,41 +231,6 @@ namespace Slask.Persistence.Specflow.IntegrationTests
                     DateTime oldStartDateTime = oldMatchStartTimes[match.Id];
                     match.StartDateTime.Should().BeCloseTo(oldStartDateTime.AddHours(3));
                 }
-            }
-        }
-
-        [When(@"matches in tournament named ""(.*)"" switches player references")]
-        public void WhenMatchesInTournamentNamedSwitchesPlayerReferences(string tournamentName, Table table)
-        {
-            using (TournamentService tournamentService = CreateTournamentService())
-            {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
-
-                foreach (TableRow row in table.Rows)
-                {
-                    ParsePlayerSwitch(row,
-                        out int roundIndex,
-                        out int groupIndex1,
-                        out int matchIndex1,
-                        out string playerName1,
-                        out int groupIndex2,
-                        out int matchIndex2,
-                        out string playerName2);
-
-                    RoundBase roundBase = tournament.Rounds[roundIndex];
-
-                    GroupBase groupBase1 = roundBase.Groups[groupIndex1];
-                    Match match1 = groupBase1.Matches[matchIndex1];
-                    Player player1 = match1.FindPlayer(playerName1);
-
-                    GroupBase groupBase2 = roundBase.Groups[groupIndex2];
-                    Match match2 = groupBase2.Matches[matchIndex2];
-                    Player player2 = match2.FindPlayer(playerName2);
-
-                    tournamentService.SwitchPlayersInMatches(player1, player2);
-                }
-
-                tournamentService.Save();
             }
         }
 
