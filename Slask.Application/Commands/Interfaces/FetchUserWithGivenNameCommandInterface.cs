@@ -1,4 +1,4 @@
-﻿namespace Slask.Application.Commands
+﻿namespace Slask.Application.Commands.Interfaces
 {
     interface FetchUserWithGivenNameCommandInterface
     {
