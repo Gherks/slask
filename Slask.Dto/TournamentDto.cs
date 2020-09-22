@@ -8,8 +8,8 @@ namespace Slask.Dto
         public Guid Id { get; set; }
         public string Name { get; set; }
         public DateTime Created { get; set; }
-        public List<RoundDto> Rounds { get; set; }
         public List<BetterDto> Betters { get; set; }
-        public List<string> Issues { get; set; }
+        public List<RoundDto> Rounds { get; set; }
+        public List<TournamentIssueDto> Issues { get; set; }
     }
 }
