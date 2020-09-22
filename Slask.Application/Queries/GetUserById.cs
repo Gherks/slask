@@ -7,21 +7,21 @@ using System;
 
 namespace Slask.Application.Querys
 {
-    public sealed class GetUserByGuid : QueryInterface<UserDto>
+    public sealed class GetUserById : QueryInterface<UserDto>
     {
         public Guid UserId { get; }
     }
 
-    public sealed class GetUserByGuidHandler : QueryHandlerInterface<GetUserByGuid, UserDto>
+    public sealed class GetUserByIdHandler : QueryHandlerInterface<GetUserById, UserDto>
     {
         private readonly UserServiceInterface _userService;
 
-        public GetUserByGuidHandler(UserServiceInterface userService)
+        public GetUserByIdHandler(UserServiceInterface userService)
         {
             _userService = userService;
         }
 
-        public UserDto Handle(GetUserByGuid query)
+        public UserDto Handle(GetUserById query)
         {
             User user = _userService.GetUserById(query.UserId);
 

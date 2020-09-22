@@ -6,28 +6,28 @@ using System;
 
 namespace Slask.Application.Commands
 {
-    public sealed class AddPlayerToTournamentByGuid : CommandInterface
+    public sealed class AddPlayerToTournamentById : CommandInterface
     {
         public Guid TournamentId { get; }
         public string PlayerName { get; }
 
-        public AddPlayerToTournamentByGuid(Guid tournamentId, string playerName)
+        public AddPlayerToTournamentById(Guid tournamentId, string playerName)
         {
             TournamentId = tournamentId;
             PlayerName = playerName;
         }
     }
 
-    public sealed class AddPlayerToTournamentByGuidHandler : CommandHandlerInterface<AddPlayerToTournamentByGuid>
+    public sealed class AddPlayerToTournamentByIdHandler : CommandHandlerInterface<AddPlayerToTournamentById>
     {
         private readonly TournamentServiceInterface _tournamentService;
 
-        public AddPlayerToTournamentByGuidHandler(TournamentServiceInterface tournamentService)
+        public AddPlayerToTournamentByIdHandler(TournamentServiceInterface tournamentService)
         {
             _tournamentService = tournamentService;
         }
 
-        public Result Handle(AddPlayerToTournamentByGuid command)
+        public Result Handle(AddPlayerToTournamentById command)
         {
             Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
 

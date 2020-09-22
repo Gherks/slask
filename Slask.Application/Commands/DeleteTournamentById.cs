@@ -4,16 +4,16 @@ using Slask.Persistence.Services;
 
 namespace Slask.Application.Commands
 {
-    public sealed class DeleteTournamentByGuid : CommandInterface
+    public sealed class DeleteTournamentById : CommandInterface
     {
     }
 
-    public sealed class DeleteTournamentByGuidHandler : CommandHandlerInterface<DeleteTournamentByGuid>
+    public sealed class DeleteTournamentByIdHandler : CommandHandlerInterface<DeleteTournamentById>
     {
         private readonly UserServiceInterface _userService;
         private readonly TournamentServiceInterface _tournamentService;
 
-        public DeleteTournamentByGuidHandler(
+        public DeleteTournamentByIdHandler(
                 UserServiceInterface userService,
                 TournamentServiceInterface tournamentService)
         {
@@ -21,7 +21,7 @@ namespace Slask.Application.Commands
             _tournamentService = tournamentService;
         }
 
-        public Result Handle(DeleteTournamentByGuid command)
+        public Result Handle(DeleteTournamentById command)
         {
             return Result.Success();
         }
