@@ -2,37 +2,38 @@
 using Slask.Application.Commands.Interfaces;
 using Slask.Domain;
 using Slask.Persistence.Services;
+using System;
 
 namespace Slask.Application.Commands
 {
-    public sealed class AddPlayerToTournamentByName : CommandInterface
+    public sealed class AddPlayerToTournament : CommandInterface
     {
-        public string TournamentName { get; }
+        public Guid TournamentId { get; }
         public string PlayerName { get; }
 
-        public AddPlayerToTournamentByName(string tournamentName, string playerName)
+        public AddPlayerToTournament(Guid tournamentId, string playerName)
         {
-            TournamentName = tournamentName;
+            TournamentId = tournamentId;
             PlayerName = playerName;
         }
     }
 
-    public sealed class AddPlayerToTournamentByNameHandler : CommandHandlerInterface<AddPlayerToTournamentByName>
+    public sealed class AddPlayerToTournamentHandler : CommandHandlerInterface<AddPlayerToTournament>
     {
         private readonly TournamentServiceInterface _tournamentService;
 
-        public AddPlayerToTournamentByNameHandler(TournamentServiceInterface tournamentService)
+        public AddPlayerToTournamentHandler(TournamentServiceInterface tournamentService)
         {
             _tournamentService = tournamentService;
         }
 
-        public Result Handle(AddPlayerToTournamentByName command)
+        public Result Handle(AddPlayerToTournament command)
         {
-            Tournament tournament = _tournamentService.GetTournamentByName(command.TournamentName);
+            Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
-                return Result.Failure($"Could not add new player ({ command.PlayerName }) to tournament. Tournament ({ command.TournamentName }) not found.");
+                return Result.Failure($"Could not add new player ({ command.PlayerName }) to tournament. Tournament ({ command.TournamentId }) not found.");
             }
 
             PlayerReference playerReference = _tournamentService.AddPlayerReference(tournament, command.PlayerName);

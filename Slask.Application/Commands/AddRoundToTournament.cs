@@ -8,34 +8,34 @@ using System;
 
 namespace Slask.Application.Commands
 {
-    public sealed class AddRoundToTournamentByName : CommandInterface
+    public sealed class AddRoundToTournament : CommandInterface
     {
-        public string TournamentName { get; }
+        public Guid TournamentId { get; }
         public string RoundType { get; }
 
-        public AddRoundToTournamentByName(string tournamentName, string roundType)
+        public AddRoundToTournament(Guid tournamentId, string roundType)
         {
-            TournamentName = tournamentName;
+            TournamentId = tournamentId;
             RoundType = roundType;
         }
     }
 
-    public sealed class AddRoundToTournamentByNameHandler : CommandHandlerInterface<AddRoundToTournamentByName>
+    public sealed class AddRoundToTournamentHandler : CommandHandlerInterface<AddRoundToTournament>
     {
         private readonly TournamentServiceInterface _tournamentService;
 
-        public AddRoundToTournamentByNameHandler(TournamentServiceInterface tournamentService)
+        public AddRoundToTournamentHandler(TournamentServiceInterface tournamentService)
         {
             _tournamentService = tournamentService;
         }
 
-        public Result Handle(AddRoundToTournamentByName command)
+        public Result Handle(AddRoundToTournament command)
         {
-            Tournament tournament = _tournamentService.GetTournamentByName(command.TournamentName);
+            Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
-                return Result.Failure($"Could not add round ({ command.RoundType }) to tournament. Tournament ({ command.TournamentName }) not found.");
+                return Result.Failure($"Could not add round ({ command.RoundType }) to tournament. Tournament ({ command.TournamentId }) not found.");
             }
 
             string parsedRoundType = StringUtility.ToUpperNoSpaces(command.RoundType);

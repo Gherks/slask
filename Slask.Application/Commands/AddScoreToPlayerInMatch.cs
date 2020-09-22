@@ -6,38 +6,38 @@ using System;
 
 namespace Slask.Application.Commands
 {
-    public sealed class AddScoreToPlayerInMatchByTournamentName : CommandInterface
+    public sealed class AddScoreToPlayerInMatch : CommandInterface
     {
-        public string TournamentName { get; }
+        public Guid TournamentId { get; }
         public Guid MatchId { get; }
         public Guid PlayerId { get; }
         public int Score { get; }
 
-        public AddScoreToPlayerInMatchByTournamentName(string tournamentName, Guid matchId, Guid playerId, int score)
+        public AddScoreToPlayerInMatch(Guid tournamentId, Guid matchId, Guid playerId, int score)
         {
-            TournamentName = tournamentName;
+            TournamentId = tournamentId;
             MatchId = matchId;
             PlayerId = playerId;
             Score = score;
         }
     }
 
-    public sealed class AddScoreToPlayerInMatchByTournamentNameHandler : CommandHandlerInterface<AddScoreToPlayerInMatchByTournamentName>
+    public sealed class AddScoreToPlayerInMatchHandler : CommandHandlerInterface<AddScoreToPlayerInMatch>
     {
         private readonly TournamentServiceInterface _tournamentService;
 
-        public AddScoreToPlayerInMatchByTournamentNameHandler(TournamentServiceInterface tournamentService)
+        public AddScoreToPlayerInMatchHandler(TournamentServiceInterface tournamentService)
         {
             _tournamentService = tournamentService;
         }
 
-        public Result Handle(AddScoreToPlayerInMatchByTournamentName command)
+        public Result Handle(AddScoreToPlayerInMatch command)
         {
-            Tournament tournament = _tournamentService.GetTournamentByName(command.TournamentName);
+            Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
-                return Result.Failure($"Could add score ({ command.Score }) to player ({ command.PlayerId }) in match ({ command.MatchId }). Tournament ({ command.TournamentName }) not found.");
+                return Result.Failure($"Could add score ({ command.Score }) to player ({ command.PlayerId }) in match ({ command.MatchId }). Tournament ({ command.TournamentId }) not found.");
             }
 
             bool scoreAdded = _tournamentService.AddScoreToPlayerInMatch(tournament, command.MatchId, command.PlayerId, command.Score);
