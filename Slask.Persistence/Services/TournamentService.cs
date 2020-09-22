@@ -127,26 +127,37 @@ namespace Slask.Persistence.Services
             return tournament;
         }
 
-        private IQueryable<Tournament> GetTournamentWithComponentsFromQuery(IQueryable<Tournament> tournamentQuery)
+        public PlayerReference AddPlayerReference(Tournament tournament, string name)
         {
-            return tournamentQuery
-                .Include(tournament => tournament.PlayerReferences)
-                .Include(tournament => tournament.Betters)
-                    .ThenInclude(better => better.Bets)
-                .Include(tournament => tournament.Betters)
-                    .ThenInclude(better => better.User)
-                .Include(tournament => tournament.Rounds)
-                .Include(tournament => tournament.Rounds)
-                    .ThenInclude(round => round.Groups)
-                        .ThenInclude(group => group.Matches)
-                            .ThenInclude(match => match.Player1)
-                .Include(tournament => tournament.Rounds)
-                    .ThenInclude(round => round.Groups)
-                        .ThenInclude(group => group.Matches)
-                            .ThenInclude(match => match.Player2);
+            if (tournament != null)
+            {
+                return tournament.RegisterPlayerReference(name);
+            }
+
+            return null;
         }
 
-        public List<PlayerReference> GetPlayerReferencesByTournamentId(Guid id)
+        public bool RemovePlayerReferenceFromTournament(Tournament tournament, string name)
+        {
+            if (tournament != null)
+            {
+                return tournament.ExcludePlayerReference(name);
+            }
+
+            return false;
+        }
+
+        public bool RenamePlayerReferenceInTournament(PlayerReference playerReference, string name)
+        {
+            if (playerReference != null)
+            {
+                return playerReference.RenameTo(name);
+            }
+
+            return false;
+        }
+
+        public IEnumerable<PlayerReference> GetPlayerReferencesByTournamentId(Guid id)
         {
             Tournament tournament = GetTournamentById(id);
 
@@ -161,17 +172,7 @@ namespace Slask.Persistence.Services
             return tournament.PlayerReferences;
         }
 
-        public bool SetStartTimeForMatch(Match match, DateTime dateTime)
-        {
-            if (match != null)
-            {
-                return match.SetStartDateTime(dateTime);
-            }
-
-            return false;
-        }
-
-        public List<PlayerReference> GetPlayerReferencesByTournamentName(string name)
+        public IEnumerable<PlayerReference> GetPlayerReferencesByTournamentName(string name)
         {
             Tournament tournament = GetTournamentByName(name);
 
@@ -184,36 +185,6 @@ namespace Slask.Persistence.Services
             }
 
             return tournament.PlayerReferences;
-        }
-
-        public List<Better> GetBettersByTournamentId(Guid id)
-        {
-            Tournament tournament = GetTournamentById(id);
-
-            bool tournamentIsInvalid = tournament == null;
-
-            if (tournamentIsInvalid)
-            {
-                // LOG Error: Cannot fetch betters from tournament by id, tournament does not exist.
-                return null;
-            }
-
-            return tournament.Betters;
-        }
-
-        public List<Better> GetBettersByTournamentName(string name)
-        {
-            Tournament tournament = GetTournamentByName(name);
-
-            bool tournamentIsInvalid = tournament == null;
-
-            if (tournamentIsInvalid)
-            {
-                // LOG Error: Cannot fetch betters from tournament by name, tournament does not exist.
-                return null;
-            }
-
-            return tournament.Betters;
         }
 
         public Better AddBetterToTournament(Tournament tournament, User user)
@@ -250,6 +221,36 @@ namespace Slask.Persistence.Services
             }
 
             return false;
+        }
+
+        public IEnumerable<Better> GetBettersByTournamentId(Guid id)
+        {
+            Tournament tournament = GetTournamentById(id);
+
+            bool tournamentIsInvalid = tournament == null;
+
+            if (tournamentIsInvalid)
+            {
+                // LOG Error: Cannot fetch betters from tournament by id, tournament does not exist.
+                return null;
+            }
+
+            return tournament.Betters;
+        }
+
+        public IEnumerable<Better> GetBettersByTournamentName(string name)
+        {
+            Tournament tournament = GetTournamentByName(name);
+
+            bool tournamentIsInvalid = tournament == null;
+
+            if (tournamentIsInvalid)
+            {
+                // LOG Error: Cannot fetch betters from tournament by name, tournament does not exist.
+                return null;
+            }
+
+            return tournament.Betters;
         }
 
         public BracketRound AddBracketRoundToTournament(Tournament tournament)
@@ -291,36 +292,6 @@ namespace Slask.Persistence.Services
             return false;
         }
 
-        public PlayerReference AddPlayerReference(Tournament tournament, string name)
-        {
-            if (tournament != null)
-            {
-                return tournament.RegisterPlayerReference(name);
-            }
-
-            return null;
-        }
-
-        public bool RemovePlayerReferenceFromTournament(Tournament tournament, string name)
-        {
-            if (tournament != null)
-            {
-                return tournament.ExcludePlayerReference(name);
-            }
-
-            return false;
-        }
-
-        public bool RenamePlayerReferenceInTournament(PlayerReference playerReference, string name)
-        {
-            if (playerReference != null)
-            {
-                return playerReference.RenameTo(name);
-            }
-
-            return false;
-        }
-
         public bool RenameRoundInTournament(RoundBase round, string name)
         {
             if (round != null)
@@ -346,6 +317,16 @@ namespace Slask.Persistence.Services
             if (round != null)
             {
                 return round.SetPlayersPerGroupCount(count);
+            }
+
+            return false;
+        }
+
+        public bool SetStartTimeForMatch(Match match, DateTime dateTime)
+        {
+            if (match != null)
+            {
+                return match.SetStartDateTime(dateTime);
             }
 
             return false;
@@ -478,6 +459,25 @@ namespace Slask.Persistence.Services
             }
 
             return true;
+        }
+
+        private IQueryable<Tournament> GetTournamentWithComponentsFromQuery(IQueryable<Tournament> tournamentQuery)
+        {
+            return tournamentQuery
+                .Include(tournament => tournament.PlayerReferences)
+                .Include(tournament => tournament.Betters)
+                    .ThenInclude(better => better.Bets)
+                .Include(tournament => tournament.Betters)
+                    .ThenInclude(better => better.User)
+                .Include(tournament => tournament.Rounds)
+                .Include(tournament => tournament.Rounds)
+                    .ThenInclude(round => round.Groups)
+                        .ThenInclude(group => group.Matches)
+                            .ThenInclude(match => match.Player1)
+                .Include(tournament => tournament.Rounds)
+                    .ThenInclude(round => round.Groups)
+                        .ThenInclude(group => group.Matches)
+                            .ThenInclude(match => match.Player2);
         }
     }
 }
