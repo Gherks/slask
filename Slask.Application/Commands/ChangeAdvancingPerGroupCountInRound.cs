@@ -23,14 +23,10 @@ namespace Slask.Application.Commands
 
     public sealed class ChangeAdvancingPerGroupCountInRoundHandler : CommandHandlerInterface<ChangeAdvancingPerGroupCountInRound>
     {
-        private readonly UserServiceInterface _userService;
         private readonly TournamentServiceInterface _tournamentService;
 
-        public ChangeAdvancingPerGroupCountInRoundHandler(
-                UserServiceInterface userService,
-                TournamentServiceInterface tournamentService)
+        public ChangeAdvancingPerGroupCountInRoundHandler(TournamentServiceInterface tournamentService)
         {
-            _userService = userService;
             _tournamentService = tournamentService;
         }
 
