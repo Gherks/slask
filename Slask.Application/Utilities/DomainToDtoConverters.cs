@@ -4,6 +4,7 @@ using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Utilities;
 using Slask.Dto;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Slask.Application.Utilities
@@ -31,6 +32,8 @@ namespace Slask.Application.Utilities
 
         public static TournamentDto ConvertToTournamentDto(Tournament tournament)
         {
+            List<TournamentIssue> issues = tournament.TournamentIssueReporter.Issues;
+
             return new TournamentDto()
             {
                 Id = tournament.Id,
@@ -38,7 +41,7 @@ namespace Slask.Application.Utilities
                 Created = tournament.Created,
                 Betters = tournament.Betters.Select(better => ConvertToBetterDto(better)).ToList(),
                 Rounds = tournament.Rounds.Select(round => ConvertToRoundDto(round)).ToList(),
-                Issues = tournament.TournamentIssueReporter.Issues.Select(issue => ConvertToTournamentIssueDto(issue)).ToList()
+                Issues = issues.Select(issue => ConvertToTournamentIssueDto(issue)).ToList()
             };
         }
 
@@ -49,7 +52,9 @@ namespace Slask.Application.Utilities
                 Id = better.Id,
                 UserId = better.User.Id,
                 Name = better.User.Name,
-                MatchBets = better.GetBetsOfType<MatchBet>().Select(bet => ConvertToMatchBetDto(bet)).ToList()
+                MatchBets = better.Bets.OfType<MatchBet>()
+                    .Select(matchBet => ConvertToMatchBetDto(matchBet))
+                    .ToList()
             };
         }
 
