@@ -19,7 +19,7 @@ namespace Slask.Application.Commands
             RoundId = roundId;
             AdvancingPerGroupCount = advancingPerGroupCount;
         }
-}
+    }
 
     public sealed class ChangeAdvancingPerGroupCountInRoundHandler : CommandHandlerInterface<ChangeAdvancingPerGroupCountInRound>
     {
@@ -34,7 +34,7 @@ namespace Slask.Application.Commands
         {
             Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
 
-            if(tournament == null)
+            if (tournament == null)
             {
                 return Result.Failure($"Could not change advancing per group count ({ command.AdvancingPerGroupCount }) setting in round ({ command.RoundId }). Tournament ({ command.TournamentId }) not found.");
             }

@@ -19,7 +19,7 @@ namespace Slask.Application.Commands
             RoundId = roundId;
             PlayersPerGroupCount = playersPerGroupCount;
         }
-}
+    }
 
     public sealed class ChangeGroupSizeInRoundHandler : CommandHandlerInterface<ChangeGroupSizeInRound>
     {
