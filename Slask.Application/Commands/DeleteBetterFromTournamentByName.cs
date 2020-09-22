@@ -1,11 +1,18 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
 using Slask.Persistence.Services;
+using System;
 
 namespace Slask.Application.Commands
 {
     public sealed class DeleteBetterFromTournamentByName : CommandInterface
     {
+        public Guid TournamentId { get; }
+
+        public DeleteBetterFromTournamentByName(Guid tournamentId)
+        {
+            TournamentId = tournamentId;
+        }
     }
 
     public sealed class DeleteBetterFromTournamentByNameHandler : CommandHandlerInterface<DeleteBetterFromTournamentByName>
@@ -23,6 +30,7 @@ namespace Slask.Application.Commands
 
         public Result Handle(DeleteBetterFromTournamentByName command)
         {
+            _tournamentService.Save();
             return Result.Success();
         }
     }
