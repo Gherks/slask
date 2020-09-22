@@ -28,7 +28,7 @@ namespace Slask.Application.Commands
         {
             User user = _userService.CreateUser(command.Name);
 
-            if(user == null)
+            if (user == null)
             {
                 return Result.Failure($"Could not create user with name {command.Name}");
             }

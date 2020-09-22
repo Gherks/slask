@@ -9,7 +9,7 @@ namespace Slask.Application.Commands
     }
 
     public sealed class BetterPlaceBetOnMatchHandler : CommandHandlerInterface<BetterPlaceBetOnMatch>
-    { 
+    {
         private readonly UserServiceInterface _userService;
         private readonly TournamentServiceInterface _tournamentService;
 

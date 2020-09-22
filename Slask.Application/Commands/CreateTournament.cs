@@ -32,7 +32,7 @@ namespace Slask.Application.Commands
             {
                 return Result.Failure($"Could not create tournament with name: {command.Name}");
             }
-            
+
             _tournamentService.Save();
             return Result.Success();
         }

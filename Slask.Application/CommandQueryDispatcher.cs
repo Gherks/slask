@@ -2,8 +2,6 @@
 using Slask.Application.Commands.Interfaces;
 using Slask.Application.Queries.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Slask.Application
 {
@@ -23,7 +21,7 @@ namespace Slask.Application
             Type commandHandlerType = type.MakeGenericType(typeArgs);
 
             dynamic handler = _provider.GetService(commandHandlerType);
-            Result result =  handler.Handle((dynamic)command);
+            Result result = handler.Handle((dynamic)command);
 
             return result;
         }

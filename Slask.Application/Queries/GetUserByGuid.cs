@@ -12,7 +12,7 @@ namespace Slask.Application.Querys
     }
 
     public sealed class GetUserByGuidHandler : QueryHandlerInterface<GetUserByGuid, UserDto>
-    { 
+    {
         private readonly UserServiceInterface _userService;
 
         public GetUserByGuidHandler(UserServiceInterface userService)

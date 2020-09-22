@@ -11,7 +11,7 @@ namespace Slask.Application.Querys
     }
 
     public sealed class GetTournamentByNameHandler : QueryHandlerInterface<GetTournamentByName, TournamentDto>
-    { 
+    {
         private readonly TournamentServiceInterface _tournamentService;
 
         public GetTournamentByNameHandler(TournamentServiceInterface tournamentService)

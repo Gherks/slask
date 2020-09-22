@@ -9,7 +9,7 @@ namespace Slask.Application.Commands
     }
 
     public sealed class AddUserToTournamentHandler : CommandHandlerInterface<AddUserToTournament>
-    { 
+    {
         private readonly UserServiceInterface _userService;
         private readonly TournamentServiceInterface _tournamentService;
 

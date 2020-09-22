@@ -12,7 +12,7 @@ namespace Slask.Application.Querys
     }
 
     public sealed class GetAllTournamentsHandler : QueryHandlerInterface<GetAllTournaments, IEnumerable<TournamentDto>>
-    { 
+    {
         private readonly TournamentServiceInterface _tournamentService;
 
         public GetAllTournamentsHandler(TournamentServiceInterface tournamentService)

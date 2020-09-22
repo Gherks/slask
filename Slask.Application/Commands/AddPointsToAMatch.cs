@@ -9,7 +9,7 @@ namespace Slask.Application.Commands
     }
 
     public sealed class AddPointsToAMatchHandler : CommandHandlerInterface<AddPointsToAMatch>
-    { 
+    {
         private readonly UserServiceInterface _userService;
         private readonly TournamentServiceInterface _tournamentService;
 
