@@ -8,6 +8,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Slask.Domain\Slask.Domain.csproj" />
+    <ProjectReference Include="..\Slask.Dto\Slask.Dto.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CSharpFunctionalExtensions" Version="2.11.7" />
   </ItemGroup>
 
 </Project>
