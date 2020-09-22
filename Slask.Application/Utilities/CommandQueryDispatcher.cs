@@ -3,7 +3,7 @@ using Slask.Application.Commands.Interfaces;
 using Slask.Application.Queries.Interfaces;
 using System;
 
-namespace Slask.Application
+namespace Slask.Application.Utilities
 {
     public sealed class CommandQueryDispatcher
     {
