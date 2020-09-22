@@ -2,7 +2,7 @@
 
 namespace Slask.Dto
 {
-    public class PlayerDto
+    public sealed class PlayerDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

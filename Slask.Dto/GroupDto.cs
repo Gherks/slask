@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Slask.Dto
 {
-    public class GroupDto
+    public sealed class GroupDto
     {
         public Guid Id { get; set; }
         public string ContestType { get; set; }

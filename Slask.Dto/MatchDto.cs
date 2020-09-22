@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
 namespace Slask.Dto
 {
-    public class MatchDto
+    public sealed class MatchDto
     {
         public Guid Id { get; set; }
         public int SortOrder { get; set; }
