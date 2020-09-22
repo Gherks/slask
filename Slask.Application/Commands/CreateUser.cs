@@ -30,9 +30,10 @@ namespace Slask.Application.Commands
 
             if (user == null)
             {
-                return Result.Failure($"Could not create user with name {command.Name}");
+                return Result.Failure($"Could not create user ({ command.Name })");
             }
 
+            _userService.Save();
             return Result.Success();
         }
     }

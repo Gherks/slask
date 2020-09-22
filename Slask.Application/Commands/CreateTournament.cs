@@ -30,7 +30,7 @@ namespace Slask.Application.Commands
 
             if (tournament == null)
             {
-                return Result.Failure($"Could not create tournament with name: {command.Name}");
+                return Result.Failure($"Could not create tournament ({command.Name})");
             }
 
             _tournamentService.Save();
