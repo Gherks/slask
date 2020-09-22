@@ -7,11 +7,11 @@ using System.Linq;
 
 namespace Slask.Application.Querys
 {
-    public sealed class GetAllTournaments : QueryInterface<IEnumerable<TournamentDto>>
+    public sealed class GetAllTournaments : QueryInterface<IEnumerable<BareTournamentDto>>
     {
     }
 
-    public sealed class GetAllTournamentsHandler : QueryHandlerInterface<GetAllTournaments, IEnumerable<TournamentDto>>
+    public sealed class GetAllTournamentsHandler : QueryHandlerInterface<GetAllTournaments, IEnumerable<BareTournamentDto>>
     {
         private readonly TournamentServiceInterface _tournamentService;
 
@@ -20,14 +20,19 @@ namespace Slask.Application.Querys
             _tournamentService = tournamentService;
         }
 
-        public IEnumerable<TournamentDto> Handle(GetAllTournaments query)
+        public IEnumerable<BareTournamentDto> Handle(GetAllTournaments query)
         {
             return _tournamentService.GetTournaments().Select(tournament => ConvertToTournamentDto(tournament)).ToList();
         }
 
-        private TournamentDto ConvertToTournamentDto(Tournament tournament)
+        private BareTournamentDto ConvertToTournamentDto(Tournament tournament)
         {
-            return new TournamentDto();
+            return new BareTournamentDto()
+            {
+                Id = tournament.Id,
+                Name = tournament.Name,
+                Created = tournament.Created
+            };
         }
     }
 }
