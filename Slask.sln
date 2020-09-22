@@ -38,6 +38,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.Domain.Xunit.UnitTest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Slask.TestCore", "Test\Slask.TestCore\Slask.TestCore.csproj", "{48E66895-59F9-41EE-8A23-415EE75BBB4A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Slask.Dto", "Slask.Dto\Slask.Dto.csproj", "{ABA5BF57-07AF-4F65-A576-07ADC3321E1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -92,6 +94,10 @@ Global
 		{48E66895-59F9-41EE-8A23-415EE75BBB4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48E66895-59F9-41EE-8A23-415EE75BBB4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48E66895-59F9-41EE-8A23-415EE75BBB4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABA5BF57-07AF-4F65-A576-07ADC3321E1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABA5BF57-07AF-4F65-A576-07ADC3321E1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABA5BF57-07AF-4F65-A576-07ADC3321E1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABA5BF57-07AF-4F65-A576-07ADC3321E1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
