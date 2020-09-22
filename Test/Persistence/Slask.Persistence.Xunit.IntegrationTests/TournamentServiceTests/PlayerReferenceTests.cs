@@ -20,7 +20,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
 
                 tournamentService.AddRoundRobinRoundToTournament(tournament);
 
-                List<PlayerReference> playerReferences = tournamentService.GetPlayerReferencesByTournamentId(tournament.Id);
+                List<PlayerReference> playerReferences = tournamentService.GetPlayerReferencesByTournamentId(tournament.Id).ToList();
 
                 playerReferences.Should().BeEmpty();
             }
@@ -107,7 +107,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
             {
                 Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
 
-                List<PlayerReference> playerReferences = tournamentService.GetPlayerReferencesByTournamentId(tournament.Id);
+                List<PlayerReference> playerReferences = tournamentService.GetPlayerReferencesByTournamentId(tournament.Id).ToList();
 
                 playerReferences.Should().HaveCount(8);
 
@@ -129,7 +129,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
 
             using (TournamentService tournamentService = CreateTournamentService())
             {
-                List<PlayerReference> playerReferences = tournamentService.GetPlayerReferencesByTournamentName(tournamentName);
+                List<PlayerReference> playerReferences = tournamentService.GetPlayerReferencesByTournamentName(tournamentName).ToList();
 
                 playerReferences.Should().HaveCount(8);
 

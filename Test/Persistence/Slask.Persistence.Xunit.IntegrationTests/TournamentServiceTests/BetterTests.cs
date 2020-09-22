@@ -42,7 +42,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
             {
                 Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
 
-                List<Better> betters = tournamentService.GetBettersByTournamentId(tournament.Id);
+                List<Better> betters = tournamentService.GetBettersByTournamentId(tournament.Id).ToList();
 
                 betters.Should().NotBeNullOrEmpty();
                 betters.Should().HaveCount(3);
@@ -59,7 +59,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
 
             using (TournamentService tournamentService = CreateTournamentService())
             {
-                List<Better> betters = tournamentService.GetBettersByTournamentName(tournamentName);
+                List<Better> betters = tournamentService.GetBettersByTournamentName(tournamentName).ToList();
 
                 betters.Should().NotBeNullOrEmpty();
                 betters.Should().HaveCount(3);
@@ -80,7 +80,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
 
                 tournament.Betters.Should().HaveCount(3);
 
-                List<Better> betters = tournamentService.GetBettersByTournamentName(tournamentName);
+                List<Better> betters = tournamentService.GetBettersByTournamentName(tournamentName).ToList();
                 bool removalResult = tournamentService.RemoveBetterFromTournamentById(tournament, betters.First().Id);
                 tournamentService.Save();
 
