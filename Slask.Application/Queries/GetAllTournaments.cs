@@ -1,5 +1,5 @@
 ﻿using Slask.Application.Queries.Interfaces;
-using Slask.Domain;
+using Slask.Application.Utilities;
 using Slask.Dto;
 using Slask.Persistence.Services;
 using System.Collections.Generic;
@@ -22,17 +22,9 @@ namespace Slask.Application.Querys
 
         public IEnumerable<BareTournamentDto> Handle(GetAllTournaments query)
         {
-            return _tournamentService.GetTournaments().Select(tournament => ConvertToTournamentDto(tournament)).ToList();
-        }
-
-        private BareTournamentDto ConvertToTournamentDto(Tournament tournament)
-        {
-            return new BareTournamentDto()
-            {
-                Id = tournament.Id,
-                Name = tournament.Name,
-                Created = tournament.Created
-            };
+            return _tournamentService.GetTournaments()
+                .Select(tournament => DomainToDtoConverters.ConvertToBareTournamentDto(tournament))
+                .ToList();
         }
     }
 }

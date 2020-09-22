@@ -1,5 +1,5 @@
 ﻿using Slask.Application.Queries.Interfaces;
-using Slask.Domain;
+using Slask.Application.Utilities;
 using Slask.Dto;
 using Slask.Persistence.Services;
 using System.Collections.Generic;
@@ -22,16 +22,9 @@ namespace Slask.Application.Querys
 
         public IEnumerable<UserDto> Handle(GetAllUsers query)
         {
-            return _userService.GetUsers().Select(user => ConvertToUserDto(user)).ToList();
-        }
-
-        private UserDto ConvertToUserDto(User user)
-        {
-            return new UserDto
-            {
-                Id = user.Id,
-                Name = user.Name
-            };
+            return _userService.GetUsers()
+                .Select(user => DomainToDtoConverters.ConvertToUserDto(user))
+                .ToList();
         }
     }
 }

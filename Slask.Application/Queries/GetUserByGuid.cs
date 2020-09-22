@@ -1,4 +1,5 @@
 ﻿using Slask.Application.Queries.Interfaces;
+using Slask.Application.Utilities;
 using Slask.Domain;
 using Slask.Dto;
 using Slask.Persistence.Services;
@@ -24,16 +25,7 @@ namespace Slask.Application.Querys
         {
             User user = _userService.GetUserById(query.UserId);
 
-            return ConvertToUserDto(user);
-        }
-
-        private UserDto ConvertToUserDto(User user)
-        {
-            return new UserDto
-            {
-                Id = user.Id,
-                Name = user.Name
-            };
+            return DomainToDtoConverters.ConvertToUserDto(user);
         }
     }
 }

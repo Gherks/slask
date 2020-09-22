@@ -1,4 +1,5 @@
 ﻿using Slask.Application.Queries.Interfaces;
+using Slask.Application.Utilities;
 using Slask.Domain;
 using Slask.Dto;
 using Slask.Persistence.Services;
@@ -24,12 +25,7 @@ namespace Slask.Application.Querys
         {
             Tournament tournament = _tournamentService.GetTournamentById(query.TournamentId);
 
-            return ConvertToTournamentDto(tournament);
-        }
-
-        private TournamentDto ConvertToTournamentDto(Tournament tournament)
-        {
-            return new TournamentDto();
+            return DomainToDtoConverters.ConvertToTournamentDto(tournament);
         }
     }
 }
