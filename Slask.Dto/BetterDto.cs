@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Slask.Dto
 {
@@ -7,6 +8,6 @@ namespace Slask.Dto
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public string Name { get; set; }
-        //public List<BetBase> Bets { get; set; }
+        public List<MatchBetDto> MatchBets { get; set; }
     }
 }
