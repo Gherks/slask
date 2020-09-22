@@ -43,6 +43,7 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not add new player ({ command.PlayerName }) to tournament.");
             }
 
+            _tournamentService.Save();
             return Result.Success();
         }
     }

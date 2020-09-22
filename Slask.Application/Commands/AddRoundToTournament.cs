@@ -61,6 +61,7 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not add round ({ command.RoundType }) to tournament.");
             }
 
+            _tournamentService.Save();
             return Result.Success();
         }
     }

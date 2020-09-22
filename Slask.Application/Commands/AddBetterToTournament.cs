@@ -54,6 +54,7 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not add better to tournament with given user ({ command.UserId }).");
             }
 
+            _tournamentService.Save();
             return Result.Success();
         }
     }

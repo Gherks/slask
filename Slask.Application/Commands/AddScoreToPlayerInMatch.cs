@@ -47,6 +47,7 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could add score ({ command.Score }) to player ({ command.PlayerId }) in match ({ command.MatchId }).");
             }
 
+            _tournamentService.Save();
             return Result.Success();
         }
     }

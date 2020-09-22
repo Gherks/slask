@@ -43,6 +43,7 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Better ({ command.BetterName }) could not place match bet on player ({ command.PlayerName }) in match ({ command.MatchId }) within tournament ({ command.TournamentId })");
             }
 
+            _tournamentService.Save();
             return Result.Success();
         }
     }
