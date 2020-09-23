@@ -1,4 +1,5 @@
-﻿using Slask.Application.Interfaces.Persistence;
+﻿using CSharpFunctionalExtensions;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Application.Queries.Interfaces;
 using Slask.Application.Utilities;
 using Slask.Domain;
@@ -13,18 +14,25 @@ namespace Slask.Application.Querys
 
     public sealed class GetTournamentByNameHandler : QueryHandlerInterface<GetTournamentByName, TournamentDto>
     {
-        private readonly TournamentRepositoryInterface tournamentRepository;
+        private readonly TournamentRepositoryInterface _tournamentRepository;
 
         public GetTournamentByNameHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            tournamentRepository = tournamentRepository;
+            _tournamentRepository = tournamentRepository;
         }
 
-        public TournamentDto Handle(GetTournamentByName query)
+        public Result<TournamentDto> Handle(GetTournamentByName query)
         {
-            Tournament tournament = tournamentRepository.GetTournamentByName(query.TournamentName);
+            Tournament tournament = _tournamentRepository.GetTournamentByName(query.TournamentName);
 
-            return DomainToDtoConverters.ConvertToTournamentDto(tournament);
+            if (tournament == null)
+            {
+                return Result.Failure<TournamentDto>($"Could not find tournament ({ query.TournamentName })");
+            }
+
+            TournamentDto tournamentDto = DomainToDtoConverters.ConvertToTournamentDto(tournament);
+
+            return Result.Success(tournamentDto);
         }
     }
 }

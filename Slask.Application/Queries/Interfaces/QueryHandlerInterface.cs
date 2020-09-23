@@ -1,7 +1,9 @@
-﻿namespace Slask.Application.Queries.Interfaces
+﻿using CSharpFunctionalExtensions;
+
+namespace Slask.Application.Queries.Interfaces
 {
-    public interface QueryHandlerInterface<QueryType, ResultType> where QueryType : QueryInterface<ResultType>
+    public interface QueryHandlerInterface<QueryType, ReturnType> where QueryType : QueryInterface<ReturnType>
     {
-        ResultType Handle(QueryType query);
+        Result<ReturnType> Handle(QueryType query);
     }
 }

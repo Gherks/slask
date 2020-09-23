@@ -1,4 +1,5 @@
-﻿using Slask.Application.Interfaces.Persistence;
+﻿using CSharpFunctionalExtensions;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Application.Queries.Interfaces;
 using Slask.Application.Utilities;
 using Slask.Dto;
@@ -20,11 +21,10 @@ namespace Slask.Application.Querys
             _userRepository = userRepository;
         }
 
-        public IEnumerable<UserDto> Handle(GetAllUsers query)
+        public Result<IEnumerable<UserDto>> Handle(GetAllUsers query)
         {
-            return _userRepository.GetUsers()
-                .Select(user => DomainToDtoConverters.ConvertToUserDto(user))
-                .ToList();
+            return Result.Success(_userRepository.GetUsers()
+                .Select(user => DomainToDtoConverters.ConvertToUserDto(user)));
         }
     }
 }
