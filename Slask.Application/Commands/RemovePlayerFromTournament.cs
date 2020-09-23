@@ -31,7 +31,7 @@ namespace Slask.Application.Commands
         {
             Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
 
-            if(tournament == null)
+            if (tournament == null)
             {
                 return Result.Failure($"Could not player ({ command.PlayerName}) from tournament ({ command.TournamentId }). Tournament not found.");
             }

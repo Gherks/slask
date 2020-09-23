@@ -2,10 +2,7 @@
 using Slask.Application.Commands.Interfaces;
 using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
-using Slask.Domain.Groups;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Slask.Application.Commands
 {
@@ -40,7 +37,7 @@ namespace Slask.Application.Commands
         {
             Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
 
-            if(tournament == null)
+            if (tournament == null)
             {
                 return Result.Failure($"Could not switch places on two players ({ command.Player1Id }, { command.Player2Id }) in matches ({ command.Match1Id }, { command.Match2Id }). Tournament ({ command.TournamentId }) not found.");
             }
