@@ -1,26 +1,26 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
-using Slask.Persistence.Services;
+using Slask.Persistence.Repositories;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
+namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 {
-    public class PlayerReferenceTests : TournamentServiceTestBase
+    public class PlayerReferenceTests : tournamentRepositoryTestBase
     {
         [Fact]
         public void CanGetEmptyPlayerReferencesListFromTournament()
         {
             InitializeUsersAndBetters();
 
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
-                tournamentService.AddRoundRobinRoundToTournament(tournament);
+                tournamentRepository.AddRoundRobinRoundToTournament(tournament);
 
-                List<PlayerReference> playerReferences = tournamentService.GetPlayerReferencesByTournamentId(tournament.Id).ToList();
+                List<PlayerReference> playerReferences = tournamentRepository.GetPlayerReferencesByTournamentId(tournament.Id).ToList();
 
                 playerReferences.Should().BeEmpty();
             }
@@ -37,17 +37,17 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
         {
             InitializeRoundGroupAndPlayers();
 
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
-                bool removeResult = tournamentService.RemovePlayerReferenceFromTournament(tournament, playerNames[0]);
+                bool removeResult = tournamentRepository.RemovePlayerReferenceFromTournament(tournament, playerNames[0]);
                 removeResult.Should().BeTrue();
 
-                tournamentService.RemovePlayerReferenceFromTournament(tournament, playerNames[1]);
+                tournamentRepository.RemovePlayerReferenceFromTournament(tournament, playerNames[1]);
                 removeResult.Should().BeTrue();
 
-                tournamentService.Save();
+                tournamentRepository.Save();
 
                 playerNames.RemoveRange(0, 2);
 
@@ -58,9 +58,9 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
                 }
             }
 
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
                 tournament.PlayerReferences.Should().HaveCount(playerNames.Count);
                 foreach (string playerName in playerNames)
@@ -78,18 +78,18 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
             string oldName = playerNames.First();
             string newName = oldName + "-san";
 
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
                 PlayerReference playerReference = tournament.GetPlayerReferenceByName(oldName);
-                tournamentService.RenamePlayerReferenceInTournament(playerReference, newName);
-                tournamentService.Save();
+                tournamentRepository.RenamePlayerReferenceInTournament(playerReference, newName);
+                tournamentRepository.Save();
             }
 
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
                 PlayerReference playerReference = tournament.GetPlayerReferenceByName(newName);
 
@@ -103,11 +103,11 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
         {
             InitializeRoundGroupAndPlayers();
 
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
-                List<PlayerReference> playerReferences = tournamentService.GetPlayerReferencesByTournamentId(tournament.Id).ToList();
+                List<PlayerReference> playerReferences = tournamentRepository.GetPlayerReferencesByTournamentId(tournament.Id).ToList();
 
                 playerReferences.Should().HaveCount(8);
 
@@ -127,9 +127,9 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
         {
             InitializeRoundGroupAndPlayers();
 
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                List<PlayerReference> playerReferences = tournamentService.GetPlayerReferencesByTournamentName(tournamentName).ToList();
+                List<PlayerReference> playerReferences = tournamentRepository.GetPlayerReferencesByTournamentName(tournamentName).ToList();
 
                 playerReferences.Should().HaveCount(8);
 

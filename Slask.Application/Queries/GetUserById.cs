@@ -1,8 +1,8 @@
-﻿using Slask.Application.Queries.Interfaces;
+﻿using Slask.Application.Interfaces.Persistence;
+using Slask.Application.Queries.Interfaces;
 using Slask.Application.Utilities;
 using Slask.Domain;
 using Slask.Dto;
-using Slask.Persistence.Services;
 using System;
 
 namespace Slask.Application.Querys
@@ -14,16 +14,16 @@ namespace Slask.Application.Querys
 
     public sealed class GetUserByIdHandler : QueryHandlerInterface<GetUserById, UserDto>
     {
-        private readonly UserServiceInterface _userService;
+        private readonly UserRepositoryInterface _userRepository;
 
-        public GetUserByIdHandler(UserServiceInterface userService)
+        public GetUserByIdHandler(UserRepositoryInterface userRepository)
         {
-            _userService = userService;
+            _userRepository = userRepository;
         }
 
         public UserDto Handle(GetUserById query)
         {
-            User user = _userService.GetUserById(query.UserId);
+            User user = _userRepository.GetUserById(query.UserId);
 
             return DomainToDtoConverters.ConvertToUserDto(user);
         }

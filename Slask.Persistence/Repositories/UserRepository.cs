@@ -1,16 +1,17 @@
 using Microsoft.EntityFrameworkCore;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Slask.Persistence.Services
+namespace Slask.Persistence.Repositories
 {
-    public class UserService : UserServiceInterface, IDisposable
+    public class UserRepository : UserRepositoryInterface, IDisposable
     {
         private SlaskContext _slaskContext;
 
-        public UserService(SlaskContext slaskContext)
+        public UserRepository(SlaskContext slaskContext)
         {
             _slaskContext = slaskContext;
         }

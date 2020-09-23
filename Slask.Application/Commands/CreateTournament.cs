@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
-using Slask.Persistence.Services;
 
 namespace Slask.Application.Commands
 {
@@ -17,23 +17,23 @@ namespace Slask.Application.Commands
 
     public sealed class CreateTournamentHandler : CommandHandlerInterface<CreateTournament>
     {
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
-        public CreateTournamentHandler(TournamentServiceInterface tournamentService)
+        public CreateTournamentHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            _tournamentService = tournamentService;
+            tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(CreateTournament command)
         {
-            Tournament tournament = _tournamentService.CreateTournament(command.Name);
+            Tournament tournament = tournamentRepository.CreateTournament(command.Name);
 
             if (tournament == null)
             {
                 return Result.Failure($"Could not create tournament ({command.Name})");
             }
 
-            _tournamentService.Save();
+            tournamentRepository.Save();
             return Result.Success();
         }
     }

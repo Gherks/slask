@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
-using Slask.Persistence.Services;
 using System;
 
 namespace Slask.Application.Commands
@@ -20,30 +20,30 @@ namespace Slask.Application.Commands
 
     public sealed class RemoveBetterFromTournamentHandler : CommandHandlerInterface<RemoveBetterFromTournament>
     {
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
-        public RemoveBetterFromTournamentHandler(TournamentServiceInterface tournamentService)
+        public RemoveBetterFromTournamentHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            _tournamentService = tournamentService;
+            tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(RemoveBetterFromTournament command)
         {
-            Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
+            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
                 return Result.Failure($"Could not remove better ({ command.BetterId }) from tournament ({ command.TournamentId }). Tournament not found.");
             }
 
-            bool betterRemoved = _tournamentService.RemoveBetterFromTournamentById(tournament, command.BetterId);
+            bool betterRemoved = tournamentRepository.RemoveBetterFromTournamentById(tournament, command.BetterId);
 
             if (!betterRemoved)
             {
                 return Result.Failure($"Could not remove better ({ command.BetterId }) from tournament ({ command.TournamentId }).");
             }
 
-            _tournamentService.Save();
+            tournamentRepository.Save();
             return Result.Success();
         }
     }

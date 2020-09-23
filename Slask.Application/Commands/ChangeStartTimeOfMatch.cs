@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
-using Slask.Persistence.Services;
 using System;
 
 namespace Slask.Application.Commands
@@ -22,16 +22,16 @@ namespace Slask.Application.Commands
 
     public sealed class ChangeStartTimeOfMatchHandler : CommandHandlerInterface<ChangeStartTimeOfMatch>
     {
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
-        public ChangeStartTimeOfMatchHandler(TournamentServiceInterface tournamentService)
+        public ChangeStartTimeOfMatchHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            _tournamentService = tournamentService;
+            tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(ChangeStartTimeOfMatch command)
         {
-            Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
+            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
@@ -45,14 +45,14 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not change start time ({ command.StartDateTime }) in match ({ command.MatchId }). Match not found.");
             }
 
-            bool changeSuccessful = _tournamentService.SetStartTimeForMatch(match, command.StartDateTime);
+            bool changeSuccessful = tournamentRepository.SetStartTimeForMatch(match, command.StartDateTime);
 
             if (!changeSuccessful)
             {
                 return Result.Failure($"Could not change start time ({ command.StartDateTime }) in match ({ command.MatchId }).");
             }
 
-            _tournamentService.Save();
+            tournamentRepository.Save();
             return Result.Success();
         }
     }

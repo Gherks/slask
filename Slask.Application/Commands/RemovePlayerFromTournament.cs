@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
-using Slask.Persistence.Services;
 using System;
 
 namespace Slask.Application.Commands
@@ -20,30 +20,30 @@ namespace Slask.Application.Commands
 
     public sealed class RemovePlayerFromTournamentHandler : CommandHandlerInterface<RemovePlayerFromTournament>
     {
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
-        public RemovePlayerFromTournamentHandler(TournamentServiceInterface tournamentService)
+        public RemovePlayerFromTournamentHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            _tournamentService = tournamentService;
+            tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(RemovePlayerFromTournament command)
         {
-            Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
+            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
 
             if(tournament == null)
             {
                 return Result.Failure($"Could not player ({ command.PlayerName}) from tournament ({ command.TournamentId }). Tournament not found.");
             }
 
-            bool playerRemoved = _tournamentService.RemovePlayerReferenceFromTournament(tournament, command.PlayerName);
+            bool playerRemoved = tournamentRepository.RemovePlayerReferenceFromTournament(tournament, command.PlayerName);
 
             if (!playerRemoved)
             {
                 return Result.Failure($"Could not player ({ command.PlayerName}) from tournament ({ command.TournamentId }).");
             }
 
-            _tournamentService.Save();
+            tournamentRepository.Save();
             return Result.Success();
         }
     }

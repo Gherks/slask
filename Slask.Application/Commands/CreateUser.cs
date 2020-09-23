@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
-using Slask.Persistence.Services;
 
 namespace Slask.Application.Commands
 {
@@ -17,23 +17,23 @@ namespace Slask.Application.Commands
 
     public sealed class CreateUserHandler : CommandHandlerInterface<CreateUser>
     {
-        private readonly UserServiceInterface _userService;
+        private readonly UserRepositoryInterface _userRepository;
 
-        public CreateUserHandler(UserServiceInterface userService)
+        public CreateUserHandler(UserRepositoryInterface userRepository)
         {
-            _userService = userService;
+            _userRepository = userRepository;
         }
 
         public Result Handle(CreateUser command)
         {
-            User user = _userService.CreateUser(command.Name);
+            User user = _userRepository.CreateUser(command.Name);
 
             if (user == null)
             {
                 return Result.Failure($"Could not create user ({ command.Name })");
             }
 
-            _userService.Save();
+            _userRepository.Save();
             return Result.Success();
         }
     }

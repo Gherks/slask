@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
-using Slask.Persistence.Services;
 using System;
 
 namespace Slask.Application.Commands
@@ -22,16 +22,16 @@ namespace Slask.Application.Commands
 
     public sealed class RenamePlayerInTournamentHandler : CommandHandlerInterface<RenamePlayerInTournament>
     {
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
-        public RenamePlayerInTournamentHandler(TournamentServiceInterface tournamentService)
+        public RenamePlayerInTournamentHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            _tournamentService = tournamentService;
+            tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(RenamePlayerInTournament command)
         {
-            Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
+            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
 
             if(tournament == null)
             {
@@ -45,14 +45,14 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not rename player ({ command.CurrentPlayerName }) to { command.NewPlayerName } in tournament ({ command.TournamentId }). Player not found.");
             }
 
-            bool renameSuccessful = _tournamentService.RenamePlayerReferenceInTournament(playerReference, command.NewPlayerName);
+            bool renameSuccessful = tournamentRepository.RenamePlayerReferenceInTournament(playerReference, command.NewPlayerName);
 
             if (!renameSuccessful)
             {
                 return Result.Failure($"Could not rename player ({ command.CurrentPlayerName }) to { command.NewPlayerName } in tournament ({ command.TournamentId }).");
             }
 
-            _tournamentService.Save();
+            tournamentRepository.Save();
             return Result.Success();
         }
     }

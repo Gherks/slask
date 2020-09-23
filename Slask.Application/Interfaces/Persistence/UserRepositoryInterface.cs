@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Slask.Persistence.Services
+namespace Slask.Application.Interfaces.Persistence
 {
-    public interface UserServiceInterface
+    public interface UserRepositoryInterface
     {
         User CreateUser(string name);
         bool RenameUser(Guid id, string name);

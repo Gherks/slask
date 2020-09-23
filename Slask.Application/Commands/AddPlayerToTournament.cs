@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
-using Slask.Persistence.Services;
 using System;
 
 namespace Slask.Application.Commands
@@ -20,30 +20,30 @@ namespace Slask.Application.Commands
 
     public sealed class AddPlayerToTournamentHandler : CommandHandlerInterface<AddPlayerToTournament>
     {
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
-        public AddPlayerToTournamentHandler(TournamentServiceInterface tournamentService)
+        public AddPlayerToTournamentHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            _tournamentService = tournamentService;
+            tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(AddPlayerToTournament command)
         {
-            Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
+            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
                 return Result.Failure($"Could not add new player ({ command.PlayerName }) to tournament. Tournament ({ command.TournamentId }) not found.");
             }
 
-            PlayerReference playerReference = _tournamentService.AddPlayerReference(tournament, command.PlayerName);
+            PlayerReference playerReference = tournamentRepository.AddPlayerReference(tournament, command.PlayerName);
 
             if (playerReference == null)
             {
                 return Result.Failure($"Could not add new player ({ command.PlayerName }) to tournament.");
             }
 
-            _tournamentService.Save();
+            tournamentRepository.Save();
             return Result.Success();
         }
     }

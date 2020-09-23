@@ -1,8 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
 using Slask.Domain.Groups;
-using Slask.Persistence.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,16 +29,16 @@ namespace Slask.Application.Commands
 
     public sealed class SwitchPlacesOfTwoPlayersWithinRoundHandler : CommandHandlerInterface<SwitchPlacesOfTwoPlayersWithinRound>
     {
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
-        public SwitchPlacesOfTwoPlayersWithinRoundHandler(TournamentServiceInterface tournamentService)
+        public SwitchPlacesOfTwoPlayersWithinRoundHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            _tournamentService = tournamentService;
+            tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(SwitchPlacesOfTwoPlayersWithinRound command)
         {
-            Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
+            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
 
             if(tournament == null)
             {
@@ -73,14 +73,14 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not switch places on two players ({ command.Player1Id }, { command.Player2Id }) in matches ({ command.Match1Id }, { command.Match2Id }). Player ({ command.Player2Id }) not found.");
             }
 
-            bool switchMade = _tournamentService.SwitchPlayersInMatches(player1, player2);
+            bool switchMade = tournamentRepository.SwitchPlayersInMatches(player1, player2);
 
             if (!switchMade)
             {
                 return Result.Failure($"Could not switch places on two players ({ command.Player1Id }, { command.Player2Id }) in matches ({ command.Match1Id }, { command.Match2Id }).");
             }
 
-            _tournamentService.Save();
+            tournamentRepository.Save();
             return Result.Success();
         }
     }

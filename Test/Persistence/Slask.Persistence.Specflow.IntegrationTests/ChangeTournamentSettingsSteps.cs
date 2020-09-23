@@ -3,7 +3,7 @@ using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Utilities;
-using Slask.Persistence.Services;
+using Slask.Persistence.Repositories;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests;
 using Slask.TestCore;
 using System;
@@ -26,11 +26,11 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         [When(@"round named ""(.*)"" is removed from tournament named ""(.*)""")]
         public void GivenRoundNamedIsRemovedFromTournamentNamed(string roundName, string tournamentName)
         {
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
-                tournamentService.RemoveRoundFromTournament(tournament, roundName);
-                tournamentService.Save();
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                tournamentRepository.RemoveRoundFromTournament(tournament, roundName);
+                tournamentRepository.Save();
             }
         }
 
@@ -38,13 +38,13 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         [When(@"round named ""(.*)"" changes advancing players per group count to ""(.*)"" in tournament named ""(.*)""")]
         public void GivenRoundNamedChangesAdvancingPlayersPerGroupCountToInTournamentNamed(string roundName, int newAdvancingPlayerCount, string tournamentName)
         {
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                 RoundBase round = tournament.GetRoundByName(roundName);
 
-                tournamentService.SetAdvancingPerGroupCountInRound(round, newAdvancingPlayerCount);
-                tournamentService.Save();
+                tournamentRepository.SetAdvancingPerGroupCountInRound(round, newAdvancingPlayerCount);
+                tournamentRepository.Save();
             }
         }
 
@@ -52,13 +52,13 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         [When(@"round named ""(.*)"" changes players per group count to ""(.*)"" in tournament named ""(.*)""")]
         public void GivenRoundNamedChangesPlayersPerGroupCountToInTournamentNamed(string roundName, int newPlayersPerGroupCount, string tournamentName)
         {
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                 RoundBase round = tournament.GetRoundByName(roundName);
 
-                tournamentService.SetPlayersPerGroupCountInRound(round, newPlayersPerGroupCount);
-                tournamentService.Save();
+                tournamentRepository.SetPlayersPerGroupCountInRound(round, newPlayersPerGroupCount);
+                tournamentRepository.Save();
             }
         }
 
@@ -66,9 +66,9 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         [When(@"matches in tournament named ""(.*)"" changes best of setting")]
         public void WhenMatchesInTournamentNamedChangesBestOfSetting(string tournamentName, Table table)
         {
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
                 foreach (TableRow row in table.Rows)
                 {
@@ -78,10 +78,10 @@ namespace Slask.Persistence.Specflow.IntegrationTests
                     GroupBase groupBase = roundBase.Groups[groupIndex];
                     Match match = groupBase.Matches[matchIndex];
 
-                    tournamentService.SetBestOfInMatch(match, bestOf);
+                    tournamentRepository.SetBestOfInMatch(match, bestOf);
                 }
 
-                tournamentService.Save();
+                tournamentRepository.Save();
             }
         }
 
@@ -90,9 +90,9 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         [Then(@"player layout for matches in tournament named ""(.*)"" looks like this")]
         public void GivenPlayerLayoutForMatchesInTournamentNamedLooksLikeThis(string tournamentName, Table table)
         {
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
                 foreach (TableRow row in table.Rows)
                 {
@@ -113,9 +113,9 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         {
             const int addedHours = 3;
 
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
                 foreach (TableRow row in table.Rows)
                 {
@@ -127,19 +127,19 @@ namespace Slask.Persistence.Specflow.IntegrationTests
 
                     oldMatchStartTimes[match.Id] = match.StartDateTime;
 
-                    tournamentService.SetStartTimeForMatch(match, match.StartDateTime.AddHours(addedHours));
+                    tournamentRepository.SetStartTimeForMatch(match, match.StartDateTime.AddHours(addedHours));
                 }
 
-                tournamentService.Save();
+                tournamentRepository.Save();
             }
         }
 
         [When(@"matches in tournament named ""(.*)"" switches player references")]
         public void WhenMatchesInTournamentNamedSwitchesPlayerReferences(string tournamentName, Table table)
         {
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
                 foreach (TableRow row in table.Rows)
                 {
@@ -162,19 +162,19 @@ namespace Slask.Persistence.Specflow.IntegrationTests
                     Match match2 = groupBase2.Matches[matchIndex2];
                     Player player2 = match2.FindPlayer(playerName2);
 
-                    tournamentService.SwitchPlayersInMatches(player1, player2);
+                    tournamentRepository.SwitchPlayersInMatches(player1, player2);
                 }
 
-                tournamentService.Save();
+                tournamentRepository.Save();
             }
         }
 
         [When(@"choosing players to solve tie in tournament named ""(.*)""")]
         public void WhenChoosingPlayersToSolveTie(string tournamentName, Table table)
         {
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
                 foreach (TableRow row in table.Rows)
                 {
@@ -185,19 +185,19 @@ namespace Slask.Persistence.Specflow.IntegrationTests
 
                     PlayerReference playerReference = tournament.GetPlayerReferenceByName(playerName);
 
-                    tournamentService.SolveTieByChoosingPlayerInGroup(groupBase, playerReference);
+                    tournamentRepository.SolveTieByChoosingPlayerInGroup(groupBase, playerReference);
                 }
 
-                tournamentService.Save();
+                tournamentRepository.Save();
             }
         }
 
         [Then(@"best of for matches in tournament named ""(.*)"" should be set to")]
         public void ThenBestOfForMatchesInTournamentNamedShouldBeSetTo(string tournamentName, Table table)
         {
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
                 foreach (TableRow row in table.Rows)
                 {
@@ -215,9 +215,9 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         [Then(@"round layout in tournament named ""(.*)"" is exactly as follows:")]
         public void ThenRoundLayoutInTournamentNamedIsExactlyAsFollows(string tournamentName, Table table)
         {
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
                 tournament.Rounds.Should().HaveCount(table.Rows.Count);
 
@@ -239,9 +239,9 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         [Then(@"start time has been moved forward three hours for matches in tournament named ""(.*)""")]
         public void ThenStartTimeHasBeenMovedForwardThreeHoursForMatchesInTournamentNamed(string tournamentName, Table table)
         {
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
                 foreach (TableRow row in table.Rows)
                 {

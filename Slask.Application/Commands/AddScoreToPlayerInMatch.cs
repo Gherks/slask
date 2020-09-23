@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
-using Slask.Persistence.Services;
 using System;
 
 namespace Slask.Application.Commands
@@ -24,30 +24,30 @@ namespace Slask.Application.Commands
 
     public sealed class AddScoreToPlayerInMatchHandler : CommandHandlerInterface<AddScoreToPlayerInMatch>
     {
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
-        public AddScoreToPlayerInMatchHandler(TournamentServiceInterface tournamentService)
+        public AddScoreToPlayerInMatchHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            _tournamentService = tournamentService;
+            tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(AddScoreToPlayerInMatch command)
         {
-            Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
+            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
                 return Result.Failure($"Could add score ({ command.Score }) to player ({ command.PlayerId }) in match ({ command.MatchId }). Tournament ({ command.TournamentId }) not found.");
             }
 
-            bool scoreAdded = _tournamentService.AddScoreToPlayerInMatch(tournament, command.MatchId, command.PlayerId, command.Score);
+            bool scoreAdded = tournamentRepository.AddScoreToPlayerInMatch(tournament, command.MatchId, command.PlayerId, command.Score);
 
             if (!scoreAdded)
             {
                 return Result.Failure($"Could add score ({ command.Score }) to player ({ command.PlayerId }) in match ({ command.MatchId }).");
             }
 
-            _tournamentService.Save();
+            tournamentRepository.Save();
             return Result.Success();
         }
     }

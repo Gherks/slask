@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using Slask.Persistence.Services;
+using Slask.Persistence.Repositories;
 using System.Reflection;
 
 namespace Slask.Persistence.StartupExtensions
@@ -8,8 +8,8 @@ namespace Slask.Persistence.StartupExtensions
     {
         public static IServiceCollection AddDataServices(this IServiceCollection services)
         {
-            services.AddTransient(typeof(UserService).Assembly);
-            services.AddTransient(typeof(TournamentService).Assembly);
+            services.AddTransient(typeof(UserRepository).Assembly);
+            services.AddTransient(typeof(TournamentRepository).Assembly);
             return services;
         }
 

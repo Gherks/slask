@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
-using Slask.Persistence.Services;
 using System;
 
 namespace Slask.Application.Commands
@@ -20,41 +20,41 @@ namespace Slask.Application.Commands
 
     public sealed class AddBetterToTournamentHandler : CommandHandlerInterface<AddBetterToTournament>
     {
-        private readonly UserServiceInterface _userService;
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly UserRepositoryInterface _userRepository;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
         public AddBetterToTournamentHandler(
-                UserServiceInterface userService,
-                TournamentServiceInterface tournamentService)
+                UserRepositoryInterface userRepository,
+                TournamentRepositoryInterface tournamentRepository)
         {
-            _userService = userService;
-            _tournamentService = tournamentService;
+            _userRepository = userRepository;
+            tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(AddBetterToTournament command)
         {
-            Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
+            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
                 return Result.Failure($"Could not add better to tournament. Tournament ({ command.TournamentId }) not found.");
             }
 
-            User user = _userService.GetUserById(command.UserId);
+            User user = _userRepository.GetUserById(command.UserId);
 
             if (user == null)
             {
                 return Result.Failure($"Could not add better to tournament with given user ({ command.UserId }). Tournament ({ command.TournamentId }) not found.");
             }
 
-            Better better = _tournamentService.AddBetterToTournament(tournament, user);
+            Better better = tournamentRepository.AddBetterToTournament(tournament, user);
 
             if (better == null)
             {
                 return Result.Failure($"Could not add better to tournament with given user ({ command.UserId }).");
             }
 
-            _tournamentService.Save();
+            tournamentRepository.Save();
             return Result.Success();
         }
     }

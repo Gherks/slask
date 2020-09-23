@@ -1,13 +1,13 @@
 ﻿using Slask.Domain;
 using Slask.Domain.Rounds.RoundTypes;
-using Slask.Persistence.Services;
+using Slask.Persistence.Repositories;
 using Slask.TestCore;
 using System;
 using System.Collections.Generic;
 
-namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
+namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 {
-    public class TournamentServiceTestBase
+    public class tournamentRepositoryTestBase
     {
         protected const string tournamentName = "GSL 2019";
         protected readonly List<string> playerNames = new List<string>
@@ -24,63 +24,63 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentServiceTests
 
         private readonly string testDatabaseName;
 
-        public TournamentServiceTestBase()
+        public tournamentRepositoryTestBase()
         {
             testDatabaseName = Guid.NewGuid().ToString();
 
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                tournamentService.CreateTournament(tournamentName);
-                tournamentService.Save();
+                tournamentRepository.CreateTournament(tournamentName);
+                tournamentRepository.Save();
             }
         }
 
-        protected UserService CreateUserService()
+        protected UserRepository CreateuserRepository()
         {
-            return new UserService(InMemoryContextCreator.Create(testDatabaseName));
+            return new UserRepository(InMemoryContextCreator.Create(testDatabaseName));
         }
 
-        protected TournamentService CreateTournamentService()
+        protected TournamentRepository CreatetournamentRepository()
         {
-            return new TournamentService(InMemoryContextCreator.Create(testDatabaseName));
+            return new TournamentRepository(InMemoryContextCreator.Create(testDatabaseName));
         }
 
         protected void InitializeUsersAndBetters()
         {
-            using (UserService userService = CreateUserService())
+            using (UserRepository userRepository = CreateuserRepository())
             {
-                userService.CreateUser("Stålberto");
-                userService.CreateUser("Bönis");
-                userService.CreateUser("Guggelito");
-                userService.Save();
+                userRepository.CreateUser("Stålberto");
+                userRepository.CreateUser("Bönis");
+                userRepository.CreateUser("Guggelito");
+                userRepository.Save();
 
-                using (TournamentService tournamentService = CreateTournamentService())
+                using (TournamentRepository tournamentRepository = CreatetournamentRepository())
                 {
-                    Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                    Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
-                    tournamentService.AddBetterToTournament(tournament, userService.GetUserByName("Stålberto"));
-                    tournamentService.AddBetterToTournament(tournament, userService.GetUserByName("Bönis"));
-                    tournamentService.AddBetterToTournament(tournament, userService.GetUserByName("Guggelito"));
-                    tournamentService.Save();
+                    tournamentRepository.AddBetterToTournament(tournament, userRepository.GetUserByName("Stålberto"));
+                    tournamentRepository.AddBetterToTournament(tournament, userRepository.GetUserByName("Bönis"));
+                    tournamentRepository.AddBetterToTournament(tournament, userRepository.GetUserByName("Guggelito"));
+                    tournamentRepository.Save();
                 }
             }
         }
 
         protected void InitializeRoundGroupAndPlayers()
         {
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
-                RoundRobinRound round = tournamentService.AddRoundRobinRoundToTournament(tournament);
-                tournamentService.SetPlayersPerGroupCountInRound(round, playerNames.Count);
+                RoundRobinRound round = tournamentRepository.AddRoundRobinRoundToTournament(tournament);
+                tournamentRepository.SetPlayersPerGroupCountInRound(round, playerNames.Count);
 
                 foreach (string playerName in playerNames)
                 {
-                    tournamentService.AddPlayerReference(tournament, playerName);
+                    tournamentRepository.AddPlayerReference(tournament, playerName);
                 }
 
-                tournamentService.Save();
+                tournamentRepository.Save();
             }
         }
     }

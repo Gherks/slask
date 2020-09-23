@@ -7,7 +7,7 @@ using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
 using Slask.Domain.Utilities.StandingsSolvers;
-using Slask.Persistence.Services;
+using Slask.Persistence.Repositories;
 using Slask.TestCore;
 using System;
 using System.Collections.Generic;
@@ -30,25 +30,25 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         {
             List<string> userNames = StringUtility.ToStringList(commaSeparatedUserNames, ",");
 
-            using (UserService userService = CreateUserService())
+            using (UserRepository userRepository = CreateuserRepository())
             {
                 foreach (string userName in userNames)
                 {
-                    userService.CreateUser(userName);
+                    userRepository.CreateUser(userName);
                 }
-                userService.Save();
+                userRepository.Save();
 
-                using (TournamentService tournamentService = CreateTournamentService())
+                using (TournamentRepository tournamentRepository = CreatetournamentRepository())
                 {
-                    Tournament tournament = tournamentService.CreateTournament(tournamentName);
+                    Tournament tournament = tournamentRepository.CreateTournament(tournamentName);
 
                     foreach (string userName in userNames)
                     {
-                        User user = userService.GetUserByName(userName);
-                        tournamentService.AddBetterToTournament(tournament, user);
+                        User user = userRepository.GetUserByName(userName);
+                        tournamentRepository.AddBetterToTournament(tournament, user);
                     }
 
-                    tournamentService.Save();
+                    tournamentRepository.Save();
                 }
             }
         }
@@ -57,9 +57,9 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [When(@"tournament named ""(.*)"" adds rounds")]
         public void GivenTournamentAddsRounds(string tournamentName, Table table)
         {
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
                 foreach (TableRow row in table.Rows)
                 {
@@ -71,27 +71,27 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
                         if (contestType == ContestTypeEnum.Bracket)
                         {
-                            round = tournamentService.AddBracketRoundToTournament(tournament);
+                            round = tournamentRepository.AddBracketRoundToTournament(tournament);
                         }
                         else if (contestType == ContestTypeEnum.DualTournament)
                         {
-                            round = tournamentService.AddDualTournamentRoundToTournament(tournament);
+                            round = tournamentRepository.AddDualTournamentRoundToTournament(tournament);
                         }
                         else if (contestType == ContestTypeEnum.RoundRobin)
                         {
-                            round = tournamentService.AddRoundRobinRoundToTournament(tournament);
+                            round = tournamentRepository.AddRoundRobinRoundToTournament(tournament);
                         }
-                        tournamentService.Save();
+                        tournamentRepository.Save();
 
                         if (round == null)
                         {
                             return;
                         }
 
-                        tournamentService.RenameRoundInTournament(round, name);
-                        tournamentService.SetAdvancingPerGroupCountInRound(round, advancingCount);
-                        tournamentService.SetPlayersPerGroupCountInRound(round, playersPerGroupCount);
-                        tournamentService.Save();
+                        tournamentRepository.RenameRoundInTournament(round, name);
+                        tournamentRepository.SetAdvancingPerGroupCountInRound(round, advancingCount);
+                        tournamentRepository.SetPlayersPerGroupCountInRound(round, playersPerGroupCount);
+                        tournamentRepository.Save();
                     }
                 }
             }
@@ -103,16 +103,16 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         {
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
                 foreach (string playerName in playerNames)
                 {
-                    tournamentService.AddPlayerReference(tournament, playerName);
+                    tournamentRepository.AddPlayerReference(tournament, playerName);
                 }
 
-                tournamentService.Save();
+                tournamentRepository.Save();
             }
         }
 
@@ -120,20 +120,20 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [When(@"betters places match bets in tournament named ""(.*)""")]
         public void GivenBettersPlacesMatchBets(string tournamentName, Table table)
         {
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                tournamentService.Save();
+                tournamentRepository.Save();
                 foreach (TableRow row in table.Rows)
                 {
                     TestUtilities.ParseBetterMatchBetPlacements(row, out string betterName, out int roundIndex, out int groupIndex, out int matchIndex, out string playerName);
 
-                    Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                    Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                     RoundBase round = tournament.Rounds[roundIndex];
                     GroupBase group = round.Groups[groupIndex];
                     Match match = group.Matches[matchIndex];
 
-                    tournamentService.BetterPlacesMatchBetOnMatch(tournament.Id, match.Id, betterName, playerName);
-                    tournamentService.Save();
+                    tournamentRepository.BetterPlacesMatchBetOnMatch(tournament.Id, match.Id, betterName, playerName);
+                    tournamentRepository.Save();
                 }
             }
         }
@@ -142,23 +142,23 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [When(@"groups within tournament named ""(.*)"" is played out")]
         public void GivenGroupsWithinTournamentIsPlayedOut(string tournamentName, Table table)
         {
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
                 foreach (TableRow row in table.Rows)
                 {
                     TestUtilities.ParseTargetGroupToPlay(row, out int _, out int roundIndex, out int groupIndex);
 
                     SystemTimeMocker.Reset();
-                    Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                    Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                     RoundBase round = tournament.Rounds[roundIndex];
                     GroupBase group = round.Groups[groupIndex];
 
                     foreach (Match match in group.Matches)
                     {
-                        PlayMatch(tournamentService, match);
+                        PlayMatch(tournamentRepository, match);
                     }
 
-                    tournamentService.Save();
+                    tournamentRepository.Save();
                 }
             }
         }
@@ -168,9 +168,9 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         public void GivenBetterStandingsInTournamentFromFirstToLastLooksLikeThis(string tournamentName, Table table)
         {
             Tournament tournament;
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                tournament = tournamentService.GetTournamentByName(tournamentName);
+                tournament = tournamentRepository.GetTournamentByName(tournamentName);
             }
 
             List<StandingsEntry<Better>> betterStandings = tournament.GetBetterStandings();
@@ -195,9 +195,9 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                 throw new ArgumentNullException(nameof(table));
             }
 
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
                 foreach (TableRow row in table.Rows)
                 {
@@ -213,7 +213,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
                     if (player != null)
                     {
-                        tournamentService.AddScoreToPlayerInMatch(tournament, match.Id, player.Id, scoreAdded);
+                        tournamentRepository.AddScoreToPlayerInMatch(tournament, match.Id, player.Id, scoreAdded);
                     }
                     else
                     {
@@ -222,11 +222,11 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                     }
                 }
 
-                tournamentService.Save();
+                tournamentRepository.Save();
             }
         }
 
-        private void PlayMatch(TournamentService tournamentService, Match match)
+        private void PlayMatch(TournamentRepository tournamentRepository, Match match)
         {
             bool matchHaveNotStarted = match.StartDateTime > SystemTime.Now;
 
@@ -243,17 +243,17 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             Tournament tournament = match.Group.Round.Tournament;
             Guid scoringPlayerId = increasePlayer1Score ? match.Player1.Id : match.Player2.Id;
 
-            tournamentService.AddScoreToPlayerInMatch(tournament, match.Id, scoringPlayerId, winningScore);
-            tournamentService.Save();
+            tournamentRepository.AddScoreToPlayerInMatch(tournament, match.Id, scoringPlayerId, winningScore);
+            tournamentRepository.Save();
         }
 
         [Then(@"tournament named ""(.*)"" should contain rounds")]
         public void ThenFetchedTournamentShouldContainRounds(string tournamentName, Table table)
         {
             Tournament tournament;
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                tournament = tournamentService.GetTournamentByName(tournamentName);
+                tournament = tournamentRepository.GetTournamentByName(tournamentName);
             }
 
             for (int index = 0; index < table.Rows.Count; ++index)
@@ -296,9 +296,9 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         public void ThenGroupsWithinRoundInFetchedTournamentIsOfType(int roundIndex, string tournamentName, string groupType)
         {
             Tournament tournament;
-            using (TournamentService tournamentService = CreateTournamentService())
+            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
             {
-                tournament = tournamentService.GetTournamentByName(tournamentName);
+                tournament = tournamentRepository.GetTournamentByName(tournamentName);
             }
 
             RoundBase round = tournament.Rounds[roundIndex];
@@ -339,14 +339,14 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
         }
 
-        protected UserService CreateUserService()
+        protected UserRepository CreateuserRepository()
         {
-            return new UserService(InMemoryContextCreator.Create(testDatabaseName));
+            return new UserRepository(InMemoryContextCreator.Create(testDatabaseName));
         }
 
-        protected TournamentService CreateTournamentService()
+        protected TournamentRepository CreatetournamentRepository()
         {
-            return new TournamentService(InMemoryContextCreator.Create(testDatabaseName));
+            return new TournamentRepository(InMemoryContextCreator.Create(testDatabaseName));
         }
     }
 }

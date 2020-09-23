@@ -1,8 +1,8 @@
-﻿using Slask.Application.Queries.Interfaces;
+﻿using Slask.Application.Interfaces.Persistence;
+using Slask.Application.Queries.Interfaces;
 using Slask.Application.Utilities;
 using Slask.Domain;
 using Slask.Dto;
-using Slask.Persistence.Services;
 
 namespace Slask.Application.Querys
 {
@@ -13,16 +13,16 @@ namespace Slask.Application.Querys
 
     public sealed class GetTournamentByNameHandler : QueryHandlerInterface<GetTournamentByName, TournamentDto>
     {
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
-        public GetTournamentByNameHandler(TournamentServiceInterface tournamentService)
+        public GetTournamentByNameHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            _tournamentService = tournamentService;
+            tournamentRepository = tournamentRepository;
         }
 
         public TournamentDto Handle(GetTournamentByName query)
         {
-            Tournament tournament = _tournamentService.GetTournamentByName(query.TournamentName);
+            Tournament tournament = tournamentRepository.GetTournamentByName(query.TournamentName);
 
             return DomainToDtoConverters.ConvertToTournamentDto(tournament);
         }

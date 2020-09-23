@@ -1,9 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Rounds;
-using Slask.Persistence.Services;
 using System;
 
 namespace Slask.Application.Commands
@@ -22,16 +22,16 @@ namespace Slask.Application.Commands
 
     public sealed class AddRoundToTournamentHandler : CommandHandlerInterface<AddRoundToTournament>
     {
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
-        public AddRoundToTournamentHandler(TournamentServiceInterface tournamentService)
+        public AddRoundToTournamentHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            _tournamentService = tournamentService;
+            tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(AddRoundToTournament command)
         {
-            Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
+            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
@@ -44,13 +44,13 @@ namespace Slask.Application.Commands
             switch (parsedRoundType)
             {
                 case "BRACKET":
-                    round = _tournamentService.AddBracketRoundToTournament(tournament);
+                    round = tournamentRepository.AddBracketRoundToTournament(tournament);
                     break;
                 case "DUALTOURNAMENT":
-                    round = _tournamentService.AddDualTournamentRoundToTournament(tournament);
+                    round = tournamentRepository.AddDualTournamentRoundToTournament(tournament);
                     break;
                 case "ROUNDROBIN":
-                    round = _tournamentService.AddRoundRobinRoundToTournament(tournament);
+                    round = tournamentRepository.AddRoundRobinRoundToTournament(tournament);
                     break;
                 default:
                     return Result.Failure($"Could not add round ({ command.RoundType }) to tournament. Invalid round type ({ command.RoundType }) given.");
@@ -61,7 +61,7 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not add round ({ command.RoundType }) to tournament.");
             }
 
-            _tournamentService.Save();
+            tournamentRepository.Save();
             return Result.Success();
         }
     }

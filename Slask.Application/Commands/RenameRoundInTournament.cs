@@ -1,8 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
 using Slask.Domain.Rounds;
-using Slask.Persistence.Services;
 using System;
 
 namespace Slask.Application.Commands
@@ -23,16 +23,16 @@ namespace Slask.Application.Commands
 
     public sealed class RenameRoundInTournamentHandler : CommandHandlerInterface<RenameRoundInTournament>
     {
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
-        public RenameRoundInTournamentHandler(TournamentServiceInterface tournamentService)
+        public RenameRoundInTournamentHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            _tournamentService = tournamentService;
+            tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(RenameRoundInTournament command)
         {
-            Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
+            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
@@ -46,14 +46,14 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not rename round ({ command.RoundId }) to { command.NewRoundName } in tournament ({ command.TournamentId }). Round not found.");
             }
 
-            bool renameSuccessful = _tournamentService.RenameRoundInTournament(round, command.NewRoundName);
+            bool renameSuccessful = tournamentRepository.RenameRoundInTournament(round, command.NewRoundName);
 
             if (!renameSuccessful)
             {
                 return Result.Failure($"Could not rename round ({ command.RoundId }) to { command.NewRoundName } in tournament ({ command.TournamentId }).");
             }
 
-            _tournamentService.Save();
+            tournamentRepository.Save();
             return Result.Success();
         }
     }

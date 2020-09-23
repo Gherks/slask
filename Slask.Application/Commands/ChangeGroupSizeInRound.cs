@@ -1,8 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
 using Slask.Domain.Rounds;
-using Slask.Persistence.Services;
 using System;
 
 namespace Slask.Application.Commands
@@ -23,16 +23,16 @@ namespace Slask.Application.Commands
 
     public sealed class ChangeGroupSizeInRoundHandler : CommandHandlerInterface<ChangeGroupSizeInRound>
     {
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
-        public ChangeGroupSizeInRoundHandler(TournamentServiceInterface tournamentService)
+        public ChangeGroupSizeInRoundHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            _tournamentService = tournamentService;
+            tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(ChangeGroupSizeInRound command)
         {
-            Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
+            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
@@ -46,14 +46,14 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not change players per group count ({ command.PlayersPerGroupCount }) setting in round ({ command.RoundId }). Round not found.");
             }
 
-            bool changeSuccessful = _tournamentService.SetPlayersPerGroupCountInRound(round, command.PlayersPerGroupCount);
+            bool changeSuccessful = tournamentRepository.SetPlayersPerGroupCountInRound(round, command.PlayersPerGroupCount);
 
             if (!changeSuccessful)
             {
                 return Result.Failure($"Could not change players per group count ({ command.PlayersPerGroupCount }) setting in round ({ command.RoundId }).");
             }
 
-            _tournamentService.Save();
+            tournamentRepository.Save();
             return Result.Success();
         }
     }

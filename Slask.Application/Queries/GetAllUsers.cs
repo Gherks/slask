@@ -1,7 +1,7 @@
-﻿using Slask.Application.Queries.Interfaces;
+﻿using Slask.Application.Interfaces.Persistence;
+using Slask.Application.Queries.Interfaces;
 using Slask.Application.Utilities;
 using Slask.Dto;
-using Slask.Persistence.Services;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,16 +13,16 @@ namespace Slask.Application.Querys
 
     public sealed class GetAllUsersHander : QueryHandlerInterface<GetAllUsers, IEnumerable<UserDto>>
     {
-        private readonly UserServiceInterface _userService;
+        private readonly UserRepositoryInterface _userRepository;
 
-        public GetAllUsersHander(UserServiceInterface userService)
+        public GetAllUsersHander(UserRepositoryInterface userRepository)
         {
-            _userService = userService;
+            _userRepository = userRepository;
         }
 
         public IEnumerable<UserDto> Handle(GetAllUsers query)
         {
-            return _userService.GetUsers()
+            return _userRepository.GetUsers()
                 .Select(user => DomainToDtoConverters.ConvertToUserDto(user))
                 .ToList();
         }

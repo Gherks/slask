@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
-using Slask.Persistence.Services;
+using Slask.Application.Interfaces.Persistence;
 using System;
 
 namespace Slask.Application.Commands
@@ -23,16 +23,16 @@ namespace Slask.Application.Commands
 
     public sealed class BetterPlaceBetOnMatchHandler : CommandHandlerInterface<BetterPlaceBetOnMatch>
     {
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
-        public BetterPlaceBetOnMatchHandler(TournamentServiceInterface tournamentService)
+        public BetterPlaceBetOnMatchHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            _tournamentService = tournamentService;
+            tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(BetterPlaceBetOnMatch command)
         {
-            bool betPlaced = _tournamentService.BetterPlacesMatchBetOnMatch(
+            bool betPlaced = tournamentRepository.BetterPlacesMatchBetOnMatch(
                 command.TournamentId,
                 command.MatchId,
                 command.BetterName,
@@ -43,7 +43,7 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Better ({ command.BetterName }) could not place match bet on player ({ command.PlayerName }) in match ({ command.MatchId }) within tournament ({ command.TournamentId })");
             }
 
-            _tournamentService.Save();
+            tournamentRepository.Save();
             return Result.Success();
         }
     }

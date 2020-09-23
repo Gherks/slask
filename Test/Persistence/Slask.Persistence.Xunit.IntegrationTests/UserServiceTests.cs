@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Slask.Domain;
-using Slask.Persistence.Services;
+using Slask.Persistence.Repositories;
 using Slask.TestCore;
 using System;
 using System.Collections.Generic;
@@ -9,11 +9,11 @@ using Xunit;
 
 namespace Slask.Persistence.Xunit.IntegrationTests
 {
-    public class UserServiceTests
+    public class userRepositoryTests
     {
         private readonly string testDatabaseName;
 
-        public UserServiceTests()
+        public userRepositoryTests()
         {
             testDatabaseName = Guid.NewGuid().ToString();
         }
@@ -23,10 +23,10 @@ namespace Slask.Persistence.Xunit.IntegrationTests
         {
             string userName = "Guggelito";
 
-            using (UserService userService = CreateUserService())
+            using (UserRepository userRepository = CreateuserRepository())
             {
-                User user = userService.CreateUser(userName);
-                userService.Save();
+                User user = userRepository.CreateUser(userName);
+                userRepository.Save();
 
                 user.Should().NotBeNull();
                 user.Id.Should().NotBeEmpty();
@@ -37,10 +37,10 @@ namespace Slask.Persistence.Xunit.IntegrationTests
         [Fact]
         public void CannotCreateUserWithEmptyName()
         {
-            using (UserService userService = CreateUserService())
+            using (UserRepository userRepository = CreateuserRepository())
             {
-                User user = userService.CreateUser("");
-                userService.Save();
+                User user = userRepository.CreateUser("");
+                userRepository.Save();
 
                 user.Should().BeNull();
             }
@@ -49,13 +49,13 @@ namespace Slask.Persistence.Xunit.IntegrationTests
         [Fact]
         public void CannotCreateUserWithNameAlreadyInUseNoMatterLetterCasing()
         {
-            using (UserService userService = CreateUserService())
+            using (UserRepository userRepository = CreateuserRepository())
             {
-                User createdUser = userService.CreateUser("Stålberto");
-                userService.Save();
+                User createdUser = userRepository.CreateUser("Stålberto");
+                userRepository.Save();
 
-                User duplicateUser = userService.CreateUser(createdUser.Name.ToUpper());
-                userService.Save();
+                User duplicateUser = userRepository.CreateUser(createdUser.Name.ToUpper());
+                userRepository.Save();
 
                 duplicateUser.Should().BeNull();
             }
@@ -67,12 +67,12 @@ namespace Slask.Persistence.Xunit.IntegrationTests
             string username1 = "Stålberto";
             string username2 = "Guggelito";
 
-            using (UserService userService = CreateUserService())
+            using (UserRepository userRepository = CreateuserRepository())
             {
-                User user = userService.CreateUser(username1);
-                userService.Save();
+                User user = userRepository.CreateUser(username1);
+                userRepository.Save();
 
-                userService.RenameUser(user.Id, username2);
+                userRepository.RenameUser(user.Id, username2);
                 user.Name.Should().Be(username2);
             }
         }
@@ -83,17 +83,17 @@ namespace Slask.Persistence.Xunit.IntegrationTests
             string username1 = "Stålberto";
             string username2 = "Guggelito";
 
-            using (UserService userService = CreateUserService())
+            using (UserRepository userRepository = CreateuserRepository())
             {
-                User user1 = userService.CreateUser(username1);
-                User user2 = userService.CreateUser(username2);
-                userService.Save();
+                User user1 = userRepository.CreateUser(username1);
+                User user2 = userRepository.CreateUser(username2);
+                userRepository.Save();
 
-                userService.RenameUser(user2.Id, username1.ToUpper());
-                userService.Save();
+                userRepository.RenameUser(user2.Id, username1.ToUpper());
+                userRepository.Save();
 
-                User after_renamed_user1 = userService.GetUserById(user1.Id);
-                User after_renamed_user2 = userService.GetUserById(user2.Id);
+                User after_renamed_user1 = userRepository.GetUserById(user1.Id);
+                User after_renamed_user2 = userRepository.GetUserById(user2.Id);
 
                 after_renamed_user1.Id.Should().Be(user1.Id);
                 after_renamed_user1.Name.Should().Be(username1);
@@ -108,17 +108,17 @@ namespace Slask.Persistence.Xunit.IntegrationTests
             string username1 = "Stålberto";
             string username2 = "Guggelito";
 
-            using (UserService userService = CreateUserService())
+            using (UserRepository userRepository = CreateuserRepository())
             {
-                User user1 = userService.CreateUser(username1);
-                User user2 = userService.CreateUser(username2);
-                userService.Save();
+                User user1 = userRepository.CreateUser(username1);
+                User user2 = userRepository.CreateUser(username2);
+                userRepository.Save();
 
-                userService.RenameUser(user2.Id, username1 + " ");
-                userService.Save();
+                userRepository.RenameUser(user2.Id, username1 + " ");
+                userRepository.Save();
 
-                User after_renamed_user1 = userService.GetUserById(user1.Id);
-                User after_renamed_user2 = userService.GetUserById(user2.Id);
+                User after_renamed_user1 = userRepository.GetUserById(user1.Id);
+                User after_renamed_user2 = userRepository.GetUserById(user2.Id);
 
                 after_renamed_user1.Id.Should().Be(user1.Id);
                 after_renamed_user1.Name.Should().Be(username1);
@@ -132,18 +132,18 @@ namespace Slask.Persistence.Xunit.IntegrationTests
         {
             List<string> userNames = new List<string>() { "Stålberto", "Guggelito", "Bönis", "Kimmieboi" };
 
-            using (UserService userService = CreateUserService())
+            using (UserRepository userRepository = CreateuserRepository())
             {
                 foreach (string userName in userNames)
                 {
-                    userService.CreateUser(userName);
+                    userRepository.CreateUser(userName);
                 }
-                userService.Save();
+                userRepository.Save();
             }
 
-            using (UserService userService = CreateUserService())
+            using (UserRepository userRepository = CreateuserRepository())
             {
-                IEnumerable<User> users = userService.GetUsers();
+                IEnumerable<User> users = userRepository.GetUsers();
 
                 users.Should().HaveCount(userNames.Count);
                 foreach (string userName in userNames)
@@ -156,12 +156,12 @@ namespace Slask.Persistence.Xunit.IntegrationTests
         [Fact]
         public void CanFetchUserById()
         {
-            using (UserService userService = CreateUserService())
+            using (UserRepository userRepository = CreateuserRepository())
             {
-                User createdUser = userService.CreateUser("Stålberto");
-                userService.Save();
+                User createdUser = userRepository.CreateUser("Stålberto");
+                userRepository.Save();
 
-                User fetchedUser = userService.GetUserById(createdUser.Id);
+                User fetchedUser = userRepository.GetUserById(createdUser.Id);
                 fetchedUser.Id.Should().Be(createdUser.Id);
                 fetchedUser.Name.Should().Be(createdUser.Name);
             }
@@ -170,12 +170,12 @@ namespace Slask.Persistence.Xunit.IntegrationTests
         [Fact]
         public void CanFetchUserByNameNoMatterLetterCasing()
         {
-            using (UserService userService = CreateUserService())
+            using (UserRepository userRepository = CreateuserRepository())
             {
-                User createdUser = userService.CreateUser("Stålberto");
-                userService.Save();
+                User createdUser = userRepository.CreateUser("Stålberto");
+                userRepository.Save();
 
-                User fetchedUser = userService.GetUserByName(createdUser.Name.ToUpper());
+                User fetchedUser = userRepository.GetUserByName(createdUser.Name.ToUpper());
 
                 fetchedUser.Should().NotBeNull();
                 fetchedUser.Id.Should().Be(createdUser.Id);
@@ -186,9 +186,9 @@ namespace Slask.Persistence.Xunit.IntegrationTests
         [Fact]
         public void ReturnsNullWhenFetchingNonexistentUserById()
         {
-            using (UserService userService = CreateUserService())
+            using (UserRepository userRepository = CreateuserRepository())
             {
-                User fetchedUser = userService.GetUserById(Guid.NewGuid());
+                User fetchedUser = userRepository.GetUserById(Guid.NewGuid());
 
                 fetchedUser.Should().BeNull();
             }
@@ -197,17 +197,17 @@ namespace Slask.Persistence.Xunit.IntegrationTests
         [Fact]
         public void ReturnsNullWhenFetchingNonexistentUserByName()
         {
-            using (UserService userService = CreateUserService())
+            using (UserRepository userRepository = CreateuserRepository())
             {
-                User fetchedUser = userService.GetUserByName("my-god-thats-jason-bourne");
+                User fetchedUser = userRepository.GetUserByName("my-god-thats-jason-bourne");
 
                 fetchedUser.Should().BeNull();
             }
         }
 
-        private UserService CreateUserService()
+        private UserRepository CreateuserRepository()
         {
-            return new UserService(InMemoryContextCreator.Create(testDatabaseName));
+            return new UserRepository(InMemoryContextCreator.Create(testDatabaseName));
         }
     }
 }

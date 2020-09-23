@@ -5,9 +5,9 @@ using Slask.Domain.Rounds.RoundTypes;
 using System;
 using System.Collections.Generic;
 
-namespace Slask.Persistence.Services
+namespace Slask.Application.Interfaces.Persistence
 {
-    public interface TournamentServiceInterface
+    public interface TournamentRepositoryInterface
     {
         Tournament CreateTournament(string name);
         bool RemoveTournament(Guid id);

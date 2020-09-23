@@ -117,7 +117,7 @@ Scenario: Two different matches can switch player references with each other
 		| 0           | 0           | 1           | 0            | Taeja       |
 		| 0           | 0           | 1           | 1            | Maru        |
 
-Scenario: Can solve a tie with tournament service
+Scenario: Can solve a tie with tournament repository
 	Given a tournament named "Homestory Cup XX" has been created with users "" added to it
 		And tournament named "Homestory Cup XX" adds rounds
 			| Round type  | Advancing per group count | Players per group count |

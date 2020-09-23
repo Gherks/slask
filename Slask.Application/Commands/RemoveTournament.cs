@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
-using Slask.Persistence.Services;
+using Slask.Application.Interfaces.Persistence;
 using System;
 
 namespace Slask.Application.Commands
@@ -17,23 +17,23 @@ namespace Slask.Application.Commands
 
     public sealed class RemoveTournamentHandler : CommandHandlerInterface<RemoveTournament>
     {
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
-        public RemoveTournamentHandler(TournamentServiceInterface tournamentService)
+        public RemoveTournamentHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            _tournamentService = tournamentService;
+            tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(RemoveTournament command)
         {
-            bool tournamentRemoved = _tournamentService.RemoveTournament(command.TournamentId);
+            bool tournamentRemoved = tournamentRepository.RemoveTournament(command.TournamentId);
 
             if (!tournamentRemoved)
             {
                 return Result.Failure($"Could remove tournament ({ command.TournamentId }). Tournament not found.");
             }
 
-            _tournamentService.Save();
+            tournamentRepository.Save();
             return Result.Success();
         }
     }

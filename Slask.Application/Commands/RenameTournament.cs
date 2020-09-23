@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
-using Slask.Persistence.Services;
+using Slask.Application.Interfaces.Persistence;
 using System;
 
 namespace Slask.Application.Commands
@@ -19,23 +19,23 @@ namespace Slask.Application.Commands
 
     public sealed class RenameTournamentHandler : CommandHandlerInterface<RenameTournament>
     {
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
-        public RenameTournamentHandler(TournamentServiceInterface tournamentService)
+        public RenameTournamentHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            _tournamentService = tournamentService;
+            tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(RenameTournament command)
         {
-            bool renameSuccessful = _tournamentService.RenameTournament(command.TournamentId, command.TournamentName);
+            bool renameSuccessful = tournamentRepository.RenameTournament(command.TournamentId, command.TournamentName);
 
             if (!renameSuccessful)
             {
                 return Result.Failure($"Could not rename tournament ({ command.TournamentId }) to \"({ command.TournamentName })\"");
             }
 
-            _tournamentService.Save();
+            tournamentRepository.Save();
             return Result.Success();
         }
     }

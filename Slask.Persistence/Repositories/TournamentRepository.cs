@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
 using Slask.Domain.Bets.BetTypes;
 using Slask.Domain.Groups;
@@ -9,13 +10,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Slask.Persistence.Services
+namespace Slask.Persistence.Repositories
 {
-    public class TournamentService : TournamentServiceInterface, IDisposable
+    public class TournamentRepository : TournamentRepositoryInterface, IDisposable
     {
         private readonly SlaskContext _slaskContext;
 
-        public TournamentService(SlaskContext slaskContext)
+        public TournamentRepository(SlaskContext slaskContext)
         {
             _slaskContext = slaskContext;
         }

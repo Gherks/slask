@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
+using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
-using Slask.Persistence.Services;
 using System;
 
 namespace Slask.Application.Commands
@@ -22,16 +22,16 @@ namespace Slask.Application.Commands
 
     public sealed class ChangeBestOfInMatchHandler : CommandHandlerInterface<ChangeBestOfInMatch>
     {
-        private readonly TournamentServiceInterface _tournamentService;
+        private readonly TournamentRepositoryInterface tournamentRepository;
 
-        public ChangeBestOfInMatchHandler(TournamentServiceInterface tournamentService)
+        public ChangeBestOfInMatchHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            _tournamentService = tournamentService;
+            tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(ChangeBestOfInMatch command)
         {
-            Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
+            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
@@ -45,14 +45,14 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not change best of ({ command.BestOf }) setting in match ({ command.MatchId }). Match not found.");
             }
 
-            bool changeSuccessful = _tournamentService.SetBestOfInMatch(match, command.BestOf);
+            bool changeSuccessful = tournamentRepository.SetBestOfInMatch(match, command.BestOf);
 
             if (!changeSuccessful)
             {
                 return Result.Failure($"Could not change best of ({ command.BestOf }) setting in match ({ command.MatchId }).");
             }
 
-            _tournamentService.Save();
+            tournamentRepository.Save();
             return Result.Success();
         }
     }
