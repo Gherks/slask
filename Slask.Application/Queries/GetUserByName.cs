@@ -25,7 +25,7 @@ namespace Slask.Application.Querys
         {
             User user = _userRepository.GetUserByName(query.UserName);
 
-            if(user == null)
+            if (user == null)
             {
                 return Result.Failure<UserDto>($"Could not find user ({ query.UserName })");
             }
