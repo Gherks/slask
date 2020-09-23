@@ -1,35 +1,85 @@
 ﻿using CSharpFunctionalExtensions;
 using Slask.Application.Commands.Interfaces;
+using Slask.Domain;
+using Slask.Domain.Groups;
 using Slask.Persistence.Services;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Slask.Application.Commands
 {
     public sealed class SwitchPlacesOfTwoPlayersWithinRound : CommandInterface
     {
         public Guid TournamentId { get; }
+        public Guid Match1Id { get; }
+        public Guid Player1Id { get; }
+        public Guid Match2Id { get; }
+        public Guid Player2Id { get; }
 
-        public SwitchPlacesOfTwoPlayersWithinRound(Guid tournamentId)
+        public SwitchPlacesOfTwoPlayersWithinRound(Guid tournamentId, Guid match1Id, Guid player1Id, Guid match2Id, Guid player2Id)
         {
             TournamentId = tournamentId;
+            Match1Id = match1Id;
+            Player1Id = player1Id;
+            Match2Id = match2Id;
+            Player2Id = player2Id;
         }
     }
 
     public sealed class SwitchPlacesOfTwoPlayersWithinRoundHandler : CommandHandlerInterface<SwitchPlacesOfTwoPlayersWithinRound>
     {
-        private readonly UserServiceInterface _userService;
         private readonly TournamentServiceInterface _tournamentService;
 
-        public SwitchPlacesOfTwoPlayersWithinRoundHandler(
-                UserServiceInterface userService,
-                TournamentServiceInterface tournamentService)
+        public SwitchPlacesOfTwoPlayersWithinRoundHandler(TournamentServiceInterface tournamentService)
         {
-            _userService = userService;
             _tournamentService = tournamentService;
         }
 
         public Result Handle(SwitchPlacesOfTwoPlayersWithinRound command)
         {
+            Tournament tournament = _tournamentService.GetTournamentById(command.TournamentId);
+
+            if(tournament == null)
+            {
+                return Result.Failure($"Could not switch places on two players ({ command.Player1Id }, { command.Player2Id }) in matches ({ command.Match1Id }, { command.Match2Id }). Tournament ({ command.TournamentId }) not found.");
+            }
+
+            Match match1 = tournament.GetMatchById(command.Match1Id);
+
+            if (match1 == null)
+            {
+                return Result.Failure($"Could not switch places on two players ({ command.Player1Id }, { command.Player2Id }) in matches ({ command.Match1Id }, { command.Match2Id }). Match ({ command.Match1Id }) not found.");
+            }
+
+            Match match2 = tournament.GetMatchById(command.Match2Id);
+
+            if (match2 == null)
+            {
+                return Result.Failure($"Could not switch places on two players ({ command.Player1Id }, { command.Player2Id }) in matches ({ command.Match1Id }, { command.Match2Id }). Match ({ command.Match2Id }) not found.");
+            }
+
+            Player player1 = match1.FindPlayer(command.Player1Id);
+
+            if (player1 == null)
+            {
+                return Result.Failure($"Could not switch places on two players ({ command.Player1Id }, { command.Player2Id }) in matches ({ command.Match1Id }, { command.Match2Id }). Player ({ command.Player1Id }) not found.");
+            }
+
+            Player player2 = match2.FindPlayer(command.Player2Id);
+
+            if (player2 == null)
+            {
+                return Result.Failure($"Could not switch places on two players ({ command.Player1Id }, { command.Player2Id }) in matches ({ command.Match1Id }, { command.Match2Id }). Player ({ command.Player2Id }) not found.");
+            }
+
+            bool switchMade = _tournamentService.SwitchPlayersInMatches(player1, player2);
+
+            if (!switchMade)
+            {
+                return Result.Failure($"Could not switch places on two players ({ command.Player1Id }, { command.Player2Id }) in matches ({ command.Match1Id }, { command.Match2Id }).");
+            }
+
             _tournamentService.Save();
             return Result.Success();
         }
