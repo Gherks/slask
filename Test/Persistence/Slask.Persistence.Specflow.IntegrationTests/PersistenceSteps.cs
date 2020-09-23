@@ -38,7 +38,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                 }
                 userRepository.Save();
 
-                using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+                using (TournamentRepository tournamentRepository = CreateTournamentRepository())
                 {
                     Tournament tournament = tournamentRepository.CreateTournament(tournamentName);
 
@@ -57,7 +57,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [When(@"tournament named ""(.*)"" adds rounds")]
         public void GivenTournamentAddsRounds(string tournamentName, Table table)
         {
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
@@ -103,7 +103,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         {
             List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
@@ -120,7 +120,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [When(@"betters places match bets in tournament named ""(.*)""")]
         public void GivenBettersPlacesMatchBets(string tournamentName, Table table)
         {
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 tournamentRepository.Save();
                 foreach (TableRow row in table.Rows)
@@ -142,7 +142,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [When(@"groups within tournament named ""(.*)"" is played out")]
         public void GivenGroupsWithinTournamentIsPlayedOut(string tournamentName, Table table)
         {
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 foreach (TableRow row in table.Rows)
                 {
@@ -168,7 +168,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         public void GivenBetterStandingsInTournamentFromFirstToLastLooksLikeThis(string tournamentName, Table table)
         {
             Tournament tournament;
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 tournament = tournamentRepository.GetTournamentByName(tournamentName);
             }
@@ -195,7 +195,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                 throw new ArgumentNullException(nameof(table));
             }
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
@@ -251,7 +251,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         public void ThenFetchedTournamentShouldContainRounds(string tournamentName, Table table)
         {
             Tournament tournament;
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 tournament = tournamentRepository.GetTournamentByName(tournamentName);
             }
@@ -296,7 +296,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         public void ThenGroupsWithinRoundInFetchedTournamentIsOfType(int roundIndex, string tournamentName, string groupType)
         {
             Tournament tournament;
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 tournament = tournamentRepository.GetTournamentByName(tournamentName);
             }
@@ -344,7 +344,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             return new UserRepository(InMemoryContextCreator.Create(testDatabaseName));
         }
 
-        protected TournamentRepository CreatetournamentRepository()
+        protected TournamentRepository CreateTournamentRepository()
         {
             return new TournamentRepository(InMemoryContextCreator.Create(testDatabaseName));
         }

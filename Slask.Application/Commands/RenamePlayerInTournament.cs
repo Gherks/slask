@@ -22,16 +22,16 @@ namespace Slask.Application.Commands
 
     public sealed class RenamePlayerInTournamentHandler : CommandHandlerInterface<RenamePlayerInTournament>
     {
-        private readonly TournamentRepositoryInterface tournamentRepository;
+        private readonly TournamentRepositoryInterface _tournamentRepository;
 
         public RenamePlayerInTournamentHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            tournamentRepository = tournamentRepository;
+            _tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(RenamePlayerInTournament command)
         {
-            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
+            Tournament tournament = _tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
@@ -45,14 +45,14 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not rename player ({ command.CurrentPlayerName }) to { command.NewPlayerName } in tournament ({ command.TournamentId }). Player not found.");
             }
 
-            bool renameSuccessful = tournamentRepository.RenamePlayerReferenceInTournament(playerReference, command.NewPlayerName);
+            bool renameSuccessful = _tournamentRepository.RenamePlayerReferenceInTournament(playerReference, command.NewPlayerName);
 
             if (!renameSuccessful)
             {
                 return Result.Failure($"Could not rename player ({ command.CurrentPlayerName }) to { command.NewPlayerName } in tournament ({ command.TournamentId }).");
             }
 
-            tournamentRepository.Save();
+            _tournamentRepository.Save();
             return Result.Success();
         }
     }

@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 {
-    public class BetterTests : tournamentRepositoryTestBase
+    public class BetterTests : TournamentRepositoryTestBase
     {
         [Fact]
         public void CanAddBettersToTournament()
@@ -23,7 +23,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 
             using (UserRepository userRepository = CreateuserRepository())
             {
-                using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+                using (TournamentRepository tournamentRepository = CreateTournamentRepository())
                 {
                     Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
@@ -38,7 +38,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             InitializeUsersAndBetters();
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
@@ -57,7 +57,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             InitializeUsersAndBetters();
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 List<Better> betters = tournamentRepository.GetBettersByTournamentName(tournamentName).ToList();
 
@@ -74,7 +74,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             InitializeUsersAndBetters();
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
@@ -94,7 +94,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             InitializeUsersAndBetters();
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
@@ -119,7 +119,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             InitializeUsersAndBetters();
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
@@ -138,7 +138,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             InitializeUsersAndBetters();
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 

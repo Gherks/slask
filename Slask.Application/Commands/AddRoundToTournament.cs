@@ -22,16 +22,16 @@ namespace Slask.Application.Commands
 
     public sealed class AddRoundToTournamentHandler : CommandHandlerInterface<AddRoundToTournament>
     {
-        private readonly TournamentRepositoryInterface tournamentRepository;
+        private readonly TournamentRepositoryInterface _tournamentRepository;
 
         public AddRoundToTournamentHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            tournamentRepository = tournamentRepository;
+            _tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(AddRoundToTournament command)
         {
-            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
+            Tournament tournament = _tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
@@ -44,13 +44,13 @@ namespace Slask.Application.Commands
             switch (parsedRoundType)
             {
                 case "BRACKET":
-                    round = tournamentRepository.AddBracketRoundToTournament(tournament);
+                    round = _tournamentRepository.AddBracketRoundToTournament(tournament);
                     break;
                 case "DUALTOURNAMENT":
-                    round = tournamentRepository.AddDualTournamentRoundToTournament(tournament);
+                    round = _tournamentRepository.AddDualTournamentRoundToTournament(tournament);
                     break;
                 case "ROUNDROBIN":
-                    round = tournamentRepository.AddRoundRobinRoundToTournament(tournament);
+                    round = _tournamentRepository.AddRoundRobinRoundToTournament(tournament);
                     break;
                 default:
                     return Result.Failure($"Could not add round ({ command.RoundType }) to tournament. Invalid round type ({ command.RoundType }) given.");
@@ -61,7 +61,7 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not add round ({ command.RoundType }) to tournament.");
             }
 
-            tournamentRepository.Save();
+            _tournamentRepository.Save();
             return Result.Success();
         }
     }

@@ -22,16 +22,16 @@ namespace Slask.Application.Commands
 
     public sealed class ChangeBestOfInMatchHandler : CommandHandlerInterface<ChangeBestOfInMatch>
     {
-        private readonly TournamentRepositoryInterface tournamentRepository;
+        private readonly TournamentRepositoryInterface _tournamentRepository;
 
         public ChangeBestOfInMatchHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            tournamentRepository = tournamentRepository;
+            _tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(ChangeBestOfInMatch command)
         {
-            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
+            Tournament tournament = _tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
@@ -45,14 +45,14 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not change best of ({ command.BestOf }) setting in match ({ command.MatchId }). Match not found.");
             }
 
-            bool changeSuccessful = tournamentRepository.SetBestOfInMatch(match, command.BestOf);
+            bool changeSuccessful = _tournamentRepository.SetBestOfInMatch(match, command.BestOf);
 
             if (!changeSuccessful)
             {
                 return Result.Failure($"Could not change best of ({ command.BestOf }) setting in match ({ command.MatchId }).");
             }
 
-            tournamentRepository.Save();
+            _tournamentRepository.Save();
             return Result.Success();
         }
     }

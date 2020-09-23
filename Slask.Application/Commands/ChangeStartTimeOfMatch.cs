@@ -22,16 +22,16 @@ namespace Slask.Application.Commands
 
     public sealed class ChangeStartTimeOfMatchHandler : CommandHandlerInterface<ChangeStartTimeOfMatch>
     {
-        private readonly TournamentRepositoryInterface tournamentRepository;
+        private readonly TournamentRepositoryInterface _tournamentRepository;
 
         public ChangeStartTimeOfMatchHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            tournamentRepository = tournamentRepository;
+            _tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(ChangeStartTimeOfMatch command)
         {
-            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
+            Tournament tournament = _tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
@@ -45,14 +45,14 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not change start time ({ command.StartDateTime }) in match ({ command.MatchId }). Match not found.");
             }
 
-            bool changeSuccessful = tournamentRepository.SetStartTimeForMatch(match, command.StartDateTime);
+            bool changeSuccessful = _tournamentRepository.SetStartTimeForMatch(match, command.StartDateTime);
 
             if (!changeSuccessful)
             {
                 return Result.Failure($"Could not change start time ({ command.StartDateTime }) in match ({ command.MatchId }).");
             }
 
-            tournamentRepository.Save();
+            _tournamentRepository.Save();
             return Result.Success();
         }
     }

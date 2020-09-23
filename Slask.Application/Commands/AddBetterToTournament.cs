@@ -21,19 +21,19 @@ namespace Slask.Application.Commands
     public sealed class AddBetterToTournamentHandler : CommandHandlerInterface<AddBetterToTournament>
     {
         private readonly UserRepositoryInterface _userRepository;
-        private readonly TournamentRepositoryInterface tournamentRepository;
+        private readonly TournamentRepositoryInterface _tournamentRepository;
 
         public AddBetterToTournamentHandler(
                 UserRepositoryInterface userRepository,
                 TournamentRepositoryInterface tournamentRepository)
         {
             _userRepository = userRepository;
-            tournamentRepository = tournamentRepository;
+            _tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(AddBetterToTournament command)
         {
-            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
+            Tournament tournament = _tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
@@ -47,14 +47,14 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not add better to tournament with given user ({ command.UserId }). Tournament ({ command.TournamentId }) not found.");
             }
 
-            Better better = tournamentRepository.AddBetterToTournament(tournament, user);
+            Better better = _tournamentRepository.AddBetterToTournament(tournament, user);
 
             if (better == null)
             {
                 return Result.Failure($"Could not add better to tournament with given user ({ command.UserId }).");
             }
 
-            tournamentRepository.Save();
+            _tournamentRepository.Save();
             return Result.Success();
         }
     }

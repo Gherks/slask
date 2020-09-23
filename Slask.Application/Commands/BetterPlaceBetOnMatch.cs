@@ -23,16 +23,16 @@ namespace Slask.Application.Commands
 
     public sealed class BetterPlaceBetOnMatchHandler : CommandHandlerInterface<BetterPlaceBetOnMatch>
     {
-        private readonly TournamentRepositoryInterface tournamentRepository;
+        private readonly TournamentRepositoryInterface _tournamentRepository;
 
         public BetterPlaceBetOnMatchHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            tournamentRepository = tournamentRepository;
+            _tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(BetterPlaceBetOnMatch command)
         {
-            bool betPlaced = tournamentRepository.BetterPlacesMatchBetOnMatch(
+            bool betPlaced = _tournamentRepository.BetterPlacesMatchBetOnMatch(
                 command.TournamentId,
                 command.MatchId,
                 command.BetterName,
@@ -43,7 +43,7 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Better ({ command.BetterName }) could not place match bet on player ({ command.PlayerName }) in match ({ command.MatchId }) within tournament ({ command.TournamentId })");
             }
 
-            tournamentRepository.Save();
+            _tournamentRepository.Save();
             return Result.Success();
         }
     }

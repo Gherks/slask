@@ -20,30 +20,30 @@ namespace Slask.Application.Commands
 
     public sealed class AddPlayerToTournamentHandler : CommandHandlerInterface<AddPlayerToTournament>
     {
-        private readonly TournamentRepositoryInterface tournamentRepository;
+        private readonly TournamentRepositoryInterface _tournamentRepository;
 
         public AddPlayerToTournamentHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            tournamentRepository = tournamentRepository;
+            _tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(AddPlayerToTournament command)
         {
-            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
+            Tournament tournament = _tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
                 return Result.Failure($"Could not add new player ({ command.PlayerName }) to tournament. Tournament ({ command.TournamentId }) not found.");
             }
 
-            PlayerReference playerReference = tournamentRepository.AddPlayerReference(tournament, command.PlayerName);
+            PlayerReference playerReference = _tournamentRepository.AddPlayerReference(tournament, command.PlayerName);
 
             if (playerReference == null)
             {
                 return Result.Failure($"Could not add new player ({ command.PlayerName }) to tournament.");
             }
 
-            tournamentRepository.Save();
+            _tournamentRepository.Save();
             return Result.Success();
         }
     }

@@ -23,16 +23,16 @@ namespace Slask.Application.Commands
 
     public sealed class ChangeAdvancingPerGroupCountInRoundHandler : CommandHandlerInterface<ChangeAdvancingPerGroupCountInRound>
     {
-        private readonly TournamentRepositoryInterface tournamentRepository;
+        private readonly TournamentRepositoryInterface _tournamentRepository;
 
         public ChangeAdvancingPerGroupCountInRoundHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            tournamentRepository = tournamentRepository;
+            _tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(ChangeAdvancingPerGroupCountInRound command)
         {
-            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
+            Tournament tournament = _tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
@@ -46,14 +46,14 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not change advancing per group count ({ command.AdvancingPerGroupCount }) setting in round ({ command.RoundId }). Round not found.");
             }
 
-            bool changeSuccessful = tournamentRepository.SetAdvancingPerGroupCountInRound(round, command.AdvancingPerGroupCount);
+            bool changeSuccessful = _tournamentRepository.SetAdvancingPerGroupCountInRound(round, command.AdvancingPerGroupCount);
 
             if (!changeSuccessful)
             {
                 return Result.Failure($"Could not change advancing per group count ({ command.AdvancingPerGroupCount }) setting in round ({ command.RoundId }).");
             }
 
-            tournamentRepository.Save();
+            _tournamentRepository.Save();
             return Result.Success();
         }
     }

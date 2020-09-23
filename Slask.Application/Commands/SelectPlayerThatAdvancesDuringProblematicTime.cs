@@ -23,16 +23,16 @@ namespace Slask.Application.Commands
 
     public sealed class SelectPlayerThatAdvancesDuringProblematicTimeHandler : CommandHandlerInterface<SelectPlayerThatAdvancesDuringProblematicTime>
     {
-        private readonly TournamentRepositoryInterface tournamentRepository;
+        private readonly TournamentRepositoryInterface _tournamentRepository;
 
         public SelectPlayerThatAdvancesDuringProblematicTimeHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            tournamentRepository = tournamentRepository;
+            _tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(SelectPlayerThatAdvancesDuringProblematicTime command)
         {
-            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
+            Tournament tournament = _tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
@@ -54,14 +54,14 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not select advancing player ({ command.PlayerName }) in group ({ command.GroupId }) during problematic tie. Player not found.");
             }
 
-            bool playerChosenSuccessfully = tournamentRepository.SolveTieByChoosingPlayerInGroup(group, playerReference);
+            bool playerChosenSuccessfully = _tournamentRepository.SolveTieByChoosingPlayerInGroup(group, playerReference);
 
             if (!playerChosenSuccessfully)
             {
                 return Result.Failure($"Could not select advancing player ({ command.PlayerName }) in group ({ command.GroupId }) during problematic tie.");
             }
 
-            tournamentRepository.Save();
+            _tournamentRepository.Save();
             return Result.Success();
         }
     }

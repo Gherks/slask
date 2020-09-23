@@ -23,16 +23,16 @@ namespace Slask.Application.Commands
 
     public sealed class ChangeGroupSizeInRoundHandler : CommandHandlerInterface<ChangeGroupSizeInRound>
     {
-        private readonly TournamentRepositoryInterface tournamentRepository;
+        private readonly TournamentRepositoryInterface _tournamentRepository;
 
         public ChangeGroupSizeInRoundHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            tournamentRepository = tournamentRepository;
+            _tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(ChangeGroupSizeInRound command)
         {
-            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
+            Tournament tournament = _tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
@@ -46,14 +46,14 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not change players per group count ({ command.PlayersPerGroupCount }) setting in round ({ command.RoundId }). Round not found.");
             }
 
-            bool changeSuccessful = tournamentRepository.SetPlayersPerGroupCountInRound(round, command.PlayersPerGroupCount);
+            bool changeSuccessful = _tournamentRepository.SetPlayersPerGroupCountInRound(round, command.PlayersPerGroupCount);
 
             if (!changeSuccessful)
             {
                 return Result.Failure($"Could not change players per group count ({ command.PlayersPerGroupCount }) setting in round ({ command.RoundId }).");
             }
 
-            tournamentRepository.Save();
+            _tournamentRepository.Save();
             return Result.Success();
         }
     }

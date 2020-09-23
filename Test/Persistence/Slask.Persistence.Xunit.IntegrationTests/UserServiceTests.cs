@@ -9,11 +9,11 @@ using Xunit;
 
 namespace Slask.Persistence.Xunit.IntegrationTests
 {
-    public class userRepositoryTests
+    public class UserRepositoryTests
     {
         private readonly string testDatabaseName;
 
-        public userRepositoryTests()
+        public UserRepositoryTests()
         {
             testDatabaseName = Guid.NewGuid().ToString();
         }

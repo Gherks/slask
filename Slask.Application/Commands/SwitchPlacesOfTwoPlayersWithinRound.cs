@@ -26,16 +26,16 @@ namespace Slask.Application.Commands
 
     public sealed class SwitchPlacesOfTwoPlayersWithinRoundHandler : CommandHandlerInterface<SwitchPlacesOfTwoPlayersWithinRound>
     {
-        private readonly TournamentRepositoryInterface tournamentRepository;
+        private readonly TournamentRepositoryInterface _tournamentRepository;
 
         public SwitchPlacesOfTwoPlayersWithinRoundHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            tournamentRepository = tournamentRepository;
+            _tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(SwitchPlacesOfTwoPlayersWithinRound command)
         {
-            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
+            Tournament tournament = _tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
@@ -70,14 +70,14 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not switch places on two players ({ command.Player1Id }, { command.Player2Id }) in matches ({ command.Match1Id }, { command.Match2Id }). Player ({ command.Player2Id }) not found.");
             }
 
-            bool switchMade = tournamentRepository.SwitchPlayersInMatches(player1, player2);
+            bool switchMade = _tournamentRepository.SwitchPlayersInMatches(player1, player2);
 
             if (!switchMade)
             {
                 return Result.Failure($"Could not switch places on two players ({ command.Player1Id }, { command.Player2Id }) in matches ({ command.Match1Id }, { command.Match2Id }).");
             }
 
-            tournamentRepository.Save();
+            _tournamentRepository.Save();
             return Result.Success();
         }
     }

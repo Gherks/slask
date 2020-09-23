@@ -24,30 +24,30 @@ namespace Slask.Application.Commands
 
     public sealed class AddScoreToPlayerInMatchHandler : CommandHandlerInterface<AddScoreToPlayerInMatch>
     {
-        private readonly TournamentRepositoryInterface tournamentRepository;
+        private readonly TournamentRepositoryInterface _tournamentRepository;
 
         public AddScoreToPlayerInMatchHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            tournamentRepository = tournamentRepository;
+            _tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(AddScoreToPlayerInMatch command)
         {
-            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
+            Tournament tournament = _tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
                 return Result.Failure($"Could add score ({ command.Score }) to player ({ command.PlayerId }) in match ({ command.MatchId }). Tournament ({ command.TournamentId }) not found.");
             }
 
-            bool scoreAdded = tournamentRepository.AddScoreToPlayerInMatch(tournament, command.MatchId, command.PlayerId, command.Score);
+            bool scoreAdded = _tournamentRepository.AddScoreToPlayerInMatch(tournament, command.MatchId, command.PlayerId, command.Score);
 
             if (!scoreAdded)
             {
                 return Result.Failure($"Could add score ({ command.Score }) to player ({ command.PlayerId }) in match ({ command.MatchId }).");
             }
 
-            tournamentRepository.Save();
+            _tournamentRepository.Save();
             return Result.Success();
         }
     }

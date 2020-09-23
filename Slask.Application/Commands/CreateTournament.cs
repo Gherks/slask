@@ -17,23 +17,23 @@ namespace Slask.Application.Commands
 
     public sealed class CreateTournamentHandler : CommandHandlerInterface<CreateTournament>
     {
-        private readonly TournamentRepositoryInterface tournamentRepository;
+        private readonly TournamentRepositoryInterface _tournamentRepository;
 
         public CreateTournamentHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            tournamentRepository = tournamentRepository;
+            _tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(CreateTournament command)
         {
-            Tournament tournament = tournamentRepository.CreateTournament(command.Name);
+            Tournament tournament = _tournamentRepository.CreateTournament(command.Name);
 
             if (tournament == null)
             {
                 return Result.Failure($"Could not create tournament ({command.Name})");
             }
 
-            tournamentRepository.Save();
+            _tournamentRepository.Save();
             return Result.Success();
         }
     }

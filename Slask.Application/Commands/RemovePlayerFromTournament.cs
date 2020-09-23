@@ -20,30 +20,30 @@ namespace Slask.Application.Commands
 
     public sealed class RemovePlayerFromTournamentHandler : CommandHandlerInterface<RemovePlayerFromTournament>
     {
-        private readonly TournamentRepositoryInterface tournamentRepository;
+        private readonly TournamentRepositoryInterface _tournamentRepository;
 
         public RemovePlayerFromTournamentHandler(TournamentRepositoryInterface tournamentRepository)
         {
-            tournamentRepository = tournamentRepository;
+            _tournamentRepository = tournamentRepository;
         }
 
         public Result Handle(RemovePlayerFromTournament command)
         {
-            Tournament tournament = tournamentRepository.GetTournamentById(command.TournamentId);
+            Tournament tournament = _tournamentRepository.GetTournamentById(command.TournamentId);
 
             if (tournament == null)
             {
                 return Result.Failure($"Could not player ({ command.PlayerName}) from tournament ({ command.TournamentId }). Tournament not found.");
             }
 
-            bool playerRemoved = tournamentRepository.RemovePlayerReferenceFromTournament(tournament, command.PlayerName);
+            bool playerRemoved = _tournamentRepository.RemovePlayerReferenceFromTournament(tournament, command.PlayerName);
 
             if (!playerRemoved)
             {
                 return Result.Failure($"Could not player ({ command.PlayerName}) from tournament ({ command.TournamentId }).");
             }
 
-            tournamentRepository.Save();
+            _tournamentRepository.Save();
             return Result.Success();
         }
     }

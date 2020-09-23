@@ -10,12 +10,12 @@ using Xunit;
 
 namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 {
-    public class RoundTests : tournamentRepositoryTestBase
+    public class RoundTests : TournamentRepositoryTestBase
     {
         [Fact]
         public void CanAddBracketRoundToTournament()
         {
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                 tournament.Rounds.Should().BeEmpty();
@@ -27,7 +27,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
                 tournament.Rounds.First().Should().BeOfType<BracketRound>();
             }
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                 tournament.Rounds.Should().HaveCount(1);
@@ -38,7 +38,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         [Fact]
         public void CanAddDualTournamentRoundToTournament()
         {
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                 tournament.Rounds.Should().BeEmpty();
@@ -50,7 +50,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
                 tournament.Rounds.First().Should().BeOfType<DualTournamentRound>();
             }
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                 tournament.Rounds.Should().HaveCount(1);
@@ -61,7 +61,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         [Fact]
         public void CanAddRoundRobinRoundToTournament()
         {
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                 tournament.Rounds.Should().BeEmpty();
@@ -73,7 +73,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
                 tournament.Rounds.First().Should().BeOfType<RoundRobinRound>();
             }
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                 tournament.Rounds.Should().HaveCount(1);
@@ -86,7 +86,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             List<Guid> roundIds = new List<Guid>();
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
@@ -102,7 +102,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
                 tournamentRepository.Save();
             }
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
@@ -123,7 +123,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             List<string> roundNames = new List<string>();
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
@@ -139,7 +139,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
                 tournamentRepository.Save();
             }
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
@@ -160,7 +160,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             string newName = "Round No Spamerino In The Chatterino";
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                 RoundBase round = tournamentRepository.AddBracketRoundToTournament(tournament);
@@ -176,7 +176,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         [Fact]
         public void CannotChangeAdvancingPerGroupCountInBracketRound()
         {
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                 RoundBase round = tournamentRepository.AddBracketRoundToTournament(tournament);
@@ -194,7 +194,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         [Fact]
         public void CannotChangeAdvancingPerGroupCountInDualTournamentRound()
         {
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                 RoundBase round = tournamentRepository.AddDualTournamentRoundToTournament(tournament);
@@ -212,7 +212,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         [Fact]
         public void CanChangeAdvancingPerGroupCountInRoundRobinRound()
         {
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                 RoundBase round = tournamentRepository.AddRoundRobinRoundToTournament(tournament);
@@ -230,7 +230,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         [Fact]
         public void CanChangePlayersPerGroupCountInBracketRound()
         {
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                 RoundBase round = tournamentRepository.AddRoundRobinRoundToTournament(tournament);
@@ -248,7 +248,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         [Fact]
         public void CannotChangePlayersPerGroupCountInDualTournamentRound()
         {
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                 RoundBase round = tournamentRepository.AddDualTournamentRoundToTournament(tournament);
@@ -266,7 +266,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         [Fact]
         public void CanChangePlayersPerGroupCountInRoundRobinRound()
         {
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
                 RoundBase round = tournamentRepository.AddRoundRobinRoundToTournament(tournament);

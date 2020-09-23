@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 {
-    public class tournamentRepositoryTestBase
+    public class TournamentRepositoryTestBase
     {
         protected const string tournamentName = "GSL 2019";
         protected readonly List<string> playerNames = new List<string>
@@ -24,11 +24,11 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 
         private readonly string testDatabaseName;
 
-        public tournamentRepositoryTestBase()
+        public TournamentRepositoryTestBase()
         {
             testDatabaseName = Guid.NewGuid().ToString();
 
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 tournamentRepository.CreateTournament(tournamentName);
                 tournamentRepository.Save();
@@ -40,7 +40,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
             return new UserRepository(InMemoryContextCreator.Create(testDatabaseName));
         }
 
-        protected TournamentRepository CreatetournamentRepository()
+        protected TournamentRepository CreateTournamentRepository()
         {
             return new TournamentRepository(InMemoryContextCreator.Create(testDatabaseName));
         }
@@ -54,7 +54,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
                 userRepository.CreateUser("Guggelito");
                 userRepository.Save();
 
-                using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+                using (TournamentRepository tournamentRepository = CreateTournamentRepository())
                 {
                     Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
@@ -68,7 +68,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 
         protected void InitializeRoundGroupAndPlayers()
         {
-            using (TournamentRepository tournamentRepository = CreatetournamentRepository())
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
