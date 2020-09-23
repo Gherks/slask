@@ -45,9 +45,9 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not change start time ({ command.StartDateTime }) in match ({ command.MatchId }). Match not found.");
             }
 
-            bool changeSuccessfull = _tournamentService.SetStartTimeForMatch(match, command.StartDateTime);
+            bool changeSuccessful = _tournamentService.SetStartTimeForMatch(match, command.StartDateTime);
 
-            if (!changeSuccessfull)
+            if (!changeSuccessful)
             {
                 return Result.Failure($"Could not change start time ({ command.StartDateTime }) in match ({ command.MatchId }).");
             }

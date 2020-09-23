@@ -45,9 +45,9 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not change best of ({ command.BestOf }) setting in match ({ command.MatchId }). Match not found.");
             }
 
-            bool changeSuccessfull = _tournamentService.SetBestOfInMatch(match, command.BestOf);
+            bool changeSuccessful = _tournamentService.SetBestOfInMatch(match, command.BestOf);
 
-            if (!changeSuccessfull)
+            if (!changeSuccessful)
             {
                 return Result.Failure($"Could not change best of ({ command.BestOf }) setting in match ({ command.MatchId }).");
             }

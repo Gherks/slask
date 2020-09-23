@@ -46,9 +46,9 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not change advancing per group count ({ command.AdvancingPerGroupCount }) setting in round ({ command.RoundId }). Round not found.");
             }
 
-            bool changeSuccessfull = _tournamentService.SetAdvancingPerGroupCountInRound(round, command.AdvancingPerGroupCount);
+            bool changeSuccessful = _tournamentService.SetAdvancingPerGroupCountInRound(round, command.AdvancingPerGroupCount);
 
-            if (!changeSuccessfull)
+            if (!changeSuccessful)
             {
                 return Result.Failure($"Could not change advancing per group count ({ command.AdvancingPerGroupCount }) setting in round ({ command.RoundId }).");
             }

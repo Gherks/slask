@@ -28,9 +28,9 @@ namespace Slask.Application.Commands
 
         public Result Handle(RenameTournament command)
         {
-            bool renameSuccessfull = _tournamentService.RenameTournament(command.TournamentId, command.TournamentName);
+            bool renameSuccessful = _tournamentService.RenameTournament(command.TournamentId, command.TournamentName);
 
-            if (!renameSuccessfull)
+            if (!renameSuccessful)
             {
                 return Result.Failure($"Could not rename tournament ({ command.TournamentId }) to \"({ command.TournamentName })\"");
             }

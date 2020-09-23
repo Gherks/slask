@@ -46,9 +46,9 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not change players per group count ({ command.PlayersPerGroupCount }) setting in round ({ command.RoundId }). Round not found.");
             }
 
-            bool changeSuccessfull = _tournamentService.SetPlayersPerGroupCountInRound(round, command.PlayersPerGroupCount);
+            bool changeSuccessful = _tournamentService.SetPlayersPerGroupCountInRound(round, command.PlayersPerGroupCount);
 
-            if (!changeSuccessfull)
+            if (!changeSuccessful)
             {
                 return Result.Failure($"Could not change players per group count ({ command.PlayersPerGroupCount }) setting in round ({ command.RoundId }).");
             }
