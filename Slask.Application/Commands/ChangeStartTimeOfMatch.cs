@@ -38,7 +38,7 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not change start time ({ command.StartDateTime }) in match ({ command.MatchId }). Tournament ({ command.TournamentId }) not found.");
             }
 
-            Match match = tournament.GetMatchByMatchId(command.MatchId);
+            Match match = tournament.GetMatchById(command.MatchId);
 
             if (match == null)
             {

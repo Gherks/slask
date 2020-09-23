@@ -39,7 +39,7 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not change players per group count ({ command.PlayersPerGroupCount }) setting in round ({ command.RoundId }). Tournament ({ command.TournamentId }) not found.");
             }
 
-            RoundBase round = tournament.GetRoundByRoundId(command.RoundId);
+            RoundBase round = tournament.GetRoundById(command.RoundId);
 
             if (round == null)
             {

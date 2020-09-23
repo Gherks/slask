@@ -41,7 +41,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             using (TournamentService tournamentService = CreateTournamentService())
             {
                 Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
-                RoundBase round = tournament.GetRoundByRoundName(roundName);
+                RoundBase round = tournament.GetRoundByName(roundName);
 
                 tournamentService.SetAdvancingPerGroupCountInRound(round, newAdvancingPlayerCount);
                 tournamentService.Save();
@@ -55,7 +55,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             using (TournamentService tournamentService = CreateTournamentService())
             {
                 Tournament tournament = tournamentService.GetTournamentByName(tournamentName);
-                RoundBase round = tournament.GetRoundByRoundName(roundName);
+                RoundBase round = tournament.GetRoundByName(roundName);
 
                 tournamentService.SetPlayersPerGroupCountInRound(round, newPlayersPerGroupCount);
                 tournamentService.Save();

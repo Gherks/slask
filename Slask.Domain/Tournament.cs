@@ -250,21 +250,21 @@ namespace Slask.Domain
             return TournamentIssueReporter.Issues.Count > 0;
         }
 
-        public RoundBase GetRoundByRoundId(Guid id)
+        public RoundBase GetRoundById(Guid roundId)
         {
-            return Rounds.FirstOrDefault(round => round.Id == id);
+            return Rounds.FirstOrDefault(round => round.Id == roundId);
         }
 
-        public RoundBase GetRoundByRoundName(string name)
+        public RoundBase GetRoundByName(string roundName)
         {
-            return Rounds.FirstOrDefault(round => round.Name.ToLower() == name.ToLower());
+            return Rounds.FirstOrDefault(round => round.Name.ToLower() == roundName.ToLower());
         }
 
-        public GroupBase GetGroupByGroupId(Guid id)
+        public GroupBase GetGroupById(Guid groupId)
         {
             foreach (RoundBase round in Rounds)
             {
-                GroupBase group = round.Groups.FirstOrDefault(group => group.Id == id);
+                GroupBase group = round.Groups.FirstOrDefault(group => group.Id == groupId);
 
                 if (group != null)
                 {
@@ -275,11 +275,11 @@ namespace Slask.Domain
             return null;
         }
 
-        public GroupBase GetGroupByGroupName(string name)
+        public GroupBase GetGroupByName(string groupName)
         {
             foreach (RoundBase round in Rounds)
             {
-                GroupBase group = round.Groups.FirstOrDefault(group => group.Name.ToLower() == name.ToLower());
+                GroupBase group = round.Groups.FirstOrDefault(group => group.Name.ToLower() == groupName.ToLower());
 
                 if (group != null)
                 {
@@ -290,13 +290,13 @@ namespace Slask.Domain
             return null;
         }
 
-        public Match GetMatchByMatchId(Guid id)
+        public Match GetMatchById(Guid matchId)
         {
             foreach (RoundBase round in Rounds)
             {
                 foreach (GroupBase group in round.Groups)
                 {
-                    Match match = group.Matches.FirstOrDefault(match => match.Id == id);
+                    Match match = group.Matches.FirstOrDefault(match => match.Id == matchId);
 
                     if (match != null)
                     {
