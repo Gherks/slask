@@ -6,6 +6,7 @@ namespace Slask.Domain
     {
         private User()
         {
+            Id = Guid.NewGuid();
         }
 
         public Guid Id { get; private set; }
@@ -20,7 +21,6 @@ namespace Slask.Domain
 
             return new User
             {
-                Id = Guid.NewGuid(),
                 Name = name
             };
         }

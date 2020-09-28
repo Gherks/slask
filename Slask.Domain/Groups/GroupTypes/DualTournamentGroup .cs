@@ -2,7 +2,6 @@
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Slask.Domain.Groups.GroupTypes
@@ -11,13 +10,10 @@ namespace Slask.Domain.Groups.GroupTypes
     {
         private DualTournamentGroup()
         {
+            ContestType = ContestTypeEnum.DualTournament;
         }
 
-        [NotMapped]
-        private const int ParticipatingPlayerCapacity = 4;
-
-        [NotMapped]
-        private const int MatchCapacity = 5;
+        private const int _matchCapacity = 5;
 
         public static DualTournamentGroup Create(DualTournamentRound round)
         {
@@ -28,7 +24,6 @@ namespace Slask.Domain.Groups.GroupTypes
 
             DualTournamentGroup group = new DualTournamentGroup
             {
-                Id = Guid.NewGuid(),
                 RoundId = round.Id,
                 Round = round
             };
@@ -91,21 +86,21 @@ namespace Slask.Domain.Groups.GroupTypes
 
         public override bool ConstructGroupLayout(int playersPerGroupCount)
         {
-            ChangeMatchCountTo(MatchCapacity);
+            ChangeMatchCountTo(_matchCapacity);
+            MarkAsModified();
+
             return true;
         }
 
-        public override bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
+        public override void FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
         {
-            PlayerReference participant1 = playerReferences.Count > 0 ? playerReferences[0] : null;
-            PlayerReference participant2 = playerReferences.Count > 1 ? playerReferences[1] : null;
-            PlayerReference participant3 = playerReferences.Count > 2 ? playerReferences[2] : null;
-            PlayerReference participant4 = playerReferences.Count > 3 ? playerReferences[3] : null;
+            Guid playerReference1Id = playerReferences.Count > 0 ? playerReferences[0].Id : Guid.Empty;
+            Guid playerReference2Id = playerReferences.Count > 1 ? playerReferences[1].Id : Guid.Empty;
+            Guid playerReference3Id = playerReferences.Count > 2 ? playerReferences[2].Id : Guid.Empty;
+            Guid playerReference4Id = playerReferences.Count > 3 ? playerReferences[3].Id : Guid.Empty;
 
-            Matches[0].SetPlayers(participant1, participant2);
-            Matches[1].SetPlayers(participant3, participant4);
-
-            return true;
+            Matches[0].AssignPlayerReferencesToPlayers(playerReference1Id, playerReference2Id);
+            Matches[1].AssignPlayerReferencesToPlayers(playerReference3Id, playerReference4Id);
         }
 
         private bool FirstMatchPairHasPlayed(Match match)
@@ -114,7 +109,7 @@ namespace Slask.Domain.Groups.GroupTypes
 
             if (matchIsOneOfFirstPairMatches)
             {
-                return GetMatch1().GetPlayState() == PlayState.Finished && GetMatch2().GetPlayState() == PlayState.Finished;
+                return GetMatch1().GetPlayState() == PlayStateEnum.Finished && GetMatch2().GetPlayState() == PlayStateEnum.Finished;
             }
 
             return false;
@@ -126,7 +121,7 @@ namespace Slask.Domain.Groups.GroupTypes
 
             if (matchIsOneOfSecondPairMatches)
             {
-                return GetWinnersMatch().GetPlayState() == PlayState.Finished && GetLosersMatch().GetPlayState() == PlayState.Finished;
+                return GetWinnersMatch().GetPlayState() == PlayStateEnum.Finished && GetLosersMatch().GetPlayState() == PlayStateEnum.Finished;
             }
 
             return false;
@@ -134,26 +129,26 @@ namespace Slask.Domain.Groups.GroupTypes
 
         private void AssignPlayersToWinnersMatch()
         {
-            PlayerReference Match1Winner = GetMatch1().GetWinningPlayer().PlayerReference;
-            PlayerReference Match2Winner = GetMatch2().GetWinningPlayer().PlayerReference;
+            Guid match1Winner = GetMatch1().GetWinningPlayer().PlayerReferenceId;
+            Guid match2Winner = GetMatch2().GetWinningPlayer().PlayerReferenceId;
 
-            GetWinnersMatch().SetPlayers(Match1Winner, Match2Winner);
+            GetWinnersMatch().AssignPlayerReferencesToPlayers(match1Winner, match2Winner);
         }
 
         private void AssignPlayersToLosersMatch()
         {
-            PlayerReference Match1Loser = GetMatch1().GetLosingPlayer().PlayerReference;
-            PlayerReference Match2Loser = GetMatch2().GetLosingPlayer().PlayerReference;
+            Guid match1Loser = GetMatch1().GetLosingPlayer().PlayerReferenceId;
+            Guid match2Loser = GetMatch2().GetLosingPlayer().PlayerReferenceId;
 
-            GetLosersMatch().SetPlayers(Match1Loser, Match2Loser);
+            GetLosersMatch().AssignPlayerReferencesToPlayers(match1Loser, match2Loser);
         }
 
         private void AssignPlayersToTiebreakerMatch()
         {
-            PlayerReference WinnersMatchLoser = GetWinnersMatch().GetLosingPlayer().PlayerReference;
-            PlayerReference LosersMatchWinner = GetLosersMatch().GetWinningPlayer().PlayerReference;
+            Guid WinnersMatchLoser = GetWinnersMatch().GetLosingPlayer().PlayerReferenceId;
+            Guid LosersMatchWinner = GetLosersMatch().GetWinningPlayer().PlayerReferenceId;
 
-            GetTiebreakerMatch().SetPlayers(WinnersMatchLoser, LosersMatchWinner);
+            GetTiebreakerMatch().AssignPlayerReferencesToPlayers(WinnersMatchLoser, LosersMatchWinner);
         }
 
         private Match GetMatch1()

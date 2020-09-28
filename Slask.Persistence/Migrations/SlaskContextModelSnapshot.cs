@@ -15,7 +15,7 @@ namespace Slask.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.4")
+                .HasAnnotation("ProductVersion", "3.1.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -25,7 +25,16 @@ namespace Slask.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("BetType")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("BetterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MatchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PlayerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -33,6 +42,8 @@ namespace Slask.Persistence.Migrations
                     b.HasIndex("BetterId");
 
                     b.ToTable("Bet");
+
+                    b.HasDiscriminator<int>("BetType").HasValue(0);
                 });
 
             modelBuilder.Entity("Slask.Domain.Better", b =>
@@ -62,17 +73,25 @@ namespace Slask.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("ContestType")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("RoundId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RoundId");
 
                     b.ToTable("Group");
+
+                    b.HasDiscriminator<int>("ContestType").HasValue(0);
                 });
 
             modelBuilder.Entity("Slask.Domain.Match", b =>
@@ -87,12 +106,27 @@ namespace Slask.Persistence.Migrations
                     b.Property<Guid>("GroupId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("Player1Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Player2Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartDateTime")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
+
+                    b.HasIndex("Player1Id")
+                        .IsUnique();
+
+                    b.HasIndex("Player2Id")
+                        .IsUnique();
 
                     b.ToTable("Match");
                 });
@@ -106,7 +140,7 @@ namespace Slask.Persistence.Migrations
                     b.Property<Guid>("MatchId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("PlayerReferenceId")
+                    b.Property<Guid>("PlayerReferenceId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Score")
@@ -115,8 +149,6 @@ namespace Slask.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("MatchId");
-
-                    b.HasIndex("PlayerReferenceId");
 
                     b.ToTable("Player");
                 });
@@ -130,15 +162,10 @@ namespace Slask.Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("RoundBaseId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("TournamentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoundBaseId");
 
                     b.HasIndex("TournamentId");
 
@@ -154,10 +181,16 @@ namespace Slask.Persistence.Migrations
                     b.Property<int>("AdvancingPerGroupCount")
                         .HasColumnType("int");
 
+                    b.Property<int>("ContestType")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PlayersPerGroupCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SortOrder")
                         .HasColumnType("int");
 
                     b.Property<Guid>("TournamentId")
@@ -168,6 +201,8 @@ namespace Slask.Persistence.Migrations
                     b.HasIndex("TournamentId");
 
                     b.ToTable("Round");
+
+                    b.HasDiscriminator<int>("ContestType").HasValue(0);
                 });
 
             modelBuilder.Entity("Slask.Domain.Tournament", b =>
@@ -175,6 +210,9 @@ namespace Slask.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -196,6 +234,62 @@ namespace Slask.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Slask.Domain.Bets.BetTypes.MatchBet", b =>
+                {
+                    b.HasBaseType("Slask.Domain.Bets.BetBase");
+
+                    b.HasDiscriminator().HasValue(1);
+                });
+
+            modelBuilder.Entity("Slask.Domain.Bets.BetTypes.MiscellaneousBet", b =>
+                {
+                    b.HasBaseType("Slask.Domain.Bets.BetBase");
+
+                    b.HasDiscriminator().HasValue(2);
+                });
+
+            modelBuilder.Entity("Slask.Domain.Groups.GroupTypes.BracketGroup", b =>
+                {
+                    b.HasBaseType("Slask.Domain.Groups.GroupBase");
+
+                    b.HasDiscriminator().HasValue(1);
+                });
+
+            modelBuilder.Entity("Slask.Domain.Groups.GroupTypes.DualTournamentGroup", b =>
+                {
+                    b.HasBaseType("Slask.Domain.Groups.GroupBase");
+
+                    b.HasDiscriminator().HasValue(2);
+                });
+
+            modelBuilder.Entity("Slask.Domain.Groups.GroupTypes.RoundRobinGroup", b =>
+                {
+                    b.HasBaseType("Slask.Domain.Groups.GroupBase");
+
+                    b.HasDiscriminator().HasValue(3);
+                });
+
+            modelBuilder.Entity("Slask.Domain.Rounds.RoundTypes.BracketRound", b =>
+                {
+                    b.HasBaseType("Slask.Domain.Rounds.RoundBase");
+
+                    b.HasDiscriminator().HasValue(1);
+                });
+
+            modelBuilder.Entity("Slask.Domain.Rounds.RoundTypes.DualTournamentRound", b =>
+                {
+                    b.HasBaseType("Slask.Domain.Rounds.RoundBase");
+
+                    b.HasDiscriminator().HasValue(2);
+                });
+
+            modelBuilder.Entity("Slask.Domain.Rounds.RoundTypes.RoundRobinRound", b =>
+                {
+                    b.HasBaseType("Slask.Domain.Rounds.RoundBase");
+
+                    b.HasDiscriminator().HasValue(3);
                 });
 
             modelBuilder.Entity("Slask.Domain.Bets.BetBase", b =>
@@ -236,6 +330,18 @@ namespace Slask.Persistence.Migrations
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Slask.Domain.Player", "Player1")
+                        .WithOne()
+                        .HasForeignKey("Slask.Domain.Match", "Player1Id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Slask.Domain.Player", "Player2")
+                        .WithOne()
+                        .HasForeignKey("Slask.Domain.Match", "Player2Id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Slask.Domain.Player", b =>
@@ -245,20 +351,12 @@ namespace Slask.Persistence.Migrations
                         .HasForeignKey("MatchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Slask.Domain.PlayerReference", "PlayerReference")
-                        .WithMany()
-                        .HasForeignKey("PlayerReferenceId");
                 });
 
             modelBuilder.Entity("Slask.Domain.PlayerReference", b =>
                 {
-                    b.HasOne("Slask.Domain.Rounds.RoundBase", null)
-                        .WithMany("PlayerReferences")
-                        .HasForeignKey("RoundBaseId");
-
                     b.HasOne("Slask.Domain.Tournament", "Tournament")
-                        .WithMany()
+                        .WithMany("PlayerReferences")
                         .HasForeignKey("TournamentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

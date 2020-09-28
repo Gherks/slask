@@ -1,40 +1,38 @@
+using Slask.Domain.Bets;
 using Slask.Domain.Bets.BetTypes;
+using Slask.Domain.ObjectState;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using Slask.Domain.Utilities.StandingsSolvers;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Slask.Domain.Groups
 {
-    [Table("Group")]
-    public partial class GroupBase : GroupInterface
+    public abstract class GroupBase : ObjectStateBase, GroupInterface, SortableInterface
     {
         protected GroupBase()
         {
+            Id = Guid.NewGuid();
             Matches = new List<Match>();
-            PlayerReferences = new List<PlayerReference>();
             ChoosenTyingPlayerEntries = new List<StandingsEntry<PlayerReference>>();
         }
 
-        public Guid Id { get; protected set; }
+        public Guid Id { get; private set; }
+        public ContestTypeEnum ContestType { get; protected set; }
+        public int SortOrder { get; private set; }
         public string Name { get; protected set; }
         public List<Match> Matches { get; protected set; }
         public Guid RoundId { get; protected set; }
         public RoundBase Round { get; protected set; }
 
-        [NotMapped]
-        public List<PlayerReference> PlayerReferences { get; private set; }
-
-        [NotMapped]
         public List<StandingsEntry<PlayerReference>> ChoosenTyingPlayerEntries { get; private set; }
 
         public bool AddPlayerReferences(List<PlayerReference> playerReferences)
         {
-            bool parentRoundHasStarted = Round.GetPlayState() != PlayState.NotBegun;
+            bool parentRoundHasStarted = Round.GetPlayState() != PlayStateEnum.NotBegun;
 
             if (parentRoundHasStarted)
             {
@@ -42,27 +40,61 @@ namespace Slask.Domain.Groups
                 return false;
             }
 
-            bool successfullyFilledGroup = FillMatchesWithPlayerReferences(playerReferences);
+            FillMatchesWithPlayerReferences(playerReferences);
+            MarkAsModified();
 
-            if (successfullyFilledGroup)
-            {
-                PlayerReferences = playerReferences;
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
-        public PlayState GetPlayState()
+        public List<Guid> GetPlayerReferenceIds()
         {
-            bool noGroupHasBegun = AllMatchesPlayStatesAre(PlayState.NotBegun);
+            HashSet<Guid> playerReferenceIds = new HashSet<Guid>();
+
+            foreach (Match match in Matches)
+            {
+                if (match.Player1.PlayerReferenceId != Guid.Empty)
+                {
+                    playerReferenceIds.Add(match.Player1.PlayerReferenceId);
+                }
+
+                if (match.Player2.PlayerReferenceId != Guid.Empty)
+                {
+                    playerReferenceIds.Add(match.Player2.PlayerReferenceId);
+                }
+            }
+
+            return playerReferenceIds.ToList();
+        }
+
+        public List<PlayerReference> GetPlayerReferences()
+        {
+            List<PlayerReference> playerReferences = new List<PlayerReference>();
+
+            foreach (Guid playerReferenceId in GetPlayerReferenceIds())
+            {
+                foreach (PlayerReference playerReference in Round.Tournament.PlayerReferences)
+                {
+                    if (playerReferenceId == playerReference.Id)
+                    {
+                        playerReferences.Add(playerReference);
+                        break;
+                    }
+                }
+            }
+
+            return playerReferences;
+        }
+
+        public PlayStateEnum GetPlayState()
+        {
+            bool noGroupHasBegun = AllMatchesPlayStatesAre(PlayStateEnum.NotBegun);
 
             if (noGroupHasBegun)
             {
-                return PlayState.NotBegun;
+                return PlayStateEnum.NotBegun;
             }
 
-            bool allMatchesHasFinished = AllMatchesPlayStatesAre(PlayState.Finished);
+            bool allMatchesHasFinished = AllMatchesPlayStatesAre(PlayStateEnum.Finished);
 
             if (allMatchesHasFinished)
             {
@@ -70,23 +102,23 @@ namespace Slask.Domain.Groups
                 {
                     if (HasSolvedTie())
                     {
-                        return PlayState.Finished;
+                        return PlayStateEnum.Finished;
                     }
                     else
                     {
-                        return PlayState.Ongoing;
+                        return PlayStateEnum.Ongoing;
                     }
                 }
                 else
                 {
-                    return PlayState.Finished;
+                    return PlayStateEnum.Finished;
                 }
             }
 
-            return PlayState.Ongoing;
+            return PlayStateEnum.Ongoing;
         }
 
-        private bool AllMatchesPlayStatesAre(PlayState playState)
+        private bool AllMatchesPlayStatesAre(PlayStateEnum playState)
         {
             foreach (Match match in Matches)
             {
@@ -99,20 +131,11 @@ namespace Slask.Domain.Groups
             return true;
         }
 
-        public virtual bool ConstructGroupLayout(int playersPerGroupCount)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract bool ConstructGroupLayout(int playersPerGroupCount);
 
-        public virtual bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract void FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences);
 
-        public virtual bool NewDateTimeIsValid(Match match, DateTime dateTime)
-        {
-            return true;
-        }
+        public abstract bool NewDateTimeIsValid(Match match, DateTime dateTime);
 
         public bool HasProblematicTie()
         {
@@ -121,7 +144,7 @@ namespace Slask.Domain.Groups
 
         public List<StandingsEntry<PlayerReference>> FindProblematiclyTyingPlayers()
         {
-            bool notAllMatchesHasBeenPlayed = !AllMatchesPlayStatesAre(PlayState.Finished);
+            bool notAllMatchesHasBeenPlayed = !AllMatchesPlayStatesAre(PlayStateEnum.Finished);
 
             if (notAllMatchesHasBeenPlayed)
             {
@@ -153,14 +176,21 @@ namespace Slask.Domain.Groups
             return problematicPlayers;
         }
 
-        public bool SolveTieByChoosing(string playerName)
+        public bool SolveTieByChoosing(Guid playerReferenceId)
+        {
+            PlayerReference playerReference = Round.Tournament.GetPlayerReferenceById(playerReferenceId);
+
+            return SolveTieByChoosing(playerReference);
+        }
+
+        public bool SolveTieByChoosing(PlayerReference playerReference)
         {
             List<StandingsEntry<PlayerReference>> tyingPlayers = FindProblematiclyTyingPlayers();
             bool hasTyingPlayers = tyingPlayers.Count > 0;
 
             if (hasTyingPlayers)
             {
-                bool playerChosen = ChooseTyingPlayer(playerName);
+                bool playerChosen = ChooseTyingPlayer(playerReference);
                 bool tieSolved = HasSolvedTie();
 
                 if (playerChosen && tieSolved)
@@ -220,11 +250,14 @@ namespace Slask.Domain.Groups
             {
                 Matches.Add(Match.Create(this));
             }
+
+            MarkAsModified();
         }
 
         protected void AssignDefaultName()
         {
             Name = "Group " + Labeler.GetLabelForIndex(Round.Groups.Count);
+            MarkAsModified();
         }
 
         internal void RemoveAllMatchBetsOnMatch(Match match)
@@ -235,22 +268,25 @@ namespace Slask.Domain.Groups
                 {
                     if (better.Bets[betIndex] is MatchBet matchBet)
                     {
-                        if (matchBet.Match.Id == match.Id)
+                        if (matchBet.MatchId == match.Id)
                         {
-                            better.Bets.Remove(better.Bets[betIndex--]);
+                            BetBase bet = better.Bets[betIndex--];
+
+                            better.Bets.Remove(bet);
+                            bet.MarkForDeletion();
                         }
                     }
                 }
             }
         }
 
-        private bool ChooseTyingPlayer(string playerName)
+        private bool ChooseTyingPlayer(PlayerReference playerReference)
         {
             List<StandingsEntry<PlayerReference>> tyingPlayers = FindProblematiclyTyingPlayers();
 
             foreach (StandingsEntry<PlayerReference> entry in tyingPlayers)
             {
-                if (entry.Object.Name == playerName)
+                if (entry.Object.Id == playerReference.Id)
                 {
                     bool haveNotChosePlayerAlready = !ChoosenTyingPlayerEntries.Contains(entry);
 
@@ -263,6 +299,33 @@ namespace Slask.Domain.Groups
             }
 
             return false;
+        }
+
+        public void UpdateSortOrder()
+        {
+            if (ObjectState == ObjectStateEnum.Deleted)
+            {
+                return;
+            }
+
+            for (int index = 0; index < Round.Groups.Count; ++index)
+            {
+                if (Round.Groups[index].Id == Id)
+                {
+                    if (SortOrder != index)
+                    {
+                        MarkAsModified();
+                    }
+
+                    SortOrder = index;
+                    return;
+                }
+            }
+        }
+
+        public void SortEntities()
+        {
+            Matches = Matches.OrderBy(match => match.SortOrder).ToList();
         }
     }
 }

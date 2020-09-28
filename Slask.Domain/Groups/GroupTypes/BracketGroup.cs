@@ -3,7 +3,6 @@ using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Slask.Domain.Groups.GroupTypes
@@ -12,10 +11,10 @@ namespace Slask.Domain.Groups.GroupTypes
     {
         private BracketGroup()
         {
+            ContestType = ContestTypeEnum.Bracket;
         }
 
-        [NotMapped]
-        public BracketNodeSystem BracketNodeSystem;
+        public BracketNodeSystem BracketNodeSystem { get; private set; }
 
         public static BracketGroup Create(BracketRound round)
         {
@@ -26,7 +25,6 @@ namespace Slask.Domain.Groups.GroupTypes
 
             BracketGroup group = new BracketGroup
             {
-                Id = Guid.NewGuid(),
                 RoundId = round.Id,
                 Round = round
             };
@@ -98,9 +96,15 @@ namespace Slask.Domain.Groups.GroupTypes
                 return;
             }
 
+            if (BracketNodeSystem == null)
+            {
+                BracketNodeSystem = new BracketNodeSystem();
+                BracketNodeSystem.Construct(Matches);
+            }
+
             BracketNode finalNode = BracketNodeSystem.FinalNode;
 
-            bool matchIsFinished = match.GetPlayState() == PlayState.Finished;
+            bool matchIsFinished = match.GetPlayState() == PlayStateEnum.Finished;
             bool matchIsNotFinal = match.Id != finalNode.Match.Id;
 
             if (matchIsFinished && matchIsNotFinal)
@@ -108,7 +112,7 @@ namespace Slask.Domain.Groups.GroupTypes
                 BracketNode bracketNode = finalNode.GetBracketNodeByMatchId(match.Id);
                 BracketNode parentNode = bracketNode.Parent;
 
-                parentNode.Match.AddPlayer(match.GetWinningPlayer().PlayerReference);
+                parentNode.Match.AssignPlayerReferenceToFirstAvailablePlayer(match.GetWinningPlayer().PlayerReferenceId);
             }
         }
 
@@ -126,31 +130,18 @@ namespace Slask.Domain.Groups.GroupTypes
             return true;
         }
 
-        public override bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
+        public override void FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
         {
             for (int matchIndex = 0; matchIndex < Matches.Count; ++matchIndex)
             {
-                PlayerReference playerReference1 = null;
-                PlayerReference playerReference2 = null;
+                int firstIndex = matchIndex * 2;
+                int secondIndex = matchIndex * 2 + 1;
 
-                try
-                {
-                    playerReference1 = playerReferences[matchIndex * 2];
-                    playerReference2 = playerReferences[matchIndex * 2 + 1];
+                Guid playerReference1Id = playerReferences.Count > firstIndex ? playerReferences[firstIndex].Id : Guid.Empty;
+                Guid playerReference2Id = playerReferences.Count > secondIndex ? playerReferences[secondIndex].Id : Guid.Empty;
 
-                    Matches[matchIndex].SetPlayers(playerReference1, playerReference2);
-                }
-                catch
-                {
-                    if (playerReference1 != null || playerReference2 != null)
-                    {
-                        Matches[matchIndex].SetPlayers(playerReference1, playerReference2);
-                    }
-                    break;
-                }
+                Matches[matchIndex].AssignPlayerReferencesToPlayers(playerReference1Id, playerReference2Id);
             }
-
-            return true;
         }
     }
 }

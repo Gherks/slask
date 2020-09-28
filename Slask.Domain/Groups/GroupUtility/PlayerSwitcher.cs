@@ -1,5 +1,6 @@
 ﻿using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Utilities;
+using System;
 
 namespace Slask.Domain.Groups.GroupUtility
 {
@@ -65,13 +66,13 @@ namespace Slask.Domain.Groups.GroupUtility
 
         private static bool EitherPlayerHasAnInvalidPlayerReference(Player player1, Player player2)
         {
-            return player1.PlayerReference == null || player2.PlayerReference == null;
+            return player1.PlayerReferenceId == Guid.Empty || player2.PlayerReferenceId == Guid.Empty;
         }
 
         private static bool EitherPlayersGroupHasBegun(Player player1, Player player2)
         {
-            bool player1MatchHasBegun = player1.Match.Group.GetPlayState() != PlayState.NotBegun;
-            bool player2MatchHasBegun = player2.Match.Group.GetPlayState() != PlayState.NotBegun;
+            bool player1MatchHasBegun = player1.Match.Group.GetPlayState() != PlayStateEnum.NotBegun;
+            bool player2MatchHasBegun = player2.Match.Group.GetPlayState() != PlayStateEnum.NotBegun;
 
             return player1MatchHasBegun || player2MatchHasBegun;
         }
@@ -86,36 +87,36 @@ namespace Slask.Domain.Groups.GroupUtility
 
         private static void MakeSwitchOnPlayerReferencesInSameMatch(Match match)
         {
-            PlayerReference firstPlayerReference = match.Player1.PlayerReference;
-            PlayerReference secondPlayerReference = match.Player2.PlayerReference;
+            Guid firstPlayerReferenceId = match.Player1.PlayerReferenceId;
+            Guid secondPlayerReferenceId = match.Player2.PlayerReferenceId;
 
-            match.SetPlayers(secondPlayerReference, firstPlayerReference);
+            match.AssignPlayerReferencesToPlayers(secondPlayerReferenceId, firstPlayerReferenceId);
         }
 
         private static void MakeSwitchOnPlayerReferencesInDifferentMatch(Player player1, Player player2)
         {
-            PlayerReference firstPlayerReference = player1.PlayerReference;
-            PlayerReference secondPlayerReference = player2.PlayerReference;
+            Guid firstPlayerReferenceId = player1.PlayerReferenceId;
+            Guid secondPlayerReferenceId = player2.PlayerReferenceId;
 
             Match player1Match = player1.Match;
             Match player2Match = player2.Match;
 
             if (player1Match.Player1.Id == player1.Id)
             {
-                player1Match.SetPlayers(secondPlayerReference, player1Match.Player2.PlayerReference);
+                player1Match.AssignPlayerReferencesToPlayers(secondPlayerReferenceId, player1Match.Player2.PlayerReferenceId);
             }
             else
             {
-                player1Match.SetPlayers(player1Match.Player1.PlayerReference, secondPlayerReference);
+                player1Match.AssignPlayerReferencesToPlayers(player1Match.Player1.PlayerReferenceId, secondPlayerReferenceId);
             }
 
             if (player2Match.Player1.Id == player2.Id)
             {
-                player2Match.SetPlayers(firstPlayerReference, player2Match.Player2.PlayerReference);
+                player2Match.AssignPlayerReferencesToPlayers(firstPlayerReferenceId, player2Match.Player2.PlayerReferenceId);
             }
             else
             {
-                player2Match.SetPlayers(player2Match.Player1.PlayerReference, firstPlayerReference);
+                player2Match.AssignPlayerReferencesToPlayers(player2Match.Player1.PlayerReferenceId, firstPlayerReferenceId);
             }
         }
     }

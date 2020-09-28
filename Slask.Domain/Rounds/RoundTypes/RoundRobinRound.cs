@@ -2,7 +2,7 @@
 using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Procedures.AdvancingPerGroupCount;
 using Slask.Domain.Procedures.PlayersPerGroupCount;
-using System;
+using Slask.Domain.Utilities;
 
 namespace Slask.Domain.Rounds.RoundTypes
 {
@@ -10,6 +10,11 @@ namespace Slask.Domain.Rounds.RoundTypes
     {
         private RoundRobinRound()
         {
+            ContestType = ContestTypeEnum.RoundRobin;
+            PlayersPerGroupCount = 2;
+            AdvancingPerGroupCount = 1;
+
+            AssignProcedures(new MutablePlayersPerGroupCountProcedure(), new MutableAdvancingPerGroupCountProcedure());
         }
 
         public static RoundRobinRound Create(Tournament tournament)
@@ -23,15 +28,11 @@ namespace Slask.Domain.Rounds.RoundTypes
 
             RoundRobinRound round = new RoundRobinRound
             {
-                Id = Guid.NewGuid(),
-                PlayersPerGroupCount = 2,
-                AdvancingPerGroupCount = 1,
                 TournamentId = tournament.Id,
                 Tournament = tournament
             };
 
             round.AssignDefaultName();
-            round.AssignProcedures(new MutablePlayersPerGroupCountProcedure(), new MutableAdvancingPerGroupCountProcedure());
 
             return round;
         }

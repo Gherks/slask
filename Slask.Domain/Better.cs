@@ -1,14 +1,16 @@
 ﻿using Slask.Domain.Bets;
 using Slask.Domain.Bets.BetTypes;
+using Slask.Domain.ObjectState;
 using System;
 using System.Collections.Generic;
 
 namespace Slask.Domain
 {
-    public class Better
+    public class Better : ObjectStateBase
     {
         private Better()
         {
+            Id = Guid.NewGuid();
             Bets = new List<BetBase>();
         }
 
@@ -27,20 +29,19 @@ namespace Slask.Domain
 
             return new Better
             {
-                Id = Guid.NewGuid(),
                 User = user,
                 TournamentId = tournament.Id,
                 Tournament = tournament
             };
         }
 
-        public bool PlaceMatchBet(Match match, Player player)
+        public MatchBet PlaceMatchBet(Match match, Player player)
         {
             bool anyParameterIsInvalid = !PlaceMatchBetParametersAreValid(match, player);
 
             if (anyParameterIsInvalid)
             {
-                return false;
+                return null;
             }
 
             MatchBet newMatchBet = MatchBet.Create(this, match, player);
@@ -54,13 +55,14 @@ namespace Slask.Domain
                 if (matchBetForThisMatchAlreadyExists)
                 {
                     Bets.Remove(existingMatchBet);
+                    existingMatchBet.MarkForDeletion();
                 }
 
                 Bets.Add(newMatchBet);
-                return true;
+                MarkAsModified();
             }
 
-            return false;
+            return newMatchBet;
         }
 
         private MatchBet FindMatchBet(Match match)
@@ -69,7 +71,7 @@ namespace Slask.Domain
             {
                 if (bet is MatchBet matchBet)
                 {
-                    if (matchBet.Match.Id == match.Id)
+                    if (matchBet.MatchId == match.Id)
                     {
                         return matchBet;
                     }

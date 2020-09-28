@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Slask.Domain.ObjectState;
+using System;
 
 namespace Slask.Domain
 {
-    public class PlayerReference
+    public class PlayerReference : ObjectStateBase
     {
         private PlayerReference()
         {
+            Id = Guid.NewGuid();
         }
 
         public Guid Id { get; private set; }
@@ -23,13 +25,12 @@ namespace Slask.Domain
                 return null;
             }
 
-            PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByPlayerName(name);
+            PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByName(name);
 
             if (fetchedPlayerReference == null)
             {
                 PlayerReference playerReference = new PlayerReference
                 {
-                    Id = Guid.NewGuid(),
                     Name = name,
                     TournamentId = tournament.Id,
                     Tournament = tournament
@@ -41,19 +42,24 @@ namespace Slask.Domain
             return fetchedPlayerReference;
         }
 
-        public void RenameTo(string name)
+        public bool RenameTo(string name)
         {
             name = name.Trim();
 
             if (name.Length > 0)
             {
-                bool newNameIsntAlreadyInUse = Tournament.GetPlayerReferenceByPlayerName(name) == null;
+                bool newNameIsntAlreadyInUse = Tournament.GetPlayerReferenceByName(name) == null;
 
                 if (newNameIsntAlreadyInUse)
                 {
                     Name = name;
+                    MarkAsModified();
+
+                    return true;
                 }
             }
+
+            return false;
         }
     }
 }

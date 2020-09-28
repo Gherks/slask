@@ -1,30 +1,36 @@
 using Slask.Common;
 using Slask.Domain.Groups;
+using Slask.Domain.ObjectState;
 using Slask.Domain.Utilities;
 using System;
-using System.Collections.Generic;
 
 namespace Slask.Domain
 {
-    public class Match
+    public class Match : ObjectStateBase, SortableInterface
     {
         private Match()
         {
-            Players = new List<Player>();
-            Players.Add(null);
-            Players.Add(null);
+            Id = Guid.NewGuid();
+            BestOf = 3;
+
+            Player1 = Player.Create(this);
+            Player1Id = Player1.Id;
+
+            Player2 = Player.Create(this);
+            Player2Id = Player2.Id;
         }
 
         public Guid Id { get; private set; }
+        public int SortOrder { get; private set; }
         public int BestOf { get; protected set; }
         public DateTime StartDateTime { get; private set; }
-        private List<Player> Players { get; set; }
+        public Guid Player1Id { get; private set; }
+        public Player Player1 { get; private set; }
+        public Guid Player2Id { get; private set; }
+        public Player Player2 { get; private set; }
         public Guid GroupId { get; private set; }
         public GroupBase Group { get; private set; }
 
-        // Ignored by SlaskContext
-        public Player Player1 { get { return Players[0]; } private set { } }
-        public Player Player2 { get { return Players[1]; } private set { } }
 
         public static Match Create(GroupBase group)
         {
@@ -38,8 +44,6 @@ namespace Slask.Domain
 
             Match match = new Match()
             {
-                Id = Guid.NewGuid(),
-                BestOf = 3,
                 StartDateTime = DateTime.MaxValue,
                 GroupId = group.Id,
                 Group = group
@@ -48,15 +52,46 @@ namespace Slask.Domain
             return match;
         }
 
+        public override void MarkForDeletion()
+        {
+            base.MarkForDeletion();
+            Player1.MarkForDeletion();
+            Player2.MarkForDeletion();
+        }
+
+        public void UpdateSortOrder()
+        {
+            if (ObjectState == ObjectStateEnum.Deleted)
+            {
+                return;
+            }
+
+            for (int index = 0; index < Group.Matches.Count; ++index)
+            {
+                if (Group.Matches[index].Id == Id)
+                {
+                    if (SortOrder != index)
+                    {
+                        MarkAsModified();
+                    }
+
+                    SortOrder = index;
+                    return;
+                }
+            }
+        }
+
         public bool SetBestOf(int bestOf)
         {
-            bool matchHasNotBegun = GetPlayState() == PlayState.NotBegun;
+            bool matchHasNotBegun = GetPlayState() == PlayStateEnum.NotBegun;
             bool newBestOfIsUneven = bestOf % 2 != 0;
             bool bestOfIsGreaterThanZero = bestOf > 0;
 
             if (matchHasNotBegun && newBestOfIsUneven && bestOfIsGreaterThanZero)
             {
                 BestOf = bestOf;
+                MarkAsModified();
+
                 return true;
             }
 
@@ -70,41 +105,55 @@ namespace Slask.Domain
             if (newDateTimeIsValid)
             {
                 StartDateTime = dateTime;
+                MarkAsModified();
+
                 return true;
             }
 
             return false;
         }
 
-        public bool SetPlayers(PlayerReference player1Reference, PlayerReference player2Reference)
+        public bool AssignPlayerReferencesToPlayers(Guid player1ReferenceId, Guid player2ReferenceId)
         {
-            if (player1Reference == null || player2Reference == null || player1Reference.Id != player2Reference.Id)
+            bool matchHasNotBegun = GetPlayState() == PlayStateEnum.NotBegun;
+
+            if (matchHasNotBegun)
             {
-                CreatePlayerWithReference(0, player1Reference);
-                CreatePlayerWithReference(1, player2Reference);
-                return true;
+                bool anyPlayerReferenceIsInvalid = player1ReferenceId == Guid.Empty || player2ReferenceId == Guid.Empty;
+                bool bothPlayerReferencesDiffer = anyPlayerReferenceIsInvalid || player1ReferenceId != player2ReferenceId;
+
+                if (bothPlayerReferencesDiffer)
+                {
+                    Player1.AssignPlayerReference(player1ReferenceId);
+                    Player2.AssignPlayerReference(player2ReferenceId);
+
+                    return true;
+                }
             }
 
             return false;
         }
 
-        public bool AddPlayer(PlayerReference playerReference)
+        public bool AssignPlayerReferenceToFirstAvailablePlayer(Guid playerReferenceId)
         {
-            if (playerReference == null)
-            {
-                throw new ArgumentNullException(nameof(playerReference));
-            }
+            bool matchHasNotBegun = GetPlayState() == PlayStateEnum.NotBegun;
+            bool playerReferenceIsValid = playerReferenceId != Guid.Empty;
 
-            if (Player1 == null)
+            if (matchHasNotBegun && playerReferenceIsValid)
             {
-                CreatePlayerWithReference(0, playerReference);
-                return true;
-            }
+                bool firstPlayerHasNoPlayerReference = Player1.PlayerReferenceId == Guid.Empty;
+                if (firstPlayerHasNoPlayerReference)
+                {
+                    Player1.AssignPlayerReference(playerReferenceId);
+                    return true;
+                }
 
-            if (Player2 == null)
-            {
-                CreatePlayerWithReference(1, playerReference);
-                return true;
+                bool secondPlayerHasNoPlayerReference = Player2.PlayerReferenceId == Guid.Empty;
+                if (secondPlayerHasNoPlayerReference)
+                {
+                    Player2.AssignPlayerReference(playerReferenceId);
+                    return true;
+                }
             }
 
             return false;
@@ -127,12 +176,12 @@ namespace Slask.Domain
 
         public Player FindPlayer(string name)
         {
-            if (Player1 != null && Player1.Name == name)
+            if (Player1 != null && Player1.GetName() == name)
             {
                 return Player1;
             }
 
-            if (Player2 != null && Player2.Name == name)
+            if (Player2 != null && Player2.GetName() == name)
             {
                 return Player2;
             }
@@ -142,17 +191,17 @@ namespace Slask.Domain
 
         public bool IsReady()
         {
-            return Player1 != null && Player2 != null;
+            return Player1.PlayerReferenceId != Guid.Empty && Player2.PlayerReferenceId != Guid.Empty;
         }
 
-        public PlayState GetPlayState()
+        public PlayStateEnum GetPlayState()
         {
             if (StartDateTime > SystemTime.Now)
             {
-                return PlayState.NotBegun;
+                return PlayStateEnum.NotBegun;
             }
 
-            return AnyPlayerHasWon() ? PlayState.Finished : PlayState.Ongoing;
+            return AnyPlayerHasWon() ? PlayStateEnum.Finished : PlayStateEnum.Ongoing;
         }
 
         public Player GetWinningPlayer()
@@ -173,17 +222,6 @@ namespace Slask.Domain
             }
 
             return null;
-        }
-
-        private bool CreatePlayerWithReference(int playerIndex, PlayerReference playerReference)
-        {
-            if (GetPlayState() == PlayState.NotBegun)
-            {
-                Players[playerIndex] = Player.Create(this, playerReference);
-                return true;
-            }
-
-            return false;
         }
 
         private bool AnyPlayerHasWon()

@@ -9,22 +9,24 @@ namespace Slask.Domain.Groups
     public interface GroupInterface
     {
         Guid Id { get; }
+        ContestTypeEnum ContestType { get; }
         string Name { get; }
         List<Match> Matches { get; }
         public Guid RoundId { get; }
         public RoundBase Round { get; }
 
-        public List<PlayerReference> PlayerReferences { get; }
         public List<StandingsEntry<PlayerReference>> ChoosenTyingPlayerEntries { get; }
 
         bool AddPlayerReferences(List<PlayerReference> playerReferences);
-        PlayState GetPlayState();
+        List<Guid> GetPlayerReferenceIds();
+        List<PlayerReference> GetPlayerReferences();
+        PlayStateEnum GetPlayState();
         bool ConstructGroupLayout(int playersPerGroupCount);
-        bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences);
+        void FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences);
         bool NewDateTimeIsValid(Match match, DateTime dateTime);
         bool HasProblematicTie();
         List<StandingsEntry<PlayerReference>> FindProblematiclyTyingPlayers();
-        bool SolveTieByChoosing(string playerName);
+        bool SolveTieByChoosing(PlayerReference playerReference);
         bool HasSolvedTie();
         void OnMatchScoreDecreased(Match match);
         void OnMatchScoreIncreased(Match match);

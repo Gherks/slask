@@ -9,20 +9,18 @@ namespace Slask.Domain.Rounds
     public interface RoundInterface
     {
         Guid Id { get; }
+        ContestTypeEnum ContestType { get; }
         string Name { get; }
         int PlayersPerGroupCount { get; }
         int AdvancingPerGroupCount { get; }
         List<GroupBase> Groups { get; }
-        List<PlayerReference> PlayerReferences { get; }
         Guid TournamentId { get; }
         Tournament Tournament { get; }
 
         int GetExpectedParticipantCount();
         bool RenameTo(string name);
-        PlayerReference RegisterPlayerReference(string name);
-        bool ExcludePlayerReference(string name);
         bool Construct();
-        bool FillGroupsWithPlayerReferences();
+        void FillGroupsWithPlayerReferences();
         bool SetPlayersPerGroupCount(int count);
         bool SetAdvancingPerGroupCount(int count);
         bool HasProblematicTie();
@@ -33,8 +31,7 @@ namespace Slask.Domain.Rounds
         List<PlayerReference> GetAdvancingPlayerReferences();
         RoundBase GetNextRound();
         RoundBase GetPreviousRound();
-        PlayState GetPlayState();
-        bool PlayerReferenceIsAdvancingPlayer(PlayerReference playerReference);
+        PlayStateEnum GetPlayState();
         void ReceiveTransferedPlayerReferences(AdvancingPlayerTransfer advancingPlayerTransfer);
     }
 }

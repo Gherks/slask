@@ -1,5 +1,6 @@
 using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.Rounds.RoundTypes;
+using Slask.Domain.Utilities;
 using System;
 using System.Collections.Generic;
 
@@ -15,6 +16,7 @@ namespace Slask.Domain.Groups.GroupTypes
     {
         private RoundRobinGroup()
         {
+            ContestType = ContestTypeEnum.RoundRobin;
         }
 
         public static RoundRobinGroup Create(RoundRobinRound round)
@@ -26,7 +28,6 @@ namespace Slask.Domain.Groups.GroupTypes
 
             RoundRobinGroup group = new RoundRobinGroup()
             {
-                Id = Guid.NewGuid(),
                 RoundId = round.Id,
                 Round = round
             };
@@ -58,13 +59,14 @@ namespace Slask.Domain.Groups.GroupTypes
         public override bool ConstructGroupLayout(int playersPerGroupCount)
         {
             Matches = RoundRobinGroupLayoutAssembler.ConstructMathes(playersPerGroupCount, this);
+            MarkAsModified();
+
             return true;
         }
 
-        public override bool FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
+        public override void FillMatchesWithPlayerReferences(List<PlayerReference> playerReferences)
         {
             RoundRobinGroupLayoutAssembler.AssignPlayersToMatches(playerReferences, Matches);
-            return true;
         }
     }
 }
