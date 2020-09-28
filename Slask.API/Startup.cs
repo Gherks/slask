@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Slask.Persistence;
 using Slask.Persistence.StartupExtensions;
 
@@ -21,26 +22,35 @@ namespace Slask.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connectionString = Configuration.GetConnectionString("SqlServer");
+
             services.AddDataServices();
-            var connectionString = Configuration.GetConnectionString("SqlServer");
             services.AddDbContext<SlaskContext>
                 (options => 
                     options.UseSqlServer(connectionString).
                     UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            UpdateDatabaseAsync(app);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
+            UpdateDatabaseAsync(app);
+
+            app.UseAuthentication();
+
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
+
         private static void UpdateDatabaseAsync(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices
