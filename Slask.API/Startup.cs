@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,7 +25,7 @@ namespace Slask.API
 
             services.AddDataServices();
             services.AddDbContext<SlaskContext>
-                (options => 
+                (options =>
                     options.UseSqlServer(connectionString).
                     UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
             services.AddControllers();
