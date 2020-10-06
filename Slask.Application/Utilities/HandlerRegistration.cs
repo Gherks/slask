@@ -10,7 +10,7 @@ namespace Slask.Application.Utilities
 {
     public static class HandlerRegistration
     {
-        public static void AddHandlers(this IServiceCollection serviceCollection)
+        public static void AddHandlers(this IServiceCollection services)
         {
             List<Type> handlerTypes = typeof(CommandInterface).Assembly.GetTypes()
                 .Where(type => type.GetInterfaces().Any(type => IsHandlerInterface(type)))
@@ -19,7 +19,7 @@ namespace Slask.Application.Utilities
 
             foreach (Type type in handlerTypes)
             {
-                AddHandler(serviceCollection, type);
+                AddHandler(services, type);
             }
         }
 
@@ -37,7 +37,7 @@ namespace Slask.Application.Utilities
             return typeDefinitionIsCommandHandler || typeDefinitionIsQueryHandler;
         }
 
-        private static void AddHandler(IServiceCollection serviceCollection, Type type)
+        private static void AddHandler(IServiceCollection services, Type type)
         {
             object[] attributes = type.GetCustomAttributes(false);
 
@@ -49,7 +49,7 @@ namespace Slask.Application.Utilities
             Type interfaceType = type.GetInterfaces().Single(type => IsHandlerInterface(type));
             Func<IServiceProvider, object> factory = BuildPipeline(pipeline, interfaceType);
 
-            serviceCollection.AddTransient(interfaceType, factory);
+            services.AddTransient(interfaceType, factory);
         }
 
         private static Type ToDecorator(object attribute)
