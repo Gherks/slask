@@ -26,14 +26,14 @@ namespace Slask.Application.Utilities
             return result;
         }
 
-        public ResultType Dispatch<ResultType>(QueryInterface<ResultType> query)
+        public Result<ReturnType> Dispatch<ReturnType>(QueryInterface<ReturnType> query)
         {
             Type type = typeof(QueryHandlerInterface<,>);
-            Type[] typeArgs = { query.GetType(), typeof(ResultType) };
+            Type[] typeArgs = { query.GetType(), typeof(ReturnType) };
             Type queryHandlerType = type.MakeGenericType(typeArgs);
 
             dynamic handler = _provider.GetService(queryHandlerType);
-            ResultType result = handler.Handle((dynamic)query);
+            Result<ReturnType> result = handler.Handle((dynamic)query);
 
             return result;
         }

@@ -9,9 +9,9 @@ namespace Slask.Application.Commands
     {
         public string Name { get; }
 
-        public CreateUser(string name)
+        public CreateUser(string userName)
         {
-            Name = name;
+            Name = userName;
         }
     }
 
