@@ -12,6 +12,10 @@ namespace Slask.API
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseDefaultServiceProvider(options =>
+                {
+                    options.ValidateScopes = true; // Don't do this when deploying to production
+                })
                 .UseStartup<Startup>();
     }
 }

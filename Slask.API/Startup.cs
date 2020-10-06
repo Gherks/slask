@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Slask.Application.Utilities;
 using Slask.Persistence;
 using Slask.Persistence.StartupExtensions;
 
@@ -23,12 +24,20 @@ namespace Slask.API
         {
             string connectionString = Configuration.GetConnectionString("SqlServer");
 
-            services.AddDataServices();
-            services.AddDbContext<SlaskContext>
-                (options =>
-                    options.UseSqlServer(connectionString).
-                    UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
-            services.AddControllers();
+            services.AddDbContext<SlaskContext>(options =>
+                   options.UseSqlServer(connectionString)
+                       .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking),
+                   ServiceLifetime.Transient,
+                   ServiceLifetime.Transient);
+            services.AddPersistenceServices();
+
+            services.AddHandlers();
+            services.AddSingleton<CommandQueryDispatcher>();
+
+            services.AddControllers(configure =>
+            {
+                configure.ReturnHttpNotAcceptable = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
