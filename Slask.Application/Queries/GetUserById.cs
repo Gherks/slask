@@ -11,6 +11,11 @@ namespace Slask.Application.Querys
     public sealed class GetUserById : QueryInterface<UserDto>
     {
         public Guid UserId { get; }
+
+        public GetUserById(Guid userId)
+        {
+            UserId = userId;
+        }
     }
 
     public sealed class GetUserByIdHandler : QueryHandlerInterface<GetUserById, UserDto>
