@@ -1,4 +1,4 @@
-﻿using CSharpFunctionalExtensions;
+using CSharpFunctionalExtensions;
 using Slask.Application.Interfaces.Persistence;
 using Slask.Application.Queries.Interfaces;
 using Slask.Application.Utilities;
@@ -12,11 +12,11 @@ namespace Slask.Application.Querys
     {
     }
 
-    public sealed class GetAllUsersHander : QueryHandlerInterface<GetAllUsers, IEnumerable<UserDto>>
+    public sealed class GetAllUsersHandler : QueryHandlerInterface<GetAllUsers, IEnumerable<UserDto>>
     {
         private readonly UserRepositoryInterface _userRepository;
 
-        public GetAllUsersHander(UserRepositoryInterface userRepository)
+        public GetAllUsersHandler(UserRepositoryInterface userRepository)
         {
             _userRepository = userRepository;
         }
