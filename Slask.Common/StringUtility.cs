@@ -9,8 +9,8 @@ namespace Slask.Common
     {
         public static List<string> ToStringList(string text, string delimiter)
         {
-            bool textIsInvalid = IsNullOrEmpty(text);
-            bool delimiterIsInvalid = IsNullOrEmpty(delimiter);
+            bool textIsInvalid = string.IsNullOrWhiteSpace(text);
+            bool delimiterIsInvalid = string.IsNullOrWhiteSpace(delimiter);
 
             if (textIsInvalid || delimiterIsInvalid)
             {
@@ -37,7 +37,7 @@ namespace Slask.Common
 
         public static string ToUpperNoSpaces(string text)
         {
-            bool textIsInvalid = IsNullOrEmpty(text);
+            bool textIsInvalid = string.IsNullOrWhiteSpace(text);
 
             if (textIsInvalid)
             {
@@ -45,21 +45,6 @@ namespace Slask.Common
             }
 
             return text.ToUpper(CultureInfo.CurrentCulture).Replace(" ", string.Empty, StringComparison.CurrentCulture);
-        }
-
-        public static bool IsNullOrEmpty(string text)
-        {
-            bool textIsInvalid = text == null;
-
-            if (textIsInvalid)
-            {
-                return true;
-            }
-
-            string textSansWhitespace = text.Replace(" ", string.Empty, StringComparison.CurrentCulture);
-            bool textIsEmpty = textSansWhitespace.Length == 0;
-
-            return textIsEmpty;
         }
     }
 }

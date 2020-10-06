@@ -171,29 +171,5 @@ namespace Slask.Common.Xunit.UnitTests
 
             transformedText.Should().BeNull();
         }
-
-        [Fact]
-        public void CheckingNullStringWithIsNullOrEmptyReturnsTrue()
-        {
-            StringUtility.IsNullOrEmpty(null).Should().BeTrue();
-        }
-
-        [Fact]
-        public void CheckingEmptyStringWithIsNullOrEmptyReturnsTrue()
-        {
-            StringUtility.IsNullOrEmpty("").Should().BeTrue();
-        }
-
-        [Fact]
-        public void CheckingWhitespaceStringWithIsNullOrEmptyReturnsTrue()
-        {
-            StringUtility.IsNullOrEmpty("  ").Should().BeTrue();
-        }
-
-        [Fact]
-        public void CheckingValidStringWithIsNullOrEmptyReturnsFalse()
-        {
-            StringUtility.IsNullOrEmpty("lol").Should().BeFalse();
-        }
     }
 }
