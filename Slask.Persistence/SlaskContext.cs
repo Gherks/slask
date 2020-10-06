@@ -25,12 +25,6 @@ namespace Slask.Persistence
             this.ChangeTracker.LazyLoadingEnabled = false;
         }
 
-        public SlaskContext(DbContextOptions<SlaskContext> options)
-            : base(options)
-        {
-            this.ChangeTracker.LazyLoadingEnabled = false;
-        }
-
         public DbSet<User> Users { get; private set; }
         public DbSet<Tournament> Tournaments { get; private set; }
 
