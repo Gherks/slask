@@ -1,8 +1,9 @@
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using Slask.Application.Interfaces.Persistence;
 using Slask.Application.Queries.Interfaces;
 using Slask.Application.Utilities;
 using Slask.Dto;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,8 +24,15 @@ namespace Slask.Application.Querys
 
         public Result<IEnumerable<UserDto>> Handle(GetAllUsers query)
         {
-            return Result.Success(_userRepository.GetUsers()
-                .Select(user => DomainToDtoConverters.ConvertToUserDto(user)));
+            try
+            {
+                return Result.Success(_userRepository.GetUsers()
+                    .Select(user => DomainToDtoConverters.ConvertToUserDto(user)));
+            }
+            catch (Exception exception)
+            {
+                return Result.Failure<IEnumerable<UserDto>>(exception.Message);
+            }
         }
     }
 }
