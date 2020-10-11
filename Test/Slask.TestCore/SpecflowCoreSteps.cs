@@ -15,13 +15,40 @@ using TechTalk.SpecFlow;
 
 namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 {
-    public class PersistenceSteps
+    public class SpecflowCoreSteps
     {
         private readonly string testDatabaseName;
 
-        public PersistenceSteps()
+        public SpecflowCoreSteps()
         {
             testDatabaseName = Guid.NewGuid().ToString();
+        }
+
+        [Given(@"users ""(.*)"" has been created")]
+        [When(@"users ""(.*)"" has been created")]
+        public void GivenUsersHasBeenCreated(string commaSeparatedUserNames)
+        {
+            List<string> userNames = StringUtility.ToStringList(commaSeparatedUserNames, ",");
+
+            using (UserRepository userRepository = CreateUserRepository())
+            {
+                foreach (string userName in userNames)
+                {
+                    userRepository.CreateUser(userName);
+                }
+                userRepository.Save();
+            }
+        }
+
+        [Given(@"a tournament named ""(.*)"" has been created")]
+        [When(@"a tournament named ""(.*)"" has been created")]
+        public void GivenATournamentNamedWithUsersAddedToIt(string tournamentName)
+        {
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
+            {
+                Tournament tournament = tournamentRepository.CreateTournament(tournamentName);
+                tournamentRepository.Save();
+            }
         }
 
         [Given(@"a tournament named ""(.*)"" has been created with users ""(.*)"" added to it")]
@@ -30,7 +57,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         {
             List<string> userNames = StringUtility.ToStringList(commaSeparatedUserNames, ",");
 
-            using (UserRepository userRepository = CreateuserRepository())
+            using (UserRepository userRepository = CreateUserRepository())
             {
                 foreach (string userName in userNames)
                 {
@@ -217,34 +244,12 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                     }
                     else
                     {
-                        // LOG Error: Invalid player name in given match within given group
                         throw new NotImplementedException();
                     }
                 }
 
                 tournamentRepository.Save();
             }
-        }
-
-        private void PlayMatch(TournamentRepository tournamentRepository, Match match)
-        {
-            bool matchHaveNotStarted = match.StartDateTime > SystemTime.Now;
-
-            if (matchHaveNotStarted)
-            {
-                SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-            }
-
-            int winningScore = (int)Math.Ceiling(match.BestOf / 2.0);
-
-            // Give points to player with name that precedes the other alphabetically
-            bool increasePlayer1Score = match.Player1.GetName().CompareTo(match.Player2.GetName()) <= 0;
-
-            Tournament tournament = match.Group.Round.Tournament;
-            Guid scoringPlayerId = increasePlayer1Score ? match.Player1.Id : match.Player2.Id;
-
-            tournamentRepository.AddScoreToPlayerInMatch(tournament, match.Id, scoringPlayerId, winningScore);
-            tournamentRepository.Save();
         }
 
         [Then(@"tournament named ""(.*)"" should contain rounds")]
@@ -339,7 +344,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
         }
 
-        protected UserRepository CreateuserRepository()
+        protected UserRepository CreateUserRepository()
         {
             return new UserRepository(InMemoryContextCreator.Create(testDatabaseName));
         }
@@ -347,6 +352,27 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         protected TournamentRepository CreateTournamentRepository()
         {
             return new TournamentRepository(InMemoryContextCreator.Create(testDatabaseName));
+        }
+
+        private void PlayMatch(TournamentRepository tournamentRepository, Match match)
+        {
+            bool matchHaveNotStarted = match.StartDateTime > SystemTime.Now;
+
+            if (matchHaveNotStarted)
+            {
+                SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
+            }
+
+            int winningScore = (int)Math.Ceiling(match.BestOf / 2.0);
+
+            // Give points to player with name that precedes the other alphabetically
+            bool increasePlayer1Score = match.Player1.GetName().CompareTo(match.Player2.GetName()) <= 0;
+
+            Tournament tournament = match.Group.Round.Tournament;
+            Guid scoringPlayerId = increasePlayer1Score ? match.Player1.Id : match.Player2.Id;
+
+            tournamentRepository.AddScoreToPlayerInMatch(tournament, match.Id, scoringPlayerId, winningScore);
+            tournamentRepository.Save();
         }
     }
 }
