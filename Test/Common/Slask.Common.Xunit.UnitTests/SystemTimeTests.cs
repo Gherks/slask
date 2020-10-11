@@ -6,8 +6,8 @@ namespace Slask.Common.Xunit.UnitTests
 {
     public class SystemTimeTests
     {
-        const int acceptableInaccuracy = 2000;
-        const int oneDay = 1;
+        private const int acceptableInaccuracy = 2000;
+        private const int oneDay = 1;
 
         public SystemTimeTests()
         {

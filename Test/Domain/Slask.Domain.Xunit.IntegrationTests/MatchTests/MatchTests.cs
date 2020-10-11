@@ -267,7 +267,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.MatchTests
         {
             DateTime initialDateTime = match.StartDateTime;
 
-            match.SetStartDateTime(DateTime.Now.AddSeconds(-1));
+            match.SetStartDateTime(SystemTime.Now.AddSeconds(-1));
 
             match.StartDateTime.Should().Be(initialDateTime);
         }

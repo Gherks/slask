@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Slask.Common;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
 using System;
@@ -35,7 +36,7 @@ namespace Slask.Domain.Xunit.UnitTests
             tournament.Should().NotBeNull();
             tournament.Id.Should().NotBeEmpty();
             tournament.Name.Should().Be(tournamentName);
-            tournament.Created.Should().BeCloseTo(DateTime.Now, acceptableInaccuracy);
+            tournament.Created.Should().BeCloseTo(SystemTime.Now, acceptableInaccuracy);
             tournament.Rounds.Should().BeEmpty();
             tournament.Betters.Should().BeEmpty();
         }

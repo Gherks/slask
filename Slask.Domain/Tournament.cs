@@ -1,3 +1,4 @@
+using Slask.Common;
 using Slask.Domain.Bets;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
@@ -15,7 +16,7 @@ namespace Slask.Domain
     {
         private Tournament()
         {
-            _created = DateTime.Now;
+            _created = SystemTime.Now;
 
             Id = Guid.NewGuid();
             Rounds = new List<RoundBase>();
