@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Slask.Application.Utilities;
 using Slask.Persistence;
 using Slask.Persistence.StartupExtensions;
+using System;
 
 namespace Slask.API
 {
@@ -38,6 +40,8 @@ namespace Slask.API
             {
                 configure.ReturnHttpNotAcceptable = true;
             });
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
