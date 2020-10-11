@@ -1,7 +1,7 @@
-﻿using CSharpFunctionalExtensions;
+﻿using AutoMapper;
+using CSharpFunctionalExtensions;
 using Slask.Application.Interfaces.Persistence;
 using Slask.Application.Queries.Interfaces;
-using Slask.Application.Utilities;
 using Slask.Domain;
 using Slask.Dto;
 using System;
@@ -21,10 +21,12 @@ namespace Slask.Application.Querys
     public sealed class GetUserByIdHandler : QueryHandlerInterface<GetUserById, UserDto>
     {
         private readonly UserRepositoryInterface _userRepository;
+        private readonly IMapper _mapper;
 
-        public GetUserByIdHandler(UserRepositoryInterface userRepository)
+        public GetUserByIdHandler(UserRepositoryInterface userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         public Result<UserDto> Handle(GetUserById query)
@@ -36,9 +38,7 @@ namespace Slask.Application.Querys
                 return Result.Failure<UserDto>($"Could not find user ({ query.UserId })");
             }
 
-            UserDto userDto = DomainToDtoConverters.ConvertToUserDto(user);
-
-            return Result.Success(userDto);
+            return Result.Success(_mapper.Map<UserDto>(user));
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using CSharpFunctionalExtensions;
+﻿using AutoMapper;
+using CSharpFunctionalExtensions;
 using Slask.Application.Interfaces.Persistence;
 using Slask.Application.Queries.Interfaces;
-using Slask.Application.Utilities;
 using Slask.Dto;
 using System;
 using System.Collections.Generic;
@@ -16,10 +16,12 @@ namespace Slask.Application.Querys
     public sealed class GetAllUsersHandler : QueryHandlerInterface<GetAllUsers, IEnumerable<UserDto>>
     {
         private readonly UserRepositoryInterface _userRepository;
+        private readonly IMapper _mapper;
 
-        public GetAllUsersHandler(UserRepositoryInterface userRepository)
+        public GetAllUsersHandler(UserRepositoryInterface userRepository, IMapper mapper)
         {
             _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         public Result<IEnumerable<UserDto>> Handle(GetAllUsers query)
@@ -27,7 +29,7 @@ namespace Slask.Application.Querys
             try
             {
                 return Result.Success(_userRepository.GetUsers()
-                    .Select(user => DomainToDtoConverters.ConvertToUserDto(user)));
+                    .Select(user => _mapper.Map<UserDto>(user)));
             }
             catch (Exception exception)
             {
