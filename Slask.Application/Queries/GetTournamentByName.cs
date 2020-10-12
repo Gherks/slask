@@ -2,7 +2,6 @@
 using CSharpFunctionalExtensions;
 using Slask.Application.Interfaces.Persistence;
 using Slask.Application.Queries.Interfaces;
-using Slask.Application.Utilities;
 using Slask.Domain;
 using Slask.Dto;
 

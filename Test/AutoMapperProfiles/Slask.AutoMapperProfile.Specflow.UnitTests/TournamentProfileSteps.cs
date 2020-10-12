@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FluentAssertions;
-using FluentAssertions.Common;
 using Slask.Application.AutoMapperProfiles;
 using Slask.Common;
 using Slask.Domain;

@@ -6,7 +6,6 @@ using Slask.Domain;
 using Slask.Dto;
 using Slask.Persistence.Repositories;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests;
-using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
 
@@ -40,7 +39,7 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
                 _bareTournamentDtos.Add(_mapper.Map<BareTournamentDto>(tournament));
             }
         }
-        
+
         [Then(@"all automapped bare tournament DTOs should be valid")]
         public void ThenAllAutomappedBareTournamentDTOsShouldBeValid()
         {
