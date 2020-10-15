@@ -10,7 +10,7 @@ namespace Slask.Application.Utilities
 {
     public static class HandlerRegistration
     {
-        public static void AddHandlers(this IServiceCollection services)
+        public static IServiceCollection AddHandlers(this IServiceCollection services)
         {
             List<Type> handlerTypes = typeof(CommandInterface).Assembly.GetTypes()
                 .Where(type => type.GetInterfaces().Any(type => IsHandlerInterface(type)))
@@ -21,6 +21,8 @@ namespace Slask.Application.Utilities
             {
                 AddHandler(services, type);
             }
+
+            return services;
         }
 
         private static bool IsHandlerInterface(Type type)

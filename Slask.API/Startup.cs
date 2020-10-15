@@ -21,30 +21,28 @@ namespace Slask.API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             string connectionString = Configuration.GetConnectionString("SqlServer");
 
             services.AddDbContext<SlaskContext>(options =>
-                   options.UseSqlServer(connectionString)
-                       .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking),
-                   ServiceLifetime.Transient,
-                   ServiceLifetime.Transient);
-            services.AddPersistenceServices();
-
-            services.AddHandlers();
-            services.AddSingleton<CommandQueryDispatcher>();
-
-            services.AddControllers(configure =>
+                {
+                    options.UseSqlServer(connectionString);
+                    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                },
+                ServiceLifetime.Transient,
+                ServiceLifetime.Transient)
+            .AddPersistenceServices()
+            .AddHandlers()
+            .AddSingleton<CommandQueryDispatcher>()
+            .AddControllers(configure =>
             {
                 configure.ReturnHttpNotAcceptable = true;
-            });
-
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            }).Services
+            .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies())
+            .AddHealthChecks();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -55,10 +53,10 @@ namespace Slask.API
             UpdateDatabaseAsync(app);
 
             app.UseAuthentication();
-
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/healthcheck");
                 endpoints.MapControllers();
             });
         }
