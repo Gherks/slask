@@ -2,11 +2,6 @@
 {
     public class UserCreationDto
     {
-        public string UserName { get; }
-
-        public UserCreationDto(string userName)
-        {
-            UserName = userName;
-        }
+        public string Username { get; set; }
     }
 }
