@@ -3,7 +3,13 @@
 
 @UserControllerTag
 Scenario: Can create a user
-	When API POST is called with address "/api/user" containing body
+	Given Content-Type is set to "application/json" and Accept is set to "application/json"
+	When POST request is sent to "/api/users" containing body
 		| Username  |
 		| Stålberto |
-	Then the POST result should return status code "200"
+	Then response should return with status code "201"
+
+Scenario: Can fetch a user
+	Given Content-Type is set to "application/json" and Accept is set to "application/json"
+	When GET request is sent to "/api/users"
+	Then response should return with status code "200"
