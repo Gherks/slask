@@ -1,8 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Slask.Application.Commands;
 using Slask.Application.Querys;
 using Slask.Application.Utilities;
 using Slask.Dto;
+using Slask.Dto.CreationDtos;
 using System;
 using System.Collections.Generic;
 
@@ -10,7 +13,7 @@ namespace Slask.API.Controllers
 {
     [ApiController]
     [Route("api/users")]
-    public class UsersController : ControllerBase
+    public sealed class UsersController : ControllerBase
     {
         private readonly CommandQueryDispatcher _commandQueryDispatcher;
 
@@ -20,7 +23,8 @@ namespace Slask.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetUsers()
+        [HttpHead]
+        public ActionResult<IEnumerable<UserDto>> GetUsers()
         {
             GetAllUsers query = new GetAllUsers();
             Result<IEnumerable<UserDto>> result = _commandQueryDispatcher.Dispatch(query);
@@ -29,7 +33,7 @@ namespace Slask.API.Controllers
             {
                 if (result.Value == null)
                 {
-                    return StatusCode(500);
+                    return StatusCode(StatusCodes.Status500InternalServerError);
                 }
 
                 return NotFound(result.Error);
@@ -39,7 +43,8 @@ namespace Slask.API.Controllers
         }
 
         [HttpGet("{userId}")]
-        public IActionResult GetUser(Guid userId)
+        [HttpHead]
+        public ActionResult<UserDto> GetUser(Guid userId)
         {
             GetUserById query = new GetUserById(userId);
             Result<UserDto> result = _commandQueryDispatcher.Dispatch(query);
@@ -52,23 +57,33 @@ namespace Slask.API.Controllers
             return Ok(result.Value);
         }
 
-        //[HttpPost("{userName}")]
-        //public IActionResult Post(UserCreationDto user)
-        //{
-        //    if(user == null)
-        //    {
-        //        return BadRequest();
-        //    }
+        [HttpGet("{userName}")]
+        [HttpHead]
+        public ActionResult<UserDto> GetUser(string userName)
+        {
+            GetUserByName query = new GetUserByName(userName);
+            Result<UserDto> result = _commandQueryDispatcher.Dispatch(query);
 
-        //    CreateUser command = new CreateUser(userName);
-        //    Result result = _commandQueryDispatcher.Dispatch(command);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
 
-        //    if (result.IsFailure)
-        //    {
-        //        return NotFound(result.Error);
-        //    }
+            return Ok(result.Value);
+        }
 
-        //    return Ok();
-        //}
+        [HttpPost]
+        public ActionResult CreateUser(UserCreationDto user)
+        {
+            CreateUser command = new CreateUser(user.Username);
+            Result result = _commandQueryDispatcher.Dispatch(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error);
+            }
+
+            return StatusCode(StatusCodes.Status201Created);
+        }
     }
 }
