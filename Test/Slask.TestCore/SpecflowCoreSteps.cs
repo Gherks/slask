@@ -12,6 +12,7 @@ using Slask.TestCore;
 using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 
 namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 {
@@ -88,23 +89,21 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
-                foreach (TableRow row in table.Rows)
+                foreach (RoundSettings roundSettings in table.CreateSet<RoundSettings>())
                 {
-                    TestUtilities.ParseRoundTable(row, out ContestTypeEnum contestType, out string name, out int advancingCount, out int playersPerGroupCount);
-
-                    if (contestType != ContestTypeEnum.None)
+                    if (roundSettings.ContestType != ContestTypeEnum.None)
                     {
                         RoundBase round = null;
 
-                        if (contestType == ContestTypeEnum.Bracket)
+                        if (roundSettings.ContestType == ContestTypeEnum.Bracket)
                         {
                             round = tournamentRepository.AddBracketRoundToTournament(tournament);
                         }
-                        else if (contestType == ContestTypeEnum.DualTournament)
+                        else if (roundSettings.ContestType == ContestTypeEnum.DualTournament)
                         {
                             round = tournamentRepository.AddDualTournamentRoundToTournament(tournament);
                         }
-                        else if (contestType == ContestTypeEnum.RoundRobin)
+                        else if (roundSettings.ContestType == ContestTypeEnum.RoundRobin)
                         {
                             round = tournamentRepository.AddRoundRobinRoundToTournament(tournament);
                         }
@@ -115,9 +114,13 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                             return;
                         }
 
-                        tournamentRepository.RenameRoundInTournament(round, name);
-                        tournamentRepository.SetAdvancingPerGroupCountInRound(round, advancingCount);
-                        tournamentRepository.SetPlayersPerGroupCountInRound(round, playersPerGroupCount);
+                        if (roundSettings.RoundName != null)
+                        {
+                            tournamentRepository.RenameRoundInTournament(round, roundSettings.RoundName);
+                        }
+
+                        tournamentRepository.SetAdvancingPerGroupCountInRound(round, roundSettings.AdvancingPerGroupCount);
+                        tournamentRepository.SetPlayersPerGroupCountInRound(round, roundSettings.PlayersPerGroupCount);
                         tournamentRepository.Save();
                     }
                 }
@@ -149,17 +152,14 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                tournamentRepository.Save();
-                foreach (TableRow row in table.Rows)
+                foreach (BetterPlacesMatchBet betterPlacesMatchBet in table.CreateSet<BetterPlacesMatchBet>())
                 {
-                    TestUtilities.ParseBetterMatchBetPlacements(row, out string betterName, out int roundIndex, out int groupIndex, out int matchIndex, out string playerName);
-
                     Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
-                    RoundBase round = tournament.Rounds[roundIndex];
-                    GroupBase group = round.Groups[groupIndex];
-                    Match match = group.Matches[matchIndex];
+                    RoundBase round = tournament.Rounds[betterPlacesMatchBet.RoundIndex];
+                    GroupBase group = round.Groups[betterPlacesMatchBet.GroupIndex];
+                    Match match = group.Matches[betterPlacesMatchBet.MatchIndex];
 
-                    tournamentRepository.BetterPlacesMatchBetOnMatch(tournament.Id, match.Id, betterName, playerName);
+                    tournamentRepository.BetterPlacesMatchBetOnMatch(tournament.Id, match.Id, betterPlacesMatchBet.BetterName, betterPlacesMatchBet.PlayerName);
                     tournamentRepository.Save();
                 }
             }
@@ -171,14 +171,12 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                foreach (TableRow row in table.Rows)
+                foreach (TargetGroupToPlay targetGroupToPlay in table.CreateSet<TargetGroupToPlay>())
                 {
-                    TestUtilities.ParseTargetGroupToPlay(row, out int _, out int roundIndex, out int groupIndex);
-
                     SystemTimeMocker.Reset();
                     Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
-                    RoundBase round = tournament.Rounds[roundIndex];
-                    GroupBase group = round.Groups[groupIndex];
+                    RoundBase round = tournament.Rounds[targetGroupToPlay.RoundIndex];
+                    GroupBase group = round.Groups[targetGroupToPlay.GroupIndex];
 
                     foreach (Match match in group.Matches)
                     {
@@ -206,10 +204,10 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
-                TestUtilities.ParseBetterStandings(table.Rows[index], out string betterName, out int points);
+                BetterStanding betterStanding = table.Rows[index].CreateInstance<BetterStanding>();
 
-                betterStandings[index].Object.User.Name.Should().Be(betterName);
-                betterStandings[index].Points.Should().Be(points);
+                betterStandings[index].Object.User.Name.Should().Be(betterStanding.BetterName);
+                betterStandings[index].Points.Should().Be(betterStanding.Points);
             }
         }
 
@@ -226,21 +224,19 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
-                foreach (TableRow row in table.Rows)
+                foreach (AssignScoreToPlayer assignScoreToPlayer in table.CreateSet<AssignScoreToPlayer>())
                 {
-                    TestUtilities.ParseScoreAddedToMatchPlayer(row, out int roundIndex, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
-
-                    RoundBase round = tournament.Rounds[roundIndex];
-                    GroupBase group = round.Groups[groupIndex];
-                    Match match = group.Matches[matchIndex];
+                    RoundBase round = tournament.Rounds[assignScoreToPlayer.RoundIndex];
+                    GroupBase group = round.Groups[assignScoreToPlayer.GroupIndex];
+                    Match match = group.Matches[assignScoreToPlayer.MatchIndex];
 
                     SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
-                    Player player = match.FindPlayer(scoringPlayer);
+                    Player player = match.FindPlayer(assignScoreToPlayer.ScoringPlayer);
 
                     if (player != null)
                     {
-                        tournamentRepository.AddScoreToPlayerInMatch(tournament, match.Id, player.Id, scoreAdded);
+                        tournamentRepository.AddScoreToPlayerInMatch(tournament, match.Id, player.Id, assignScoreToPlayer.ScoreAdded);
                     }
                     else
                     {
@@ -263,7 +259,8 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
-                TestUtilities.ParseRoundTable(table.Rows[index], out ContestTypeEnum contestType, out _, out _, out _);
+                TableRow row = table.Rows[index];
+                Enum.TryParse(row["Contest type"], out ContestTypeEnum contestType);
 
                 if (contestType != ContestTypeEnum.None)
                 {
@@ -307,7 +304,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
 
             RoundBase round = tournament.Rounds[roundIndex];
-            ContestTypeEnum contestType = TestUtilities.ParseContestTypeString(groupType);
+            Enum.TryParse(groupType, out ContestTypeEnum contestType);
 
             if (contestType == ContestTypeEnum.Bracket)
             {
@@ -373,6 +370,44 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
             tournamentRepository.AddScoreToPlayerInMatch(tournament, match.Id, scoringPlayerId, winningScore);
             tournamentRepository.Save();
+        }
+
+        private sealed class RoundSettings
+        {
+            public ContestTypeEnum ContestType { get; set; }
+            public string RoundName { get; set; }
+            public int AdvancingPerGroupCount { get; set; }
+            public int PlayersPerGroupCount { get; set; }
+        }
+
+        private sealed class BetterPlacesMatchBet
+        {
+            public string BetterName { get; set; }
+            public int RoundIndex { get; set; }
+            public int GroupIndex { get; set; }
+            public int MatchIndex { get; set; }
+            public string PlayerName { get; set; }
+        }
+
+        private sealed class TargetGroupToPlay
+        {
+            public int RoundIndex { get; set; }
+            public int GroupIndex { get; set; }
+        }
+
+        private sealed class AssignScoreToPlayer
+        {
+            public int RoundIndex { get; set; }
+            public int GroupIndex { get; set; }
+            public int MatchIndex { get; set; }
+            public string ScoringPlayer { get; set; }
+            public int ScoreAdded { get; set; }
+        }
+
+        private sealed class BetterStanding
+        {
+            public string BetterName { get; set; }
+            public int Points { get; set; }
         }
     }
 }

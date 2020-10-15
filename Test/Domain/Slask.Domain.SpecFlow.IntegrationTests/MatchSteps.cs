@@ -2,6 +2,7 @@
 using Slask.Domain.Groups;
 using Slask.Domain.SpecFlow.IntegrationTests.GroupTests;
 using Slask.Domain.Utilities;
+using System;
 using TechTalk.SpecFlow;
 
 namespace Slask.Domain.SpecFlow.IntegrationTests
@@ -21,13 +22,13 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
             GivenATournamentNamedHasBeenCreatedWithUsersAddedToIt("GSL 2019", "Stålberto, Bönis, Guggelito");
 
             Table roundTable = new Table(new string[] {
-                            "Round type",
+                            "Contest type",
                             "Best of",
                             "Advancing per group count",
                             "Players per group count"});
 
             roundTable.AddRow(new string[] {
-                            "Round robin",
+                            "RoundRobin",
                             "3",
                             "3",
                             "4"});
@@ -63,7 +64,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
         [Then(@"match (.*) in group (.*) should be in state ""(.*)""")]
         public void ThenMatchInGroupShouldBeInState(int matchIndex, int groupIndex, string playStateString)
         {
-            PlayStateEnum playState = ParsePlayStateString(playStateString);
+            Enum.TryParse(playStateString, out PlayStateEnum playState);
 
             GroupBase group = createdGroups[groupIndex];
             Match match = group.Matches[matchIndex];

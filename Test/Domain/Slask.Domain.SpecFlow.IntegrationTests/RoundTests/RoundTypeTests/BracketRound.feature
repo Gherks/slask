@@ -5,8 +5,8 @@
 Scenario: Cannot reconfigure players per group count in bracket round when it has started
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type | Advancing per group count | Players per group count |
-			| Bracket    | 1                         | 4                       |
+			| Contest type | Advancing per group count | Players per group count |
+			| Bracket      | 1                         | 4                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |

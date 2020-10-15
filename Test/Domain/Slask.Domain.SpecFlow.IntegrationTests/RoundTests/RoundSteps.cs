@@ -4,11 +4,11 @@ using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
-using Slask.TestCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 
 namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
 {
@@ -29,20 +29,18 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
                 throw new ArgumentNullException(nameof(table));
             }
 
-            foreach (TableRow row in table.Rows)
+            foreach (AssignScoreToPlayer assignScoreToPlayer in table.CreateSet<AssignScoreToPlayer>())
             {
-                TestUtilities.ParseScoreAddedToMatchPlayer(row, out int _, out int groupIndex, out int matchIndex, out string scoringPlayer, out int scoreAdded);
-
-                GroupBase group = createdGroups[groupIndex];
-                Match match = group.Matches[matchIndex];
+                GroupBase group = createdGroups[assignScoreToPlayer.GroupIndex];
+                Match match = group.Matches[assignScoreToPlayer.MatchIndex];
 
                 SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
-                Player player = match.FindPlayer(scoringPlayer);
+                Player player = match.FindPlayer(assignScoreToPlayer.ScoringPlayer);
 
                 if (player != null)
                 {
-                    player.IncreaseScore(scoreAdded);
+                    player.IncreaseScore(assignScoreToPlayer.ScoreAdded);
                 }
                 else
                 {
@@ -79,24 +77,24 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
-                TestUtilities.ParseRoundTable(table.Rows[index], out ContestTypeEnum roundType, out string name, out int advancingCount, out int playersPerGroupCount);
+                RoundSettings roundSettings = table.Rows[index].CreateInstance<RoundSettings>();
 
                 RoundBase round = tournament.Rounds[index];
 
                 if (round is BracketRound bracketRound)
                 {
-                    roundType.Should().Be(ContestTypeEnum.Bracket);
+                    roundSettings.ContestType.Should().Be(ContestTypeEnum.Bracket);
                 }
                 else if (round is DualTournamentRound dualTournamentRound)
                 {
-                    roundType.Should().Be(ContestTypeEnum.DualTournament);
+                    roundSettings.ContestType.Should().Be(ContestTypeEnum.DualTournament);
                 }
                 else if (round is RoundRobinRound roundRobinRound)
                 {
-                    roundType.Should().Be(ContestTypeEnum.RoundRobin);
+                    roundSettings.ContestType.Should().Be(ContestTypeEnum.RoundRobin);
                 }
 
-                CheckRoundValidity(round, name, advancingCount, playersPerGroupCount);
+                CheckRoundValidity(round, roundSettings);
             }
         }
 
@@ -121,7 +119,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
         {
             RoundBase round = createdRounds[roundIndex];
 
-            PlayStateEnum playState = ParsePlayStateString(playStateString);
+            Enum.TryParse(playStateString, out PlayStateEnum playState);
 
             round.GetPlayState().Should().Be(playState);
         }
@@ -140,7 +138,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
                 playerReferences.FirstOrDefault(playerReference => playerReference.Name == playerName).Should().NotBeNull();
             }
         }
-        protected static void CheckRoundValidity(RoundBase round, string correctName, int advancingCount, int playersPerGroupCount)
+        private static void CheckRoundValidity(RoundBase round, RoundSettings roundSettings)
         {
             if (round == null)
             {
@@ -149,12 +147,28 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
 
             round.Should().NotBeNull();
             round.Id.Should().NotBeEmpty();
-            round.Name.Should().Be(correctName);
-            round.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
-            round.AdvancingPerGroupCount.Should().Be(advancingCount);
+            round.Name.Should().Be(roundSettings.Name);
+            round.PlayersPerGroupCount.Should().Be(roundSettings.PlayersPerGroupCount);
+            round.AdvancingPerGroupCount.Should().Be(roundSettings.AdvancingCount);
             round.Groups.Should().HaveCount(1);
             round.TournamentId.Should().NotBeEmpty();
             round.Tournament.Should().NotBeNull();
+        }
+
+        private sealed class RoundSettings
+        {
+            public ContestTypeEnum ContestType { get; set; }
+            public string Name { get; set; }
+            public int AdvancingCount { get; set; }
+            public int PlayersPerGroupCount { get; set; }
+        }
+
+        private sealed class AssignScoreToPlayer
+        {
+            public int GroupIndex { get; set; }
+            public int MatchIndex { get; set; }
+            public string ScoringPlayer { get; set; }
+            public int ScoreAdded { get; set; }
         }
     }
 }

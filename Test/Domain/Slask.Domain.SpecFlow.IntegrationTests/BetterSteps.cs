@@ -3,9 +3,9 @@ using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.SpecFlow.IntegrationTests.GroupTests;
 using Slask.Domain.Utilities.StandingsSolvers;
-using Slask.TestCore;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 
 namespace Slask.Domain.SpecFlow.IntegrationTests
 {
@@ -21,21 +21,19 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
         [When(@"betters places match bets")]
         public void GivenBettersPlacesMatchBets(Table table)
         {
-            foreach (TableRow row in table.Rows)
+            foreach (BetterPlacesMatchBet betterPlacesMatchBet in table.CreateSet<BetterPlacesMatchBet>())
             {
-                TestUtilities.ParseBetterMatchBetPlacements(row, out string betterName, out int roundIndex, out int groupIndex, out int matchIndex, out string playerName);
+                RoundBase round = createdRounds[betterPlacesMatchBet.RoundIndex];
+                GroupBase group = createdGroups[betterPlacesMatchBet.GroupIndex];
+                Match match = group.Matches[betterPlacesMatchBet.MatchIndex];
 
-                RoundBase round = createdRounds[roundIndex];
-                GroupBase group = createdGroups[groupIndex];
-                Match match = group.Matches[matchIndex];
-
-                bool betterNameIsNotEmpty = betterName.Length > 0;
-                bool playerNameIsNotEmpty = playerName.Length > 0;
+                bool betterNameIsNotEmpty = betterPlacesMatchBet.BetterName.Length > 0;
+                bool playerNameIsNotEmpty = betterPlacesMatchBet.PlayerName.Length > 0;
 
                 if (betterNameIsNotEmpty && playerNameIsNotEmpty)
                 {
-                    Better better = round.Tournament.GetBetterByName(betterName);
-                    Player player = match.FindPlayer(playerName);
+                    Better better = round.Tournament.GetBetterByName(betterPlacesMatchBet.BetterName);
+                    Player player = match.FindPlayer(betterPlacesMatchBet.PlayerName);
 
                     better.Should().NotBeNull();
                     player.Should().NotBeNull();
@@ -58,11 +56,26 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
-                TestUtilities.ParseBetterStandings(table.Rows[index], out string betterName, out int points);
+                BetterStanding betterStanding = table.Rows[index].CreateInstance<BetterStanding>();
 
-                betterStandings[index].Object.User.Name.Should().Be(betterName);
-                betterStandings[index].Points.Should().Be(points);
+                betterStandings[index].Object.User.Name.Should().Be(betterStanding.BetterName);
+                betterStandings[index].Points.Should().Be(betterStanding.Points);
             }
+        }
+
+        private sealed class BetterPlacesMatchBet
+        {
+            public string BetterName { get; set; }
+            public int RoundIndex { get; set; }
+            public int GroupIndex { get; set; }
+            public int MatchIndex { get; set; }
+            public string PlayerName { get; set; }
+        }
+
+        private sealed class BetterStanding
+        {
+            public string BetterName { get; set; }
+            public int Points { get; set; }
         }
     }
 }

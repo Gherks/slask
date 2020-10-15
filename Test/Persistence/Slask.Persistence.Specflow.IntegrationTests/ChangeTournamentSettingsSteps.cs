@@ -5,15 +5,15 @@ using Slask.Domain.Rounds;
 using Slask.Domain.Utilities;
 using Slask.Persistence.Repositories;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests;
-using Slask.TestCore;
 using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 
 namespace Slask.Persistence.Specflow.IntegrationTests
 {
     [Binding, Scope(Feature = "ChangeTournamentSettings")]
-    public class ChangeTournamentSettings : SpecflowCoreSteps
+    public sealed class ChangeTournamentSettings : SpecflowCoreSteps
     {
         private readonly Dictionary<Guid, DateTime> oldMatchStartTimes;
 
@@ -70,15 +70,13 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
-                foreach (TableRow row in table.Rows)
+                foreach (MatchBestOfSelection selection in table.CreateSet<MatchBestOfSelection>())
                 {
-                    ParseMatchBestOfSelection(row, out int roundIndex, out int groupIndex, out int matchIndex, out int bestOf);
+                    RoundBase roundBase = tournament.Rounds[selection.RoundIndex];
+                    GroupBase groupBase = roundBase.Groups[selection.GroupIndex];
+                    Match match = groupBase.Matches[selection.MatchIndex];
 
-                    RoundBase roundBase = tournament.Rounds[roundIndex];
-                    GroupBase groupBase = roundBase.Groups[groupIndex];
-                    Match match = groupBase.Matches[matchIndex];
-
-                    tournamentRepository.SetBestOfInMatch(match, bestOf);
+                    tournamentRepository.SetBestOfInMatch(match, selection.BestOf);
                 }
 
                 tournamentRepository.Save();
@@ -94,16 +92,14 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
-                foreach (TableRow row in table.Rows)
+                foreach (PlayerMatchLayout playerMatchLayout in table.CreateSet<PlayerMatchLayout>())
                 {
-                    ParseTableLayoutRow(row, out int roundIndex, out int groupIndex, out int matchIndex, out int playerIndex, out string playerName);
+                    RoundBase roundBase = tournament.Rounds[playerMatchLayout.RoundIndex];
+                    GroupBase groupBase = roundBase.Groups[playerMatchLayout.GroupIndex];
+                    Match match = groupBase.Matches[playerMatchLayout.MatchIndex];
+                    Player player = playerMatchLayout.PlayerIndex == 0 ? match.Player1 : match.Player2;
 
-                    RoundBase roundBase = tournament.Rounds[roundIndex];
-                    GroupBase groupBase = roundBase.Groups[groupIndex];
-                    Match match = groupBase.Matches[matchIndex];
-                    Player player = playerIndex == 0 ? match.Player1 : match.Player2;
-
-                    player.GetName().Should().Be(playerName);
+                    player.GetName().Should().Be(playerMatchLayout.PlayerName);
                 }
             }
         }
@@ -117,13 +113,11 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
-                foreach (TableRow row in table.Rows)
+                foreach (MatchBestOfSelection selection in table.CreateSet<MatchBestOfSelection>())
                 {
-                    ParseMatchBestOfSelection(row, out int roundIndex, out int groupIndex, out int matchIndex, out int _);
-
-                    RoundBase roundBase = tournament.Rounds[roundIndex];
-                    GroupBase groupBase = roundBase.Groups[groupIndex];
-                    Match match = groupBase.Matches[matchIndex];
+                    RoundBase roundBase = tournament.Rounds[selection.RoundIndex];
+                    GroupBase groupBase = roundBase.Groups[selection.GroupIndex];
+                    Match match = groupBase.Matches[selection.MatchIndex];
 
                     oldMatchStartTimes[match.Id] = match.StartDateTime;
 
@@ -141,26 +135,17 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
-                foreach (TableRow row in table.Rows)
+                foreach (PlayerSwitch playerSwitch in table.CreateSet<PlayerSwitch>())
                 {
-                    ParsePlayerSwitch(row,
-                        out int roundIndex,
-                        out int groupIndex1,
-                        out int matchIndex1,
-                        out string playerName1,
-                        out int groupIndex2,
-                        out int matchIndex2,
-                        out string playerName2);
+                    RoundBase roundBase = tournament.Rounds[playerSwitch.RoundIndex];
 
-                    RoundBase roundBase = tournament.Rounds[roundIndex];
+                    GroupBase groupBase1 = roundBase.Groups[playerSwitch.GroupIndex1];
+                    Match match1 = groupBase1.Matches[playerSwitch.MatchIndex1];
+                    Player player1 = match1.FindPlayer(playerSwitch.PlayerName1);
 
-                    GroupBase groupBase1 = roundBase.Groups[groupIndex1];
-                    Match match1 = groupBase1.Matches[matchIndex1];
-                    Player player1 = match1.FindPlayer(playerName1);
-
-                    GroupBase groupBase2 = roundBase.Groups[groupIndex2];
-                    Match match2 = groupBase2.Matches[matchIndex2];
-                    Player player2 = match2.FindPlayer(playerName2);
+                    GroupBase groupBase2 = roundBase.Groups[playerSwitch.GroupIndex2];
+                    Match match2 = groupBase2.Matches[playerSwitch.MatchIndex2];
+                    Player player2 = match2.FindPlayer(playerSwitch.PlayerName2);
 
                     tournamentRepository.SwitchPlayersInMatches(player1, player2);
                 }
@@ -176,14 +161,12 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
-                foreach (TableRow row in table.Rows)
+                foreach (TieSolving tieSolving in table.CreateSet<TieSolving>())
                 {
-                    ParseTieSolvingRow(row, out int roundIndex, out int groupIndex, out string playerName);
+                    RoundBase roundBase = tournament.Rounds[tieSolving.RoundIndex];
+                    GroupBase groupBase = roundBase.Groups[tieSolving.GroupIndex];
 
-                    RoundBase roundBase = tournament.Rounds[roundIndex];
-                    GroupBase groupBase = roundBase.Groups[groupIndex];
-
-                    PlayerReference playerReference = tournament.GetPlayerReferenceByName(playerName);
+                    PlayerReference playerReference = tournament.GetPlayerReferenceByName(tieSolving.PlayerName);
 
                     tournamentRepository.SolveTieByChoosingPlayerInGroup(groupBase, playerReference);
                 }
@@ -199,15 +182,13 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
-                foreach (TableRow row in table.Rows)
+                foreach (MatchBestOfSelection selection in table.CreateSet<MatchBestOfSelection>())
                 {
-                    ParseMatchBestOfSelection(row, out int roundIndex, out int groupIndex, out int matchIndex, out int bestOf);
+                    RoundBase roundBase = tournament.Rounds[selection.RoundIndex];
+                    GroupBase groupBase = roundBase.Groups[selection.GroupIndex];
+                    Match match = groupBase.Matches[selection.MatchIndex];
 
-                    RoundBase roundBase = tournament.Rounds[roundIndex];
-                    GroupBase groupBase = roundBase.Groups[groupIndex];
-                    Match match = groupBase.Matches[matchIndex];
-
-                    match.BestOf.Should().Be(bestOf);
+                    match.BestOf.Should().Be(selection.BestOf);
                 }
             }
         }
@@ -223,15 +204,14 @@ namespace Slask.Persistence.Specflow.IntegrationTests
 
                 for (int rowIndex = 0; rowIndex < table.Rows.Count; ++rowIndex)
                 {
-                    TableRow row = table.Rows[rowIndex];
+                    RoundSettings roundSettings = table.Rows[rowIndex].CreateInstance<RoundSettings>();
+
                     RoundBase round = tournament.Rounds[rowIndex];
 
-                    TestUtilities.ParseRoundTable(row, out ContestTypeEnum contestType, out string name, out int advancingCount, out int playersPerGroupCount);
-
-                    round.ContestType.Should().Be(contestType);
-                    round.Name.Should().Be(name);
-                    round.AdvancingPerGroupCount.Should().Be(advancingCount);
-                    round.PlayersPerGroupCount.Should().Be(playersPerGroupCount);
+                    round.ContestType.Should().Be(roundSettings.ContestType);
+                    round.Name.Should().Be(roundSettings.RoundName);
+                    round.AdvancingPerGroupCount.Should().Be(roundSettings.AdvancingPerGroupCount);
+                    round.PlayersPerGroupCount.Should().Be(roundSettings.PlayersPerGroupCount);
                 }
             }
         }
@@ -243,13 +223,11 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
-                foreach (TableRow row in table.Rows)
+                foreach (MatchBestOfSelection selection in table.CreateSet<MatchBestOfSelection>())
                 {
-                    ParseMatchBestOfSelection(row, out int roundIndex, out int groupIndex, out int matchIndex, out int _);
-
-                    RoundBase roundBase = tournament.Rounds[roundIndex];
-                    GroupBase groupBase = roundBase.Groups[groupIndex];
-                    Match match = groupBase.Matches[matchIndex];
+                    RoundBase roundBase = tournament.Rounds[selection.RoundIndex];
+                    GroupBase groupBase = roundBase.Groups[selection.GroupIndex];
+                    Match match = groupBase.Matches[selection.MatchIndex];
 
                     DateTime oldStartDateTime = oldMatchStartTimes[match.Id];
                     match.StartDateTime.Should().BeCloseTo(oldStartDateTime.AddHours(3));
@@ -257,134 +235,47 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             }
         }
 
-        private void ParseMatchBestOfSelection(TableRow row, out int roundIndex, out int groupIndex, out int matchIndex, out int bestOf)
+        private sealed class RoundSettings
         {
-            roundIndex = -1;
-            groupIndex = -1;
-            matchIndex = -1;
-            bestOf = -1;
-
-            if (row.ContainsKey("Round index"))
-            {
-                int.TryParse(row["Round index"], out roundIndex);
-            }
-
-            if (row.ContainsKey("Group index"))
-            {
-                int.TryParse(row["Group index"], out groupIndex);
-            }
-
-            if (row.ContainsKey("Match index"))
-            {
-                int.TryParse(row["Match index"], out matchIndex);
-            }
-
-            if (row.ContainsKey("Best of"))
-            {
-                int.TryParse(row["Best of"], out bestOf);
-            }
+            public ContestTypeEnum ContestType { get; set; }
+            public string RoundName { get; set; }
+            public int AdvancingPerGroupCount { get; set; }
+            public int PlayersPerGroupCount { get; set; }
         }
 
-        private void ParseTableLayoutRow(TableRow row, out int roundIndex, out int groupIndex, out int matchIndex, out int playerIndex, out string playerName)
+        private sealed class MatchBestOfSelection
         {
-            roundIndex = -1;
-            groupIndex = -1;
-            matchIndex = -1;
-            playerIndex = -1;
-            playerName = "";
-
-            if (row.ContainsKey("Round index"))
-            {
-                int.TryParse(row["Round index"], out roundIndex);
-            }
-
-            if (row.ContainsKey("Group index"))
-            {
-                int.TryParse(row["Group index"], out groupIndex);
-            }
-
-            if (row.ContainsKey("Match index"))
-            {
-                int.TryParse(row["Match index"], out matchIndex);
-            }
-
-            if (row.ContainsKey("Player index"))
-            {
-                int.TryParse(row["Player index"], out playerIndex);
-            }
-
-            if (row.ContainsKey("Player name"))
-            {
-                playerName = row["Player name"];
-            }
+            public int RoundIndex { get; set; }
+            public int GroupIndex { get; set; }
+            public int MatchIndex { get; set; }
+            public int BestOf { get; set; }
         }
 
-        private void ParsePlayerSwitch(TableRow row, out int roundIndex, out int groupIndex1, out int matchIndex1, out string playerName1, out int groupIndex2, out int matchIndex2, out string playerName2)
+        private sealed class PlayerMatchLayout
         {
-            roundIndex = -1;
-            groupIndex1 = -1;
-            matchIndex1 = -1;
-            playerName1 = "";
-            groupIndex2 = -1;
-            matchIndex2 = -1;
-            playerName2 = "";
-
-            if (row.ContainsKey("Round index"))
-            {
-                int.TryParse(row["Round index"], out roundIndex);
-            }
-
-            if (row.ContainsKey("Group index 1"))
-            {
-                int.TryParse(row["Group index 1"], out groupIndex1);
-            }
-
-            if (row.ContainsKey("Match index 1"))
-            {
-                int.TryParse(row["Match index 1"], out matchIndex1);
-            }
-
-            if (row.ContainsKey("Player name 1"))
-            {
-                playerName1 = row["Player name 1"];
-            }
-
-            if (row.ContainsKey("Group index 2"))
-            {
-                int.TryParse(row["Group index 2"], out groupIndex2);
-            }
-
-            if (row.ContainsKey("Match index 2"))
-            {
-                int.TryParse(row["Match index 2"], out matchIndex2);
-            }
-
-            if (row.ContainsKey("Player name 2"))
-            {
-                playerName2 = row["Player name 2"];
-            }
+            public int RoundIndex { get; set; }
+            public int GroupIndex { get; set; }
+            public int MatchIndex { get; set; }
+            public int PlayerIndex { get; set; }
+            public string PlayerName { get; set; }
         }
 
-        private void ParseTieSolvingRow(TableRow row, out int roundIndex, out int groupIndex, out string playerName)
+        private sealed class PlayerSwitch
         {
-            roundIndex = -1;
-            groupIndex = -1;
-            playerName = "";
+            public int RoundIndex { get; set; }
+            public int GroupIndex1 { get; set; }
+            public int MatchIndex1 { get; set; }
+            public string PlayerName1 { get; set; }
+            public int GroupIndex2 { get; set; }
+            public int MatchIndex2 { get; set; }
+            public string PlayerName2 { get; set; }
+        }
 
-            if (row.ContainsKey("Round index"))
-            {
-                int.TryParse(row["Round index"], out roundIndex);
-            }
-
-            if (row.ContainsKey("Group index"))
-            {
-                int.TryParse(row["Group index"], out groupIndex);
-            }
-
-            if (row.ContainsKey("Player name"))
-            {
-                playerName = row["Player name"];
-            }
+        private sealed class TieSolving
+        {
+            public int RoundIndex { get; set; }
+            public int GroupIndex { get; set; }
+            public string PlayerName { get; set; }
         }
     }
 }

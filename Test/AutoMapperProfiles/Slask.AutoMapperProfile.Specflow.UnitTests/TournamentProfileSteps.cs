@@ -7,26 +7,26 @@ using Slask.Domain.Utilities;
 using Slask.Dto;
 using Slask.Persistence.Repositories;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests;
-using Slask.TestCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 
 namespace Slask.AutoMapperProfile.Specflow.UnitTests
 {
     [Binding, Scope(Feature = "TournamentProfile")]
-    public class TournamentProfileSteps : SpecflowCoreSteps
+    public sealed class TournamentProfileSteps : SpecflowCoreSteps
     {
-        private const int acceptableInaccuracy = 10000;
-        private readonly DateTime tournamentCreated;
+        private const int _acceptableInaccuracy = 10000;
+        private readonly DateTime _tournamentCreated;
 
         private readonly IMapper _mapper;
         private readonly List<TournamentDto> _tournamentDtos;
 
         public TournamentProfileSteps()
         {
-            tournamentCreated = SystemTime.Now;
+            _tournamentCreated = SystemTime.Now;
 
             MapperConfiguration mapperConfiguration = new MapperConfiguration(config =>
             {
@@ -54,7 +54,7 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
 
             tournamentDto.Id.Should().NotBeEmpty();
             tournamentDto.Name.Should().NotBeNullOrEmpty();
-            tournamentDto.Created.Should().BeCloseTo(tournamentCreated, acceptableInaccuracy);
+            tournamentDto.Created.Should().BeCloseTo(_tournamentCreated, _acceptableInaccuracy);
         }
 
         [Then(@"automapped tournament DTO named ""(.*)"" should contain betters ""(.*)""")]
@@ -81,13 +81,13 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
-                ParseTournamentDtoRound(table.Rows[index], out ContestTypeEnum contestType, out string roundName);
+                TournamentDtoRoundLayout layout = table.Rows[index].CreateInstance<TournamentDtoRoundLayout>();
 
                 RoundDto roundDto = tournamentDto.Rounds[index];
 
                 roundDto.Id.Should().NotBeEmpty();
-                roundDto.ContestType.Should().Be(contestType.ToString());
-                roundDto.Name.Should().Be(roundName);
+                roundDto.ContestType.Should().Be(layout.ContestType.ToString());
+                roundDto.Name.Should().Be(layout.RoundName);
             }
         }
 
@@ -96,17 +96,15 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
         {
             TournamentDto tournamentDto = _tournamentDtos.FirstOrDefault(tournamentDto => tournamentDto.Name == tournamentName);
 
-            foreach (TableRow row in table.Rows)
+            foreach (TournamentDtoGroupLayout layout in table.CreateSet<TournamentDtoGroupLayout>())
             {
-                ParseTournamentDtoGroup(row, out int roundIndex, out int groupIndex, out ContestTypeEnum contestType, out int sortOrder, out string groupName);
-
-                RoundDto roundDto = tournamentDto.Rounds[roundIndex];
-                GroupDto groupDto = roundDto.Groups[groupIndex];
+                RoundDto roundDto = tournamentDto.Rounds[layout.RoundIndex];
+                GroupDto groupDto = roundDto.Groups[layout.GroupIndex];
 
                 groupDto.Id.Should().NotBeEmpty();
-                groupDto.ContestType.Should().Be(contestType.ToString());
-                groupDto.SortOrder.Should().Be(sortOrder);
-                groupDto.Name.Should().Be(groupName);
+                groupDto.ContestType.Should().Be(layout.ContestType.ToString());
+                groupDto.SortOrder.Should().Be(layout.SortOrder);
+                groupDto.Name.Should().Be(layout.GroupName);
             }
         }
 
@@ -115,22 +113,20 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
         {
             TournamentDto tournamentDto = _tournamentDtos.FirstOrDefault(tournamentDto => tournamentDto.Name == tournamentName);
 
-            foreach (TableRow row in table.Rows)
+            foreach (TournamentMatchLayout tournamentMatchLayout in table.CreateSet<TournamentMatchLayout>())
             {
-                ParseTournamentDtoMatch(row, out int roundIndex, out int groupIndex, out int matchIndex, out int sortOrder, out int bestOf, out string player1Name, out int player1Score, out string player2Name, out int player2Score);
-
-                RoundDto roundDto = tournamentDto.Rounds[roundIndex];
-                GroupDto groupDto = roundDto.Groups[groupIndex];
-                MatchDto matchDto = groupDto.Matches[matchIndex];
+                RoundDto roundDto = tournamentDto.Rounds[tournamentMatchLayout.RoundIndex];
+                GroupDto groupDto = roundDto.Groups[tournamentMatchLayout.GroupIndex];
+                MatchDto matchDto = groupDto.Matches[tournamentMatchLayout.MatchIndex];
 
                 matchDto.Id.Should().NotBeEmpty();
-                matchDto.SortOrder.Should().Be(sortOrder);
-                matchDto.BestOf.Should().Be(bestOf);
+                matchDto.SortOrder.Should().Be(tournamentMatchLayout.SortOrder);
+                matchDto.BestOf.Should().Be(tournamentMatchLayout.BestOf);
                 matchDto.StartDateTime.Should().BeBefore(SystemTime.Now);
-                matchDto.Player1.Name.Should().Be(player1Name);
-                matchDto.Player1.Score.Should().Be(player1Score);
-                matchDto.Player2.Name.Should().Be(player2Name);
-                matchDto.Player2.Score.Should().Be(player2Score);
+                matchDto.Player1.Name.Should().Be(tournamentMatchLayout.Player1Name);
+                matchDto.Player1.Score.Should().Be(tournamentMatchLayout.Player1Score);
+                matchDto.Player2.Name.Should().Be(tournamentMatchLayout.Player2Name);
+                matchDto.Player2.Score.Should().Be(tournamentMatchLayout.Player2Score);
             }
         }
 
@@ -143,14 +139,14 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
-                ParseTournamentDtoIssue(table.Rows[index], out int roundIndex, out int groupIndex, out int matchIndex, out string description);
+                TournamentIssueDto soughtTournamentIssueDto = table.Rows[index].CreateInstance<TournamentIssueDto>();
 
                 TournamentIssueDto tournamentIssueDto = tournamentDto.Issues[index];
 
-                tournamentIssueDto.Round.Should().Be(roundIndex);
-                tournamentIssueDto.Group.Should().Be(groupIndex);
-                tournamentIssueDto.Match.Should().Be(matchIndex);
-                tournamentIssueDto.Description.Should().Be(description);
+                tournamentIssueDto.Round.Should().Be(soughtTournamentIssueDto.Round);
+                tournamentIssueDto.Group.Should().Be(soughtTournamentIssueDto.Group);
+                tournamentIssueDto.Match.Should().Be(soughtTournamentIssueDto.Match);
+                tournamentIssueDto.Description.Should().Be(soughtTournamentIssueDto.Description);
             }
         }
 
@@ -169,170 +165,16 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
 
             tournamentDto.Betters.Should().HaveCount(table.Rows.Count);
 
-            foreach (TableRow row in table.Rows)
+            foreach (BetterStanding betterStanding in table.CreateSet<BetterStanding>())
             {
-                ParseTournamentDtoBetter(row, out string betterName, out int points);
-
-                BetterDto betterDto = tournamentDto.Betters.FirstOrDefault(betterDto => betterDto.Name == betterName);
+                BetterDto betterDto = tournamentDto.Betters.FirstOrDefault(betterDto => betterDto.Name == betterStanding.BetterName);
 
                 int betterPoints = CalculateBetterPoints(tournamentDto, betterDto.MatchBets);
 
                 betterDto.Id.Should().NotBeEmpty();
                 betterDto.UserId.Should().NotBeEmpty();
-                betterDto.Name.Should().Be(betterName);
-                betterPoints.Should().Be(points);
-            }
-        }
-
-        private void ParseTournamentDtoRound(TableRow row, out ContestTypeEnum contestType, out string roundName)
-        {
-            contestType = ContestTypeEnum.None;
-            roundName = "";
-
-            if (row.ContainsKey("Contest type"))
-            {
-                contestType = TestUtilities.ParseContestTypeString(row["Contest type"]);
-            }
-
-            if (row.ContainsKey("Round name"))
-            {
-                roundName = row["Round name"];
-            }
-        }
-
-        private void ParseTournamentDtoGroup(TableRow row, out int roundIndex, out int groupIndex, out ContestTypeEnum contestType, out int sortOrder, out string groupName)
-        {
-            roundIndex = -1;
-            groupIndex = -1;
-            contestType = ContestTypeEnum.None;
-            sortOrder = -1;
-            groupName = "";
-
-            if (row.ContainsKey("Round index"))
-            {
-                int.TryParse(row["Round index"], out roundIndex);
-            }
-
-            if (row.ContainsKey("Group index"))
-            {
-                int.TryParse(row["Group index"], out groupIndex);
-            }
-
-            if (row.ContainsKey("Contest type"))
-            {
-                contestType = TestUtilities.ParseContestTypeString(row["Contest type"]);
-            }
-
-            if (row.ContainsKey("Sort order"))
-            {
-                int.TryParse(row["Sort order"], out sortOrder);
-            }
-
-            if (row.ContainsKey("Group name"))
-            {
-                groupName = row["Group name"];
-            }
-        }
-
-        private void ParseTournamentDtoMatch(TableRow row, out int roundIndex, out int groupIndex, out int matchIndex, out int sortOrder, out int bestOf, out string player1Name, out int player1Score, out string player2Name, out int player2Score)
-        {
-            roundIndex = -1;
-            groupIndex = -1;
-            matchIndex = -1;
-            sortOrder = -1;
-            bestOf = -1;
-            player1Name = "";
-            player1Score = -1;
-            player2Name = "";
-            player2Score = -1;
-
-            if (row.ContainsKey("Round index"))
-            {
-                int.TryParse(row["Round index"], out roundIndex);
-            }
-
-            if (row.ContainsKey("Group index"))
-            {
-                int.TryParse(row["Group index"], out groupIndex);
-            }
-
-            if (row.ContainsKey("Match index"))
-            {
-                int.TryParse(row["Match index"], out matchIndex);
-            }
-
-            if (row.ContainsKey("Sort order"))
-            {
-                int.TryParse(row["Sort order"], out sortOrder);
-            }
-
-            if (row.ContainsKey("Best of"))
-            {
-                int.TryParse(row["Best of"], out bestOf);
-            }
-
-            if (row.ContainsKey("Player1 name"))
-            {
-                player1Name = row["Player1 name"];
-            }
-
-            if (row.ContainsKey("Player1 score"))
-            {
-                int.TryParse(row["Player1 score"], out player1Score);
-            }
-
-            if (row.ContainsKey("Player2 name"))
-            {
-                player2Name = row["Player2 name"];
-            }
-
-            if (row.ContainsKey("Player2 score"))
-            {
-                int.TryParse(row["Player2 score"], out player2Score);
-            }
-        }
-
-        private void ParseTournamentDtoIssue(TableRow row, out int roundIndex, out int groupIndex, out int matchIndex, out string description)
-        {
-            roundIndex = -1;
-            groupIndex = -1;
-            matchIndex = -1;
-            description = "";
-
-            if (row.ContainsKey("Round index"))
-            {
-                int.TryParse(row["Round index"], out roundIndex);
-            }
-
-            if (row.ContainsKey("Group index"))
-            {
-                int.TryParse(row["Group index"], out groupIndex);
-            }
-
-            if (row.ContainsKey("Match index"))
-            {
-                int.TryParse(row["Match index"], out matchIndex);
-            }
-
-            if (row.ContainsKey("Description"))
-            {
-                description = row["Description"];
-            }
-        }
-
-        private void ParseTournamentDtoBetter(TableRow row, out string betterName, out int points)
-        {
-            betterName = "";
-            points = -1;
-
-            if (row.ContainsKey("Better name"))
-            {
-                betterName = row["Better name"];
-            }
-
-            if (row.ContainsKey("Points"))
-            {
-                int.TryParse(row["Points"], out points);
+                betterDto.Name.Should().Be(betterStanding.BetterName);
+                betterPoints.Should().Be(betterStanding.Points);
             }
         }
 
@@ -387,6 +229,40 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
             }
 
             return points;
+        }
+
+        private sealed class TournamentDtoRoundLayout
+        {
+            public ContestTypeEnum ContestType { get; set; }
+            public string RoundName { get; set; }
+        }
+
+        private sealed class TournamentDtoGroupLayout
+        {
+            public int RoundIndex { get; set; }
+            public int GroupIndex { get; set; }
+            public ContestTypeEnum ContestType { get; set; }
+            public int SortOrder { get; set; }
+            public string GroupName { get; set; }
+        }
+
+        private sealed class TournamentMatchLayout
+        {
+            public int RoundIndex { get; set; }
+            public int GroupIndex { get; set; }
+            public int MatchIndex { get; set; }
+            public int SortOrder { get; set; }
+            public int BestOf { get; set; }
+            public string Player1Name { get; set; }
+            public int Player1Score { get; set; }
+            public string Player2Name { get; set; }
+            public int Player2Score { get; set; }
+        }
+
+        private sealed class BetterStanding
+        {
+            public string BetterName { get; set; }
+            public int Points { get; set; }
         }
     }
 }

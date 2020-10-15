@@ -3,11 +3,11 @@ using Slask.Common;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Utilities;
-using Slask.TestCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 
 namespace Slask.Domain.SpecFlow.IntegrationTests
 {
@@ -66,23 +66,21 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
 
             Tournament tournament = createdTournaments[tournamentIndex];
 
-            foreach (TableRow row in table.Rows)
+            foreach (RoundSettings roundSettings in table.CreateSet<RoundSettings>())
             {
-                TestUtilities.ParseRoundTable(row, out ContestTypeEnum contestType, out string name, out int advancingCount, out int playersPerGroupCount);
-
-                if (contestType != ContestTypeEnum.None)
+                if (roundSettings.ContestType != ContestTypeEnum.None)
                 {
                     RoundBase round = null;
 
-                    if (contestType == ContestTypeEnum.Bracket)
+                    if (roundSettings.ContestType == ContestTypeEnum.Bracket)
                     {
                         round = tournament.AddBracketRound();
                     }
-                    else if (contestType == ContestTypeEnum.DualTournament)
+                    else if (roundSettings.ContestType == ContestTypeEnum.DualTournament)
                     {
                         round = tournament.AddDualTournamentRound();
                     }
-                    else if (contestType == ContestTypeEnum.RoundRobin)
+                    else if (roundSettings.ContestType == ContestTypeEnum.RoundRobin)
                     {
                         round = tournament.AddRoundRobinRound();
                     }
@@ -92,9 +90,13 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
                         return;
                     }
 
-                    round.RenameTo(name);
-                    round.SetAdvancingPerGroupCount(advancingCount);
-                    round.SetPlayersPerGroupCount(playersPerGroupCount);
+                    if (roundSettings.RoundName != null)
+                    {
+                        round.RenameTo(roundSettings.RoundName);
+                    }
+
+                    round.SetAdvancingPerGroupCount(roundSettings.AdvancingPerGroupCount);
+                    round.SetPlayersPerGroupCount(roundSettings.PlayersPerGroupCount);
 
                     createdRounds.Add(round);
 
@@ -164,9 +166,11 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
                 throw new ArgumentNullException(nameof(table));
             }
 
-            foreach (TableRow row in table.Rows)
+            foreach (TargetGroupToPlay targetGroupToPlay in table.CreateSet<TargetGroupToPlay>())
             {
-                TestUtilities.ParseTargetGroupToPlay(row, out int tournamentIndex, out int roundIndex, out int groupIndex);
+                int tournamentIndex = targetGroupToPlay.TournamentIndex;
+                int roundIndex = targetGroupToPlay.RoundIndex;
+                int groupIndex = targetGroupToPlay.GroupIndex;
 
                 bool tournamentIndexIsValid = createdTournaments.Count > tournamentIndex;
                 bool roundIndexIsValid = createdTournaments[tournamentIndex].Rounds.Count > roundIndex;
@@ -212,9 +216,11 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
                 throw new ArgumentNullException(nameof(table));
             }
 
-            foreach (TableRow row in table.Rows)
+            foreach (TargetGroupToPlay targetGroupToPlay in table.CreateSet<TargetGroupToPlay>())
             {
-                TestUtilities.ParseTargetGroupToPlay(row, out int tournamentIndex, out int roundIndex, out int groupIndex);
+                int tournamentIndex = targetGroupToPlay.TournamentIndex;
+                int roundIndex = targetGroupToPlay.RoundIndex;
+                int groupIndex = targetGroupToPlay.GroupIndex;
 
                 bool tournamentIndexIsValid = createdTournaments.Count > tournamentIndex;
                 bool roundIndexIsValid = createdTournaments[tournamentIndex].Rounds.Count > roundIndex;
@@ -302,7 +308,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
         {
             Tournament tournament = createdTournaments[tournamentIndex];
 
-            PlayStateEnum playState = ParsePlayStateString(playStateString);
+            Enum.TryParse(playStateString, out PlayStateEnum playState);
 
             tournament.GetPlayState().Should().Be(playState);
         }
@@ -341,26 +347,6 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
             return true;
         }
 
-        protected PlayStateEnum ParsePlayStateString(string playStateString)
-        {
-            playStateString = StringUtility.ToUpperNoSpaces(playStateString);
-
-            if (playStateString.Contains("NOTBEGUN", StringComparison.CurrentCulture))
-            {
-                return PlayStateEnum.NotBegun;
-            }
-            else if (playStateString.Contains("ONGOING", StringComparison.CurrentCulture))
-            {
-                return PlayStateEnum.Ongoing;
-            }
-            else if (playStateString.Contains("FINISHED", StringComparison.CurrentCulture))
-            {
-                return PlayStateEnum.Finished;
-            }
-
-            throw new NotImplementedException();
-        }
-
         private void PlaceBetsOnAvailableMatchesInGroup(List<Better> betters, GroupBase group)
         {
             Random random = new Random(133742069);
@@ -390,6 +376,21 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
 
                 matchCounter++;
             }
+        }
+
+        private sealed class RoundSettings
+        {
+            public ContestTypeEnum ContestType { get; set; }
+            public string RoundName { get; set; }
+            public int AdvancingPerGroupCount { get; set; }
+            public int PlayersPerGroupCount { get; set; }
+        }
+
+        private sealed class TargetGroupToPlay
+        {
+            public int TournamentIndex { get; set; }
+            public int RoundIndex { get; set; }
+            public int GroupIndex { get; set; }
         }
     }
 }

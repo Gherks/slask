@@ -5,9 +5,9 @@
 Scenario: Can fetch correct better standings from tournament
 	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito, Kimmieboi" added to it
 		And tournament 0 adds rounds
-			| Round type | Advancing per group count | Players per group count |
-			| Bracket    | 1                         | 4                       |
-			| Bracket    | 1                         | 2                       |
+			| Contest type | Advancing per group count | Players per group count |
+			| Bracket      | 1                         | 4                       |
+			| Bracket      | 1                         | 2                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 		And betters places match bets
 			| Better name | Round index | Group index | Match index | Player name |

@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
-using Slask.Common;
 using Slask.Domain.SpecFlow.IntegrationTests.GroupTests;
 using System;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 
 namespace Slask.Domain.SpecFlow.IntegrationTests.UtilityTests
 {
@@ -30,25 +30,24 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.UtilityTests
 
             for (int index = 0; index < table.Rows.Count; ++index)
             {
-                ParseTournamentIssueTable(table.Rows[index], out string type);
+                TournamentIssueType tournamentIssueType = table.Rows[index].CreateInstance<TournamentIssueType>();
+                string typeName = tournamentIssueType.IssueType;
 
-                if (type.Length > 0)
+                if (typeName.Length > 0)
                 {
-                    type = GetIssueType(type);
-
-                    if (type == "TOURNAMENT")
+                    if (typeName.ToUpper() == "TOURNAMENT")
                     {
                         tournament.TournamentIssueReporter.Issues[index].IsTournamentIssue().Should().BeTrue();
                     }
-                    else if (type == "ROUND")
+                    else if (typeName.ToUpper() == "ROUND")
                     {
                         tournament.TournamentIssueReporter.Issues[index].IsRoundIssue().Should().BeTrue();
                     }
-                    else if (type == "GROUP")
+                    else if (typeName.ToUpper() == "GROUP")
                     {
                         tournament.TournamentIssueReporter.Issues[index].IsGroupIssue().Should().BeTrue();
                     }
-                    else if (type == "MATCH")
+                    else if (typeName.ToUpper() == "MATCH")
                     {
                         tournament.TournamentIssueReporter.Issues[index].IsMatchIssue().Should().BeTrue();
                     }
@@ -56,38 +55,9 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.UtilityTests
             }
         }
 
-        protected static void ParseTournamentIssueTable(TableRow row, out string typeName)
+        private sealed class TournamentIssueType
         {
-            typeName = "";
-
-            if (row.ContainsKey("Issue type"))
-            {
-                typeName = row["Issue type"];
-            }
-        }
-
-        protected static string GetIssueType(string type)
-        {
-            type = StringUtility.ToUpperNoSpaces(type);
-
-            if (type.Contains("TOURNAMENT", StringComparison.CurrentCulture))
-            {
-                return "TOURNAMENT";
-            }
-            else if (type.Contains("ROUND", StringComparison.CurrentCulture))
-            {
-                return "ROUND";
-            }
-            else if (type.Contains("GROUP", StringComparison.CurrentCulture))
-            {
-                return "GROUP";
-            }
-            else if (type.Contains("MATCH", StringComparison.CurrentCulture))
-            {
-                return "MATCH";
-            }
-
-            return "";
+            public string IssueType { get; set; }
         }
     }
 }

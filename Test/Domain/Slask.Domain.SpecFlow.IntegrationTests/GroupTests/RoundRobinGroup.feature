@@ -1,27 +1,27 @@
 Feature: RoundRobinGroup
-	Does a bunch of tests on Round robin group
+	Does a bunch of tests on RoundRobin group
 
 @RoundRobinGroupTag
 Scenario: Adding group to round robin round creates round robin group
 	Given a tournament named "GSL 2019" has been created
 	When tournament 0 adds rounds
-		| Round type  | Advancing per group count | Players per group count |
-		| Round robin | 1                         | 6                       |
-	Then group 0 should be valid of type "Round robin"
+		| Contest type | Advancing per group count | Players per group count |
+		| RoundRobin   | 1                         | 6                       |
+	Then group 0 should be valid of type "RoundRobin"
 
 Scenario: Start time in matches in round robin groups is spaced with one hour upon creation
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type  | Advancing per group count | Players per group count |
-			| Round robin | 1                         | 8                       |
+			| Contest type | Advancing per group count | Players per group count |
+			| RoundRobin   | 1                         | 8                       |
 	When players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 	Then minutes between matches in group 0 should be 60
 
 Scenario: Creates proper round robin layout upon group creation
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type  | Advancing per group count | Players per group count |
-			| Round robin | 1                         | 4                       |
+			| Contest type | Advancing per group count | Players per group count |
+			| RoundRobin   | 1                         | 4                       |
 	When players "First, Second, Third, Fourth" is registered to tournament 0
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
@@ -32,12 +32,12 @@ Scenario: Creates proper round robin layout upon group creation
 		| 4           | First         | Second        |
 		| 5           | Fourth        | Third         |
 
-Scenario: Round robin progression with four players goes as expected
+Scenario: RoundRobin progression with four players goes as expected
 	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
 		And tournament 0 adds rounds
-			| Round type  | Advancing per group count | Players per group count |
-			| Round robin | 2                         | 4                       |
-			| Round robin | 1                         | 2                       |
+			| Contest type | Advancing per group count | Players per group count |
+			| RoundRobin   | 2                         | 4                       |
+			| RoundRobin   | 1                         | 2                       |
 		And players "First, Second, Third, Fourth" is registered to tournament 0
 	When groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
@@ -52,12 +52,12 @@ Scenario: Round robin progression with four players goes as expected
 			| 4           | First         | Second        |
 			| 5           | Fourth        | Third         |
 
-Scenario: Round robin progression with five players goes as expected
+Scenario: RoundRobin progression with five players goes as expected
 	Given a tournament named "GSL 2019" has been created with users "Stålberto, Bönis, Guggelito" added to it
 		And tournament 0 adds rounds
-			| Round type  | Advancing per group count | Players per group count |
-			| Round robin | 3                         | 5                       |
-			| Round robin | 1                         | 3                       |
+			| Contest type | Advancing per group count | Players per group count |
+			| RoundRobin   | 3                         | 5                       |
+			| RoundRobin   | 1                         | 3                       |
 	And players "First, Second, Third, Fourth, Fifth" is registered to tournament 0
 	When groups within tournament is played out and betted on
 		| Tournament index | Round index | Group index |
@@ -79,9 +79,9 @@ Scenario: Round robin progression with five players goes as expected
 Scenario: PlayState is set to Ongoing when group has finished with a problematic tie
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type  | Advancing per group count | Players per group count |
-			| Round robin | 1                         | 3                       |
-			| Round robin | 1                         | 2                       |
+			| Contest type | Advancing per group count | Players per group count |
+			| RoundRobin   | 1                         | 3                       |
+			| RoundRobin   | 1                         | 2                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |

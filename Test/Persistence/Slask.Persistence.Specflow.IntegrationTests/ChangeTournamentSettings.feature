@@ -5,11 +5,11 @@
 Scenario: Can only remove a round before tournament has started
 	Given a tournament named "Homestory Cup XX" has been created with users "" added to it
 		And tournament named "Homestory Cup XX" adds rounds
-			| Round type      | Round name   | Advancing per group count | Players per group count |
-			| Round robin     | Round Uno    | 4                         | 5                       |
-			| Round robin     | Round Dos    | 4                         | 4                       |
-			| Dual tournament | Round Tres   | 2                         | 4                       |
-			| Bracket         | Round Cuatro | 1                         | 4                       |
+			| Contest type   | Round name   | Advancing per group count | Players per group count |
+			| RoundRobin     | Round Uno    | 4                         | 5                       |
+			| RoundRobin     | Round Dos    | 4                         | 4                       |
+			| DualTournament | Round Tres   | 2                         | 4                       |
+			| Bracket        | Round Cuatro | 1                         | 4                       |
 		And round named "Round Dos" is removed from tournament named "Homestory Cup XX"
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure" is registered to tournament named "Homestory Cup XX"
 		And groups within tournament named "Homestory Cup XX" is played out
@@ -18,17 +18,17 @@ Scenario: Can only remove a round before tournament has started
 	When round named "Round Uno" is removed from tournament named "Homestory Cup XX"
 		And round named "Round Cuatro" is removed from tournament named "Homestory Cup XX"
 	Then round layout in tournament named "Homestory Cup XX" is exactly as follows:
-		| Round type      | Round name   | Advancing per group count | Players per group count |
-		| Round robin     | Round Uno    | 4                         | 5                       |
-		| Dual tournament | Round Tres   | 2                         | 4                       |
-		| Bracket         | Round Cuatro | 1                         | 4                       |
+		| Contest type   | Round name   | Advancing per group count | Players per group count |
+		| RoundRobin     | Round Uno    | 4                         | 5                       |
+		| DualTournament | Round Tres   | 2                         | 4                       |
+		| Bracket        | Round Cuatro | 1                         | 4                       |
 
 Scenario: Can only change advancing players per group count before tournament has started
 	Given a tournament named "Homestory Cup XX" has been created with users "" added to it
 		And tournament named "Homestory Cup XX" adds rounds
-			| Round type  | Round name | Advancing per group count | Players per group count |
-			| Round robin | Round Uno  | 4                         | 6                       |
-			| Bracket     | Round Dos  | 1                         | 8                       |
+			| Contest type | Round name | Advancing per group count | Players per group count |
+			| RoundRobin   | Round Uno  | 4                         | 6                       |
+			| Bracket      | Round Dos  | 1                         | 8                       |
 		And round named "Round Uno" changes advancing players per group count to "2" in tournament named "Homestory Cup XX"
 		And round named "Round Dos" changes players per group count to "4" in tournament named "Homestory Cup XX"
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure, Stats, Rogue" is registered to tournament named "Homestory Cup XX"
@@ -38,16 +38,16 @@ Scenario: Can only change advancing players per group count before tournament ha
 		And round named "Round Uno" changes advancing players per group count to "6" in tournament named "Homestory Cup XX"
 		And round named "Round Dos" changes players per group count to "8" in tournament named "Homestory Cup XX"
 	Then round layout in tournament named "Homestory Cup XX" is exactly as follows:
-		| Round type  | Round name | Advancing per group count | Players per group count |
-		| Round robin | Round Uno  | 2                         | 6                       |
-		| Bracket     | Round Dos  | 1                         | 4                       |
+		| Contest type | Round name | Advancing per group count | Players per group count |
+		| RoundRobin   | Round Uno  | 2                         | 6                       |
+		| Bracket      | Round Dos  | 1                         | 4                       |
 
 Scenario: Can only change players per group count before tournament has started
 	Given a tournament named "Homestory Cup XX" has been created with users "" added to it
 		And tournament named "Homestory Cup XX" adds rounds
-			| Round type  | Round name | Advancing per group count | Players per group count |
-			| Bracket     | Round Uno  | 1                         | 6                       |
-			| Round robin | Round Dos  | 1                         | 2                       |
+			| Contest type | Round name | Advancing per group count | Players per group count |
+			| Bracket      | Round Uno  | 1                         | 6                       |
+			| RoundRobin   | Round Dos  | 1                         | 2                       |
 		And round named "Round Uno" changes players per group count to "4" in tournament named "Homestory Cup XX"
 		And round named "Round Dos" changes players per group count to "3" in tournament named "Homestory Cup XX"
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure, Stats, Rogue" is registered to tournament named "Homestory Cup XX"
@@ -57,16 +57,16 @@ Scenario: Can only change players per group count before tournament has started
 		And round named "Round Uno" changes players per group count to "6" in tournament named "Homestory Cup XX"
 		And round named "Round Dos" changes players per group count to "2" in tournament named "Homestory Cup XX"
 	Then round layout in tournament named "Homestory Cup XX" is exactly as follows:
-		| Round type  | Round name | Advancing per group count | Players per group count |
-		| Bracket     | Round Uno  | 1                         | 4                       |
-		| Round robin | Round Dos  | 1                         | 3                       |
+		| Contest type | Round name | Advancing per group count | Players per group count |
+		| Bracket      | Round Uno  | 1                         | 4                       |
+		| RoundRobin   | Round Dos  | 1                         | 3                       |
 
 Scenario: Can change best of settings in a match that has not started
 	Given a tournament named "Homestory Cup XX" has been created with users "" added to it
 		And tournament named "Homestory Cup XX" adds rounds
-			| Round type  | Round name | Advancing per group count | Players per group count |
-			| Bracket     | Round Uno  | 1                         | 6                       |
-			| Round robin | Round Dos  | 1                         | 2                       |
+			| Contest type | Round name | Advancing per group count | Players per group count |
+			| Bracket      | Round Uno  | 1                         | 6                       |
+			| RoundRobin   | Round Dos  | 1                         | 2                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure, Stats, Rogue" is registered to tournament named "Homestory Cup XX"
 		And groups within tournament named "Homestory Cup XX" is played out
 			| Round index | Group index |
@@ -84,9 +84,9 @@ Scenario: Can change best of settings in a match that has not started
 Scenario: Can change start time on match in tournament before it has started
 	Given a tournament named "Homestory Cup XX" has been created with users "" added to it
 		And tournament named "Homestory Cup XX" adds rounds
-			| Round type  | Round name | Advancing per group count | Players per group count |
-			| Round robin | Round Uno  | 2                         | 12                      |
-			| Bracket     | Round Dos  | 1                         | 2                       |
+			| Contest type | Round name | Advancing per group count | Players per group count |
+			| RoundRobin   | Round Uno  | 2                         | 12                      |
+			| Bracket      | Round Dos  | 1                         | 2                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure, Stats, Rogue" is registered to tournament named "Homestory Cup XX"
 	When move start time three hours forward for matches in tournament named "Homestory Cup XX"
 		| Round index | Group index | Match index |
@@ -98,8 +98,8 @@ Scenario: Can change start time on match in tournament before it has started
 Scenario: Two different matches can switch player references with each other
 	Given a tournament named "Homestory Cup XX" has been created with users "" added to it
 		And tournament named "Homestory Cup XX" adds rounds
-			| Round type  | Advancing per group count | Players per group count |
-			| Bracket     | 1                         | 4                       |
+			| Contest type | Advancing per group count | Players per group count |
+			| Bracket      | 1                         | 4                       |
 		And players "Maru, Stork, Taeja, Rain" is registered to tournament named "Homestory Cup XX"
 		And player layout for matches in tournament named "Homestory Cup XX" looks like this
 			| Round index | Group index | Match index | Player index | Player name |
@@ -120,12 +120,12 @@ Scenario: Two different matches can switch player references with each other
 Scenario: Can solve a tie with tournament repository
 	Given a tournament named "Homestory Cup XX" has been created with users "" added to it
 		And tournament named "Homestory Cup XX" adds rounds
-			| Round type  | Advancing per group count | Players per group count |
-			| Round robin | 2                         | 3                       |
-			| Bracket     | 1                         | 2                       |
+			| Contest type | Advancing per group count | Players per group count |
+			| RoundRobin   | 2                         | 3                       |
+			| Bracket      | 1                         | 2                       |
 		And players "Maru, Stork, Taeja" is registered to tournament named "Homestory Cup XX"
 		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
-			| Round index | Group index | Match index | Scoring player | Added score |
+			| Round index | Group index | Match index | Scoring player | Score Added |
 			| 0           | 0           | 0           | Maru           | 2           |
 			| 0           | 0           | 1           | Taeja          | 2           |
 			| 0           | 0           | 2           | Stork          | 2           |

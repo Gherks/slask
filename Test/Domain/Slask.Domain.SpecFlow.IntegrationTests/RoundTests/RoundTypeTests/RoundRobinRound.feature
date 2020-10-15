@@ -5,8 +5,8 @@
 Scenario: Cannot reconfigure players per group count in round robin round when it has started
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type  | Advancing per group count | Players per group count |
-			| Round robin | 1                         | 4                       |
+			| Contest type | Advancing per group count | Players per group count |
+			| RoundRobin   | 1                         | 4                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
@@ -17,8 +17,8 @@ Scenario: Cannot reconfigure players per group count in round robin round when i
 Scenario: Cannot reconfigure advancing count in round robin round when it has started
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type  | Advancing per group count | Players per group count |
-			| Round robin | 1                         | 4                       |
+			| Contest type | Advancing per group count | Players per group count |
+			| RoundRobin   | 1                         | 4                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
@@ -29,15 +29,15 @@ Scenario: Cannot reconfigure advancing count in round robin round when it has st
 Scenario: PlayState is set to Ongoing when round has finished with a problematic tie
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type  | Advancing per group count | Players per group count |
-			| Round robin | 1                         | 3                       |
-			| Round robin | 1                         | 2                       |
+			| Contest type | Advancing per group count | Players per group count |
+			| RoundRobin   | 1                         | 3                       |
+			| RoundRobin   | 1                         | 2                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to tournament 0
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 	When score is added to players in given matches in groups
-		| Group index | Match index | Scoring player | Added score |
+		| Group index | Match index | Scoring player | Score Added |
 		| 1           | 0           | Rain           | 2           |
 		| 1           | 1           | FanTaSy        | 2           |
 		| 1           | 2           | Bomber         | 2           |
@@ -46,12 +46,12 @@ Scenario: PlayState is set to Ongoing when round has finished with a problematic
 Scenario: Can detect several groups with problematic ties
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type  | Advancing per group count | Players per group count |
-			| Round robin | 1                         | 3                       |
-			| Round robin | 1                         | 2                       |
+			| Contest type | Advancing per group count | Players per group count |
+			| RoundRobin   | 1                         | 3                       |
+			| RoundRobin   | 1                         | 2                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to tournament 0
 	When score is added to players in given matches in groups
-		| Group index | Match index | Scoring player | Added score |
+		| Group index | Match index | Scoring player | Score Added |
 		| 0           | 0           | Maru           | 2           |
 		| 0           | 1           | Taeja          | 2           |
 		| 0           | 2           | Stork          | 2           |
@@ -63,12 +63,12 @@ Scenario: Can detect several groups with problematic ties
 Scenario: Does not transfer any players to next round when group has problematic ties
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type  | Advancing per group count | Players per group count |
-			| Round robin | 1                         | 3                       |
-			| Round robin | 1                         | 2                       |
+			| Contest type | Advancing per group count | Players per group count |
+			| RoundRobin   | 1                         | 3                       |
+			| RoundRobin   | 1                         | 2                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy" is registered to tournament 0
 	When score is added to players in given matches in groups
-		| Group index | Match index | Scoring player | Added score |
+		| Group index | Match index | Scoring player | Score Added |
 		| 0           | 0           | Maru           | 2           |
 		| 0           | 1           | Taeja          | 2           |
 		| 0           | 2           | Stork          | 2           |
@@ -80,12 +80,12 @@ Scenario: Does not transfer any players to next round when group has problematic
  Scenario: Can solve tie
 	Given a tournament named "GSL 2019" has been created
 		And tournament 0 adds rounds
-			| Round type  | Advancing per group count | Players per group count |
-			| Round robin | 2                         | 3                       |
-			| Bracket     | 1                         | 2                       |
+			| Contest type | Advancing per group count | Players per group count |
+			| RoundRobin   | 2                         | 3                       |
+			| Bracket      | 1                         | 2                       |
 		And players "Maru, Stork, Taeja" is registered to tournament 0
 		And score is added to players in given matches in groups
-			| Group index | Match index | Scoring player | Added score |
+			| Group index | Match index | Scoring player | Score Added |
 			| 0           | 0           | Maru           | 2           |
 			| 0           | 1           | Taeja          | 2           |
 			| 0           | 2           | Stork          | 2           |

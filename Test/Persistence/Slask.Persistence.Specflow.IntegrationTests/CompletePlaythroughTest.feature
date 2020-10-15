@@ -5,10 +5,10 @@
 Scenario: Tournament playthrough and fetching goes as expected
 	Given a tournament named "Homestory Cup XX" has been created with users "Stålberto, Bönis, Guggelito, Kimmieboi" added to it
 		And tournament named "Homestory Cup XX" adds rounds
-			| Round type      | Advancing per group count | Players per group count |
-			| Round robin     | 4                         | 5                       |
-			| Dual tournament | 2                         | 4                       |
-			| Bracket         | 1                         | 4                       |
+			| Contest type   | Advancing per group count | Players per group count |
+			| RoundRobin     | 4                         | 5                       |
+			| DualTournament | 2                         | 4                       |
+			| Bracket        | 1                         | 4                       |
 		And players "Maru, Stork, Taeja, Rain, Bomber, FanTaSy, Stephano, Thorzain, TY, Cure" is registered to tournament named "Homestory Cup XX"
 		# ROUND ROBIN ROUND BEGINS
 		And betters places match bets in tournament named "Homestory Cup XX"
@@ -118,7 +118,7 @@ Scenario: Tournament playthrough and fetching goes as expected
 			| Kimmieboi   | 1           | 0           | 1           | Stork       |
 		# Play first set of matches in first dual tournament group
 		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
-			| Round index | Group index | Match index | Scoring player | Added score |
+			| Round index | Group index | Match index | Scoring player | Score Added |
 			| 1           | 0           | 0           | Bomber         | 2           |
 			| 1           | 0           | 1           | Rain           | 2           |
 		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
@@ -141,7 +141,7 @@ Scenario: Tournament playthrough and fetching goes as expected
 			| Kimmieboi   | 1           | 0           | 3           | Maru        |
 		# Play winners and losers matches in first dual tournament group
 		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
-			| Round index | Group index | Match index | Scoring player | Added score |
+			| Round index | Group index | Match index | Scoring player | Score Added |
 			| 1           | 0           | 2           | Bomber         | 2           |
 			| 1           | 0           | 3           | Maru           | 2           |
 		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
@@ -160,7 +160,7 @@ Scenario: Tournament playthrough and fetching goes as expected
 			| Kimmieboi   | 1           | 0           | 4           | Rain        |
 		# Play decider match in first dual tournament group
 		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
-			| Round index | Group index | Match index | Scoring player | Added score |
+			| Round index | Group index | Match index | Scoring player | Score Added |
 			| 1           | 0           | 4           | Maru           | 2           |
 		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
 			| Better name | Points |
@@ -182,7 +182,7 @@ Scenario: Tournament playthrough and fetching goes as expected
 			| Kimmieboi   | 1           | 1           | 1           | Stephano    |
 		# Play first set of matches in second dual tournament group
 		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
-			| Round index | Group index | Match index | Scoring player | Added score |
+			| Round index | Group index | Match index | Scoring player | Score Added |
 			| 1           | 1           | 0           | Cure           | 2           |
 			| 1           | 1           | 1           | Stephano       | 2           |
 		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
@@ -205,7 +205,7 @@ Scenario: Tournament playthrough and fetching goes as expected
 			| Kimmieboi   | 1           | 1           | 3           | Thorzain    |
 		# Play winners and losers matches in second dual tournament groups
 		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
-			| Round index | Group index | Match index | Scoring player | Added score |
+			| Round index | Group index | Match index | Scoring player | Score Added |
 			| 1           | 1           | 2           | Cure           | 2           |
 			| 1           | 1           | 3           | FanTaSy        | 2           |
 		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
@@ -224,7 +224,7 @@ Scenario: Tournament playthrough and fetching goes as expected
 			| Kimmieboi   | 1           | 1           | 4           | Stephano    |
 		# Play decider match in second dual tournament group
 		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
-			| Round index | Group index | Match index | Scoring player | Added score |
+			| Round index | Group index | Match index | Scoring player | Score Added |
 			| 1           | 1           | 4           | FanTaSy        | 2           |
 		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
 			| Better name | Points |
@@ -247,7 +247,7 @@ Scenario: Tournament playthrough and fetching goes as expected
 			| Kimmieboi   | 2           | 0           | 1           | FanTaSy     |
 		# Play semifinal matches in bracket group
 		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
-			| Round index | Group index | Match index | Scoring player | Added score |
+			| Round index | Group index | Match index | Scoring player | Score Added |
 			| 2           | 0           | 0           | Bomber         | 2           |
 			| 2           | 0           | 1           | Cure           | 2           |
 		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
@@ -266,7 +266,7 @@ Scenario: Tournament playthrough and fetching goes as expected
 			| Kimmieboi   | 2           | 0           | 2           | Bomber      |
 		# Play final match in bracket group
 		And score is added to players in given matches within groups in tournament named "Homestory Cup XX"
-			| Round index | Group index | Match index | Scoring player | Added score |
+			| Round index | Group index | Match index | Scoring player | Score Added |
 			| 2           | 0           | 2           | Bomber         | 2           |
 		And better standings in tournament named "Homestory Cup XX" from first to last looks like this
 			| Better name | Points |
@@ -275,10 +275,10 @@ Scenario: Tournament playthrough and fetching goes as expected
 			| Bönis       | 17     |
 			| Guggelito   | 15     |
 	Then tournament named "Homestory Cup XX" should contain rounds
-		| Round type      |
-		| Round robin     |
-		| Dual tournament |
-		| Bracket         |
-		And groups within round 0 in tournament named "Homestory Cup XX" is of type "Round robin"
-		And groups within round 1 in tournament named "Homestory Cup XX" is of type "Dual tournament"
+		| Contest type   |
+		| RoundRobin     |
+		| DualTournament |
+		| Bracket        |
+		And groups within round 0 in tournament named "Homestory Cup XX" is of type "RoundRobin"
+		And groups within round 1 in tournament named "Homestory Cup XX" is of type "DualTournament"
 		And groups within round 2 in tournament named "Homestory Cup XX" is of type "Bracket"

@@ -5,16 +5,16 @@ using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Rounds;
 using Slask.Domain.SpecFlow.IntegrationTests.RoundTests;
 using Slask.Domain.Utilities;
-using Slask.TestCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 
 namespace Slask.Domain.SpecFlow.IntegrationTests.GroupTests
 {
     [Binding, Scope(Feature = "Group")]
-    public class GroupSteps : GroupStepDefinitions
+    public sealed class GroupSteps : GroupStepDefinitions
     {
         [AfterScenario]
         public static void AfterScenario()
@@ -28,7 +28,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.GroupTests
         [Then(@"group (.*) should be valid of type ""(.*)""")]
         public void ThenGroupShouldBeValidOfType(int groupIndex, string roundType)
         {
-            ContestTypeEnum contestType = TestUtilities.ParseContestTypeString(roundType);
+            Enum.TryParse(roundType, out ContestTypeEnum contestType);
 
             GroupBase group = createdGroups[groupIndex];
 
@@ -86,31 +86,10 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.GroupTests
         {
             GroupBase group = createdGroups[groupIndex];
 
-            foreach (TableRow row in table.Rows)
+            foreach (BracketGroupMatchSetup setup in table.CreateSet<BracketGroupMatchSetup>())
             {
-                row["Match index"].Should().NotBeNullOrEmpty();
-                row["Player 1 name"].Should().NotBeNull();
-                row["Player 2 name"].Should().NotBeNull();
-
-                ParseBracketGroupMatchSetup(row, out int matchIndex, out string player1Name, out string player2Name);
-
-                if (player1Name.Length > 0)
-                {
-                    group.Matches[matchIndex].Player1.GetName().Should().Be(player1Name);
-                }
-                else
-                {
-                    group.Matches[matchIndex].Player1.PlayerReferenceId.Should().BeEmpty();
-                }
-
-                if (player2Name.Length > 0)
-                {
-                    group.Matches[matchIndex].Player2.GetName().Should().Be(player2Name);
-                }
-                else
-                {
-                    group.Matches[matchIndex].Player2.PlayerReferenceId.Should().BeEmpty();
-                }
+                group.Matches[setup.MatchIndex].Player1.GetName().Should().Be(setup.Player1Name);
+                group.Matches[setup.MatchIndex].Player2.GetName().Should().Be(setup.Player2Name);
             }
         }
 
@@ -119,7 +98,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.GroupTests
         {
             GroupBase group = createdGroups[groupIndex];
 
-            PlayStateEnum playState = ParsePlayStateString(playStateString);
+            Enum.TryParse(playStateString, out PlayStateEnum playState);
 
             group.GetPlayState().Should().Be(playState);
         }
@@ -164,28 +143,11 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.GroupTests
             group.Round.Should().NotBeNull();
         }
 
-        protected void ParseBracketGroupMatchSetup(TableRow row, out int matchIndex, out string player1Name, out string player2Name)
+        private sealed class BracketGroupMatchSetup
         {
-            matchIndex = -1;
-            player1Name = "";
-            player2Name = "";
-
-            if (row.ContainsKey("Match index"))
-            {
-                int.TryParse(row["Match index"], out matchIndex);
-            }
-
-            matchIndex.Should().BeGreaterOrEqualTo(0);
-
-            if (row.ContainsKey("Player 1 name"))
-            {
-                player1Name = row["Player 1 name"];
-            }
-
-            if (row.ContainsKey("Player 2 name"))
-            {
-                player2Name = row["Player 2 name"];
-            }
+            public int MatchIndex { get; set; }
+            public string Player1Name { get; set; }
+            public string Player2Name { get; set; }
         }
     }
 }
