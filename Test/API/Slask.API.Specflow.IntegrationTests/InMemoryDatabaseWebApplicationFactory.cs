@@ -3,12 +3,10 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Slask.Persistence;
 using System;
-using System.Configuration;
 using System.Linq;
 
 namespace Slask.API.Specflow.IntegrationTests
@@ -25,12 +23,12 @@ namespace Slask.API.Specflow.IntegrationTests
                 ServiceDescriptor slaskContextDescriptor = services.SingleOrDefault(descriptor =>
                     descriptor.ServiceType == typeof(DbContextOptions<SlaskContext>));
 
-                if(slaskContextDescriptor != null)
+                if (slaskContextDescriptor != null)
                 {
                     services.Remove(slaskContextDescriptor);
                 }
 
-                services.AddDbContext<SlaskContext>(options => 
+                services.AddDbContext<SlaskContext>(options =>
                     {
                         options.UseInMemoryDatabase(_testDatabaseName, _inMemoryDatabaseRoot);
                         options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
