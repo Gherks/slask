@@ -26,9 +26,9 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.UtilityTests
 
             Tournament tournament = createdTournaments[tournamentIndex];
 
-            tournament.TournamentIssueReporter.Issues.Should().HaveCount(table.Rows.Count);
+            tournament.TournamentIssueReporter.Issues.Should().HaveCount(table.RowCount);
 
-            for (int index = 0; index < table.Rows.Count; ++index)
+            for (int index = 0; index < table.RowCount; ++index)
             {
                 TournamentIssueType tournamentIssueType = table.Rows[index].CreateInstance<TournamentIssueType>();
                 string typeName = tournamentIssueType.IssueType;

@@ -195,9 +195,9 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
             List<StandingsEntry<Better>> betterStandings = tournament.GetBetterStandings();
 
-            betterStandings.Should().HaveCount(table.Rows.Count);
+            betterStandings.Should().HaveCount(table.RowCount);
 
-            for (int index = 0; index < table.Rows.Count; ++index)
+            for (int index = 0; index < table.RowCount; ++index)
             {
                 BetterStanding betterStanding = table.Rows[index].CreateInstance<BetterStanding>();
 
@@ -252,7 +252,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                 tournament = tournamentRepository.GetTournamentByName(tournamentName);
             }
 
-            for (int index = 0; index < table.Rows.Count; ++index)
+            for (int index = 0; index < table.RowCount; ++index)
             {
                 TableRow row = table.Rows[index];
                 Enum.TryParse(row["Contest type"], out ContestTypeEnum contestType);

@@ -75,7 +75,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
 
             Tournament tournament = createdTournaments[tournamentIndex];
 
-            for (int index = 0; index < table.Rows.Count; ++index)
+            for (int index = 0; index < table.RowCount; ++index)
             {
                 RoundSettings roundSettings = table.Rows[index].CreateInstance<RoundSettings>();
 

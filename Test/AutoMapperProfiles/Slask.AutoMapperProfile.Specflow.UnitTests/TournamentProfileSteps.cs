@@ -77,9 +77,9 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
         {
             TournamentDto tournamentDto = _tournamentDtos.FirstOrDefault(tournamentDto => tournamentDto.Name == tournamentName);
 
-            tournamentDto.Rounds.Should().HaveCount(table.Rows.Count);
+            tournamentDto.Rounds.Should().HaveCount(table.RowCount);
 
-            for (int index = 0; index < table.Rows.Count; ++index)
+            for (int index = 0; index < table.RowCount; ++index)
             {
                 TournamentDtoRoundLayout layout = table.Rows[index].CreateInstance<TournamentDtoRoundLayout>();
 
@@ -135,9 +135,9 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
         {
             TournamentDto tournamentDto = _tournamentDtos.FirstOrDefault(tournamentDto => tournamentDto.Name == tournamentName);
 
-            tournamentDto.Issues.Should().HaveCount(table.Rows.Count);
+            tournamentDto.Issues.Should().HaveCount(table.RowCount);
 
-            for (int index = 0; index < table.Rows.Count; ++index)
+            for (int index = 0; index < table.RowCount; ++index)
             {
                 TournamentIssueDto soughtTournamentIssueDto = table.Rows[index].CreateInstance<TournamentIssueDto>();
 
@@ -163,7 +163,7 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
         {
             TournamentDto tournamentDto = _tournamentDtos.FirstOrDefault(tournamentDto => tournamentDto.Name == tournamentName);
 
-            tournamentDto.Betters.Should().HaveCount(table.Rows.Count);
+            tournamentDto.Betters.Should().HaveCount(table.RowCount);
 
             foreach (BetterStanding betterStanding in table.CreateSet<BetterStanding>())
             {

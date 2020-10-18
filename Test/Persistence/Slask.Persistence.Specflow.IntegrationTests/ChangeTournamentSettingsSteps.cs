@@ -200,9 +200,9 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             {
                 Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
 
-                tournament.Rounds.Should().HaveCount(table.Rows.Count);
+                tournament.Rounds.Should().HaveCount(table.RowCount);
 
-                for (int rowIndex = 0; rowIndex < table.Rows.Count; ++rowIndex)
+                for (int rowIndex = 0; rowIndex < table.RowCount; ++rowIndex)
                 {
                     RoundSettings roundSettings = table.Rows[rowIndex].CreateInstance<RoundSettings>();
 

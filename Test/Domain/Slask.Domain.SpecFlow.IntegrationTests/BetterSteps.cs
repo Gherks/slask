@@ -52,9 +52,9 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
 
             List<StandingsEntry<Better>> betterStandings = tournament.GetBetterStandings();
 
-            betterStandings.Should().HaveCount(table.Rows.Count);
+            betterStandings.Should().HaveCount(table.RowCount);
 
-            for (int index = 0; index < table.Rows.Count; ++index)
+            for (int index = 0; index < table.RowCount; ++index)
             {
                 BetterStanding betterStanding = table.Rows[index].CreateInstance<BetterStanding>();
 
