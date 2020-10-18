@@ -16,10 +16,10 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
 
                 tournament.Id.Should().NotBeEmpty();
-                tournament.Name.Should().Be(tournamentName);
+                tournament.Name.Should().Be(_tournamentName);
                 tournament.Rounds.Should().BeEmpty();
                 tournament.Betters.Should().BeEmpty();
             }
@@ -30,14 +30,14 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
 
                 bool removeResult = tournamentRepository.RemoveTournament(tournament.Id);
                 tournamentRepository.Save();
 
                 removeResult.Should().BeTrue();
 
-                tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                tournament = tournamentRepository.GetTournamentByName(_tournamentName);
                 tournament.Should().BeNull();
             }
         }
@@ -47,13 +47,13 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
 
                 bool removeResult = tournamentRepository.RemoveTournament(tournament.Name);
                 tournamentRepository.Save();
                 removeResult.Should().BeTrue();
 
-                tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                tournament = tournamentRepository.GetTournamentByName(_tournamentName);
                 tournament.Should().BeNull();
             }
         }
@@ -63,7 +63,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament secondTournament = tournamentRepository.CreateTournament(tournamentName.ToUpper());
+                Tournament secondTournament = tournamentRepository.CreateTournament(_tournamentName.ToUpper());
                 secondTournament.Should().BeNull();
             }
         }
@@ -73,7 +73,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
 
                 bool renameResult = tournamentRepository.RenameTournament(tournament.Id, "BHA Open 2019");
                 tournamentRepository.Save();
@@ -88,7 +88,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
 
                 bool renameResult = tournamentRepository.RenameTournament(tournament.Id, "");
                 tournamentRepository.Save();
@@ -103,12 +103,12 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
-                bool renameResult = tournamentRepository.RenameTournament(tournament.Id, tournamentName.ToUpper());
+                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
+                bool renameResult = tournamentRepository.RenameTournament(tournament.Id, _tournamentName.ToUpper());
                 tournamentRepository.Save();
 
                 renameResult.Should().BeFalse();
-                tournament.Name.Should().Be(tournamentName);
+                tournament.Name.Should().Be(_tournamentName);
             }
         }
 
@@ -126,7 +126,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         [Fact]
         public void CanGetListOfSeveralTournaments()
         {
-            List<string> tournamentNames = new List<string>() { tournamentName, "WCS 2019", "BHA Cup", "DH Masters" };
+            List<string> tournamentNames = new List<string>() { _tournamentName, "WCS 2019", "BHA Cup", "DH Masters" };
 
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
@@ -149,7 +149,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         [Fact]
         public void CanGetCertainRangeOfCreatedTournaments()
         {
-            List<string> tournamentNames = new List<string>() { tournamentName };
+            List<string> tournamentNames = new List<string>() { _tournamentName };
             for (int index = 1; index < 30; ++index)
             {
                 tournamentNames.Add("Tourney " + index.ToString());
@@ -185,11 +185,11 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
 
                 tournament = tournamentRepository.GetTournamentById(tournament.Id);
 
-                tournament.Name.Should().Be(tournamentName);
+                tournament.Name.Should().Be(_tournamentName);
             }
         }
 
@@ -198,9 +198,9 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
 
-                tournament.Name.Should().Be(tournamentName);
+                tournament.Name.Should().Be(_tournamentName);
             }
         }
     }

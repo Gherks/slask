@@ -9,8 +9,8 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 {
     public class TournamentRepositoryTestBase
     {
-        protected const string tournamentName = "GSL 2019";
-        protected readonly List<string> playerNames = new List<string>
+        protected const string _tournamentName = "GSL 2019";
+        protected readonly List<string> _playerNames = new List<string>
         {
             "Maru",
             "Stork",
@@ -28,7 +28,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                tournamentRepository.CreateTournament(tournamentName);
+                tournamentRepository.CreateTournament(_tournamentName);
                 tournamentRepository.Save();
             }
         }
@@ -54,7 +54,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 
                 using (TournamentRepository tournamentRepository = CreateTournamentRepository())
                 {
-                    Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                    Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
 
                     tournamentRepository.AddBetterToTournament(tournament, userRepository.GetUserByName("Stålberto"));
                     tournamentRepository.AddBetterToTournament(tournament, userRepository.GetUserByName("Bönis"));
@@ -68,12 +68,12 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
 
                 RoundRobinRound round = tournamentRepository.AddRoundRobinRoundToTournament(tournament);
-                tournamentRepository.SetPlayersPerGroupCountInRound(round, playerNames.Count);
+                tournamentRepository.SetPlayersPerGroupCountInRound(round, _playerNames.Count);
 
-                foreach (string playerName in playerNames)
+                foreach (string playerName in _playerNames)
                 {
                     tournamentRepository.AddPlayerReference(tournament, playerName);
                 }

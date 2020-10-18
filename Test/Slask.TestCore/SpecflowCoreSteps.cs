@@ -18,7 +18,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 {
     public class SpecflowCoreSteps
     {
-        private readonly string testDatabaseName = "InMemoryTestDatabase_" + Guid.NewGuid().ToString();
+        private readonly string _testDatabaseName = "InMemoryTestDatabase_" + Guid.NewGuid().ToString();
 
         [Given(@"users ""(.*)"" has been created")]
         [When(@"users ""(.*)"" has been created")]
@@ -338,12 +338,12 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
         protected UserRepository CreateUserRepository()
         {
-            return new UserRepository(InMemoryContextCreator.Create(testDatabaseName));
+            return new UserRepository(InMemoryContextCreator.Create(_testDatabaseName));
         }
 
         protected TournamentRepository CreateTournamentRepository()
         {
-            return new TournamentRepository(InMemoryContextCreator.Create(testDatabaseName));
+            return new TournamentRepository(InMemoryContextCreator.Create(_testDatabaseName));
         }
 
         private void PlayMatch(TournamentRepository tournamentRepository, Match match)
