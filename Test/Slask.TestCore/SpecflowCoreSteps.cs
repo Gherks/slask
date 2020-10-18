@@ -18,12 +18,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 {
     public class SpecflowCoreSteps
     {
-        private readonly string testDatabaseName;
-
-        public SpecflowCoreSteps()
-        {
-            testDatabaseName = Guid.NewGuid().ToString();
-        }
+        private readonly string testDatabaseName = "InMemoryTestDatabase_" + Guid.NewGuid().ToString();
 
         [Given(@"users ""(.*)"" has been created")]
         [When(@"users ""(.*)"" has been created")]

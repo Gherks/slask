@@ -11,12 +11,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests
 {
     public class UserRepositoryTests
     {
-        private readonly string testDatabaseName;
-
-        public UserRepositoryTests()
-        {
-            testDatabaseName = Guid.NewGuid().ToString();
-        }
+        private readonly string testDatabaseName = "InMemoryTestDatabase_" + Guid.NewGuid().ToString();
 
         [Fact]
         public void CanCreateUser()

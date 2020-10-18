@@ -22,12 +22,10 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
             "Thorzain"
         };
 
-        private readonly string testDatabaseName;
+        private readonly string _testDatabaseName = "InMemoryTestDatabase_" + Guid.NewGuid().ToString();
 
         public TournamentRepositoryTestBase()
         {
-            testDatabaseName = Guid.NewGuid().ToString();
-
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 tournamentRepository.CreateTournament(tournamentName);
@@ -37,12 +35,12 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 
         protected UserRepository CreateuserRepository()
         {
-            return new UserRepository(InMemoryContextCreator.Create(testDatabaseName));
+            return new UserRepository(InMemoryContextCreator.Create(_testDatabaseName));
         }
 
         protected TournamentRepository CreateTournamentRepository()
         {
-            return new TournamentRepository(InMemoryContextCreator.Create(testDatabaseName));
+            return new TournamentRepository(InMemoryContextCreator.Create(_testDatabaseName));
         }
 
         protected void InitializeUsersAndBetters()
