@@ -11,7 +11,7 @@ using TechTalk.SpecFlow;
 namespace Slask.API.Specflow.IntegrationTests
 {
     [Binding, Scope(Feature = "UserController")]
-    public sealed class UserControllerSteps : APIControllerSteps
+    public sealed class UserControllerSteps : ControllerStepsBase
     {
         public UserControllerSteps(InMemoryDatabaseWebApplicationFactory<Startup> factory)
             : base(factory)

@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Slask.API.Specflow.IntegrationTests
 {
-    public class APIControllerSteps : SpecflowCoreSteps, IClassFixture<InMemoryDatabaseWebApplicationFactory<Startup>>
+    public class ControllerStepsBase : SpecflowCoreSteps, IClassFixture<InMemoryDatabaseWebApplicationFactory<Startup>>
     {
         protected readonly HttpClient _client;
         protected HttpResponseMessage _response;
@@ -19,7 +19,7 @@ namespace Slask.API.Specflow.IntegrationTests
         private string _contentType;
         private string _accept;
 
-        public APIControllerSteps(InMemoryDatabaseWebApplicationFactory<Startup> factory)
+        public ControllerStepsBase(InMemoryDatabaseWebApplicationFactory<Startup> factory)
         {
             _client = factory.CreateClient();
         }
