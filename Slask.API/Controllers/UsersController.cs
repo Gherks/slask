@@ -42,7 +42,7 @@ namespace Slask.API.Controllers
             return Ok(result.Value);
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("{userId:guid}")]
         [HttpHead]
         public ActionResult<UserDto> GetUser(Guid userId)
         {
