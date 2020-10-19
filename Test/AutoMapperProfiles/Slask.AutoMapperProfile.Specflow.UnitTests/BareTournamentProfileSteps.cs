@@ -14,7 +14,7 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
     [Binding, Scope(Feature = "BareTournamentProfile")]
     public class BareTournamentProfileSteps : SpecflowCoreSteps
     {
-        private const int acceptableInaccuracy = 2000;
+        private const int _acceptableInaccuracy = 2000;
 
         private readonly IMapper _mapper;
         private readonly List<BareTournamentDto> _bareTournamentDtos;
@@ -47,7 +47,7 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
             {
                 bareTournamentDto.Id.Should().NotBeEmpty();
                 bareTournamentDto.Name.Should().NotBeNullOrEmpty();
-                bareTournamentDto.Created.Should().BeCloseTo(SystemTime.Now, acceptableInaccuracy);
+                bareTournamentDto.Created.Should().BeCloseTo(SystemTime.Now, _acceptableInaccuracy);
             }
         }
     }
