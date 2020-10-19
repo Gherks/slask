@@ -1,9 +1,16 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
+using Slask.Common;
+using Slask.Dto;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 using Xunit;
 
@@ -11,11 +18,11 @@ namespace Slask.API.Specflow.IntegrationTests
 {
     public class APIControllerSteps : SpecflowCoreSteps, IClassFixture<InMemoryDatabaseWebApplicationFactory<Startup>>
     {
-        private readonly HttpClient _client;
+        protected readonly HttpClient _client;
+        protected HttpResponseMessage _response;
 
         private string _contentType;
         private string _accept;
-        private HttpResponseMessage _response;
 
         public APIControllerSteps(InMemoryDatabaseWebApplicationFactory<Startup> factory)
         {
@@ -25,46 +32,39 @@ namespace Slask.API.Specflow.IntegrationTests
 
         [Given(@"Content-Type is set to ""(.*)"" and Accept is set to ""(.*)""")]
         [When(@"Content-Type is set to ""(.*)"" and Accept is set to ""(.*)""")]
-        public void GivenContent_TypeIsSetToAndAcceptIsSetTo(string contentType, string accept)
+        public void GivenContentTypeIsSetToAndAcceptIsSetTo(string contentType, string accept)
         {
             _contentType = contentType;
             _accept = accept;
         }
 
-        [Given(@"GET request is sent to ""(.*)""")]
-        [When(@"GET request is sent to ""(.*)""")]
-        public void GivenGetRequestIsSentToContainingBody(string address)
-        {
-            _response = _client.GetAsync(address).Result;
-        }
-
-        [Given(@"POST request is sent to ""(.*)"" containing body")]
-        [When(@"POST request is sent to ""(.*)"" containing body")]
-        public void GivenPostRequestIsSentToContainingBody(string address, Table table)
-        {
-            string jsonContent = "";
-
-            foreach (TableRow row in table.Rows)
-            {
-                jsonContent += JsonConvert.SerializeObject(row);
-            }
-
-            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(_accept));
-            HttpContent body = new StringContent(jsonContent, Encoding.UTF8, _contentType);
-
-            _response = _client.PostAsync(address, body).Result;
-        }
-
         [Then(@"response should return with status code ""(.*)""")]
-        public void ThenThePOSTResultShouldReturnStatusCode(int statusCode)
+        public void ThenResponseShouldReturnWithStatusCode(int statusCode)
         {
             _response.StatusCode.Should().Be(statusCode);
         }
 
-        [Then(@"response should contain JSON content")]
-        public void ThenReponseShouldContainJSONContent(Table table)
+        protected StringContent CreateHttpContent(string content)
         {
-            ScenarioContext.Current.Pending();
+            _client.DefaultRequestHeaders.Accept.Clear();
+            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(_accept));
+
+            return new StringContent(content, Encoding.UTF8, _contentType);
+        }
+
+        protected async Task<List<ObjectType>> JsonResponseToObjectList<ObjectType>()
+        {
+            string responseContent = await _response.Content.ReadAsStringAsync();
+
+            try
+            {
+                ObjectType userDto = JsonConvert.DeserializeObject<ObjectType>(responseContent);
+                return new List<ObjectType>() { userDto };
+            }
+            catch
+            {
+                return JsonConvert.DeserializeObject<List<ObjectType>>(responseContent);
+            }
         }
     }
 }
