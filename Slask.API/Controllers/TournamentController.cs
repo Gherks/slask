@@ -22,6 +22,26 @@ namespace Slask.API.Controllers
             _commandQueryDispatcher = commandQueryDispatcher;
         }
 
+        [HttpGet]
+        [HttpHead]
+        public ActionResult<IEnumerable<BareTournamentDto>> GetTournaments()
+        {
+            GetAllTournaments query = new GetAllTournaments();
+            Result<IEnumerable<BareTournamentDto>> result = _commandQueryDispatcher.Dispatch(query);
+
+            if (result.IsFailure)
+            {
+                if (result.Value == null)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+
+                return NotFound(result.Error);
+            }
+
+            return Ok(result.Value);
+        }
+
         [HttpPost]
         public ActionResult CreateTournament(TournamentCreationDto tournament)
         {
