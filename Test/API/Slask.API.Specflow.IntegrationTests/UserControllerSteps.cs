@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Utilities;
 using Newtonsoft.Json;
 using Slask.Common;
 using Slask.Dto;
@@ -8,7 +7,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
 
 namespace Slask.API.Specflow.IntegrationTests
 {

@@ -1,14 +1,9 @@
 ﻿using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
-using Slask.Common;
-using Slask.Dto;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests;
-using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
@@ -28,7 +23,6 @@ namespace Slask.API.Specflow.IntegrationTests
         {
             _client = factory.CreateClient();
         }
-
 
         [Given(@"Content-Type is set to ""(.*)"" and Accept is set to ""(.*)""")]
         [When(@"Content-Type is set to ""(.*)"" and Accept is set to ""(.*)""")]
