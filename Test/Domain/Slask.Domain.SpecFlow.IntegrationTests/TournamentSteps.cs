@@ -46,7 +46,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
             Tournament tournament = Tournament.Create(tournamentName);
             createdTournaments.Add(tournament);
 
-            List<string> userNames = StringUtility.ToStringList(commaSeparatedUserNames, ",");
+            List<string> userNames = commaSeparatedUserNames.ToStringList(",");
             foreach (string userName in userNames)
             {
                 tournament.AddBetter(User.Create(userName));
@@ -126,7 +126,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
         [Then(@"players ""(.*)"" is registered to tournament (.*)")]
         public void GivenPlayersIsRegisteredToRound(string commaSeparatedPlayerNames, int tournamentIndex)
         {
-            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            List<string> playerNames = commaSeparatedPlayerNames.ToStringList(",");
             Tournament tournament = createdTournaments[tournamentIndex];
 
             foreach (string playerName in playerNames)
@@ -148,7 +148,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
         [When(@"players ""(.*)"" is excluded from tournament (.*)")]
         public void GivenPlayersIsExcludedFromRound(string commaSeparatedPlayerNames, int tournamentIndex)
         {
-            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            List<string> playerNames = commaSeparatedPlayerNames.ToStringList(",");
             Tournament tournament = createdTournaments[tournamentIndex];
 
             foreach (string playerName in playerNames)
@@ -276,7 +276,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
         public void ThenTournamentShouldContainExactlyThesePlayerReferencesWithNames(int tournamentIndex, string commaSeparetedPlayerNames)
         {
             Tournament tournament = createdTournaments[tournamentIndex];
-            List<string> playerNames = StringUtility.ToStringList(commaSeparetedPlayerNames, ",");
+            List<string> playerNames = commaSeparetedPlayerNames.ToStringList(",");
 
             List<PlayerReference> playerReferences = tournament.PlayerReferences;
 
@@ -292,7 +292,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
         public void ThenParticipatingPlayersInRoundShouldBeExactly(int roundIndex, string commaSeparatedPlayerNames)
         {
             RoundBase round = createdRounds[roundIndex];
-            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            List<string> playerNames = commaSeparatedPlayerNames.ToStringList(",");
 
             List<PlayerReference> playerReferences = round.Tournament.GetPlayerReferencesByIds(round.GetPlayerReferenceIds());
 

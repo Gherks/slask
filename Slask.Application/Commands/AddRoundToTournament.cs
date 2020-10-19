@@ -38,7 +38,7 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not add round ({ command.RoundType }) to tournament. Tournament ({ command.TournamentId }) not found.");
             }
 
-            string parsedRoundType = StringUtility.ToUpperNoSpaces(command.RoundType);
+            string parsedRoundType = command.RoundType.ToUpperNoSpaces();
             RoundBase round;
 
             switch (parsedRoundType)

@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace Slask.Common
 {
-    public static class StringUtility
+    public static class StringExtensions
     {
-        public static List<string> ToStringList(string text, string delimiter)
+        public static List<string> ToStringList(this string text, string delimiter)
         {
             bool textIsInvalid = string.IsNullOrWhiteSpace(text);
             bool delimiterIsInvalid = string.IsNullOrWhiteSpace(delimiter);
@@ -29,13 +29,13 @@ namespace Slask.Common
                     continue;
                 }
 
-                textList[index] = textList[index].Replace(" ", string.Empty, StringComparison.CurrentCulture);
+                textList[index] = textList[index].Replace(" ", string.Empty);
             }
 
             return textList;
         }
 
-        public static string ToUpperNoSpaces(string text)
+        public static string ToUpperNoSpaces(this string text)
         {
             bool textIsInvalid = string.IsNullOrWhiteSpace(text);
 
@@ -44,7 +44,7 @@ namespace Slask.Common
                 return text;
             }
 
-            return text.ToUpper(CultureInfo.CurrentCulture).Replace(" ", string.Empty, StringComparison.CurrentCulture);
+            return text.ToUpper().Replace(" ", string.Empty);
         }
     }
 }

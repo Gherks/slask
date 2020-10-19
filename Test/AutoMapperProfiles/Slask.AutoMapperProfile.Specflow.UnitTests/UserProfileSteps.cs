@@ -31,7 +31,7 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
         [When(@"automapper maps domain user ""(.*)"" to a user DTO")]
         public void WhenAutomapperMapsDomainUserToAUserDTO(string commaSeparatedUserNames)
         {
-            List<string> userNames = StringUtility.ToStringList(commaSeparatedUserNames, ",");
+            List<string> userNames = commaSeparatedUserNames.ToStringList(",");
 
             using (UserRepository userRepository = CreateUserRepository())
             {

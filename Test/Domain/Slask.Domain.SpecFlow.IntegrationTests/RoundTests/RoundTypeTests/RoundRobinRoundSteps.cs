@@ -19,7 +19,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests.RoundTypeTests
         public void WhenTieInGroupIsSolvedByChoosing(int groupIndex, string commaSeparatedPlayerNames)
         {
             RoundRobinGroup group = createdGroups[groupIndex] as RoundRobinGroup;
-            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            List<string> playerNames = commaSeparatedPlayerNames.ToStringList(",");
             List<PlayerReference> playerReferences = new List<PlayerReference>();
 
             foreach (string playerName in playerNames)

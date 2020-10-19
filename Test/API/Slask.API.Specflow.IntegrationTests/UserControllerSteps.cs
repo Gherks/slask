@@ -62,7 +62,7 @@ namespace Slask.API.Specflow.IntegrationTests
         [Then(@"response should contain users ""(.*)""")]
         public async Task ThenReponseShouldContainJSONContent(string commaSeparatedUsernames)
         {
-            List<string> usernames = StringUtility.ToStringList(commaSeparatedUsernames, ",");
+            List<string> usernames = commaSeparatedUsernames.ToStringList(",");
 
             List<UserDto> userDtos = await JsonResponseToObjectList<UserDto>();
 

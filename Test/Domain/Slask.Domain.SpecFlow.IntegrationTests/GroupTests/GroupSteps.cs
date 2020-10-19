@@ -70,7 +70,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.GroupTests
         public void ThenGroupShouldContainExactlyThesePlayerReferencesWithNames(int groupIndex, string commaSeparatedPlayerNames)
         {
             GroupBase group = createdGroups[groupIndex];
-            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            List<string> playerNames = commaSeparatedPlayerNames.ToStringList(",");
 
             List<PlayerReference> playerReferences = group.GetPlayerReferences();
 
@@ -107,7 +107,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.GroupTests
         public void ThenAdvancingPlayersFromRoundFromFirstToLastShouldBe(int roundIndex, string commaSeparatedPlayerNames)
         {
             RoundBase round = createdRounds[roundIndex];
-            List<string> expectedPlayerNameOrder = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            List<string> expectedPlayerNameOrder = commaSeparatedPlayerNames.ToStringList(",");
 
             List<PlayerReference> playerReferences = AdvancingPlayersSolver.FetchFrom(round);
 
@@ -122,7 +122,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.GroupTests
         public void ThenAdvancingPlayersFromGroupFromFirstToLastShouldBeExactly(int groupIndex, string commaSeparatedPlayerNames)
         {
             GroupBase group = createdGroups[groupIndex];
-            List<string> expectedPlayerNameOrder = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            List<string> expectedPlayerNameOrder = commaSeparatedPlayerNames.ToStringList(",");
 
             List<PlayerReference> playerReferences = AdvancingPlayersSolver.FetchFrom(group);
 

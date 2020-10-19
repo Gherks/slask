@@ -4,14 +4,14 @@ using Xunit;
 
 namespace Slask.Common.Xunit.UnitTests
 {
-    public class StringUtilityTests
+    public class StringExtensionTests
     {
         [Fact]
         public void CanCreateStringListFromStringWithCommaDelimiter()
         {
             string text = "Zero,One,Two,Three";
 
-            List<string> stringList = StringUtility.ToStringList(text, ",");
+            List<string> stringList = text.ToStringList(",");
 
             stringList.Should().HaveCount(4);
             stringList[0].Should().Be("Zero");
@@ -25,7 +25,7 @@ namespace Slask.Common.Xunit.UnitTests
         {
             string text = "eagle|bear|cow";
 
-            List<string> stringList = StringUtility.ToStringList(text, "|");
+            List<string> stringList = text.ToStringList("|");
 
             stringList.Should().HaveCount(3);
             stringList[0].Should().Be("eagle");
@@ -38,7 +38,7 @@ namespace Slask.Common.Xunit.UnitTests
         {
             string text = "4a3a2a1";
 
-            List<string> stringList = StringUtility.ToStringList(text, "a");
+            List<string> stringList = text.ToStringList("a");
 
             stringList.Should().HaveCount(4);
             stringList[0].Should().Be("4");
@@ -52,7 +52,7 @@ namespace Slask.Common.Xunit.UnitTests
         {
             string text = "cheese1cheese1cheese1cheese";
 
-            List<string> stringList = StringUtility.ToStringList(text, "1");
+            List<string> stringList = text.ToStringList("1");
 
             stringList.Should().HaveCount(4);
             stringList[0].Should().Be("cheese");
@@ -66,7 +66,7 @@ namespace Slask.Common.Xunit.UnitTests
         {
             string text = "T_O_P_K_E_K";
 
-            List<string> stringList = StringUtility.ToStringList(text, "_");
+            List<string> stringList = text.ToStringList("_");
 
             stringList.Should().HaveCount(6);
             stringList[0].Should().Be("T");
@@ -82,7 +82,7 @@ namespace Slask.Common.Xunit.UnitTests
         {
             string text = "1abccatabclol";
 
-            List<string> stringList = StringUtility.ToStringList(text, "abc");
+            List<string> stringList = text.ToStringList("abc");
 
             stringList.Should().HaveCount(3);
             stringList[0].Should().Be("1");
@@ -95,7 +95,7 @@ namespace Slask.Common.Xunit.UnitTests
         {
             string text = ",omega,yikes";
 
-            List<string> stringList = StringUtility.ToStringList(text, ",");
+            List<string> stringList = text.ToStringList(",");
 
             stringList.Should().HaveCount(2);
             stringList[0].Should().Be("omega");
@@ -107,7 +107,7 @@ namespace Slask.Common.Xunit.UnitTests
         {
             string text = "kaktus,galaxus,";
 
-            List<string> stringList = StringUtility.ToStringList(text, ",");
+            List<string> stringList = text.ToStringList(",");
 
             stringList.Should().HaveCount(2);
             stringList[0].Should().Be("kaktus");
@@ -119,7 +119,7 @@ namespace Slask.Common.Xunit.UnitTests
         {
             string text = "  Zero, One ,Two ,  Three    ";
 
-            List<string> stringList = StringUtility.ToStringList(text, ",");
+            List<string> stringList = text.ToStringList(",");
 
             stringList.Should().HaveCount(4);
             stringList[0].Should().Be("Zero");
@@ -133,7 +133,7 @@ namespace Slask.Common.Xunit.UnitTests
         {
             string text = "Woof Woof Woof Woof";
 
-            List<string> stringList = StringUtility.ToStringList(text, " ");
+            List<string> stringList = text.ToStringList(" ");
 
             stringList.Should().BeEmpty();
         }
@@ -143,7 +143,7 @@ namespace Slask.Common.Xunit.UnitTests
         {
             string text = "Never|stop|never|stopping";
 
-            List<string> stringList = StringUtility.ToStringList(text, "");
+            List<string> stringList = text.ToStringList("");
 
             stringList.Should().BeEmpty();
         }
@@ -151,7 +151,7 @@ namespace Slask.Common.Xunit.UnitTests
         [Fact]
         public void CanTransformStringToUppserWithNoSpaces()
         {
-            string transformedText = StringUtility.ToUpperNoSpaces("to upper no spaces");
+            string transformedText = "to upper no spaces".ToUpperNoSpaces();
 
             transformedText.Should().Be("TOUPPERNOSPACES");
         }
@@ -159,7 +159,7 @@ namespace Slask.Common.Xunit.UnitTests
         [Fact]
         public void TransformingEmptyStringToUpperNoSpacesReturnsUntouchedString()
         {
-            string transformedText = StringUtility.ToUpperNoSpaces("");
+            string transformedText = "".ToUpperNoSpaces();
 
             transformedText.Should().Be("");
         }
@@ -167,7 +167,7 @@ namespace Slask.Common.Xunit.UnitTests
         [Fact]
         public void TransformingNullStringToUpperNoSpacesReturnsNull()
         {
-            string transformedText = StringUtility.ToUpperNoSpaces(null);
+            string transformedText = StringExtensions.ToUpperNoSpaces(null);
 
             transformedText.Should().BeNull();
         }

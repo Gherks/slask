@@ -20,7 +20,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.UtilityTests
         public void ThenPlayerStandingsInGroupFromFirstToLastShouldBe(int groupIndex, string commaSeparatedPlayerNames)
         {
             GroupBase group = createdGroups[groupIndex];
-            List<string> expectedPlayerNameOrder = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            List<string> expectedPlayerNameOrder = commaSeparatedPlayerNames.ToStringList(",");
 
             PlayerStandingsSolver playerStandingsSolver = new PlayerStandingsSolver();
             List<StandingsEntry<PlayerReference>> playerStandings = playerStandingsSolver.FetchFrom(group);

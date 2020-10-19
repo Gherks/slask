@@ -15,7 +15,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
         public void ThenFetchedAdvancingPlayersInRoundShouldBeExactly(int roundIndex, string commaSeparatedPlayerNames)
         {
             RoundBase round = createdRounds[roundIndex];
-            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            List<string> playerNames = commaSeparatedPlayerNames.ToStringList(",");
 
             RoundInteractionStepUtility.FetchingAdvancingPlayersInRoundYieldsGivenPlayerNames(round, playerNames);
         }
@@ -36,7 +36,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
         public void ThenFetchedAdvancingPlayersInRoundShouldBeExactly(int roundIndex, string commaSeparatedPlayerNames)
         {
             RoundBase round = createdRounds[roundIndex];
-            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            List<string> playerNames = commaSeparatedPlayerNames.ToStringList(",");
 
             RoundInteractionStepUtility.FetchingAdvancingPlayersInRoundYieldsGivenPlayerNames(round, playerNames);
         }
@@ -57,7 +57,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
         public void ThenFetchedAdvancingPlayersInRoundShouldBeExactly(int roundIndex, string commaSeparatedPlayerNames)
         {
             RoundBase round = createdRounds[roundIndex];
-            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            List<string> playerNames = commaSeparatedPlayerNames.ToStringList(",");
 
             RoundInteractionStepUtility.FetchingAdvancingPlayersInRoundYieldsGivenPlayerNames(round, playerNames);
         }

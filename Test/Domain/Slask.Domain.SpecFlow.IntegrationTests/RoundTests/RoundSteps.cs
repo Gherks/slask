@@ -128,7 +128,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
         public void ThenAdvancingPlayersInGroupIsExactly(int groupIndex, string commaSeparatedPlayerNames)
         {
             GroupBase group = createdGroups[groupIndex];
-            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            List<string> playerNames = commaSeparatedPlayerNames.ToStringList(",");
 
             List<PlayerReference> playerReferences = AdvancingPlayersSolver.FetchFrom(group);
 

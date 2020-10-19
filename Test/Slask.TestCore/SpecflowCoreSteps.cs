@@ -24,7 +24,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [When(@"users ""(.*)"" has been created")]
         public void GivenUsersHasBeenCreated(string commaSeparatedUserNames)
         {
-            List<string> userNames = StringUtility.ToStringList(commaSeparatedUserNames, ",");
+            List<string> userNames = commaSeparatedUserNames.ToStringList(",");
 
             using (UserRepository userRepository = CreateUserRepository())
             {
@@ -51,7 +51,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [When(@"a tournament named ""(.*)"" has been created with users ""(.*)"" added to it")]
         public void GivenATournamentNamedWithUsersAddedToIt(string tournamentName, string commaSeparatedUserNames)
         {
-            List<string> userNames = StringUtility.ToStringList(commaSeparatedUserNames, ",");
+            List<string> userNames = commaSeparatedUserNames.ToStringList(",");
 
             using (UserRepository userRepository = CreateUserRepository())
             {
@@ -126,7 +126,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         [When(@"players ""(.*)"" is registered to tournament named ""(.*)""")]
         public void GivenPlayersIsRegisteredToRound(string commaSeparatedPlayerNames, string tournamentName)
         {
-            List<string> playerNames = StringUtility.ToStringList(commaSeparatedPlayerNames, ",");
+            List<string> playerNames = commaSeparatedPlayerNames.ToStringList(",");
 
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {

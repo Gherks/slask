@@ -62,7 +62,7 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
         {
             TournamentDto tournamentDto = _tournamentDtos.FirstOrDefault(tournamentDto => tournamentDto.Name == tournamentName);
 
-            List<string> userNames = StringUtility.ToStringList(commaSeparatedUserNames, ",");
+            List<string> userNames = commaSeparatedUserNames.ToStringList(",");
 
             tournamentDto.Betters.Should().HaveCount(userNames.Count);
 
