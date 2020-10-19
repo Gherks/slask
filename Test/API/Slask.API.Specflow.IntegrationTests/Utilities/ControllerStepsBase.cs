@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 using Xunit;
 
-namespace Slask.API.Specflow.IntegrationTests
+namespace Slask.API.Specflow.IntegrationTests.Utilities
 {
     public class ControllerStepsBase : SpecflowCoreSteps, IClassFixture<InMemoryDatabaseWebApplicationFactory<Startup>>
     {

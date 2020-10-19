@@ -9,7 +9,7 @@ using Slask.Persistence;
 using System;
 using System.Linq;
 
-namespace Slask.API.Specflow.IntegrationTests
+namespace Slask.API.Specflow.IntegrationTests.Utilities
 {
     public class InMemoryDatabaseWebApplicationFactory<StartupType> : WebApplicationFactory<StartupType> where StartupType : class
     {
