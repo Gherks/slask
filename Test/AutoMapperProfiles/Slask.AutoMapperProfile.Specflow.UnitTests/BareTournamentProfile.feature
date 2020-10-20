@@ -5,4 +5,4 @@
 Scenario: Can map a domain tournament to a bare tournament DTO
 	Given a tournament named "GSL 2019" has been created
 	When automapper maps domain tournament "GSL 2019" to a bare tournament DTO
-	Then all bare tournament DTOs should be valid
+	Then all bare tournament DTOs should be valid with names "GSL 2019"

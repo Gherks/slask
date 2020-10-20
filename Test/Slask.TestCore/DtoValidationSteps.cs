@@ -29,13 +29,19 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             }
         }
 
-        [Then(@"all bare tournament DTOs should be valid")]
-        public void ThenAllBareTournamentDTOsShouldBeValid()
+        [Then(@"all bare tournament DTOs should be valid with names ""(.*)""")]
+        public void ThenAllBareTournamentDTOsShouldBeValid(string commaSeparatedTournamentNames)
         {
-            foreach (BareTournamentDto bareTournamentDto in _bareTournamentDtos)
+            List<string> tournamentNames = commaSeparatedTournamentNames.ToStringList(",");
+
+            _bareTournamentDtos.Should().HaveCount(tournamentNames.Count);
+
+            for(int index = 0; index < _bareTournamentDtos.Count; ++index)
             {
+                BareTournamentDto bareTournamentDto = _bareTournamentDtos[index];
+
                 bareTournamentDto.Id.Should().NotBeEmpty();
-                bareTournamentDto.Name.Should().NotBeNullOrEmpty();
+                bareTournamentDto.Name.Should().Be(tournamentNames[index]);
                 bareTournamentDto.Created.Should().BeCloseTo(SystemTime.Now, _acceptableInaccuracy);
             }
         }
