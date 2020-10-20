@@ -32,23 +32,21 @@ Scenario: Can map a domain tournament to a tournament DTO
 			| Round index | Group index | Match index | Scoring player | Score Added |
 			| 0           | 0           | 2           | Taeja          | 2           |
 	When automapper maps domain tournament "GSL 2020" to a tournament DTO
-	Then automapped tournament DTO named "GSL 2020" should be valid with
-			| Better count | Round count | Issue count |
-			| 4            | 1           | 0           |
-		And automapped tournament DTO named "GSL 2020" should contain betters "Stålberto, Bönis, Guggelito, Kimmieboi"
-		And automapped tournament DTO named "GSL 2020" should contain rounds
+	Then tournament DTO named "GSL 2020" should be valid with 4 betters, 1 rounds, and 0 issues
+		And tournament DTO named "GSL 2020" should contain betters "Stålberto, Bönis, Guggelito, Kimmieboi"
+		And tournament DTO named "GSL 2020" should contain rounds
 			| Contest type | Round name |
 			| Bracket      | Round A    |
-		And automapped tournament DTO named "GSL 2020" should contain groups
+		And tournament DTO named "GSL 2020" should contain groups
 			| Round index | Group index | Contest type | Sort order | Group name |
 			| 0           | 0           | Bracket      | 0          | Group A    |
-		And automapped tournament DTO named "GSL 2020" should contain matches
+		And tournament DTO named "GSL 2020" should contain matches
 			| Round index | Group index | Match index | Sort order | Best of | Player1 name | Player1 score | Player2 name | Player2 score |
 			| 0           | 0           | 0           | 0          | 3       | Maru         | 2             | Stork        | 0             |
 			| 0           | 0           | 1           | 1          | 3       | Taeja        | 2             | Rain         | 0             |
 			| 0           | 0           | 2           | 2          | 3       | Maru         | 0             | Taeja        | 2             |
-		And automapped tournament DTO named "GSL 2020" should contain no issues
-		And automapped tournament DTO named "GSL 2020" should contain better standings
+		And tournament DTO named "GSL 2020" should contain no issues
+		And tournament DTO named "GSL 2020" should contain better standings
 			| Better name | Points |
 			| Stålberto   | 3      |
 			| Guggelito   | 2      |
@@ -62,7 +60,7 @@ Scenario: Mapped tournament DTO is filled with tournament issues when they are p
 			| Bracket      | 1                         | 4                       |
 			| Bracket      | 1                         | 4                       |
 	When automapper maps domain tournament "GSL 2020" to a tournament DTO
-	Then automapped tournament DTO named "GSL 2020" should contain issues
+	Then tournament DTO named "GSL 2020" should contain issues
 		| Round | Group | Match | Description                                                                                                                                        |
 		| 0     | -1    | -1    | Current player count does not fill all group(s) to capacity. Add more players or reduce group capacity.                                            |
 		| 1     | -1    | -1    | Round does not synergize with previous round. Advancing players from previous round will not fill the groups within the current round to capacity. |

@@ -12,12 +12,9 @@ using TechTalk.SpecFlow;
 namespace Slask.AutoMapperProfile.Specflow.UnitTests
 {
     [Binding, Scope(Feature = "BareTournamentProfile")]
-    public class BareTournamentProfileSteps : SpecflowCoreSteps
+    public class BareTournamentProfileSteps : DtoValidationSteps
     {
-        private const int _acceptableInaccuracy = 2000;
-
         private readonly IMapper _mapper;
-        private readonly List<BareTournamentDto> _bareTournamentDtos;
 
         public BareTournamentProfileSteps()
         {
@@ -25,9 +22,8 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
             {
                 config.AddProfile<BareTournamentProfile>();
             });
-            _mapper = mapperConfiguration.CreateMapper();
 
-            _bareTournamentDtos = new List<BareTournamentDto>();
+            _mapper = mapperConfiguration.CreateMapper();
         }
 
         [When(@"automapper maps domain tournament ""(.*)"" to a bare tournament DTO")]
@@ -37,17 +33,6 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
             {
                 Tournament tournament = userRepository.GetTournamentByName(tournamentName);
                 _bareTournamentDtos.Add(_mapper.Map<BareTournamentDto>(tournament));
-            }
-        }
-
-        [Then(@"all automapped bare tournament DTOs should be valid")]
-        public void ThenAllAutomappedBareTournamentDTOsShouldBeValid()
-        {
-            foreach (BareTournamentDto bareTournamentDto in _bareTournamentDtos)
-            {
-                bareTournamentDto.Id.Should().NotBeEmpty();
-                bareTournamentDto.Name.Should().NotBeNullOrEmpty();
-                bareTournamentDto.Created.Should().BeCloseTo(SystemTime.Now, _acceptableInaccuracy);
             }
         }
     }

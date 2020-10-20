@@ -12,10 +12,9 @@ using TechTalk.SpecFlow;
 namespace Slask.AutoMapperProfile.Specflow.UnitTests
 {
     [Binding, Scope(Feature = "UserProfile")]
-    public class UserProfileSteps : SpecflowCoreSteps
+    public class UserProfileSteps : DtoValidationSteps
     {
         private readonly IMapper _mapper;
-        private readonly List<UserDto> _userDtos;
 
         public UserProfileSteps()
         {
@@ -23,9 +22,8 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
             {
                 config.AddProfile<UsersProfile>();
             });
+         
             _mapper = mapperConfiguration.CreateMapper();
-
-            _userDtos = new List<UserDto>();
         }
 
         [When(@"automapper maps domain user ""(.*)"" to a user DTO")]
@@ -40,16 +38,6 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
                     User user = userRepository.GetUserByName(userName);
                     _userDtos.Add(_mapper.Map<UserDto>(user));
                 }
-            }
-        }
-
-        [Then(@"all automapped user DTOs should be valid")]
-        public void ThenAllAutomappedUserDTOsShouldBeValid()
-        {
-            foreach (UserDto userDto in _userDtos)
-            {
-                userDto.Id.Should().NotBeEmpty();
-                userDto.Name.Should().NotBeNullOrEmpty();
             }
         }
     }
