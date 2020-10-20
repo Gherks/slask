@@ -6,6 +6,7 @@ using Slask.Application.Querys;
 using Slask.Application.Utilities;
 using Slask.Dto;
 using Slask.Dto.CreationDtos;
+using System;
 using System.Collections.Generic;
 
 namespace Slask.API.Controllers
@@ -35,6 +36,21 @@ namespace Slask.API.Controllers
                     return StatusCode(StatusCodes.Status500InternalServerError);
                 }
 
+                return NotFound(result.Error);
+            }
+
+            return Ok(result.Value);
+        }
+
+        [HttpGet("{tournamentId:guid}")]
+        [HttpHead]
+        public ActionResult<TournamentDto> GetTournament(Guid tournamentId)
+        {
+            GetTournamentById query = new GetTournamentById(tournamentId);
+            Result<TournamentDto> result = _commandQueryDispatcher.Dispatch(query);
+
+            if (result.IsFailure)
+            {
                 return NotFound(result.Error);
             }
 
