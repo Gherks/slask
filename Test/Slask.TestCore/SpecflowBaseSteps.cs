@@ -16,7 +16,7 @@ using TechTalk.SpecFlow.Assist;
 
 namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 {
-    public class SpecflowCoreSteps
+    public class SpecflowBaseSteps
     {
         private readonly string _testDatabaseName = "InMemoryTestDatabase_" + Guid.NewGuid().ToString();
 

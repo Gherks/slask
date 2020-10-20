@@ -10,7 +10,7 @@ using TechTalk.SpecFlow.Assist;
 
 namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 {
-    public class DtoValidationSteps : SpecflowCoreSteps
+    public class DtoValidationSteps : SpecflowBaseSteps
     {
         private const int _acceptableInaccuracy = 10000;
         private readonly DateTime _tournamentCreated = SystemTime.Now;

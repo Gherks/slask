@@ -13,7 +13,7 @@ using TechTalk.SpecFlow.Assist;
 namespace Slask.Persistence.Specflow.IntegrationTests
 {
     [Binding, Scope(Feature = "ChangeTournamentSettings")]
-    public sealed class ChangeTournamentSettings : SpecflowCoreSteps
+    public sealed class ChangeTournamentSettings : SpecflowBaseSteps
     {
         private readonly Dictionary<Guid, DateTime> oldMatchStartTimes;
 
