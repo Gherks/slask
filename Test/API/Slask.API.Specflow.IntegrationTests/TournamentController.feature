@@ -28,3 +28,11 @@ Scenario: Can fetch created tournament by name
 		And response return with status code "200"
 	When tournament DTOs are extracted from response
 	Then tournament DTO named "GSL 2019" should be valid with 0 betters, 0 rounds, and 0 issues
+	
+Scenario: Can fetch created tournament by id
+	Given Content-Type is set to "application/json" and Accept is set to "application/json"
+		And POST request is sent to create a tournament named "GSL 2019"
+		And GET request is sent to fetch tournament named "GSL 2019" by user id
+		And response return with status code "200"
+	When tournament DTOs are extracted from response
+	Then tournament DTO named "GSL 2019" should be valid with 0 betters, 0 rounds, and 0 issues
