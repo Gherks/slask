@@ -117,15 +117,16 @@ namespace Slask.Common.Xunit.UnitTests
         [Fact]
         public void RemovesWhitespaceFromStringElements()
         {
-            string text = "  Zero, One ,Two ,  Three    ";
+            string text = "  Zero, One ,Two ,  Three    , Ten and Five";
 
             List<string> stringList = text.ToStringList(",");
 
-            stringList.Should().HaveCount(4);
+            stringList.Should().HaveCount(5);
             stringList[0].Should().Be("Zero");
             stringList[1].Should().Be("One");
             stringList[2].Should().Be("Two");
             stringList[3].Should().Be("Three");
+            stringList[4].Should().Be("Ten and Five");
         }
 
         [Fact]

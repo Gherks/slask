@@ -27,7 +27,7 @@ namespace Slask.Common
                     continue;
                 }
 
-                textList[index] = textList[index].Replace(" ", string.Empty);
+                textList[index] = textList[index].Trim();
             }
 
             return textList;
