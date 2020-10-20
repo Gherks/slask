@@ -4,9 +4,11 @@ using Slask.API.Specflow.IntegrationTests.Utilities;
 using Slask.Common;
 using Slask.Dto;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 
 namespace Slask.API.Specflow.IntegrationTests
 {
@@ -27,6 +29,28 @@ namespace Slask.API.Specflow.IntegrationTests
             _response = await _client.GetAsync("api/tournaments");
         }
 
+        [Given(@"GET request is sent to fetch tournament named ""(.*)""")]
+        [When(@"GET request is sent to fetch tournament named ""(.*)""")]
+        public async Task GivenGETRequestIsSentToFetchTournamentNamed(string name)
+        {
+            _response = await _client.GetAsync("api/tournaments/" + name);
+        }
+
+        [Given(@"GET request is sent to fetch tournament named ""(.*)"" by user id")]
+        [When(@"GET request is sent to fetch tournament named ""(.*)"" by user id")]
+        public async Task GivenGETRequestIsSentToFetchTournamentNamedByUserId(string name)
+        {
+            await GivenGETRequestIsSentToFetchTournamentNamed(name);
+
+            List<TournamentDto> tournamentDtos = await JsonResponseToObjectList<TournamentDto>();
+            TournamentDto tournamentDto = tournamentDtos.FirstOrDefault(dto => dto.Name == name);
+
+            if (tournamentDto != null)
+            {
+                _response = await _client.GetAsync("api/tournaments/" + tournamentDto.Id);
+            }
+        }
+
         [Given(@"POST request is sent to create a tournament named ""(.*)""")]
         [When(@"POST request is sent to create a tournament named ""(.*)""")]
         public async Task GivenPOSTRequestIsSentToCreateATournamentNamed(string name)
@@ -37,23 +61,18 @@ namespace Slask.API.Specflow.IntegrationTests
             _response = await _client.PostAsync("api/tournaments", content);
         }
 
-        [Then(@"response should contain tournaments ""(.*)""")]
-        public async Task ThenResponseShouldContainTournaments(string commaSeparatedTournamentNames)
+        [Given(@"bare tournament DTOs are extracted from response")]
+        [When(@"bare tournament DTOs are extracted from response")]
+        public async Task WhenBareTournamentDTOsAreExtractedFromResponse()
         {
-            List<string> tournamentNames = commaSeparatedTournamentNames.ToStringList(",");
+            _bareTournamentDtos.AddRange(await JsonResponseToObjectList<BareTournamentDto>());
+        }
 
-            List<BareTournamentDto> bareTournamentDtos = await JsonResponseToObjectList<BareTournamentDto>();
-
-            bareTournamentDtos.Should().HaveCount(tournamentNames.Count);
-
-            for (int index = 0; index < bareTournamentDtos.Count; ++index)
-            {
-                BareTournamentDto bareTournamentDto = bareTournamentDtos[index];
-
-                bareTournamentDto.Id.Should().NotBeEmpty();
-                bareTournamentDto.Name.Should().Be(tournamentNames[index]);
-                bareTournamentDto.Created.Should().BeCloseTo(SystemTime.Now, _acceptableInaccuracy);
-            }
+        [Given(@"tournament DTOs are extracted from response")]
+        [When(@"tournament DTOs are extracted from response")]
+        public async Task WhenTournamentDTOsAreExtractedFromResponse()
+        {
+            _tournamentDtos.AddRange(await JsonResponseToObjectList<TournamentDto>());
         }
     }
 }
