@@ -18,4 +18,4 @@ Scenario: Can fetch existing tournaments with OK response
 		And POST request is sent to create a tournament named "GSL 2019"
 	When GET request is sent to fetch tournaments
 	Then response return with status code "200"
-		And response should contain tournaments "Homestory Cup XX, GSL 2019"
+		And response should contain bare tournaments "Homestory Cup XX, GSL 2019"
