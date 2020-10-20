@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Newtonsoft.Json;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Slask.API.Specflow.IntegrationTests.Utilities
 {
-    public class ControllerStepsBase : SpecflowCoreSteps, IClassFixture<InMemoryDatabaseWebApplicationFactory<Startup>>
+    public class ControllerStepsBase : DtoValidationSteps, IClassFixture<InMemoryDatabaseWebApplicationFactory<Startup>>
     {
         protected readonly HttpClient _client;
         protected HttpResponseMessage _response;
