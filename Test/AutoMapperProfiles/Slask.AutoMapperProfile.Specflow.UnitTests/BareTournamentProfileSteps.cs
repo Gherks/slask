@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using FluentAssertions;
 using Slask.Application.AutoMapperProfiles;
-using Slask.Common;
 using Slask.Domain;
 using Slask.Dto;
 using Slask.Persistence.Repositories;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests;
-using System.Collections.Generic;
 using TechTalk.SpecFlow;
 
 namespace Slask.AutoMapperProfile.Specflow.UnitTests

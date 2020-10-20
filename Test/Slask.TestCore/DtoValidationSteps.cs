@@ -36,7 +36,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
             _bareTournamentDtos.Should().HaveCount(tournamentNames.Count);
 
-            for(int index = 0; index < _bareTournamentDtos.Count; ++index)
+            for (int index = 0; index < _bareTournamentDtos.Count; ++index)
             {
                 BareTournamentDto bareTournamentDto = _bareTournamentDtos[index];
 

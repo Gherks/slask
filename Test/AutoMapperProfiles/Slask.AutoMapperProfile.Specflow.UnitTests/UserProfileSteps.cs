@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FluentAssertions;
 using Slask.Application.AutoMapperProfiles;
 using Slask.Common;
 using Slask.Domain;
@@ -22,7 +21,7 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
             {
                 config.AddProfile<UsersProfile>();
             });
-         
+
             _mapper = mapperConfiguration.CreateMapper();
         }
 

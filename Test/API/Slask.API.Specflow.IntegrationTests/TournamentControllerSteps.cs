@@ -1,14 +1,11 @@
-﻿using FluentAssertions;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Slask.API.Specflow.IntegrationTests.Utilities;
-using Slask.Common;
 using Slask.Dto;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
 
 namespace Slask.API.Specflow.IntegrationTests
 {
