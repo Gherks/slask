@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Newtonsoft.Json;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests;
 using System.Collections.Generic;
@@ -32,8 +32,10 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
             _accept = accept;
         }
 
-        [Then(@"response should return with status code ""(.*)""")]
-        public void ThenResponseShouldReturnWithStatusCode(int statusCode)
+        [Given(@"response return with status code ""(.*)""")]
+        [When(@"response return with status code ""(.*)""")]
+        [Then(@"response return with status code ""(.*)""")]
+        public void ThenResponseReturnWithStatusCode(int statusCode)
         {
             _response.StatusCode.Should().Be(statusCode);
         }
