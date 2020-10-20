@@ -42,6 +42,21 @@ namespace Slask.API.Controllers
             return Ok(result.Value);
         }
 
+        [HttpGet("{tournamentName}")]
+        [HttpHead]
+        public ActionResult<TournamentDto> GetTournament(string tournamentName)
+        {
+            GetTournamentByName query = new GetTournamentByName(tournamentName);
+            Result<TournamentDto> result = _commandQueryDispatcher.Dispatch(query);
+
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+
+            return Ok(result.Value);
+        }
+
         [HttpPost]
         public ActionResult CreateTournament(TournamentCreationDto tournament)
         {

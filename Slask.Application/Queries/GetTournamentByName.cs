@@ -10,6 +10,11 @@ namespace Slask.Application.Querys
     public sealed class GetTournamentByName : QueryInterface<TournamentDto>
     {
         public string TournamentName { get; }
+
+        public GetTournamentByName(string tournamentName)
+        {
+            TournamentName = tournamentName;
+        }
     }
 
     public sealed class GetTournamentByNameHandler : QueryHandlerInterface<GetTournamentByName, TournamentDto>
