@@ -85,5 +85,12 @@ namespace Slask.API.Controllers
 
             return StatusCode(StatusCodes.Status201Created);
         }
+
+        [HttpOptions]
+        public ActionResult GetUserOptions()
+        {
+            Response.Headers.Add("Allow", "GET,OPTIONS,POST");
+            return Ok();
+        }
     }
 }
