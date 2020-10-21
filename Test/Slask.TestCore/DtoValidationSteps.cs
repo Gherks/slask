@@ -141,7 +141,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         {
             TournamentDto tournamentDto = _tournamentDtos.FirstOrDefault(tournamentDto => tournamentDto.Name == tournamentName);
 
-            table.CompareToSet(tournamentDto.Issues); 
+            table.CompareToSet(tournamentDto.Issues);
         }
 
         [Then(@"tournament DTO named ""(.*)"" should contain no issues")]
