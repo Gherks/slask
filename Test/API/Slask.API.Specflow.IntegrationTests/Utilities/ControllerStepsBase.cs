@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
 using Newtonsoft.Json;
+using Slask.Common;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -32,12 +34,33 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
             _accept = accept;
         }
 
+        [When(@"OPTIONS request is sent to ""(.*)""")]
+        public async Task WhenOPTIONSRequestIsSentTo(string uri)
+        {
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Options, uri);
+            _response = await _client.SendAsync(message);
+        }
+
         [Given(@"response return with status code ""(.*)""")]
         [When(@"response return with status code ""(.*)""")]
         [Then(@"response return with status code ""(.*)""")]
         public void ThenResponseReturnWithStatusCode(int statusCode)
         {
             _response.StatusCode.Should().Be(statusCode);
+        }
+
+        [Then(@"response header contain endpoints ""(.*)""")]
+        public void ThenResponseHeaderContainEndpoints(string commaSeparatedEndpoints)
+        {
+            List<string> endpoints = commaSeparatedEndpoints.ToStringList(",");
+            List<string> allowed = _response.Content.Headers.Allow.ToList();
+
+            allowed.Should().HaveCount(endpoints.Count);
+
+            foreach (string endpoint in endpoints)
+            {
+                allowed.Contains(endpoint);
+            }
         }
 
         protected StringContent CreateHttpContent(string content)
