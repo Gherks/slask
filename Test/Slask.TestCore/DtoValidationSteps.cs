@@ -19,13 +19,17 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         protected readonly List<BareTournamentDto> _bareTournamentDtos = new List<BareTournamentDto>();
         protected readonly List<TournamentDto> _tournamentDtos = new List<TournamentDto>();
 
-        [Then(@"all user DTOs should be valid")]
-        public void ThenAllUserDTOsShouldBeValid()
+        [Then(@"all user DTOs should be valid with names ""(.*)""")]
+        public void ThenAllUserDTOsShouldBeValid(string commaSeparatedUsernames)
         {
-            foreach (UserDto userDto in _userDtos)
+            List<string> usernames = commaSeparatedUsernames.ToStringList(",");
+
+            for (int index = 0; index < usernames.Count; ++index)
             {
+                UserDto userDto = _userDtos[index];
+
                 userDto.Id.Should().NotBeEmpty();
-                userDto.Name.Should().NotBeNullOrEmpty();
+                userDto.Name.Should().Be(usernames[index]);
             }
         }
 
@@ -137,19 +141,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         {
             TournamentDto tournamentDto = _tournamentDtos.FirstOrDefault(tournamentDto => tournamentDto.Name == tournamentName);
 
-            tournamentDto.Issues.Should().HaveCount(table.RowCount);
-
-            for (int index = 0; index < table.RowCount; ++index)
-            {
-                TournamentIssueDto soughtTournamentIssueDto = table.Rows[index].CreateInstance<TournamentIssueDto>();
-
-                TournamentIssueDto tournamentIssueDto = tournamentDto.Issues[index];
-
-                tournamentIssueDto.Round.Should().Be(soughtTournamentIssueDto.Round);
-                tournamentIssueDto.Group.Should().Be(soughtTournamentIssueDto.Group);
-                tournamentIssueDto.Match.Should().Be(soughtTournamentIssueDto.Match);
-                tournamentIssueDto.Description.Should().Be(soughtTournamentIssueDto.Description);
-            }
+            table.CompareToSet(tournamentDto.Issues); 
         }
 
         [Then(@"tournament DTO named ""(.*)"" should contain no issues")]
