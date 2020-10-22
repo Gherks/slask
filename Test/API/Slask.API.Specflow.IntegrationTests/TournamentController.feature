@@ -34,3 +34,8 @@ Scenario: Can fetch tournament by name
 		And response return with status code "200"
 	When tournament DTOs are extracted from response
 	Then tournament DTO named "GSL 2019" should be valid with 0 betters, 0 rounds, and 0 issues
+
+Scenario: Can rename tournament
+		And POST request is sent to create a tournament named "Homestory Cup XX"
+		And PATCH request is sent to rename tournament with name "Homestory Cup XX" to "BHA Open 2020"
+	Then response return with status code "204"
