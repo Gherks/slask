@@ -46,7 +46,13 @@ namespace Slask.Domain
 
         public void RenameTo(string name)
         {
-            Name = name.Trim();
+            string trimmedName = name.Trim();
+
+            if (Name != trimmedName)
+            {
+                Name = trimmedName;
+                MarkAsModified();
+            }
         }
 
         public BracketRound AddBracketRound()
