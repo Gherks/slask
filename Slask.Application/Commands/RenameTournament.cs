@@ -32,7 +32,7 @@ namespace Slask.Application.Commands
 
             if (!renameSuccessful)
             {
-                return Result.Failure($"Could not rename tournament ({ command.TournamentId }) to \"({ command.TournamentName })\"");
+                return Result.Failure($"Could not rename tournament ({ command.TournamentId }) to ({ command.TournamentName })");
             }
 
             _tournamentRepository.Save();
