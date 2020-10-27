@@ -104,6 +104,17 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             }
         }
 
+        [When(@"tournament ""(.*)"" is renamed to ""(.*)""")]
+        public void WhenTournamentIsRenamedTo(string oldTournamentName, string newTournamentName)
+        {
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
+            {
+                Tournament tournament = tournamentRepository.GetTournamentByName(oldTournamentName);
+                tournament.RenameTo(newTournamentName);
+                tournamentRepository.Save();
+            }
+        }
+
         [When(@"move start time three hours forward for matches in tournament named ""(.*)""")]
         public void WhenMoveStartTimeThreeHoursForwardForMatchesInTournamentNamed(string tournamentName, Table table)
         {
@@ -190,6 +201,28 @@ namespace Slask.Persistence.Specflow.IntegrationTests
 
                     match.BestOf.Should().Be(selection.BestOf);
                 }
+            }
+        }
+
+        [Then(@"tournament named ""(.*)"" should exist")]
+        public void ThenTournamentNamedShouldExist(string tournamentName)
+        {
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
+            {
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+
+                tournament.Should().NotBeNull();
+            }
+        }
+
+        [Then(@"tournament named ""(.*)"" should not exist")]
+        public void ThenTournamentNamedShouldNotExist(string tournamentName)
+        {
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
+            {
+                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+
+                tournament.Should().BeNull();
             }
         }
 

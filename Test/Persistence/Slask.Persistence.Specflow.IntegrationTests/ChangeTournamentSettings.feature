@@ -2,6 +2,12 @@
 	Makes sure tournament entities can be changed when they are supposed to, and not change when they are not supposed to.
 
 @ChangeTournamentSettingsTag
+Scenario: Can rename tournament
+	Given a tournament named "Homestory Cup XX" has been created
+	When tournament "Homestory Cup XX" is renamed to "GSL 2019"
+	Then tournament named "GSL 2019" should exist
+		And tournament named "Homestory Cup XX" should not exist
+
 Scenario: Can only remove a round before tournament has started
 	Given a tournament named "Homestory Cup XX" has been created with users "" added to it
 		And tournament named "Homestory Cup XX" adds rounds
