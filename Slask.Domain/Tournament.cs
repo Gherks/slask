@@ -1,6 +1,7 @@
 using Slask.Common;
 using Slask.Domain.Bets;
 using Slask.Domain.Groups;
+using Slask.Domain.ObjectState;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Rounds.RoundUtilities;
@@ -12,7 +13,7 @@ using System.Linq;
 
 namespace Slask.Domain
 {
-    public class Tournament
+    public class Tournament : ObjectStateBase
     {
         private Tournament()
         {
@@ -185,6 +186,8 @@ namespace Slask.Domain
 
         public void ResetObjectStatesOnAllEntities()
         {
+            ResetObjectState();
+
             foreach (PlayerReference playerReference in PlayerReferences)
             {
                 playerReference.ResetObjectState();
@@ -414,6 +417,7 @@ namespace Slask.Domain
                 Rounds.Add(round);
                 round.Construct();
                 FindIssues();
+                MarkAsModified();
                 return true;
             }
 
@@ -445,6 +449,7 @@ namespace Slask.Domain
                 if (removalSuccessful)
                 {
                     round.MarkForDeletion();
+                    MarkAsModified();
 
                     bool stillContainsRounds = Rounds.Count > 0;
                     if (stillContainsRounds)
@@ -467,6 +472,7 @@ namespace Slask.Domain
             firstRound.FillGroupsWithPlayerReferences();
 
             FindIssues();
+            MarkAsModified();
         }
     }
 }
