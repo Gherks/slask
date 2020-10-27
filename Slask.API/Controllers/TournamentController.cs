@@ -6,6 +6,7 @@ using Slask.Application.Querys;
 using Slask.Application.Utilities;
 using Slask.Dto;
 using Slask.Dto.CreationDtos;
+using Slask.Dto.UpdateDtos;
 using System;
 using System.Collections.Generic;
 
@@ -84,6 +85,20 @@ namespace Slask.API.Controllers
             }
 
             return StatusCode(StatusCodes.Status201Created);
+        }
+
+        [HttpPut("{tournamentId}")]
+        public ActionResult RenameTournament(Guid tournamentId, TournamentRenameDto tournamentRenameDto)
+        {
+            RenameTournament command = new RenameTournament(tournamentId, tournamentRenameDto.NewName);
+            Result result = _commandQueryDispatcher.Dispatch(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error);
+            }
+
+            return StatusCode(StatusCodes.Status204NoContent);
         }
     }
 }
