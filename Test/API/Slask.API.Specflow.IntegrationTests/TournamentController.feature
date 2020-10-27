@@ -41,6 +41,6 @@ Scenario: Can rename tournament
 	Then response return with status code "204"
 
 Scenario: Can remove created tournament by id
-		And POST request is sent to create a tournament named "Homestory Cup XX"
-	When DELETE request is sent to delete tournament named "Homestory Cup XX" by id
+		And POST request is sent to create a tournament named "GSL 2020"
+	When DELETE request is sent to delete tournament named "GSL 2020" by id
 	Then response return with status code "204"
