@@ -72,18 +72,21 @@ namespace Slask.API.Specflow.IntegrationTests
             _tournamentDtos.AddRange(await JsonResponseToObjectList<TournamentDto>());
         }
 
-        [Given(@"PATCH request is sent to rename tournament with name ""(.*)"" to ""(.*)""")]
-        public async Task GivenPATCHRequestIsSentToRenameTournamentWithNameTo(string currentTournamentName, string newTournamentName)
+        [Given(@"PUT request is sent to rename tournament with name ""(.*)"" to ""(.*)""")]
+        [When(@"PUT request is sent to rename tournament with name ""(.*)"" to ""(.*)""")]
+        public async Task GivenPUTRequestIsSentToRenameTournamentWithNameTo(string currentTournamentName, string newTournamentName)
         {
             await GivenGETRequestIsSentToFetchTournamentNamed(currentTournamentName);
 
             List<TournamentDto> tournamentDtos = await JsonResponseToObjectList<TournamentDto>();
             TournamentDto tournamentDto = tournamentDtos.FirstOrDefault(dto => dto.Name == currentTournamentName);
 
-            string jsonContent = JsonConvert.SerializeObject(new { newName = newTournamentName });
+            string jsonContent = JsonConvert.SerializeObject(new { NewName = newTournamentName });
             HttpContent content = CreateHttpContent(jsonContent);
 
-            _response = await _client.PostAsync("api/tournaments/" + tournamentDto.Id, content);
+            string requestUri = "api/tournaments/" + tournamentDto.Id;
+
+            _response = await _client.PutAsync(requestUri, content);
         }
     }
 }
