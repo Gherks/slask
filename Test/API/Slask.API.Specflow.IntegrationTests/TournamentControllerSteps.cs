@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Slask.API.Specflow.IntegrationTests.Utilities;
 using Slask.Dto;
 using System.Collections.Generic;
@@ -23,14 +23,18 @@ namespace Slask.API.Specflow.IntegrationTests
         [When(@"GET request is sent to fetch tournaments")]
         public async Task GivenGETRequestIsSentToFetchTournaments()
         {
-            _response = await _client.GetAsync("api/tournaments");
+            string requestUri = "api/tournaments";
+
+            _response = await _client.GetAsync(requestUri);
         }
 
         [Given(@"GET request is sent to fetch tournament named ""(.*)""")]
         [When(@"GET request is sent to fetch tournament named ""(.*)""")]
         public async Task GivenGETRequestIsSentToFetchTournamentNamed(string name)
         {
-            _response = await _client.GetAsync("api/tournaments/" + name);
+            string requestUri = "api/tournaments/" + name;
+
+            _response = await _client.GetAsync(requestUri);
         }
 
         [Given(@"GET request is sent to fetch tournament named ""(.*)"" by user id")]
@@ -44,7 +48,9 @@ namespace Slask.API.Specflow.IntegrationTests
 
             if (tournamentDto != null)
             {
-                _response = await _client.GetAsync("api/tournaments/" + tournamentDto.Id);
+                string requestUri = "api/tournaments/" + tournamentDto.Id;
+
+                _response = await _client.GetAsync(requestUri);
             }
         }
 
@@ -55,7 +61,9 @@ namespace Slask.API.Specflow.IntegrationTests
             string jsonContent = JsonConvert.SerializeObject(new { tournamentName = name });
             HttpContent content = CreateHttpContent(jsonContent);
 
-            _response = await _client.PostAsync("api/tournaments", content);
+            string requestUri = "api/tournaments";
+
+            _response = await _client.PostAsync(requestUri, content);
         }
 
         [Given(@"bare tournament DTOs are extracted from response")]
