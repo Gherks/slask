@@ -100,5 +100,19 @@ namespace Slask.API.Controllers
 
             return StatusCode(StatusCodes.Status204NoContent);
         }
+
+        [HttpDelete("{tournamentId}")]
+        public ActionResult DeleteTournament(Guid tournamentId)
+        {
+            RemoveTournament command = new RemoveTournament(tournamentId);
+            Result result = _commandQueryDispatcher.Dispatch(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error);
+            }
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
     }
 }
