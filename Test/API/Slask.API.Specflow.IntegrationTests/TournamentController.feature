@@ -39,3 +39,8 @@ Scenario: Can rename tournament
 		And POST request is sent to create a tournament named "Homestory Cup XX"
 	When PUT request is sent to rename tournament with name "Homestory Cup XX" to "BHA Open 2020"
 	Then response return with status code "204"
+
+Scenario: Can remove created tournament by id
+		And POST request is sent to create a tournament named "Homestory Cup XX"
+	When DELETE request is sent to delete tournament named "Homestory Cup XX" by id
+	Then response return with status code "204"

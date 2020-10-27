@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Slask.API.Specflow.IntegrationTests.Utilities;
 using Slask.Dto;
 using System.Collections.Generic;
@@ -87,6 +87,22 @@ namespace Slask.API.Specflow.IntegrationTests
             string requestUri = "api/tournaments/" + tournamentDto.Id;
 
             _response = await _client.PutAsync(requestUri, content);
+        }
+
+        [When(@"DELETE request is sent to delete tournament named ""(.*)"" by id")]
+        public async Task WhenDELETERequestIsSentToDeleteTournamentNamedById(string name)
+        {
+            await GivenGETRequestIsSentToFetchTournamentNamed(name);
+
+            List<TournamentDto> tournamentDtos = await JsonResponseToObjectList<TournamentDto>();
+            TournamentDto tournamentDto = tournamentDtos.FirstOrDefault(dto => dto.Name == name);
+
+            if (tournamentDto != null)
+            {
+                string requestUri = "api/tournaments/" + tournamentDto.Id;
+
+                _response = await _client.DeleteAsync(requestUri);
+            }
         }
     }
 }
