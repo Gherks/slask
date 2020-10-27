@@ -132,6 +132,7 @@ namespace Slask.Persistence
 
         private void SetupIgnoredProperties(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Tournament>().Ignore(tournament => tournament.ObjectState);
             modelBuilder.Entity<Tournament>().Ignore(tournament => tournament.TournamentIssueReporter);
 
             modelBuilder.Entity<Better>().Ignore(better => better.ObjectState);

@@ -46,7 +46,7 @@ namespace Slask.Persistence.Repositories
 
             if (tournament != null)
             {
-                _slaskContext.Remove(tournament);
+                tournament.MarkForDeletion();
                 return true;
             }
 
@@ -59,7 +59,7 @@ namespace Slask.Persistence.Repositories
 
             if (tournament != null)
             {
-                _slaskContext.Remove(tournament);
+                tournament.MarkForDeletion();
                 return true;
             }
 
@@ -104,6 +104,7 @@ namespace Slask.Persistence.Repositories
 
             if (tournament != null)
             {
+                _slaskContext.Add(tournament);
                 tournament.ResetObjectStatesOnAllEntities();
                 tournament.SortEntities();
                 tournament.FindIssues();
@@ -120,6 +121,7 @@ namespace Slask.Persistence.Repositories
 
             if (tournament != null)
             {
+                _slaskContext.Add(tournament);
                 tournament.ResetObjectStatesOnAllEntities();
                 tournament.SortEntities();
                 tournament.FindIssues();
