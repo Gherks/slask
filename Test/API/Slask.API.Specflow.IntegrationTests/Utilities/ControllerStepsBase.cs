@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Newtonsoft.Json;
 using Slask.Common;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests;
@@ -62,7 +62,7 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
 
         [Given(@"POST request is sent to ""(.*)""")]
         [When(@"POST request is sent to ""(.*)""")]
-        public async Task GivenPOSTRequestIsSentToWithContent(string uri, Table table)
+        public async Task GivenPOSTRequestIsSentTo(string uri, Table table)
         {
             foreach (TableRow row in table.Rows)
             {
@@ -71,7 +71,7 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
         }
 
         [When(@"PUT request is sent to ""(.*)""")]
-        public async Task GivenPUTRequestIsSentToWithContent(string uri, Table table)
+        public async Task GivenPUTRequestIsSentTo(string uri, Table table)
         {
             foreach (TableRow row in table.Rows)
             {
@@ -84,7 +84,7 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
         }
 
         [When(@"DELETE request is sent to ""(.*)""")]
-        public async Task WhenDELETERequestIsSentToWithContent(string uri, Table table)
+        public async Task WhenDELETERequestIsSentTo(string uri, Table table)
         {
             foreach (TableRow row in table.Rows)
             {
