@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Newtonsoft.Json;
 using Slask.Common;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests;
@@ -75,9 +75,12 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
         {
             foreach (TableRow row in table.Rows)
             {
-                dynamic dto = await GetReplacementObject(uri, row[_idReplacementToken], row[_dtoTypeToken]);
+                if (row.ContainsKey(_idReplacementToken))
+                {
+                    dynamic dto = await GetReplacementObject(uri, row[_idReplacementToken], row[_dtoTypeToken]);
 
-                uri = uri.Replace(_idReplacementToken, dto.Id.ToString());
+                    uri = uri.Replace(_idReplacementToken, dto.Id.ToString());
+                }
 
                 _response = await _client.PutAsync(uri, GetHttpContentFromRow(row));
             }
@@ -140,7 +143,8 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
 
         private async Task<dynamic> GetReplacementObject(string baseUri, string replacementValue, string dtoType)
         {
-            string replacementUri = baseUri.Replace(_idReplacementToken, replacementValue);
+            int replacementTokenStart = baseUri.IndexOf(_idReplacementToken);
+            string replacementUri = baseUri.Substring(0, replacementTokenStart) + replacementValue;
 
             _response = await _client.GetAsync(replacementUri);
             string responseContent = await _response.Content.ReadAsStringAsync();

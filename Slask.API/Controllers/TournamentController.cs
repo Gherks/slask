@@ -101,6 +101,20 @@ namespace Slask.API.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
+        [HttpPut("{tournamentId}/rounds")]
+        public ActionResult AddRoundToTournament(Guid tournamentId, RoundCreationDto roundCreationDto)
+        {
+            AddRoundToTournament command = new AddRoundToTournament(tournamentId, roundCreationDto.RoundType);
+            Result result = _commandQueryDispatcher.Dispatch(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error);
+            }
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
         [HttpDelete("{tournamentId}")]
         public ActionResult DeleteTournament(Guid tournamentId)
         {
