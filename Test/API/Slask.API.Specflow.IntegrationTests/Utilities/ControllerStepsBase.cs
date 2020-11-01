@@ -1,13 +1,12 @@
 ﻿using FluentAssertions;
 using Newtonsoft.Json;
 using Slask.Common;
+using Slask.Dto;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
@@ -18,7 +17,6 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
     public class ControllerStepsBase : DtoValidationSteps, IClassFixture<InMemoryDatabaseWebApplicationFactory<Startup>>
     {
         const string _idReplacementToken = "IdReplacement";
-        const string _dtoTypeToken = "DtoType";
 
         protected readonly HttpClient _client;
         protected HttpResponseMessage _response;
@@ -52,11 +50,14 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
         {
             foreach (TableRow row in table.Rows)
             {
-                dynamic dto = await GetReplacementObject(uri, row[_idReplacementToken], row[_dtoTypeToken]);
+                string finalizedUri = uri;
 
-                uri = uri.Replace(_idReplacementToken, dto.Id.ToString());
+                if (uri.Contains(_idReplacementToken))
+                {
+                    finalizedUri = await ConvertNamesToIdsInUri(uri, row);
+                }
 
-                _response = await _client.GetAsync(uri);
+                _response = await _client.GetAsync(finalizedUri);
             }
         }
 
@@ -70,20 +71,27 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
             }
         }
 
+        [Given(@"PUT request is sent to ""(.*)""")]
         [When(@"PUT request is sent to ""(.*)""")]
         public async Task GivenPUTRequestIsSentTo(string uri, Table table)
         {
             foreach (TableRow row in table.Rows)
             {
-                if (row.ContainsKey(_idReplacementToken))
-                {
-                    dynamic dto = await GetReplacementObject(uri, row[_idReplacementToken], row[_dtoTypeToken]);
+                string finalizedUri = uri;
 
-                    uri = uri.Replace(_idReplacementToken, dto.Id.ToString());
+                if (uri.Contains(_idReplacementToken))
+                {
+                    finalizedUri = await ConvertNamesToIdsInUri(uri, row);
                 }
 
-                _response = await _client.PutAsync(uri, GetHttpContentFromRow(row));
+                _response = await _client.PutAsync(finalizedUri, GetHttpContentFromRow(row));
             }
+        }
+
+        [When(@"DELETE request is sent to ""(.*)""")]
+        public async Task WhenDELETERequestIsSentTo(string uri)
+        {
+            _response = await _client.DeleteAsync(uri);
         }
 
         [When(@"DELETE request is sent to ""(.*)""")]
@@ -91,11 +99,14 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
         {
             foreach (TableRow row in table.Rows)
             {
-                dynamic dto = await GetReplacementObject(uri, row[_idReplacementToken], row[_dtoTypeToken]);
+                string finalizedUri = uri;
 
-                uri = uri.Replace(_idReplacementToken, dto.Id.ToString());
+                if (uri.Contains(_idReplacementToken))
+                {
+                    finalizedUri = await ConvertNamesToIdsInUri(uri, row);
+                }
 
-                _response = await _client.DeleteAsync(uri);
+                _response = await _client.DeleteAsync(finalizedUri);
             }
         }
 
@@ -141,31 +152,90 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
             }
         }
 
-        private async Task<dynamic> GetReplacementObject(string baseUri, string replacementValue, string dtoType)
+        private async Task<string> ConvertNamesToIdsInUri(string uri, TableRow row)
         {
-            int replacementTokenStart = baseUri.IndexOf(_idReplacementToken);
-            string replacementUri = baseUri.Substring(0, replacementTokenStart) + replacementValue;
+            int replacementIndex = 0;
+            TournamentDto tournamentDto = null;
+            RoundDto roundDto = null;
 
-            _response = await _client.GetAsync(replacementUri);
-            string responseContent = await _response.Content.ReadAsStringAsync();
-
-            dynamic list = ExtractGenericContentsFromResponseContent(dtoType, responseContent);
-
-            if (list.Count != 1)
+            while (true)
             {
-                throw new InvalidOperationException();
+                string idReplacementToken = _idReplacementToken + replacementIndex.ToString();
+                string idStandIn;
+
+                try
+                {
+                    idStandIn = row[idReplacementToken];
+                }
+                catch
+                {
+                    break;
+                }
+
+                string componentType = GetComponentTypeOfIdReplacement(uri, idReplacementToken);
+
+                if (componentType == "users")
+                {
+                    string userUri = uri.Replace(idReplacementToken, idStandIn);
+                    UserDto userDto = await FetchObject<UserDto>(userUri);
+
+                    uri = uri.Replace(idReplacementToken, userDto.Id.ToString());
+                }
+                else if (componentType == "tournaments")
+                {
+                    string tournamentUri = SeverUriAtComponent(uri, "tournaments");
+                    tournamentUri = tournamentUri.Replace(idReplacementToken, idStandIn);
+
+                    tournamentDto = await FetchObject<TournamentDto>(tournamentUri);
+                    uri = uri.Replace(idReplacementToken, tournamentDto.Id.ToString());
+                }
+                else if (componentType == "rounds")
+                {
+                    if (tournamentDto == null)
+                    {
+                        string tournamentUri = SeverUriAtComponent(uri, "tournaments");
+                        tournamentDto = await FetchObject<TournamentDto>(tournamentUri);
+                    }
+
+                    roundDto = tournamentDto.Rounds.First(round => round.Name == idStandIn);
+                    uri = uri.Replace(idReplacementToken, roundDto.Id.ToString());
+                }
+
+                replacementIndex++;
             }
 
-            return list[0];
+            return uri;
         }
 
-        private dynamic ExtractGenericContentsFromResponseContent(string dtoType, string responseContent)
+        private string GetComponentTypeOfIdReplacement(string uri, string idReplacementToken)
         {
-            Type type = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).First(x => x.Name == dtoType);
+            int componentTypeEnd = uri.IndexOf("/" + idReplacementToken) - 1;
+            int componentTypeStart = uri.LastIndexOf("/", componentTypeEnd) + 1;
+            return uri.Substring(componentTypeStart, componentTypeEnd - componentTypeStart + 1);
+        }
 
-            MethodInfo method = typeof(ControllerStepsBase).GetMethod(nameof(JsonResponseToObjectList));
-            MethodInfo generic = method.MakeGenericMethod(type);
-            return generic.Invoke(this, new object[] { responseContent });
+        private string SeverUriAtComponent(string uri, string componentName)
+        {
+            string component = componentName + "/";
+            int componentEnd = uri.IndexOf(component);
+            int uriEnd = uri.IndexOf("/", componentEnd + component.Length);
+
+            if (uriEnd == -1)
+            {
+                return uri;
+            }
+
+            return uri.Substring(0, uriEnd);
+        }
+
+        private async Task<TypeObject> FetchObject<TypeObject>(string uri)
+        {
+            HttpResponseMessage response = await _client.GetAsync(uri);
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            List<TypeObject> dtos = JsonResponseToObjectList<TypeObject>(responseContent);
+
+            return dtos.First();
         }
 
         private HttpContent GetHttpContentFromRow(TableRow row)
@@ -174,7 +244,7 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
 
             foreach (KeyValuePair<string, string> cell in row)
             {
-                if (cell.Key != _idReplacementToken && cell.Key != _dtoTypeToken)
+                if (cell.Key != _idReplacementToken)
                 {
                     rowDictionary[cell.Key] = cell.Value;
                 }
