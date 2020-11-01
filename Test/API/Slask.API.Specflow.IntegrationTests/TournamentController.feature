@@ -31,9 +31,9 @@ Scenario: Can fetch tournament by id
 		And POST request is sent to "api/tournaments"
 			| TournamentName |
 			| GSL 2019       |
-		And GET request is sent to "api/tournaments/IdReplacement"
-			| IdReplacement | DtoType       |
-			| GSL 2019      | TournamentDto |
+		And GET request is sent to "api/tournaments/IdReplacement0"
+			| IdReplacement0 | DtoType0      |
+			| GSL 2019       | TournamentDto |
 		And response return with status code "200"
 	When tournament DTOs are extracted from response
 	Then tournament DTO named "GSL 2019" should be valid with 0 betters, 0 rounds, and 0 issues
@@ -89,16 +89,16 @@ Scenario: Can rename tournament
 		And POST request is sent to "api/tournaments"
 			| TournamentName   |
 			| Homestory Cup XX |
-	When PUT request is sent to "api/tournaments/IdReplacement"
-			| IdReplacement    | DtoType       | NewName       |
-			| Homestory Cup XX | TournamentDto | BHA Open 2020 |
+	When PUT request is sent to "api/tournaments/IdReplacement0"
+			| IdReplacement0   | NewName       |
+			| Homestory Cup XX | BHA Open 2020 |
 	Then response return with status code "204"
 
 Scenario: Can remove created tournament by id
 		And POST request is sent to "api/tournaments"
 			| TournamentName |
 			| GSL 2020       |
-	When DELETE request is sent to "api/tournaments/IdReplacement"
-			| IdReplacement | DtoType       |
-			| GSL 2020      | TournamentDto |
+	When DELETE request is sent to "api/tournaments/IdReplacement0"
+			| IdReplacement0 |
+			| GSL 2020       |
 	Then response return with status code "204"

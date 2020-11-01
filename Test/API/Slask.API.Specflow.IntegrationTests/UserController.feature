@@ -38,9 +38,9 @@ Scenario: Can fetch created user by id
 		And POST request is sent to "api/users"
 			| Username  |
 			| Stålberto |
-	When GET request is sent to "api/users/IdReplacement"
-		| IdReplacement | DtoType |
-		| Stålberto     | UserDto |
+	When GET request is sent to "api/users/IdReplacement0"
+		| IdReplacement0 |
+		| Stålberto      |
 	Then response return with status code "200"
 		And response should contain users "Stålberto"
 
