@@ -2,19 +2,20 @@
 using Slask.Application.Commands.Interfaces;
 using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
+using Slask.Domain.Rounds;
 using System;
 
 namespace Slask.Application.Commands
 {
     public sealed class RemoveRoundFromTournament : CommandInterface
     {
-        public Guid TournamentId { get; }
-        public Guid RoundId { get; }
+        public string TournamentIdentifier { get; }
+        public string RoundIdentifier { get; }
 
-        public RemoveRoundFromTournament(Guid tournamentId, Guid roundId)
+        public RemoveRoundFromTournament(string tournamentIdentifier, string roundIdentifier)
         {
-            TournamentId = tournamentId;
-            RoundId = roundId;
+            TournamentIdentifier = tournamentIdentifier;
+            RoundIdentifier = roundIdentifier;
         }
     }
 
@@ -29,22 +30,53 @@ namespace Slask.Application.Commands
 
         public Result Handle(RemoveRoundFromTournament command)
         {
-            Tournament tournament = _tournamentRepository.GetTournamentById(command.TournamentId);
+            Tournament tournament = GetTournamentFromIdentifer(command.TournamentIdentifier);
 
             if (tournament == null)
             {
-                return Result.Failure($"Could not remove round ({ command.RoundId }) from tournament ({ command.TournamentId }). Tournament not found.");
+                return Result.Failure($"Could not remove round ({ command.RoundIdentifier }) from tournament ({ command.TournamentIdentifier }). Tournament not found.");
             }
 
-            bool roundRemoved = _tournamentRepository.RemoveRoundFromTournament(tournament, command.RoundId);
+            RoundBase round = GetRoundFromIdentifer(tournament, command.RoundIdentifier);
+
+            if (round == null)
+            {
+                return Result.Failure($"Could not remove round ({ command.RoundIdentifier }) from tournament ({ command.TournamentIdentifier }). Round not found.");
+            }
+
+            bool roundRemoved = _tournamentRepository.RemoveRoundFromTournament(tournament, round.Id);
 
             if (!roundRemoved)
             {
-                return Result.Failure($"Could not remove round ({ command.RoundId }) from tournament ({ command.TournamentId }).");
+                return Result.Failure($"Could not remove round ({ command.RoundIdentifier }) from tournament ({ command.TournamentIdentifier }).");
             }
 
             _tournamentRepository.Save();
             return Result.Success();
+        }
+
+        private Tournament GetTournamentFromIdentifer(string tournamentIdentifier)
+        {
+            if (Guid.TryParse(tournamentIdentifier, out Guid tournamentId))
+            {
+                return _tournamentRepository.GetTournamentById(tournamentId);
+            }
+            else
+            {
+                return _tournamentRepository.GetTournamentByName(tournamentIdentifier);
+            }
+        }
+
+        private RoundBase GetRoundFromIdentifer(Tournament tournament, string roundIdentifier)
+        {
+            if (Guid.TryParse(roundIdentifier, out Guid roundId))
+            {
+                return tournament.GetRoundById(roundId);
+            }
+            else
+            {
+                return tournament.GetRoundByName(roundIdentifier);
+            }
         }
     }
 }

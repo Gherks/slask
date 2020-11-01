@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Slask.Application.Commands;
+using Slask.Application.Queries.Interfaces;
 using Slask.Application.Querys;
 using Slask.Application.Utilities;
 using Slask.Dto;
@@ -43,26 +44,11 @@ namespace Slask.API.Controllers
             return Ok(result.Value);
         }
 
-        [HttpGet("{tournamentId:guid}")]
+        [HttpGet("{tournamentIdentifier}")]
         [HttpHead]
-        public ActionResult<TournamentDto> GetTournament(Guid tournamentId)
+        public ActionResult<TournamentDto> GetTournament(string tournamentIdentifier)
         {
-            GetTournamentById query = new GetTournamentById(tournamentId);
-            Result<TournamentDto> result = _commandQueryDispatcher.Dispatch(query);
-
-            if (result.IsFailure)
-            {
-                return NotFound(result.Error);
-            }
-
-            return Ok(result.Value);
-        }
-
-        [HttpGet("{tournamentName}")]
-        [HttpHead]
-        public ActionResult<TournamentDto> GetTournament(string tournamentName)
-        {
-            GetTournamentByName query = new GetTournamentByName(tournamentName);
+            GetTournament query = new GetTournament(tournamentIdentifier);
             Result<TournamentDto> result = _commandQueryDispatcher.Dispatch(query);
 
             if (result.IsFailure)
@@ -87,7 +73,7 @@ namespace Slask.API.Controllers
             return StatusCode(StatusCodes.Status201Created);
         }
 
-        [HttpPut("{tournamentId}")]
+        [HttpPut("{tournamentId:guid}")]
         public ActionResult RenameTournament(Guid tournamentId, TournamentRenameDto tournamentRenameDto)
         {
             RenameTournament command = new RenameTournament(tournamentId, tournamentRenameDto.NewName);
@@ -101,7 +87,70 @@ namespace Slask.API.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        [HttpPut("{tournamentId}/rounds")]
+        [HttpDelete("{tournamentId:guid}")]
+        public ActionResult DeleteTournament(Guid tournamentId)
+        {
+            RemoveTournament command = new RemoveTournament(tournamentId);
+            Result result = _commandQueryDispatcher.Dispatch(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error);
+            }
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
+
+        //[HttpGet("{tournamentIdentifier}/rounds/{roundIdentifier}")]
+        //[HttpHead]
+        //public ActionResult<TournamentDto> GetRoundFromTournament(string tournamentIdentifier, string roundIdentifier)
+        //{
+        //    GetRoundFromTournament query = new GetRoundFromTournament(tournamentIdentifier, roundIdentifier);
+        //    Result<RoundDto> result = _commandQueryDispatcher.Dispatch(query);
+
+        //    if (result.IsFailure)
+        //    {
+        //        return NotFound(result.Error);
+        //    }
+
+        //    return Ok(result.Value);
+        //}
+
+
+
+
+        //[HttpGet("{tournamentId:guid}/rounds/{roundId:guid}")]
+        //[HttpHead]
+        //public ActionResult<TournamentDto> GetRoundFromTournament(Guid tournamentId, Guid roundId)
+        //{
+        //    GetRoundFromTournamentById query = new GetRoundFromTournamentById(tournamentId, roundId);
+        //    Result<RoundDto> result = _commandQueryDispatcher.Dispatch(query);
+
+        //    if (result.IsFailure)
+        //    {
+        //        return NotFound(result.Error);
+        //    }
+
+        //    return Ok(result.Value);
+        //}
+
+        //[HttpGet("{tournamentName}/rounds/{roundName}")]
+        //[HttpHead]
+        //public ActionResult<TournamentDto> GetRoundFromTournament(string tournamentName, string roundName)
+        //{
+        //    GetRoundFromTournamentByName query = new GetRoundFromTournamentByName(tournamentName, roundName);
+        //    Result<RoundDto> result = _commandQueryDispatcher.Dispatch(query);
+
+        //    if (result.IsFailure)
+        //    {
+        //        return NotFound(result.Error);
+        //    }
+
+        //    return Ok(result.Value);
+        //}
+
+        [HttpPut("{tournamentId:guid}/rounds")]
         public ActionResult AddRoundToTournament(Guid tournamentId, RoundCreationDto roundCreationDto)
         {
             AddRoundToTournament command = new AddRoundToTournament(tournamentId, roundCreationDto.RoundType);
@@ -115,10 +164,10 @@ namespace Slask.API.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
-        [HttpDelete("{tournamentId}")]
-        public ActionResult DeleteTournament(Guid tournamentId)
+        [HttpDelete("{tournamentIdentifier}/rounds/{roundIdentifier}")]
+        public ActionResult DeleteRoundFromTournament(string tournamentIdentifier, string roundIdentifier)
         {
-            RemoveTournament command = new RemoveTournament(tournamentId);
+            RemoveRoundFromTournament command = new RemoveRoundFromTournament(tournamentIdentifier, roundIdentifier);
             Result result = _commandQueryDispatcher.Dispatch(command);
 
             if (result.IsFailure)

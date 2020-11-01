@@ -42,26 +42,11 @@ namespace Slask.API.Controllers
             return Ok(result.Value);
         }
 
-        [HttpGet("{userId:guid}")]
+        [HttpGet("{userIdentifier}")]
         [HttpHead]
-        public ActionResult<UserDto> GetUser(Guid userId)
+        public ActionResult<UserDto> GetUser(string userIdentifier)
         {
-            GetUserById query = new GetUserById(userId);
-            Result<UserDto> result = _commandQueryDispatcher.Dispatch(query);
-
-            if (result.IsFailure)
-            {
-                return NotFound(result.Error);
-            }
-
-            return Ok(result.Value);
-        }
-
-        [HttpGet("{userName}")]
-        [HttpHead]
-        public ActionResult<UserDto> GetUser(string userName)
-        {
-            GetUserByName query = new GetUserByName(userName);
+            GetUser query = new GetUser(userIdentifier);
             Result<UserDto> result = _commandQueryDispatcher.Dispatch(query);
 
             if (result.IsFailure)
