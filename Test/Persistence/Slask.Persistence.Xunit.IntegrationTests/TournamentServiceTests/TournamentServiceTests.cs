@@ -1,4 +1,4 @@
-using FluentAssertions;
+﻿using FluentAssertions;
 using Slask.Domain;
 using Slask.Persistence.Repositories;
 using System;
@@ -107,7 +107,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         }
 
         [Fact]
-        public void CanRenameTournament()
+        public void CanRenameTournamentById()
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
@@ -122,11 +122,26 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         }
 
         [Fact]
-        public void CannotRenameTournamentToEmptyName()
+        public void CanRenameTournamentByName()
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
+
+                bool renameResult = tournamentRepository.RenameTournament(tournament.Name, "BHA Open 2019");
+                tournamentRepository.Save();
+
+                renameResult.Should().BeTrue();
+                tournament.Name.Should().Be("BHA Open 2019");
+            }
+        }
+
+        [Fact]
+        public void CannotRenameTournamentByIdToEmptyName()
+        {
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
+            {
+                Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
 
                 bool renameResult = tournamentRepository.RenameTournament(tournament.Id, "");
                 tournamentRepository.Save();
@@ -137,12 +152,31 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         }
 
         [Fact]
-        public void CannotRenameTournamentToNameAlreadyInUseNoMatterLetterCasing()
+        public void CannotRenameTournamentByNameToEmptyName()
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
-                bool renameResult = tournamentRepository.RenameTournament(tournament.Id, _tournamentName.ToUpper());
+                Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
+
+                bool renameResult = tournamentRepository.RenameTournament(tournament.Name, "");
+                tournamentRepository.Save();
+
+                renameResult.Should().BeFalse();
+                tournament.Name.Should().Be("GSL 2019");
+            }
+        }
+
+        [Fact]
+        public void CannotRenameTournamentByIdToNameAlreadyInUseNoMatterLetterCasing()
+        {
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
+            {
+                string occupiedName = "Homestory Cup XX";
+                tournamentRepository.CreateTournament(occupiedName);
+                tournamentRepository.Save();
+
+                Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
+                bool renameResult = tournamentRepository.RenameTournament(tournament.Id, occupiedName.ToUpper());
                 tournamentRepository.Save();
 
                 renameResult.Should().BeFalse();
@@ -151,11 +185,38 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         }
 
         [Fact]
-        public void CannotRenameNonexistingTournament()
+        public void CannotRenameTournamentByNameToNameAlreadyInUseNoMatterLetterCasing()
+        {
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
+            {
+                string occupiedName = "Homestory Cup XX";
+                tournamentRepository.CreateTournament(occupiedName);
+                tournamentRepository.Save();
+
+                bool renameResult = tournamentRepository.RenameTournament(_tournamentName, occupiedName.ToUpper());
+                tournamentRepository.Save();
+
+                renameResult.Should().BeFalse();
+            }
+        }
+
+        [Fact]
+        public void CannotRenameNonexistingTournamentById()
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 bool renameResult = tournamentRepository.RenameTournament(Guid.NewGuid(), "BHA Open 2019");
+
+                renameResult.Should().BeFalse();
+            }
+        }
+
+        [Fact]
+        public void CannotRenameNonexistingTournamentByName()
+        {
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
+            {
+                bool renameResult = tournamentRepository.RenameTournament(Guid.NewGuid().ToString(), "BHA Open 2019");
 
                 renameResult.Should().BeFalse();
             }
