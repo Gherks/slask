@@ -39,6 +39,16 @@ namespace Slask.Persistence.Repositories
 
             return tournament;
         }
+        public bool TournamentExist(Guid id)
+        {
+            return _slaskContext.Tournaments.Any(tournament => tournament.Id == id);
+        }
+
+        public bool TournamentExist(string name)
+        {
+            return _slaskContext.Tournaments.Any(tournament => tournament.Name.ToLower() == name.ToLower());
+        }
+
 
         public bool RemoveTournament(Guid id)
         {
