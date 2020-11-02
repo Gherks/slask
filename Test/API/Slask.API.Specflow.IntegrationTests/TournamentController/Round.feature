@@ -26,6 +26,18 @@ Scenario: Can add round robin round to tournament
 		| GSL 2020       | Round robin |
 	Then response return with status code "204"
 
+Scenario: Returns correct response when attempting to add non-existent round type to tournament
+	When PUT request is sent to "api/tournaments/IdReplacement0/rounds"
+		| IdReplacement0 | RoundType      |
+		| GSL 2020       | Robert Paulson |
+	Then response return with status code "400"
+
+Scenario: Can add round to tournament by name
+	When PUT request is sent to "api/tournaments/GSL 2020/rounds"
+		| RoundType |
+		| Bracket   |
+	Then response return with status code "204"
+
 Scenario: Can remove round by id from tournament by id
 		And PUT request is sent to "api/tournaments/IdReplacement0/rounds"
 			| IdReplacement0 | RoundType   |
