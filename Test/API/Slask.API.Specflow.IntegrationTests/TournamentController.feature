@@ -1,4 +1,4 @@
-﻿Feature: TournamentController
+Feature: TournamentController
 	Makes sure all api calls for the tournament controller are running correctly
 
 Background: 
@@ -85,13 +85,22 @@ Scenario: Can fetch tournament by name
 #			| Kimmieboi   | 1      |
 #			| Bönis       | 0      |
 
-Scenario: Can rename tournament
+Scenario: Can rename tournament by id
 		And POST request is sent to "api/tournaments"
 			| TournamentName   |
 			| Homestory Cup XX |
 	When PUT request is sent to "api/tournaments/IdReplacement0"
 			| IdReplacement0   | NewName       |
 			| Homestory Cup XX | BHA Open 2020 |
+	Then response return with status code "204"
+
+Scenario: Can rename tournament by name
+		And POST request is sent to "api/tournaments"
+			| TournamentName   |
+			| Homestory Cup XX |
+	When PUT request is sent to "api/tournaments/Homestory Cup XX"
+			| NewName       |
+			| BHA Open 2020 |
 	Then response return with status code "204"
 
 Scenario: Can remove created tournament by id
