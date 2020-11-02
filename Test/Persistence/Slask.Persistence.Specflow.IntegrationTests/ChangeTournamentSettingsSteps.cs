@@ -28,7 +28,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(tournamentName);
                 tournamentRepository.RemoveRoundFromTournament(tournament, roundName);
                 tournamentRepository.Save();
             }
@@ -40,7 +40,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(tournamentName);
                 RoundBase round = tournament.GetRoundByName(roundName);
 
                 tournamentRepository.SetAdvancingPerGroupCountInRound(round, newAdvancingPlayerCount);
@@ -54,7 +54,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(tournamentName);
                 RoundBase round = tournament.GetRoundByName(roundName);
 
                 tournamentRepository.SetPlayersPerGroupCountInRound(round, newPlayersPerGroupCount);
@@ -68,7 +68,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(tournamentName);
 
                 foreach (MatchBestOfSelection selection in table.CreateSet<MatchBestOfSelection>())
                 {
@@ -90,7 +90,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(tournamentName);
 
                 foreach (PlayerMatchLayout playerMatchLayout in table.CreateSet<PlayerMatchLayout>())
                 {
@@ -109,7 +109,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(oldTournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(oldTournamentName);
                 tournament.RenameTo(newTournamentName);
                 tournamentRepository.Save();
             }
@@ -122,7 +122,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
 
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(tournamentName);
 
                 foreach (MatchBestOfSelection selection in table.CreateSet<MatchBestOfSelection>())
                 {
@@ -144,7 +144,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(tournamentName);
 
                 foreach (PlayerSwitch playerSwitch in table.CreateSet<PlayerSwitch>())
                 {
@@ -170,7 +170,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(tournamentName);
 
                 foreach (TieSolving tieSolving in table.CreateSet<TieSolving>())
                 {
@@ -191,7 +191,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(tournamentName);
 
                 foreach (MatchBestOfSelection selection in table.CreateSet<MatchBestOfSelection>())
                 {
@@ -209,7 +209,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(tournamentName);
 
                 tournament.Should().NotBeNull();
             }
@@ -220,7 +220,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(tournamentName);
 
                 tournament.Should().BeNull();
             }
@@ -231,7 +231,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(tournamentName);
 
                 tournament.Rounds.Should().HaveCount(table.RowCount);
 
@@ -254,7 +254,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(tournamentName);
 
                 foreach (MatchBestOfSelection selection in table.CreateSet<MatchBestOfSelection>())
                 {

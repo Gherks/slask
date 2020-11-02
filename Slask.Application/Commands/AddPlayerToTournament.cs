@@ -29,7 +29,7 @@ namespace Slask.Application.Commands
 
         public Result Handle(AddPlayerToTournament command)
         {
-            Tournament tournament = _tournamentRepository.GetTournamentById(command.TournamentId);
+            Tournament tournament = _tournamentRepository.GetTournament(command.TournamentId);
 
             if (tournament == null)
             {

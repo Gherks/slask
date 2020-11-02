@@ -25,7 +25,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
             {
                 using (TournamentRepository tournamentRepository = CreateTournamentRepository())
                 {
-                    Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
+                    Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
 
                     Better better = tournamentRepository.AddBetterToTournament(tournament, userRepository.GetUserByName("Stålberto"));
                     better.Should().BeNull();
@@ -40,7 +40,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
 
                 List<Better> betters = tournamentRepository.GetBettersByTournamentId(tournament.Id).ToList();
 
@@ -76,7 +76,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
 
                 tournament.Betters.Should().HaveCount(3);
 
@@ -96,7 +96,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
 
                 tournament.Betters.Should().HaveCount(3);
 
@@ -121,7 +121,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
 
                 tournament.Betters.Should().HaveCount(3);
 
@@ -140,7 +140,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
 
                 tournament.Betters.Should().HaveCount(3);
 

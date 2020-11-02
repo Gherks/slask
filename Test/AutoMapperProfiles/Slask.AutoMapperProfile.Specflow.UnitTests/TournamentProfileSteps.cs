@@ -28,7 +28,7 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
         {
             using (TournamentRepository userRepository = CreateTournamentRepository())
             {
-                Tournament tournament = userRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = userRepository.GetTournament(tournamentName);
                 _tournamentDtos.Add(_mapper.Map<TournamentDto>(tournament));
             }
         }

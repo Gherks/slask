@@ -54,7 +54,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
 
                 using (TournamentRepository tournamentRepository = CreateTournamentRepository())
                 {
-                    Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
+                    Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
 
                     tournamentRepository.AddBetterToTournament(tournament, userRepository.GetUserByName("Stålberto"));
                     tournamentRepository.AddBetterToTournament(tournament, userRepository.GetUserByName("Bönis"));
@@ -68,7 +68,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(_tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
 
                 RoundRobinRound round = tournamentRepository.AddRoundRobinRoundToTournament(tournament);
                 tournamentRepository.SetPlayersPerGroupCountInRound(round, _playerNames.Count);

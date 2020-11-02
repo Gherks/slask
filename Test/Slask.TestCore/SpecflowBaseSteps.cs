@@ -82,7 +82,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(tournamentName);
 
                 foreach (RoundSettings roundSettings in table.CreateSet<RoundSettings>())
                 {
@@ -130,7 +130,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(tournamentName);
 
                 foreach (string playerName in playerNames)
                 {
@@ -149,7 +149,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             {
                 foreach (BetterPlacesMatchBet betterPlacesMatchBet in table.CreateSet<BetterPlacesMatchBet>())
                 {
-                    Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                    Tournament tournament = tournamentRepository.GetTournament(tournamentName);
                     RoundBase round = tournament.Rounds[betterPlacesMatchBet.RoundIndex];
                     GroupBase group = round.Groups[betterPlacesMatchBet.GroupIndex];
                     Match match = group.Matches[betterPlacesMatchBet.MatchIndex];
@@ -169,7 +169,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                 foreach (TargetGroupToPlay targetGroupToPlay in table.CreateSet<TargetGroupToPlay>())
                 {
                     SystemTimeMocker.Reset();
-                    Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                    Tournament tournament = tournamentRepository.GetTournament(tournamentName);
                     RoundBase round = tournament.Rounds[targetGroupToPlay.RoundIndex];
                     GroupBase group = round.Groups[targetGroupToPlay.GroupIndex];
 
@@ -190,7 +190,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             Tournament tournament;
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                tournament = tournamentRepository.GetTournament(tournamentName);
             }
 
             List<StandingsEntry<Better>> betterStandings = tournament.GetBetterStandings();
@@ -217,7 +217,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                Tournament tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                Tournament tournament = tournamentRepository.GetTournament(tournamentName);
 
                 foreach (AssignScoreToPlayer assignScoreToPlayer in table.CreateSet<AssignScoreToPlayer>())
                 {
@@ -249,7 +249,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             Tournament tournament;
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                tournament = tournamentRepository.GetTournament(tournamentName);
             }
 
             for (int index = 0; index < table.RowCount; ++index)
@@ -295,7 +295,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             Tournament tournament;
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                tournament = tournamentRepository.GetTournamentByName(tournamentName);
+                tournament = tournamentRepository.GetTournament(tournamentName);
             }
 
             RoundBase round = tournament.Rounds[roundIndex];

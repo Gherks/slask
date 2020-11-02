@@ -35,11 +35,11 @@ namespace Slask.Application.Querys
 
             if (Guid.TryParse(query.TournamentIdentifier, out Guid tournamentId))
             {
-                tournament = _tournamentRepository.GetTournamentById(tournamentId);
+                tournament = _tournamentRepository.GetTournament(tournamentId);
             }
             else
             {
-                tournament = _tournamentRepository.GetTournamentByName(query.TournamentIdentifier);
+                tournament = _tournamentRepository.GetTournament(query.TournamentIdentifier);
             }
 
             if (tournament == null)

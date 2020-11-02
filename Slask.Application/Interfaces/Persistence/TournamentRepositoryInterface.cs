@@ -16,8 +16,8 @@ namespace Slask.Application.Interfaces.Persistence
         bool RemoveTournament(string name);
         bool RenameTournament(Guid id, string name);
         IEnumerable<Tournament> GetTournaments(int startIndex = 0, int count = 128);
-        Tournament GetTournamentById(Guid id);
-        Tournament GetTournamentByName(string name);
+        Tournament GetTournament(Guid id);
+        Tournament GetTournament(string name);
         PlayerReference AddPlayerReference(Tournament tournament, string name);
         bool RemovePlayerReferenceFromTournament(Tournament tournament, string name);
         bool RenamePlayerReferenceInTournament(PlayerReference playerReference, string name);

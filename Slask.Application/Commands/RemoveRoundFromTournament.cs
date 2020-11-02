@@ -59,11 +59,11 @@ namespace Slask.Application.Commands
         {
             if (Guid.TryParse(tournamentIdentifier, out Guid tournamentId))
             {
-                return _tournamentRepository.GetTournamentById(tournamentId);
+                return _tournamentRepository.GetTournament(tournamentId);
             }
             else
             {
-                return _tournamentRepository.GetTournamentByName(tournamentIdentifier);
+                return _tournamentRepository.GetTournament(tournamentIdentifier);
             }
         }
 

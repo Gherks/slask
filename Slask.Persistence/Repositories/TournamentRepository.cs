@@ -52,7 +52,7 @@ namespace Slask.Persistence.Repositories
 
         public bool RemoveTournament(Guid id)
         {
-            Tournament tournament = GetTournamentById(id);
+            Tournament tournament = GetTournament(id);
 
             if (tournament != null)
             {
@@ -65,7 +65,7 @@ namespace Slask.Persistence.Repositories
 
         public bool RemoveTournament(string name)
         {
-            Tournament tournament = GetTournamentByName(name);
+            Tournament tournament = GetTournament(name);
 
             if (tournament != null)
             {
@@ -85,7 +85,7 @@ namespace Slask.Persistence.Repositories
 
             if (nameIsNotEmpty && nameIsNotInUse)
             {
-                Tournament tournament = GetTournamentById(id);
+                Tournament tournament = GetTournament(id);
                 bool tournamentFound = tournament != null;
 
                 if (tournamentFound)
@@ -106,7 +106,7 @@ namespace Slask.Persistence.Repositories
             return _slaskContext.Tournaments.Skip(controlledStartIndex).Take(controlledCount).AsNoTracking();
         }
 
-        public Tournament GetTournamentById(Guid id)
+        public Tournament GetTournament(Guid id)
         {
             IQueryable<Tournament> tournamentQuery = _slaskContext.Tournaments.Where(tournament => tournament.Id == id);
 
@@ -123,7 +123,7 @@ namespace Slask.Persistence.Repositories
             return tournament;
         }
 
-        public Tournament GetTournamentByName(string name)
+        public Tournament GetTournament(string name)
         {
             IQueryable<Tournament> tournamentQuery = _slaskContext.Tournaments.Where(tournament => tournament.Name.ToLower() == name.ToLower());
 
@@ -172,7 +172,7 @@ namespace Slask.Persistence.Repositories
 
         public IEnumerable<PlayerReference> GetPlayerReferencesByTournamentId(Guid id)
         {
-            Tournament tournament = GetTournamentById(id);
+            Tournament tournament = GetTournament(id);
 
             bool tournamentIsInvalid = tournament == null;
 
@@ -187,7 +187,7 @@ namespace Slask.Persistence.Repositories
 
         public IEnumerable<PlayerReference> GetPlayerReferencesByTournamentName(string name)
         {
-            Tournament tournament = GetTournamentByName(name);
+            Tournament tournament = GetTournament(name);
 
             bool tournamentIsInvalid = tournament == null;
 
@@ -238,7 +238,7 @@ namespace Slask.Persistence.Repositories
 
         public IEnumerable<Better> GetBettersByTournamentId(Guid id)
         {
-            Tournament tournament = GetTournamentById(id);
+            Tournament tournament = GetTournament(id);
 
             bool tournamentIsInvalid = tournament == null;
 
@@ -253,7 +253,7 @@ namespace Slask.Persistence.Repositories
 
         public IEnumerable<Better> GetBettersByTournamentName(string name)
         {
-            Tournament tournament = GetTournamentByName(name);
+            Tournament tournament = GetTournament(name);
 
             bool tournamentIsInvalid = tournament == null;
 
@@ -357,7 +357,7 @@ namespace Slask.Persistence.Repositories
 
         public bool BetterPlacesMatchBetOnMatch(Guid tournamentId, Guid matchId, string betterName, string playerName)
         {
-            Tournament tournament = GetTournamentById(tournamentId);
+            Tournament tournament = GetTournament(tournamentId);
 
             if (tournament == null)
             {
@@ -463,7 +463,7 @@ namespace Slask.Persistence.Repositories
                 return false;
             }
 
-            bool tournamentAlreadyExist = GetTournamentByName(name) != null;
+            bool tournamentAlreadyExist = GetTournament(name) != null;
 
             if (tournamentAlreadyExist)
             {
