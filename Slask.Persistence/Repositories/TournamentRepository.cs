@@ -81,7 +81,7 @@ namespace Slask.Persistence.Repositories
             name = name.Trim();
 
             bool nameIsNotEmpty = name != "";
-            bool nameIsNotInUse = GetTournamentByName(name) == null;
+            bool nameIsNotInUse = TournamentExist(name) == false;
 
             if (nameIsNotEmpty && nameIsNotInUse)
             {
