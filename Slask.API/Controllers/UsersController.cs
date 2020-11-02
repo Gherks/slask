@@ -73,7 +73,7 @@ namespace Slask.API.Controllers
         [HttpOptions]
         public ActionResult GetUserOptions()
         {
-            Response.Headers.Add("Allow", "GET,OPTIONS,POST");
+            Response.Headers.Add("Allow", "GET,HEAD,POST,OPTIONS");
             return Ok();
         }
     }
