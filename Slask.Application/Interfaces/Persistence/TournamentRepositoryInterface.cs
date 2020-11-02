@@ -1,4 +1,4 @@
-using Slask.Domain;
+﻿using Slask.Domain;
 using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
@@ -15,6 +15,7 @@ namespace Slask.Application.Interfaces.Persistence
         bool RemoveTournament(Guid id);
         bool RemoveTournament(string name);
         bool RenameTournament(Guid id, string name);
+        bool RenameTournament(string oldName, string newName);
         IEnumerable<Tournament> GetTournaments(int startIndex = 0, int count = 128);
         Tournament GetTournament(Guid id);
         Tournament GetTournament(string name);

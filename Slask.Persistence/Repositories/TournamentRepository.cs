@@ -98,6 +98,29 @@ namespace Slask.Persistence.Repositories
             return false;
         }
 
+        public bool RenameTournament(string oldName, string newName)
+        {
+            oldName = oldName.Trim();
+            newName = newName.Trim();
+
+            bool newNameIsNotEmpty = newName != "";
+            bool nameIsNotInUse = TournamentExist(newName) == false;
+
+            if (newNameIsNotEmpty && nameIsNotInUse)
+            {
+                Tournament tournament = GetTournament(oldName);
+                bool tournamentFound = tournament != null;
+
+                if (tournamentFound)
+                {
+                    tournament.RenameTo(newName);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public IEnumerable<Tournament> GetTournaments(int startIndex = 0, int count = 128)
         {
             int controlledStartIndex = Math.Max(0, startIndex);
