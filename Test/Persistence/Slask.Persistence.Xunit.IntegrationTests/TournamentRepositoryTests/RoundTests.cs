@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
-namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
+namespace Slask.Persistence.Xunit.IntegrationTests.TournamentRepositoryTests
 {
     public class RoundTests : TournamentRepositoryTestBase
     {

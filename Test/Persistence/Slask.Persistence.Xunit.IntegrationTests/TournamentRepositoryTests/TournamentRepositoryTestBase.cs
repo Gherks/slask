@@ -5,7 +5,7 @@ using Slask.TestCore;
 using System;
 using System.Collections.Generic;
 
-namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
+namespace Slask.Persistence.Xunit.IntegrationTests.TournamentRepositoryTests
 {
     public class TournamentRepositoryTestBase
     {

@@ -7,9 +7,9 @@ using System.Linq;
 using System.Threading;
 using Xunit;
 
-namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
+namespace Slask.Persistence.Xunit.IntegrationTests.TournamentRepositoryTests
 {
-    public class TournamentRepositoryTest : TournamentRepositoryTestBase
+    public class TournamentRepositoryTests : TournamentRepositoryTestBase
     {
         [Fact]
         public void CanCreateTournament()
