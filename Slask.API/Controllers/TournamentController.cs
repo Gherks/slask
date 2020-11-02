@@ -127,5 +127,12 @@ namespace Slask.API.Controllers
 
             return StatusCode(StatusCodes.Status204NoContent);
         }
+
+        [HttpOptions]
+        public ActionResult GetTournamentOptions()
+        {
+            Response.Headers.Add("Allow", "GET,HEAD,POST,PUT,DELETE,OPTIONS");
+            return Ok();
+        }
     }
 }
