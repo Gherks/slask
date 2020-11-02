@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Slask.Application.Commands;
-using Slask.Application.Queries.Interfaces;
 using Slask.Application.Querys;
 using Slask.Application.Utilities;
 using Slask.Dto;
@@ -100,55 +99,6 @@ namespace Slask.API.Controllers
 
             return StatusCode(StatusCodes.Status204NoContent);
         }
-
-
-        //[HttpGet("{tournamentIdentifier}/rounds/{roundIdentifier}")]
-        //[HttpHead]
-        //public ActionResult<TournamentDto> GetRoundFromTournament(string tournamentIdentifier, string roundIdentifier)
-        //{
-        //    GetRoundFromTournament query = new GetRoundFromTournament(tournamentIdentifier, roundIdentifier);
-        //    Result<RoundDto> result = _commandQueryDispatcher.Dispatch(query);
-
-        //    if (result.IsFailure)
-        //    {
-        //        return NotFound(result.Error);
-        //    }
-
-        //    return Ok(result.Value);
-        //}
-
-
-
-
-        //[HttpGet("{tournamentId:guid}/rounds/{roundId:guid}")]
-        //[HttpHead]
-        //public ActionResult<TournamentDto> GetRoundFromTournament(Guid tournamentId, Guid roundId)
-        //{
-        //    GetRoundFromTournamentById query = new GetRoundFromTournamentById(tournamentId, roundId);
-        //    Result<RoundDto> result = _commandQueryDispatcher.Dispatch(query);
-
-        //    if (result.IsFailure)
-        //    {
-        //        return NotFound(result.Error);
-        //    }
-
-        //    return Ok(result.Value);
-        //}
-
-        //[HttpGet("{tournamentName}/rounds/{roundName}")]
-        //[HttpHead]
-        //public ActionResult<TournamentDto> GetRoundFromTournament(string tournamentName, string roundName)
-        //{
-        //    GetRoundFromTournamentByName query = new GetRoundFromTournamentByName(tournamentName, roundName);
-        //    Result<RoundDto> result = _commandQueryDispatcher.Dispatch(query);
-
-        //    if (result.IsFailure)
-        //    {
-        //        return NotFound(result.Error);
-        //    }
-
-        //    return Ok(result.Value);
-        //}
 
         [HttpPut("{tournamentId:guid}/rounds")]
         public ActionResult AddRoundToTournament(Guid tournamentId, RoundCreationDto roundCreationDto)

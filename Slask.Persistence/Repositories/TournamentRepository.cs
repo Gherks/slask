@@ -49,7 +49,6 @@ namespace Slask.Persistence.Repositories
             return _slaskContext.Tournaments.Any(tournament => tournament.Name.ToLower() == name.ToLower());
         }
 
-
         public bool RemoveTournament(Guid id)
         {
             Tournament tournament = GetTournament(id);

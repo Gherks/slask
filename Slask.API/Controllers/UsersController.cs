@@ -6,7 +6,6 @@ using Slask.Application.Querys;
 using Slask.Application.Utilities;
 using Slask.Dto;
 using Slask.Dto.CreationDtos;
-using System;
 using System.Collections.Generic;
 
 namespace Slask.API.Controllers
