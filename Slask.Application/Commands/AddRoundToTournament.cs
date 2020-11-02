@@ -10,12 +10,12 @@ namespace Slask.Application.Commands
 {
     public sealed class AddRoundToTournament : CommandInterface
     {
-        public Guid TournamentId { get; }
+        public string TournamentIdentifier { get; }
         public string RoundType { get; }
 
-        public AddRoundToTournament(Guid tournamentId, string roundType)
+        public AddRoundToTournament(string tournamentIdentifier, string roundType)
         {
-            TournamentId = tournamentId;
+            TournamentIdentifier = tournamentIdentifier;
             RoundType = roundType;
         }
     }
@@ -31,11 +31,21 @@ namespace Slask.Application.Commands
 
         public Result Handle(AddRoundToTournament command)
         {
-            Tournament tournament = _tournamentRepository.GetTournament(command.TournamentId);
+            Tournament tournament;
+
+            if (Guid.TryParse(command.TournamentIdentifier, out Guid tournamentId))
+            {
+                tournament = _tournamentRepository.GetTournament(tournamentId);
+            }
+            else
+            {
+                tournament = _tournamentRepository.GetTournament(command.TournamentIdentifier);
+            }
+
 
             if (tournament == null)
             {
-                return Result.Failure($"Could not add round ({ command.RoundType }) to tournament. Tournament ({ command.TournamentId }) not found.");
+                return Result.Failure($"Could not add round ({ command.RoundType }) to tournament. Tournament ({ command.TournamentIdentifier }) not found.");
             }
 
             string parsedRoundType = command.RoundType.ToUpperNoSpaces();
