@@ -47,4 +47,4 @@ Scenario: Can fetch created user by id
 Scenario: Can provide allowed request types for users endpoint
 	When OPTIONS request is sent to "api/users"
 	Then response return with status code "200"
-		And response header contain endpoints "GET, OPTIONS, POST"
+		And response header contain endpoints "GET, HEAD, POST, OPTIONS"
