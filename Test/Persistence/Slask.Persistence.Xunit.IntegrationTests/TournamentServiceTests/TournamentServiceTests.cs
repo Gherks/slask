@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Domain;
 using Slask.Persistence.Repositories;
 using System;
@@ -22,6 +22,44 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
                 tournament.Name.Should().Be(_tournamentName);
                 tournament.Rounds.Should().BeEmpty();
                 tournament.Betters.Should().BeEmpty();
+            }
+        }
+
+        [Fact]
+        public void CanDetermineThatTournamentExistById()
+        {
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
+            {
+                Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
+
+                tournamentRepository.TournamentExist(tournament.Id).Should().BeTrue();
+            }
+        }
+
+        [Fact]
+        public void CanDetermineThatTournamentExistByNameNoMatterLetterCasing()
+        {
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
+            {
+                tournamentRepository.TournamentExist(_tournamentName.ToUpper()).Should().BeTrue();
+            }
+        }
+
+        [Fact]
+        public void CanDetermineThatTournamentDoesNotExistById()
+        {
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
+            {
+                tournamentRepository.TournamentExist(Guid.NewGuid()).Should().BeFalse();
+            }
+        }
+
+        [Fact]
+        public void CanDetermineThatTournamentDoesNotExistByName()
+        {
+            using (TournamentRepository tournamentRepository = CreateTournamentRepository())
+            {
+                tournamentRepository.TournamentExist("non-existing-tournament").Should().BeFalse();
             }
         }
 
