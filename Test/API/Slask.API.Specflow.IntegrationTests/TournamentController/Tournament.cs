@@ -3,12 +3,12 @@ using Slask.Dto;
 using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 
-namespace Slask.API.Specflow.IntegrationTests
+namespace Slask.API.Specflow.IntegrationTests.TournamentController
 {
     [Binding, Scope(Feature = "TournamentController")]
-    public class TournamentControllerSteps : ControllerStepsBase
+    public class Tournament : ControllerStepsBase
     {
-        public TournamentControllerSteps(InMemoryDatabaseWebApplicationFactory<Startup> factory)
+        public Tournament(InMemoryDatabaseWebApplicationFactory<Startup> factory)
             : base(factory)
         {
         }
