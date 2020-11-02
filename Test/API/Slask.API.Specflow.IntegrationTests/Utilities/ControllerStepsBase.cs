@@ -37,6 +37,16 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
             _accept = accept;
         }
 
+        [Given(@"POST request is sent to ""(.*)""")]
+        [When(@"POST request is sent to ""(.*)""")]
+        public async Task GivenPOSTRequestIsSentTo(string uri, Table table)
+        {
+            foreach (TableRow row in table.Rows)
+            {
+                _response = await _client.PostAsync(uri, GetHttpContentFromRow(row));
+            }
+        }
+
         [Given(@"GET request is sent to ""(.*)""")]
         [When(@"GET request is sent to ""(.*)""")]
         public async Task GivenGETRequestIsSentTo(string uri)
@@ -58,16 +68,6 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
                 }
 
                 _response = await _client.GetAsync(finalizedUri);
-            }
-        }
-
-        [Given(@"POST request is sent to ""(.*)""")]
-        [When(@"POST request is sent to ""(.*)""")]
-        public async Task GivenPOSTRequestIsSentTo(string uri, Table table)
-        {
-            foreach (TableRow row in table.Rows)
-            {
-                _response = await _client.PostAsync(uri, GetHttpContentFromRow(row));
             }
         }
 
