@@ -1,4 +1,4 @@
-Feature: TournamentController
+﻿Feature: TournamentController
 	Makes sure all api calls for the tournament controller are running correctly
 
 Background: 
@@ -110,4 +110,11 @@ Scenario: Can remove created tournament by id
 	When DELETE request is sent to "api/tournaments/IdReplacement0"
 			| IdReplacement0 |
 			| GSL 2020       |
+	Then response return with status code "204"
+
+Scenario: Can remove created tournament by name
+		And POST request is sent to "api/tournaments"
+			| TournamentName |
+			| GSL 2020       |
+	When DELETE request is sent to "api/tournaments/GSL 2020"
 	Then response return with status code "204"
