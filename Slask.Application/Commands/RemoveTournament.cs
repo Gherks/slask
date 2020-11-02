@@ -7,11 +7,11 @@ namespace Slask.Application.Commands
 {
     public sealed class RemoveTournament : CommandInterface
     {
-        public Guid TournamentId { get; }
+        public string TournamentIdentifier { get; }
 
-        public RemoveTournament(Guid tournamentId)
+        public RemoveTournament(string tournamentIdentifier)
         {
-            TournamentId = tournamentId;
+            TournamentIdentifier = tournamentIdentifier;
         }
     }
 
@@ -26,11 +26,20 @@ namespace Slask.Application.Commands
 
         public Result Handle(RemoveTournament command)
         {
-            bool tournamentRemoved = _tournamentRepository.RemoveTournament(command.TournamentId);
+            bool tournamentRemoved;
+
+            if (Guid.TryParse(command.TournamentIdentifier, out Guid tournamentId))
+            {
+                tournamentRemoved = _tournamentRepository.RemoveTournament(tournamentId);
+            }
+            else
+            {
+                tournamentRemoved = _tournamentRepository.RemoveTournament(command.TournamentIdentifier);
+            }
 
             if (!tournamentRemoved)
             {
-                return Result.Failure($"Could remove tournament ({ command.TournamentId }). Tournament not found.");
+                return Result.Failure($"Could remove tournament ({ command.TournamentIdentifier }). Tournament not found.");
             }
 
             _tournamentRepository.Save();
