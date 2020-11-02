@@ -23,6 +23,20 @@ namespace Slask.API.Controllers
             _commandQueryDispatcher = commandQueryDispatcher;
         }
 
+        [HttpPost]
+        public ActionResult CreateTournament(TournamentCreationDto tournament)
+        {
+            CreateTournament command = new CreateTournament(tournament.TournamentName);
+            Result result = _commandQueryDispatcher.Dispatch(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error);
+            }
+
+            return StatusCode(StatusCodes.Status201Created);
+        }
+
         [HttpGet]
         [HttpHead]
         public ActionResult<IEnumerable<BareTournamentDto>> GetTournaments()
@@ -56,20 +70,6 @@ namespace Slask.API.Controllers
             }
 
             return Ok(result.Value);
-        }
-
-        [HttpPost]
-        public ActionResult CreateTournament(TournamentCreationDto tournament)
-        {
-            CreateTournament command = new CreateTournament(tournament.TournamentName);
-            Result result = _commandQueryDispatcher.Dispatch(command);
-
-            if (result.IsFailure)
-            {
-                return BadRequest(result.Error);
-            }
-
-            return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpPut("{tournamentIdentifier}")]
