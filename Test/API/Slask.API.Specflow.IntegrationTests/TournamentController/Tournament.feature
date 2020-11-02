@@ -1,4 +1,4 @@
-﻿Feature: TournamentController
+Feature: TournamentController
 	Makes sure all api calls for the tournament controller are running correctly
 
 Background: 
@@ -84,6 +84,11 @@ Scenario: Can fetch tournament by name
 #			| Guggelito   | 2      |
 #			| Kimmieboi   | 1      |
 #			| Bönis       | 0      |
+
+Scenario: Can provide allowed request types for tournaments endpoint
+	When OPTIONS request is sent to "api/tournaments"
+	Then response return with status code "200"
+		And response header contain endpoints "GET, HEAD, POST, PUT, DELETE, OPTIONS"
 
 Scenario: Can rename tournament by id
 		And POST request is sent to "api/tournaments"
