@@ -10,8 +10,8 @@ namespace Slask.Application.Interfaces.Persistence
     public interface TournamentRepositoryInterface
     {
         Tournament CreateTournament(string name);
-        bool TournamentExist(Guid id);
-        bool TournamentExist(string name);
+        bool HasTournament(Guid id);
+        bool HasTournament(string name);
         bool RemoveTournament(Guid id);
         bool RemoveTournament(string name);
         bool RenameTournament(Guid id, string name);

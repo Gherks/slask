@@ -32,7 +32,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
             {
                 Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
 
-                tournamentRepository.TournamentExist(tournament.Id).Should().BeTrue();
+                tournamentRepository.HasTournament(tournament.Id).Should().BeTrue();
             }
         }
 
@@ -41,7 +41,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                tournamentRepository.TournamentExist(_tournamentName.ToUpper()).Should().BeTrue();
+                tournamentRepository.HasTournament(_tournamentName.ToUpper()).Should().BeTrue();
             }
         }
 
@@ -50,7 +50,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                tournamentRepository.TournamentExist(Guid.NewGuid()).Should().BeFalse();
+                tournamentRepository.HasTournament(Guid.NewGuid()).Should().BeFalse();
             }
         }
 
@@ -59,7 +59,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.tournamentRepositoryTests
         {
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                tournamentRepository.TournamentExist("non-existing-tournament").Should().BeFalse();
+                tournamentRepository.HasTournament("non-existing-tournament").Should().BeFalse();
             }
         }
 

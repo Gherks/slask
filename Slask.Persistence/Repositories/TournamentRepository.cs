@@ -39,12 +39,12 @@ namespace Slask.Persistence.Repositories
 
             return tournament;
         }
-        public bool TournamentExist(Guid id)
+        public bool HasTournament(Guid id)
         {
             return _slaskContext.Tournaments.Any(tournament => tournament.Id == id);
         }
 
-        public bool TournamentExist(string name)
+        public bool HasTournament(string name)
         {
             return _slaskContext.Tournaments.Any(tournament => tournament.Name.ToLower() == name.ToLower());
         }
@@ -80,7 +80,7 @@ namespace Slask.Persistence.Repositories
             name = name.Trim();
 
             bool nameIsNotEmpty = name != "";
-            bool nameIsNotInUse = TournamentExist(name) == false;
+            bool nameIsNotInUse = HasTournament(name) == false;
 
             if (nameIsNotEmpty && nameIsNotInUse)
             {
@@ -103,7 +103,7 @@ namespace Slask.Persistence.Repositories
             newName = newName.Trim();
 
             bool newNameIsNotEmpty = newName != "";
-            bool nameIsNotInUse = TournamentExist(newName) == false;
+            bool nameIsNotInUse = HasTournament(newName) == false;
 
             if (newNameIsNotEmpty && nameIsNotInUse)
             {
