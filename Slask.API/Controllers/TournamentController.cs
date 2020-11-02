@@ -72,10 +72,10 @@ namespace Slask.API.Controllers
             return StatusCode(StatusCodes.Status201Created);
         }
 
-        [HttpPut("{tournamentId:guid}")]
-        public ActionResult RenameTournament(Guid tournamentId, TournamentRenameDto tournamentRenameDto)
+        [HttpPut("{tournamentIdentifier}")]
+        public ActionResult RenameTournament(string tournamentIdentifier, TournamentRenameDto tournamentRenameDto)
         {
-            RenameTournament command = new RenameTournament(tournamentId, tournamentRenameDto.NewName);
+            RenameTournament command = new RenameTournament(tournamentIdentifier, tournamentRenameDto.NewName);
             Result result = _commandQueryDispatcher.Dispatch(command);
 
             if (result.IsFailure)
