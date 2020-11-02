@@ -41,7 +41,7 @@ Scenario: Can add round to tournament by name
 Scenario: Can remove round by id from tournament by id
 		And PUT request is sent to "api/tournaments/IdReplacement0/rounds"
 			| IdReplacement0 | RoundType   |
-			| GSL 2020      | Round robin |
+			| GSL 2020       | Round robin |
 	When DELETE request is sent to "api/tournaments/IdReplacement0/rounds/IdReplacement1"
 			| IdReplacement0 | IdReplacement1 |
 			| GSL 2020       | Round A        |
