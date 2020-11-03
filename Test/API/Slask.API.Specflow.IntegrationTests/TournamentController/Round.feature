@@ -70,4 +70,44 @@ Scenario: Can remove round by name from tournament by name
 			| RoundType   |
 			| Round robin |
 	When DELETE request is sent to "api/tournaments/GSL 2020/rounds/Round A"
+	Then response return with status code "204"
+
+Scenario: Returns correct response when attempting remove non-existent round from tournament
+	When DELETE request is sent to "api/tournaments/GSL 2020/rounds/Round XYZ"
+	Then response return with status code "400"
+
+Scenario: Can change group size in a round by round id in tournament by id
+		And PUT request is sent to "api/tournaments/GSL 2020/rounds"
+			| RoundType   |
+			| Round robin |
+	When PUT request is sent to "api/tournaments/IdReplacement0/rounds/IdReplacement1"
+		| IdReplacement0 | IdReplacement1 | PlayersPerGroupCount |
+		| GSL 2020       | Round A        | 8                    |
+	Then response return with status code "204"
+
+Scenario: Can change group size in a round by round name in tournament by id
+		And PUT request is sent to "api/tournaments/GSL 2020/rounds"
+			| RoundType   |
+			| Round robin |
+	When PUT request is sent to "api/tournaments/IdReplacement0/rounds/Round A"
+		| IdReplacement0 | PlayersPerGroupCount |
+		| GSL 2020       | 8                    |
+	Then response return with status code "204"
+
+Scenario: Can change group size in a round by round id in tournament by name
+		And PUT request is sent to "api/tournaments/GSL 2020/rounds"
+			| RoundType   |
+			| Round robin |
+	When PUT request is sent to "api/tournaments/GSL 2020/rounds/IdReplacement0"
+		| IdReplacement0 | PlayersPerGroupCount |
+		| Round A        | 8                    |
+	Then response return with status code "204"
+
+Scenario: Can change group size in a round by round name in tournament by name
+		And PUT request is sent to "api/tournaments/GSL 2020/rounds"
+			| RoundType   |
+			| Round robin |
+	When PUT request is sent to "api/tournaments/GSL 2020/rounds/Round A"
+		| PlayersPerGroupCount |
+		| 8                    |
 	Then response return with status code "204"
