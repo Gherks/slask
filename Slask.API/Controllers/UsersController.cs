@@ -42,7 +42,7 @@ namespace Slask.API.Controllers
         }
 
         [HttpGet("{userIdentifier}")]
-        [HttpHead]
+        [HttpHead("{userIdentifier}")]
         public ActionResult<UserDto> GetUser(string userIdentifier)
         {
             GetUser query = new GetUser(userIdentifier);
