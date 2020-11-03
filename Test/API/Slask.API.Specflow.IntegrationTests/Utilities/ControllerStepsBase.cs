@@ -110,6 +110,30 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
             }
         }
 
+        [When(@"HEAD request is sent to ""(.*)""")]
+        public async Task WhenHEADRequestIsSentTo(string uri)
+        {
+            HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Head, uri);
+            _response = await _client.SendAsync(message);
+        }
+
+        [When(@"HEAD request is sent to ""(.*)""")]
+        public async Task WhenHEADRequestIsSentTo(string uri, Table table)
+        {
+            foreach (TableRow row in table.Rows)
+            {
+                string finalizedUri = uri;
+
+                if (uri.Contains(_idReplacementToken))
+                {
+                    finalizedUri = await ConvertNamesToIdsInUri(uri, row);
+                }
+
+                HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Head, finalizedUri);
+                _response = await _client.SendAsync(message);
+            }
+        }
+
         [When(@"OPTIONS request is sent to ""(.*)""")]
         public async Task WhenOPTIONSRequestIsSentTo(string uri)
         {
