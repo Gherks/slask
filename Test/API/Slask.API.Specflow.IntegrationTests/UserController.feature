@@ -44,6 +44,26 @@ Scenario: Can fetch created user by id
 	Then response return with status code "200"
 		And response should contain users "Stålberto"
 
+Scenario: Can return HEAD response when fetching all users
+	When HEAD request is sent to "api/users"
+	Then response return with status code "200"
+
+Scenario: Can return HEAD response when fetching specific user by id
+		And POST request is sent to "api/users"
+			| Username  |
+			| Stålberto |
+	When HEAD request is sent to "api/users/IdReplacement0"
+		| IdReplacement0 |
+		| Stålberto      |
+	Then response return with status code "200"
+
+Scenario: Can return HEAD response when fetching specific user by name
+		And POST request is sent to "api/users"
+			| Username  |
+			| Stålberto |
+	When HEAD request is sent to "api/users/Stålberto"
+	Then response return with status code "200"
+
 Scenario: Can provide allowed request types for users endpoint
 	When OPTIONS request is sent to "api/users"
 	Then response return with status code "200"
