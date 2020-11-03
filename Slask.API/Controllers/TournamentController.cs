@@ -57,7 +57,7 @@ namespace Slask.API.Controllers
         }
 
         [HttpGet("{tournamentIdentifier}")]
-        [HttpHead]
+        [HttpHead("{tournamentIdentifier}")]
         public ActionResult<TournamentDto> GetTournament(string tournamentIdentifier)
         {
             GetTournament query = new GetTournament(tournamentIdentifier);
