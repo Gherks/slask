@@ -31,6 +31,7 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
                 services.AddDbContext<SlaskContext>(options =>
                     {
                         options.UseInMemoryDatabase(_testDatabaseName, _inMemoryDatabaseRoot);
+                        options.EnableServiceProviderCaching(false);
                         options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
                     },
                     ServiceLifetime.Transient,
