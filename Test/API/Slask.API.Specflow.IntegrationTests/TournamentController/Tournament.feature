@@ -119,6 +119,26 @@ Scenario: Can remove created tournament by name
 	When DELETE request is sent to "api/tournaments/GSL 2020"
 	Then response return with status code "204"
 
+Scenario: Can return HEAD response when fetching all tournaments
+	When HEAD request is sent to "api/tournaments"
+	Then response return with status code "200"
+
+Scenario: Can return HEAD response when fetching specific tournament by id
+		And POST request is sent to "api/tournaments"
+			| TournamentName |
+			| GSL 2020       |
+	When HEAD request is sent to "api/tournaments/IdReplacement0"
+		| IdReplacement0 |
+		| GSL 2020       |
+	Then response return with status code "200"
+
+Scenario: Can return HEAD response when fetching specific tournament by name
+		And POST request is sent to "api/tournaments"
+			| TournamentName |
+			| GSL 2020       |
+	When HEAD request is sent to "api/tournaments/GSL 2020"
+	Then response return with status code "200"
+
 Scenario: Can provide allowed request types for tournaments endpoint
 	When OPTIONS request is sent to "api/tournaments"
 	Then response return with status code "200"
