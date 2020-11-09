@@ -2,6 +2,7 @@
 using Slask.Common;
 using Slask.Domain.Groups.GroupTypes;
 using Slask.Domain.Rounds;
+using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
 
@@ -26,12 +27,12 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests.RoundTypeTests
             {
                 foreach (Match match in group.Matches)
                 {
-                    Player player = match.FindPlayer(playerName);
-                    bool playerFound = player != null;
+                    Guid playerReferenceId = match.FindPlayer(playerName);
+                    bool playerFound = playerReferenceId != Guid.Empty;
 
                     if (playerFound)
                     {
-                        group.SolveTieByChoosing(player.PlayerReferenceId);
+                        group.SolveTieByChoosing(playerReferenceId);
                         break;
                     }
                 }

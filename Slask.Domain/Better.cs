@@ -35,16 +35,16 @@ namespace Slask.Domain
             };
         }
 
-        public MatchBet PlaceMatchBet(Match match, Player player)
+        public MatchBet PlaceMatchBet(Match match, Guid playerReferenceId)
         {
-            bool anyParameterIsInvalid = !PlaceMatchBetParametersAreValid(match, player);
+            bool anyParameterIsInvalid = !PlaceMatchBetParametersAreValid(match, playerReferenceId);
 
             if (anyParameterIsInvalid)
             {
                 return null;
             }
 
-            MatchBet newMatchBet = MatchBet.Create(this, match, player);
+            MatchBet newMatchBet = MatchBet.Create(this, match, playerReferenceId);
             MatchBet existingMatchBet = FindMatchBet(match);
 
             bool createdNewMatchBetSuccessfully = newMatchBet != null;
@@ -81,7 +81,7 @@ namespace Slask.Domain
             return null;
         }
 
-        private static bool PlaceMatchBetParametersAreValid(Match match, Player player)
+        private static bool PlaceMatchBetParametersAreValid(Match match, Guid playerReferenceId)
         {
             bool invalidMatchGiven = match == null;
 
@@ -91,9 +91,9 @@ namespace Slask.Domain
                 return false;
             }
 
-            bool invalidPlayerGiven = player == null;
+            bool invalidPlayerReferenceIdGiven = playerReferenceId == Guid.Empty;
 
-            if (invalidPlayerGiven)
+            if (invalidPlayerReferenceIdGiven)
             {
                 // LOG Error: Cannot place match bet because given player was invalid
                 return false;

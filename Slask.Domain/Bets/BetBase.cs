@@ -16,7 +16,7 @@ namespace Slask.Domain.Bets
         public Guid BetterId { get; protected set; }
         public Better Better { get; protected set; }
         public Guid MatchId { get; protected set; }
-        public Guid PlayerId { get; protected set; }
+        public Guid PlayerReferenceId { get; protected set; }
 
         public abstract bool IsWon();
     }

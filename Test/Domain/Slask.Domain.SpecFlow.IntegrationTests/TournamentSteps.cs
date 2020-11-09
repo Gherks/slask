@@ -324,17 +324,20 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
 
                 if (matchShouldHaveStarted && matchIsNotFinished)
                 {
+                    string player1Name = match.GetPlayer1Name();
+                    string player2Name = match.GetPlayer2Name();
+
                     // Give points to player with name that precedes the other alphabetically
-                    bool increasePlayer1Score = match.Player1.GetName().CompareTo(match.Player2.GetName()) <= 0;
+                    bool increasePlayer1Score = player1Name.CompareTo(player2Name) <= 0;
                     bool scoreIncreased;
 
                     if (increasePlayer1Score)
                     {
-                        scoreIncreased = match.Player1.IncreaseScore(winningScore);
+                        scoreIncreased = match.IncreaseScoreForPlayer1(winningScore);
                     }
                     else
                     {
-                        scoreIncreased = match.Player2.IncreaseScore(winningScore);
+                        scoreIncreased = match.IncreaseScoreForPlayer2(winningScore);
                     }
 
                     if (!scoreIncreased)
@@ -363,15 +366,15 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
 
                 if (matchCounter % 4 != 0)
                 {
-                    better.PlaceMatchBet(match, match.Player1);
+                    better.PlaceMatchBet(match, match.PlayerReference1Id);
                 }
 
                 for (int betterIndex = 1; betterIndex < betters.Count; ++betterIndex)
                 {
-                    Player player = random.Next(2) == 0 ? match.Player1 : match.Player2;
+                    Guid playerReferenceId = random.Next(2) == 0 ? match.PlayerReference1Id : match.PlayerReference2Id;
 
                     better = betters[betterIndex];
-                    better.PlaceMatchBet(match, player);
+                    better.PlaceMatchBet(match, playerReferenceId);
                 }
 
                 matchCounter++;

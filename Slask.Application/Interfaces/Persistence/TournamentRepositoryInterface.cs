@@ -40,7 +40,7 @@ namespace Slask.Application.Interfaces.Persistence
         bool SetStartTimeForMatch(Match match, DateTime dateTime);
         bool SetBestOfInMatch(Match match, int bestOf);
         bool BetterPlacesMatchBetOnMatch(Guid tournamentId, Guid matchId, string betterName, string playerName);
-        bool SwitchPlayersInMatches(Player player1, Player player2);
+        bool SwitchPlayersInMatches(Match match1, Guid playerReference1Id, Match match2, Guid playerReference2Id);
         bool SolveTieByChoosingPlayerInGroup(GroupBase groupBase, Guid playerReferenceId);
         bool SolveTieByChoosingPlayerInGroup(GroupBase groupBase, PlayerReference playerReference);
         bool AddScoreToPlayerInMatch(Tournament tournament, Guid matchId, Guid playerId, int score);

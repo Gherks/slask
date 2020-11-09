@@ -34,12 +34,12 @@ namespace Slask.Domain.Xunit.IntegrationTests
         {
             Better better = tournament.AddBetter(user);
 
-            better.PlaceMatchBet(match, match.Player1);
+            better.PlaceMatchBet(match, match.PlayerReference1Id);
 
             better.Bets.Should().HaveCount(1);
             better.Bets.First().Should().NotBeNull();
             MatchBet matchBet = better.Bets.First() as MatchBet;
-            ValidateMatchBet(matchBet, better, match, match.Player1);
+            ValidateMatchBet(matchBet, better, match, match.PlayerReference1Id);
         }
 
         [Fact]
@@ -47,19 +47,19 @@ namespace Slask.Domain.Xunit.IntegrationTests
         {
             Better better = tournament.AddBetter(user);
 
-            better.PlaceMatchBet(match, match.Player1);
+            better.PlaceMatchBet(match, match.PlayerReference1Id);
 
             better.Bets.Should().HaveCount(1);
             better.Bets.First().Should().NotBeNull();
             MatchBet matchBet = better.Bets.First() as MatchBet;
-            ValidateMatchBet(matchBet, better, match, match.Player1);
+            ValidateMatchBet(matchBet, better, match, match.PlayerReference1Id);
 
-            better.PlaceMatchBet(match, match.Player2);
+            better.PlaceMatchBet(match, match.PlayerReference2Id);
 
             better.Bets.Should().HaveCount(1);
             better.Bets.First().Should().NotBeNull();
             matchBet = better.Bets.First() as MatchBet;
-            ValidateMatchBet(matchBet, better, match, match.Player2);
+            ValidateMatchBet(matchBet, better, match, match.PlayerReference2Id);
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace Slask.Domain.Xunit.IntegrationTests
             group = round.Groups.First();
             Match incompleteMatch = group.Matches.Last();
 
-            better.PlaceMatchBet(null, incompleteMatch.Player1);
+            better.PlaceMatchBet(null, incompleteMatch.PlayerReference1Id);
 
             better.Bets.Should().BeEmpty();
         }
@@ -88,7 +88,7 @@ namespace Slask.Domain.Xunit.IntegrationTests
             group = round.Groups.First();
             Match match = group.Matches.First();
 
-            better.PlaceMatchBet(null, match.Player1);
+            better.PlaceMatchBet(null, match.PlayerReference1Id);
 
             better.Bets.Should().BeEmpty();
         }
@@ -103,7 +103,7 @@ namespace Slask.Domain.Xunit.IntegrationTests
             group = round.Groups.First();
             Match incompleteMatch = group.Matches.Last();
 
-            better.PlaceMatchBet(incompleteMatch, incompleteMatch.Player1);
+            better.PlaceMatchBet(incompleteMatch, incompleteMatch.PlayerReference1Id);
 
             better.Bets.Should().BeEmpty();
         }
@@ -114,7 +114,7 @@ namespace Slask.Domain.Xunit.IntegrationTests
             Better better = tournament.AddBetter(user);
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
-            better.PlaceMatchBet(match, match.Player1);
+            better.PlaceMatchBet(match, match.PlayerReference1Id);
 
             better.Bets.Should().BeEmpty();
         }
@@ -124,16 +124,16 @@ namespace Slask.Domain.Xunit.IntegrationTests
         {
             Better better = tournament.AddBetter(user);
 
-            better.PlaceMatchBet(match, match.Player1);
+            better.PlaceMatchBet(match, match.PlayerReference1Id);
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
-            better.PlaceMatchBet(match, match.Player2);
+            better.PlaceMatchBet(match, match.PlayerReference2Id);
 
             better.Bets.Should().HaveCount(1);
             better.Bets.First().Should().NotBeNull();
 
             MatchBet matchBet = better.Bets.First() as MatchBet;
-            ValidateMatchBet(matchBet, better, match, match.Player1);
+            ValidateMatchBet(matchBet, better, match, match.PlayerReference1Id);
         }
 
         [Fact]
@@ -143,9 +143,9 @@ namespace Slask.Domain.Xunit.IntegrationTests
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
             int winningScore = (int)Math.Ceiling(match.BestOf / 2.0);
-            match.Player1.IncreaseScore(winningScore);
+            match.IncreaseScoreForPlayer1(winningScore);
 
-            better.PlaceMatchBet(match, match.Player1);
+            better.PlaceMatchBet(match, match.PlayerReference2Id);
 
             better.Bets.Should().BeEmpty();
         }
@@ -155,9 +155,9 @@ namespace Slask.Domain.Xunit.IntegrationTests
         {
             Better better = tournament.AddBetter(user);
 
-            better.PlaceMatchBet(match, match.Player1);
+            better.PlaceMatchBet(match, match.PlayerReference1Id);
 
-            PlayerSwitcher.SwitchMatchesOn(match.Player1, match.Player2);
+            PlayerSwitcher.SwitchMatchesOn(match, match.PlayerReference1Id, match, match.PlayerReference2Id);
 
             better.Bets.Should().BeEmpty();
         }
@@ -175,19 +175,19 @@ namespace Slask.Domain.Xunit.IntegrationTests
             Match firstMatch = group.Matches[0];
             Match secondMatch = group.Matches[1];
 
-            better.PlaceMatchBet(firstMatch, firstMatch.Player1);
-            better.PlaceMatchBet(secondMatch, secondMatch.Player1);
+            better.PlaceMatchBet(firstMatch, firstMatch.PlayerReference1Id);
+            better.PlaceMatchBet(secondMatch, secondMatch.PlayerReference1Id);
 
-            PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player1);
+            PlayerSwitcher.SwitchMatchesOn(firstMatch, firstMatch.PlayerReference1Id, secondMatch, secondMatch.PlayerReference1Id);
 
             better.Bets.Should().BeEmpty();
         }
 
-        private void ValidateMatchBet(MatchBet matchBet, Better correctBetter, Match correctMatch, Player correctPlayer)
+        private void ValidateMatchBet(MatchBet matchBet, Better correctBetter, Match correctMatch, Guid correctPlayerReferenceId)
         {
             matchBet.BetterId.Should().Be(correctBetter.Id);
             matchBet.MatchId.Should().Be(correctMatch.Id);
-            matchBet.PlayerId.Should().Be(correctPlayer.Id);
+            matchBet.PlayerReferenceId.Should().Be(correctPlayerReferenceId);
         }
     }
 }

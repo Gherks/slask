@@ -1,4 +1,5 @@
 ﻿using Slask.Domain.Utilities;
+using System;
 
 namespace Slask.Domain.Bets.BetTypes
 {
@@ -9,9 +10,9 @@ namespace Slask.Domain.Bets.BetTypes
             BetType = BetTypeEnum.MiscellaneousBet;
         }
 
-        public static MiscellaneousBet Create(Better better, Player player)
+        public static MiscellaneousBet Create(Better better, Guid playerReferenceId)
         {
-            bool anyParameterIsInvalid = !ParametersAreValid(better, player);
+            bool anyParameterIsInvalid = !ParametersAreValid(better, playerReferenceId);
 
             if (anyParameterIsInvalid)
             {
@@ -21,7 +22,7 @@ namespace Slask.Domain.Bets.BetTypes
             return new MiscellaneousBet
             {
                 BetterId = better.Id,
-                PlayerId = player.Id,
+                PlayerReferenceId = playerReferenceId
             };
         }
 
@@ -30,7 +31,7 @@ namespace Slask.Domain.Bets.BetTypes
             throw new System.NotImplementedException();
         }
 
-        private static bool ParametersAreValid(Better better, Player player)
+        private static bool ParametersAreValid(Better better, Guid playerReferenceId)
         {
             bool invalidBetterGiven = better == null;
 
@@ -40,9 +41,9 @@ namespace Slask.Domain.Bets.BetTypes
                 return false;
             }
 
-            bool invalidPlayerGiven = player == null;
+            bool invalidPlayerReferenceIdGiven = playerReferenceId == Guid.Empty;
 
-            if (invalidPlayerGiven)
+            if (invalidPlayerReferenceIdGiven)
             {
                 // LOG Error: Cannot create miscellaneous bet because given player was invalid
                 return false;

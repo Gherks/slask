@@ -6,23 +6,23 @@ namespace Slask.Domain.Groups.GroupUtility
 {
     public static class PlayerSwitcher
     {
-        public static bool SwitchMatchesOn(Player player1, Player player2)
+        public static bool SwitchMatchesOn(Match match1, Guid playerReference1Id, Match match2, Guid playerReference2Id)
         {
-            if (SwitchIsPossible(player1, player2))
+            if (SwitchIsPossible(match1, playerReference1Id, match2, playerReference2Id))
             {
-                bool bothPlayersResidesInSameMatch = player1.Match.Id == player2.Match.Id;
+                bool playersResidesInSameMatch = match1.Id == match2.Id;
 
-                if (bothPlayersResidesInSameMatch)
+                if (playersResidesInSameMatch)
                 {
-                    MakeSwitchOnPlayerReferencesInSameMatch(player1.Match);
+                    MakeSwitchOnPlayerReferencesInSameMatch(match1);
                 }
                 else
                 {
-                    MakeSwitchOnPlayerReferencesInDifferentMatch(player1, player2);
+                    MakeSwitchOnPlayerReferencesInDifferentMatch(match1, playerReference1Id, match2, playerReference2Id);
                 }
 
-                player1.Match.Group.RemoveAllMatchBetsOnMatch(player1.Match);
-                player2.Match.Group.RemoveAllMatchBetsOnMatch(player2.Match);
+                match1.Group.RemoveAllMatchBetsOnMatch(match1);
+                match2.Group.RemoveAllMatchBetsOnMatch(match2);
 
                 return true;
             }
@@ -30,27 +30,31 @@ namespace Slask.Domain.Groups.GroupUtility
             return false;
         }
 
-        private static bool SwitchIsPossible(Player player1, Player player2)
+        private static bool SwitchIsPossible(Match match1, Guid playerReference1Id, Match match2, Guid playerReference2Id)
         {
-            if (EitherPlayerIsInvalid(player1, player2))
+            bool eitherMatchIsInvalid = match1 == null || match2 == null;
+
+            if (eitherMatchIsInvalid)
             {
                 // LOG Error: Either player that is attempting to switch match is invalid
                 return false;
             }
 
-            if (EitherPlayerHasAnInvalidPlayerReference(player1, player2))
+            bool eitherPlayerReferenceIsInvalid = playerReference1Id == Guid.Empty || playerReference2Id == Guid.Empty;
+
+            if (eitherPlayerReferenceIsInvalid)
             {
                 // LOG Error: Either or both players that are switching matches has invalid player references
                 return false;
             }
 
-            if (EitherPlayersGroupHasBegun(player1, player2))
+            if (EitherMatchGroupHasBegun(match1, match2))
             {
                 // LOG Issue?: Either player that wants to switch matches is residing in a group that has already started, it's too late to switch matches with other players
                 return false;
             }
 
-            if (EitherPlayerResidesInGroupThatDisallowSwitching(player1, player2))
+            if (EitherPlayerResidesInGroupThatDisallowSwitching(match1, match2))
             {
                 // LOG Issue?: Either player that wants to switch matches resides in a group that does not allow switching
                 return false;
@@ -59,64 +63,45 @@ namespace Slask.Domain.Groups.GroupUtility
             return true;
         }
 
-        private static bool EitherPlayerIsInvalid(Player player1, Player player2)
+        private static bool EitherMatchGroupHasBegun(Match match1, Match match2)
         {
-            return player1 == null || player2 == null;
+            bool match1HasBegun = match1.Group.GetPlayState() != PlayStateEnum.NotBegun;
+            bool match2HasBegun = match2.Group.GetPlayState() != PlayStateEnum.NotBegun;
+
+            return match1HasBegun || match2HasBegun;
         }
 
-        private static bool EitherPlayerHasAnInvalidPlayerReference(Player player1, Player player2)
+        private static bool EitherPlayerResidesInGroupThatDisallowSwitching(Match match1, Match match2)
         {
-            return player1.PlayerReferenceId == Guid.Empty || player2.PlayerReferenceId == Guid.Empty;
-        }
+            bool match1GroupDisallowsSwitching = match1.Group is RoundRobinGroup;
+            bool match2GroupDisallowsSwitching = match2.Group is RoundRobinGroup;
 
-        private static bool EitherPlayersGroupHasBegun(Player player1, Player player2)
-        {
-            bool player1MatchHasBegun = player1.Match.Group.GetPlayState() != PlayStateEnum.NotBegun;
-            bool player2MatchHasBegun = player2.Match.Group.GetPlayState() != PlayStateEnum.NotBegun;
-
-            return player1MatchHasBegun || player2MatchHasBegun;
-        }
-
-        private static bool EitherPlayerResidesInGroupThatDisallowSwitching(Player player1, Player player2)
-        {
-            bool player1GroupDisallowsSwitching = player1.Match.Group is RoundRobinGroup;
-            bool player2GroupDisallowsSwitching = player2.Match.Group is RoundRobinGroup;
-
-            return player1GroupDisallowsSwitching && player2GroupDisallowsSwitching;
+            return match1GroupDisallowsSwitching && match2GroupDisallowsSwitching;
         }
 
         private static void MakeSwitchOnPlayerReferencesInSameMatch(Match match)
         {
-            Guid firstPlayerReferenceId = match.Player1.PlayerReferenceId;
-            Guid secondPlayerReferenceId = match.Player2.PlayerReferenceId;
-
-            match.AssignPlayerReferencesToPlayers(secondPlayerReferenceId, firstPlayerReferenceId);
+            match.AssignPlayerReferencesToPlayers(match.PlayerReference2Id, match.PlayerReference1Id);
         }
 
-        private static void MakeSwitchOnPlayerReferencesInDifferentMatch(Player player1, Player player2)
+        private static void MakeSwitchOnPlayerReferencesInDifferentMatch(Match match1, Guid playerReference1Id, Match match2, Guid playerReference2Id)
         {
-            Guid firstPlayerReferenceId = player1.PlayerReferenceId;
-            Guid secondPlayerReferenceId = player2.PlayerReferenceId;
-
-            Match player1Match = player1.Match;
-            Match player2Match = player2.Match;
-
-            if (player1Match.Player1.Id == player1.Id)
+            if (match1.PlayerReference1Id == playerReference1Id)
             {
-                player1Match.AssignPlayerReferencesToPlayers(secondPlayerReferenceId, player1Match.Player2.PlayerReferenceId);
+                match1.AssignPlayerReferencesToPlayers(playerReference2Id, match1.PlayerReference2Id);
             }
             else
             {
-                player1Match.AssignPlayerReferencesToPlayers(player1Match.Player1.PlayerReferenceId, secondPlayerReferenceId);
+                match1.AssignPlayerReferencesToPlayers(match1.PlayerReference1Id, playerReference2Id);
             }
 
-            if (player2Match.Player1.Id == player2.Id)
+            if (match2.PlayerReference1Id == playerReference2Id)
             {
-                player2Match.AssignPlayerReferencesToPlayers(firstPlayerReferenceId, player2Match.Player2.PlayerReferenceId);
+                match2.AssignPlayerReferencesToPlayers(playerReference1Id, match2.PlayerReference2Id);
             }
             else
             {
-                player2Match.AssignPlayerReferencesToPlayers(player2Match.Player1.PlayerReferenceId, firstPlayerReferenceId);
+                match2.AssignPlayerReferencesToPlayers(match2.PlayerReference1Id, playerReference1Id);
             }
         }
     }

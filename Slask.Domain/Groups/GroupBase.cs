@@ -52,14 +52,14 @@ namespace Slask.Domain.Groups
 
             foreach (Match match in Matches)
             {
-                if (match.Player1.PlayerReferenceId != Guid.Empty)
+                if (match.PlayerReference1Id != Guid.Empty)
                 {
-                    playerReferenceIds.Add(match.Player1.PlayerReferenceId);
+                    playerReferenceIds.Add(match.PlayerReference1Id);
                 }
 
-                if (match.Player2.PlayerReferenceId != Guid.Empty)
+                if (match.PlayerReference2Id != Guid.Empty)
                 {
-                    playerReferenceIds.Add(match.Player2.PlayerReferenceId);
+                    playerReferenceIds.Add(match.PlayerReference2Id);
                 }
             }
 

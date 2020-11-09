@@ -33,19 +33,19 @@ namespace Slask.Domain.Xunit.UnitTests.BetTests
         [Fact]
         public void CanCreateMatchBet()
         {
-            MatchBet matchBet = MatchBet.Create(better, firstMatch, firstMatch.Player1);
+            MatchBet matchBet = MatchBet.Create(better, firstMatch, firstMatch.PlayerReference1Id);
 
             matchBet.Should().NotBeNull();
             matchBet.Id.Should().NotBeEmpty();
             matchBet.BetterId.Should().Be(better.Id);
             matchBet.MatchId.Should().Be(firstMatch.Id);
-            matchBet.PlayerId.Should().Be(firstMatch.Player1.Id);
+            matchBet.PlayerReferenceId.Should().Be(firstMatch.PlayerReference1Id);
         }
 
         [Fact]
         public void CannotCreateMatchBetWithoutBetter()
         {
-            MatchBet matchBet = MatchBet.Create(null, firstMatch, firstMatch.Player1);
+            MatchBet matchBet = MatchBet.Create(null, firstMatch, firstMatch.PlayerReference1Id);
 
             matchBet.Should().BeNull();
         }
@@ -53,7 +53,7 @@ namespace Slask.Domain.Xunit.UnitTests.BetTests
         [Fact]
         public void CannotCreateMatchBetWithoutMatch()
         {
-            MatchBet matchBet = MatchBet.Create(better, null, firstMatch.Player1);
+            MatchBet matchBet = MatchBet.Create(better, null, firstMatch.PlayerReference1Id);
 
             matchBet.Should().BeNull();
         }
@@ -61,7 +61,7 @@ namespace Slask.Domain.Xunit.UnitTests.BetTests
         [Fact]
         public void CannotCreateMatchBetWithoutPlayer()
         {
-            MatchBet matchBet = MatchBet.Create(better, firstMatch, null);
+            MatchBet matchBet = MatchBet.Create(better, firstMatch, Guid.Empty);
 
             matchBet.Should().BeNull();
         }
@@ -82,7 +82,7 @@ namespace Slask.Domain.Xunit.UnitTests.BetTests
         {
             SystemTimeMocker.SetOneSecondAfter(firstMatch.StartDateTime);
 
-            MatchBet matchBet = MatchBet.Create(better, firstMatch, firstMatch.Player1);
+            MatchBet matchBet = MatchBet.Create(better, firstMatch, firstMatch.PlayerReference1Id);
 
             matchBet.Should().BeNull();
         }
@@ -93,9 +93,9 @@ namespace Slask.Domain.Xunit.UnitTests.BetTests
             SystemTimeMocker.SetOneSecondAfter(firstMatch.StartDateTime);
 
             int winningScore = (int)Math.Ceiling(firstMatch.BestOf / 2.0);
-            firstMatch.Player1.IncreaseScore(winningScore);
+            firstMatch.IncreaseScoreForPlayer1(winningScore);
 
-            MatchBet matchBet = MatchBet.Create(better, firstMatch, firstMatch.Player1);
+            MatchBet matchBet = MatchBet.Create(better, firstMatch, firstMatch.PlayerReference1Id);
 
             matchBet.Should().BeNull();
         }

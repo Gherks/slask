@@ -104,15 +104,15 @@ namespace Slask.Domain.Xunit.IntegrationTests.RoundTests.RoundTypeTests
 
             match = round.Groups.First().Matches[0];
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-            match.Player1.IncreaseScore(2);
+            match.IncreaseScoreForPlayer1(2);
 
             match = round.Groups.First().Matches[1];
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-            match.Player2.IncreaseScore(2);
+            match.IncreaseScoreForPlayer2(2);
 
             match = round.Groups.First().Matches[2];
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-            match.Player1.IncreaseScore(2);
+            match.IncreaseScoreForPlayer1(2);
 
             round.HasProblematicTie().Should().BeFalse();
         }
@@ -128,7 +128,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.RoundTests.RoundTypeTests
             foreach (Match match in round.Groups.First().Matches)
             {
                 SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-                match.Player1.IncreaseScore(2);
+                match.IncreaseScoreForPlayer1(2);
             }
 
             round.HasProblematicTie().Should().BeTrue();
@@ -145,7 +145,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.RoundTests.RoundTypeTests
             foreach (Match match in round.Groups.First().Matches)
             {
                 SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-                match.Player1.IncreaseScore(2);
+                match.IncreaseScoreForPlayer1(2);
             }
 
             round.GetPlayState().Should().Be(PlayStateEnum.Ongoing);
@@ -163,15 +163,15 @@ namespace Slask.Domain.Xunit.IntegrationTests.RoundTests.RoundTypeTests
 
             match = round.Groups.First().Matches[0];
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-            match.Player1.IncreaseScore(2);
+            match.IncreaseScoreForPlayer1(2);
 
             match = round.Groups.First().Matches[1];
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-            match.Player2.IncreaseScore(2);
+            match.IncreaseScoreForPlayer2(2);
 
             match = round.Groups.First().Matches[2];
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-            match.Player1.IncreaseScore(2);
+            match.IncreaseScoreForPlayer1(2);
 
             round.Groups.First().SolveTieByChoosing(maruPlayerReference.Id);
 

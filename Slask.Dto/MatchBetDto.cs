@@ -7,6 +7,6 @@ namespace Slask.Dto
         public Guid Id { get; set; }
         public Guid BetterId { get; set; }
         public Guid MatchId { get; set; }
-        public Guid PlayerId { get; set; }
+        public Guid PlayerReferenceId { get; set; }
     }
 }

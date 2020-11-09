@@ -9,14 +9,14 @@ namespace Slask.Application.Commands
 {
     public sealed class ChangeGroupSizeInRound : CommandInterface
     {
-        public Guid TournamentId { get; }
-        public Guid RoundId { get; }
+        public string TournamentIdentifier { get; }
+        public string RoundIdentifier { get; }
         public int PlayersPerGroupCount { get; }
 
-        public ChangeGroupSizeInRound(Guid tournamentId, Guid roundId, int playersPerGroupCount)
+        public ChangeGroupSizeInRound(string tournamentIdentifier, string roundIdentifier, int playersPerGroupCount)
         {
-            TournamentId = tournamentId;
-            RoundId = roundId;
+            TournamentIdentifier = tournamentIdentifier;
+            RoundIdentifier = roundIdentifier;
             PlayersPerGroupCount = playersPerGroupCount;
         }
     }
@@ -32,25 +32,43 @@ namespace Slask.Application.Commands
 
         public Result Handle(ChangeGroupSizeInRound command)
         {
-            Tournament tournament = _tournamentRepository.GetTournament(command.TournamentId);
+            Tournament tournament;
+
+            if (Guid.TryParse(command.TournamentIdentifier, out Guid tournamentId))
+            {
+                tournament = _tournamentRepository.GetTournament(tournamentId);
+            }
+            else
+            {
+                tournament = _tournamentRepository.GetTournament(command.TournamentIdentifier);
+            }
 
             if (tournament == null)
             {
-                return Result.Failure($"Could not change players per group count ({ command.PlayersPerGroupCount }) setting in round ({ command.RoundId }). Tournament ({ command.TournamentId }) not found.");
+                return Result.Failure($"Could not change players per group count ({ command.PlayersPerGroupCount }) setting in round ({ command.RoundIdentifier }). Tournament ({ command.TournamentIdentifier }) not found.");
             }
 
-            RoundBase round = tournament.GetRoundById(command.RoundId);
+            RoundBase round;
+
+            if (Guid.TryParse(command.TournamentIdentifier, out Guid roundId))
+            {
+                round = tournament.GetRoundById(roundId);
+            }
+            else
+            {
+                round = tournament.GetRoundByName(command.RoundIdentifier);
+            }
 
             if (round == null)
             {
-                return Result.Failure($"Could not change players per group count ({ command.PlayersPerGroupCount }) setting in round ({ command.RoundId }). Round not found.");
+                return Result.Failure($"Could not change players per group count ({ command.PlayersPerGroupCount }) setting in round ({ command.RoundIdentifier }). Round not found.");
             }
 
             bool changeSuccessful = _tournamentRepository.SetPlayersPerGroupCountInRound(round, command.PlayersPerGroupCount);
 
             if (!changeSuccessful)
             {
-                return Result.Failure($"Could not change players per group count ({ command.PlayersPerGroupCount }) setting in round ({ command.RoundId }).");
+                return Result.Failure($"Could not change players per group count ({ command.PlayersPerGroupCount }) setting in round ({ command.RoundIdentifier }).");
             }
 
             _tournamentRepository.Save();

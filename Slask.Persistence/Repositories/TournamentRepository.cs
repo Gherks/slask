@@ -403,15 +403,15 @@ namespace Slask.Persistence.Repositories
                     {
                         if (match.Id == matchId)
                         {
-                            Player player = match.FindPlayer(playerName);
+                            Guid playerReferenceId = match.FindPlayer(playerName);
 
-                            if (player == null)
+                            if (playerReferenceId == Guid.Empty)
                             {
                                 /* LOG Issue: Could not place match bet; sought player is not participating in sought match. */
                                 return false;
                             }
 
-                            MatchBet matchBet = better.PlaceMatchBet(match, player);
+                            MatchBet matchBet = better.PlaceMatchBet(match, playerReferenceId);
 
                             return matchBet != null;
                         }
@@ -422,9 +422,9 @@ namespace Slask.Persistence.Repositories
             return false;
         }
 
-        public bool SwitchPlayersInMatches(Player player1, Player player2)
+        public bool SwitchPlayersInMatches(Match match1, Guid playerReference1Id, Match match2, Guid playerReference2Id)
         {
-            return PlayerSwitcher.SwitchMatchesOn(player1, player2);
+            return PlayerSwitcher.SwitchMatchesOn(match1, playerReference1Id, match2, playerReference2Id);
         }
 
         public bool SolveTieByChoosingPlayerInGroup(GroupBase groupBase, Guid playerReferenceId)
@@ -453,15 +453,7 @@ namespace Slask.Persistence.Repositories
                     {
                         if (match.Id == matchId)
                         {
-                            Player player = match.FindPlayer(playerId);
-
-                            if (player == null)
-                            {
-                                /* LOG Issue: Could not add score to player in match; sought player is not participating in sought match. */
-                                return false;
-                            }
-
-                            return player.IncreaseScore(score);
+                            return match.IncreaseScoreForPlayer(playerId, score);
                         }
                     }
                 }
@@ -505,14 +497,8 @@ namespace Slask.Persistence.Repositories
                 .Include(tournament => tournament.Betters)
                     .ThenInclude(better => better.User)
                 .Include(tournament => tournament.Rounds)
-                .Include(tournament => tournament.Rounds)
                     .ThenInclude(round => round.Groups)
-                        .ThenInclude(group => group.Matches)
-                            .ThenInclude(match => match.Player1)
-                .Include(tournament => tournament.Rounds)
-                    .ThenInclude(round => round.Groups)
-                        .ThenInclude(group => group.Matches)
-                            .ThenInclude(match => match.Player2);
+                        .ThenInclude(group => group.Matches);
         }
     }
 }

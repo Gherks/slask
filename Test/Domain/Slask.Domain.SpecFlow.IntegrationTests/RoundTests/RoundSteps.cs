@@ -36,11 +36,11 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.RoundTests
 
                 SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
-                Player player = match.FindPlayer(assignScoreToPlayer.ScoringPlayer);
+                Guid playerReferenceId = match.FindPlayer(assignScoreToPlayer.ScoringPlayer);
 
-                if (player != null)
+                if (playerReferenceId != Guid.Empty)
                 {
-                    player.IncreaseScore(assignScoreToPlayer.ScoreAdded);
+                    match.IncreaseScoreForPlayer(playerReferenceId, assignScoreToPlayer.ScoreAdded);
                 }
                 else
                 {

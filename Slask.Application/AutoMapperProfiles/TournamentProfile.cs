@@ -38,12 +38,13 @@ namespace Slask.Application.AutoMapperProfiles
 
             CreateMap<GroupBase, GroupDto>();
 
-            CreateMap<Match, MatchDto>();
-
-            CreateMap<Player, PlayerDto>()
+            CreateMap<Match, MatchDto>()
                 .ForMember(
-                    betterDto => betterDto.Name,
-                    options => options.MapFrom(better => better.GetName()));
+                    matchDto => matchDto.Player1Name,
+                    options => options.MapFrom(match => match.GetPlayer1Name()))
+                .ForMember(
+                    matchDto => matchDto.Player2Name,
+                    options => options.MapFrom(match => match.GetPlayer2Name()));
 
             CreateMap<TournamentIssue, TournamentIssueDto>();
         }

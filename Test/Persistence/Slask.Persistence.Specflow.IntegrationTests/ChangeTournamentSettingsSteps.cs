@@ -97,9 +97,9 @@ namespace Slask.Persistence.Specflow.IntegrationTests
                     RoundBase roundBase = tournament.Rounds[playerMatchLayout.RoundIndex];
                     GroupBase groupBase = roundBase.Groups[playerMatchLayout.GroupIndex];
                     Match match = groupBase.Matches[playerMatchLayout.MatchIndex];
-                    Player player = playerMatchLayout.PlayerIndex == 0 ? match.Player1 : match.Player2;
+                    string playerName = playerMatchLayout.PlayerIndex == 0 ? match.GetPlayer1Name() : match.GetPlayer2Name();
 
-                    player.GetName().Should().Be(playerMatchLayout.PlayerName);
+                    playerName.Should().Be(playerMatchLayout.PlayerName);
                 }
             }
         }
@@ -152,13 +152,13 @@ namespace Slask.Persistence.Specflow.IntegrationTests
 
                     GroupBase groupBase1 = roundBase.Groups[playerSwitch.GroupIndex1];
                     Match match1 = groupBase1.Matches[playerSwitch.MatchIndex1];
-                    Player player1 = match1.FindPlayer(playerSwitch.PlayerName1);
+                    Guid playerReference1Id = match1.FindPlayer(playerSwitch.PlayerName1);
 
                     GroupBase groupBase2 = roundBase.Groups[playerSwitch.GroupIndex2];
                     Match match2 = groupBase2.Matches[playerSwitch.MatchIndex2];
-                    Player player2 = match2.FindPlayer(playerSwitch.PlayerName2);
+                    Guid playerReference2Id = match2.FindPlayer(playerSwitch.PlayerName2);
 
-                    tournamentRepository.SwitchPlayersInMatches(player1, player2);
+                    tournamentRepository.SwitchPlayersInMatches(match1, playerReference1Id, match2, playerReference2Id);
                 }
 
                 tournamentRepository.Save();

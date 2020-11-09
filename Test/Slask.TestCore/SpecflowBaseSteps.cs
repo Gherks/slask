@@ -227,15 +227,15 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
                     SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
 
-                    Player player = match.FindPlayer(assignScoreToPlayer.ScoringPlayer);
+                    Guid playerReferenceId = match.FindPlayer(assignScoreToPlayer.ScoringPlayer);
 
-                    if (player != null)
+                    if (playerReferenceId != Guid.Empty)
                     {
-                        tournamentRepository.AddScoreToPlayerInMatch(tournament, match.Id, player.Id, assignScoreToPlayer.ScoreAdded);
+                        tournamentRepository.AddScoreToPlayerInMatch(tournament, match.Id, playerReferenceId, assignScoreToPlayer.ScoreAdded);
                     }
                     else
                     {
-                        throw new NotImplementedException();
+                        throw new InvalidOperationException();
                     }
                 }
 
@@ -358,10 +358,10 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             int winningScore = (int)Math.Ceiling(match.BestOf / 2.0);
 
             // Give points to player with name that precedes the other alphabetically
-            bool increasePlayer1Score = match.Player1.GetName().CompareTo(match.Player2.GetName()) <= 0;
+            bool increasePlayer1Score = match.GetPlayer1Name().CompareTo(match.GetPlayer2Name()) <= 0;
 
             Tournament tournament = match.Group.Round.Tournament;
-            Guid scoringPlayerId = increasePlayer1Score ? match.Player1.Id : match.Player2.Id;
+            Guid scoringPlayerId = increasePlayer1Score ? match.PlayerReference1Id : match.PlayerReference2Id;
 
             tournamentRepository.AddScoreToPlayerInMatch(tournament, match.Id, scoringPlayerId, winningScore);
             tournamentRepository.Save();

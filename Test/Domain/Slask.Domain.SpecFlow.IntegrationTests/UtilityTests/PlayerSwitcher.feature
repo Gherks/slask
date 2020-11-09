@@ -153,7 +153,7 @@ Scenario: Cannot switch player that resides in a round robin group with player i
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
 			| 0                | 0           | 1           |
-	When player "Maru" in group 0 and player "Thorzain" in group 2 switches matches
+	When player "Stork" in group 0 and player "Bomber" in group 2 switches matches
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | Maru          | Stork         |
@@ -224,7 +224,7 @@ Scenario: Cannot switch player with other player in different group within same 
 		And groups within tournament is played out and betted on
 			| Tournament index | Round index | Group index |
 			| 0                | 0           | 0           |
-	When player "Maru" in group 0 and player "Taeja" in group 0 switches matches
+	When player "Maru" in group 0 and player "Taeja" in group 1 switches matches
 	Then participating players in group 0 should be mapped accordingly
 		| Match index | Player 1 name | Player 2 name |
 		| 0           | Maru          | Stork         |

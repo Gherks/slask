@@ -1,8 +1,10 @@
 using Slask.Common;
 using Slask.Domain.Groups;
 using Slask.Domain.ObjectState;
+using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
+using System.Collections.Generic;
 
 namespace Slask.Domain
 {
@@ -12,25 +14,22 @@ namespace Slask.Domain
         {
             Id = Guid.NewGuid();
             BestOf = 3;
-
-            Player1 = Player.Create(this);
-            Player1Id = Player1.Id;
-
-            Player2 = Player.Create(this);
-            Player2Id = Player2.Id;
+            PlayerReference1Id = Guid.Empty;
+            Player1Score = 0;
+            PlayerReference2Id = Guid.Empty;
+            Player2Score = 0;
         }
 
         public Guid Id { get; private set; }
         public int SortOrder { get; private set; }
         public int BestOf { get; protected set; }
         public DateTime StartDateTime { get; private set; }
-        public Guid Player1Id { get; private set; }
-        public Player Player1 { get; private set; }
-        public Guid Player2Id { get; private set; }
-        public Player Player2 { get; private set; }
+        public Guid PlayerReference1Id { get; private set; }
+        public int Player1Score { get; private set; }
+        public Guid PlayerReference2Id { get; private set; }
+        public int Player2Score { get; private set; }
         public Guid GroupId { get; private set; }
         public GroupBase Group { get; private set; }
-
 
         public static Match Create(GroupBase group)
         {
@@ -52,11 +51,14 @@ namespace Slask.Domain
             return match;
         }
 
-        public override void MarkForDeletion()
+        public string GetPlayer1Name()
         {
-            base.MarkForDeletion();
-            Player1.MarkForDeletion();
-            Player2.MarkForDeletion();
+            return GetPlayerName(0);
+        }
+
+        public string GetPlayer2Name()
+        {
+            return GetPlayerName(1);
         }
 
         public void UpdateSortOrder()
@@ -113,19 +115,20 @@ namespace Slask.Domain
             return false;
         }
 
-        public bool AssignPlayerReferencesToPlayers(Guid player1ReferenceId, Guid player2ReferenceId)
+        public bool AssignPlayerReferencesToPlayers(Guid playerReference1Id, Guid playerReference2Id)
         {
             bool matchHasNotBegun = GetPlayState() == PlayStateEnum.NotBegun;
 
             if (matchHasNotBegun)
             {
-                bool anyPlayerReferenceIsInvalid = player1ReferenceId == Guid.Empty || player2ReferenceId == Guid.Empty;
-                bool bothPlayerReferencesDiffer = anyPlayerReferenceIsInvalid || player1ReferenceId != player2ReferenceId;
+                bool anyPlayerReferenceIsInvalid = playerReference1Id == Guid.Empty || playerReference2Id == Guid.Empty;
+                bool bothPlayerReferencesDiffer = anyPlayerReferenceIsInvalid || playerReference1Id != playerReference2Id;
 
                 if (bothPlayerReferencesDiffer)
                 {
-                    Player1.AssignPlayerReference(player1ReferenceId);
-                    Player2.AssignPlayerReference(player2ReferenceId);
+                    PlayerReference1Id = playerReference1Id;
+                    PlayerReference2Id = playerReference2Id;
+                    MarkAsModified();
 
                     return true;
                 }
@@ -141,17 +144,17 @@ namespace Slask.Domain
 
             if (matchHasNotBegun && playerReferenceIsValid)
             {
-                bool firstPlayerHasNoPlayerReference = Player1.PlayerReferenceId == Guid.Empty;
-                if (firstPlayerHasNoPlayerReference)
+                if (PlayerReference1Id == Guid.Empty)
                 {
-                    Player1.AssignPlayerReference(playerReferenceId);
+                    PlayerReference1Id = playerReferenceId;
+                    MarkAsModified();
                     return true;
                 }
 
-                bool secondPlayerHasNoPlayerReference = Player2.PlayerReferenceId == Guid.Empty;
-                if (secondPlayerHasNoPlayerReference)
+                if (PlayerReference2Id == Guid.Empty)
                 {
-                    Player2.AssignPlayerReference(playerReferenceId);
+                    PlayerReference2Id = playerReferenceId;
+                    MarkAsModified();
                     return true;
                 }
             }
@@ -159,39 +162,34 @@ namespace Slask.Domain
             return false;
         }
 
-        public Player FindPlayer(Guid id)
+        public bool HasPlayer(Guid id)
         {
-            if (Player1 != null && Player1.Id == id)
-            {
-                return Player1;
-            }
-
-            if (Player2 != null && Player2.Id == id)
-            {
-                return Player2;
-            }
-
-            return null;
+            return PlayerReference1Id == id || PlayerReference2Id == id;
         }
 
-        public Player FindPlayer(string name)
+        public Guid FindPlayer(string name)
         {
-            if (Player1 != null && Player1.GetName() == name)
+            PlayerReference playerReference = Group.Round.Tournament.GetPlayerReferenceByName(name);
+
+            if (playerReference != null)
             {
-                return Player1;
+                if (PlayerReference1Id == playerReference.Id)
+                {
+                    return PlayerReference1Id;
+                }
+
+                if (PlayerReference2Id == playerReference.Id)
+                {
+                    return PlayerReference2Id;
+                }
             }
 
-            if (Player2 != null && Player2.GetName() == name)
-            {
-                return Player2;
-            }
-
-            return null;
+            return Guid.Empty;
         }
 
         public bool IsReady()
         {
-            return Player1.PlayerReferenceId != Guid.Empty && Player2.PlayerReferenceId != Guid.Empty;
+            return PlayerReference1Id != Guid.Empty && PlayerReference2Id != Guid.Empty;
         }
 
         public PlayStateEnum GetPlayState()
@@ -204,36 +202,137 @@ namespace Slask.Domain
             return AnyPlayerHasWon() ? PlayStateEnum.Finished : PlayStateEnum.Ongoing;
         }
 
-        public Player GetWinningPlayer()
+        public Guid GetWinningPlayerReference()
         {
             if (AnyPlayerHasWon())
             {
-                return Player1.Score > Player2.Score ? Player1 : Player2;
+                return Player1Score > Player2Score ? PlayerReference1Id : PlayerReference2Id;
             }
 
-            return null;
+            return Guid.Empty;
         }
 
-        public Player GetLosingPlayer()
+        public Guid GetLosingPlayerReference()
         {
             if (AnyPlayerHasWon())
             {
-                return Player1.Score < Player2.Score ? Player1 : Player2;
+                return Player1Score < Player2Score ? PlayerReference1Id : PlayerReference2Id;
             }
 
-            return null;
+            return Guid.Empty;
+        }
+
+        public bool IncreaseScoreForPlayer(Guid playerReferenceId, int score)
+        {
+            if (CanChangeScore())
+            {
+                if (playerReferenceId == PlayerReference1Id)
+                {
+                    Player1Score += score;
+                }
+                else if (playerReferenceId == PlayerReference2Id)
+                {
+                    Player2Score += score;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Invalid player reference id given. Id does not match any player in match.");
+                }
+
+                Group.OnMatchScoreIncreased(this);
+
+                bool groupJustFinished = Group.GetPlayState() == PlayStateEnum.Finished;
+
+                if (groupJustFinished)
+                {
+                    if (Group.Round.GetPlayState() == PlayStateEnum.Finished)
+                    {
+                        AdvancingPlayerTransfer advancingPlayerTransfer = new AdvancingPlayerTransfer();
+                        advancingPlayerTransfer.TransferToNextRound(Group.Round);
+                    }
+                }
+
+                MarkAsModified();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool IncreaseScoreForPlayer1(int score)
+        {
+            return IncreaseScoreForPlayer(PlayerReference1Id, score);
+        }
+
+        public bool IncreaseScoreForPlayer2(int score)
+        {
+            return IncreaseScoreForPlayer(PlayerReference2Id, score);
         }
 
         private bool AnyPlayerHasWon()
         {
-            if (Player1 != null && Player2 != null)
+            if (PlayerReference1Id != Guid.Empty && PlayerReference2Id != Guid.Empty)
             {
                 int matchPointBarrier = BestOf - (BestOf / 2);
 
-                return Player1.Score >= matchPointBarrier || Player2.Score >= matchPointBarrier;
+                return Player1Score >= matchPointBarrier || Player2Score >= matchPointBarrier;
             }
 
             return false;
+        }
+
+        private bool CanChangeScore()
+        {
+            bool matchIsReady = IsReady();
+            bool matchIsOngoing = GetPlayState() == PlayStateEnum.Ongoing;
+            bool tournamentHasNoIssues = !Group.Round.Tournament.HasIssues();
+
+            return matchIsReady && matchIsOngoing && tournamentHasNoIssues;
+        }
+
+        private string GetPlayerName(int playerIndex)
+        {
+            if (playerIndex == 0)
+            {
+                PlayerReference playerReference = GetPlayerReference(PlayerReference1Id);
+
+                if (playerReference != null)
+                {
+                    return playerReference.Name;
+                }
+
+                return "";
+            }
+            else if (playerIndex == 1)
+            {
+                PlayerReference playerReference = GetPlayerReference(PlayerReference2Id);
+
+                if (playerReference != null)
+                {
+                    return playerReference.Name;
+                }
+
+                return "";
+            }
+
+            throw new InvalidOperationException();
+        }
+
+        private PlayerReference GetPlayerReference(Guid playerReferenceId)
+        {
+            if (playerReferenceId != Guid.Empty)
+            {
+                foreach (PlayerReference playerReference in Group.Round.Tournament.PlayerReferences)
+                {
+                    if (playerReference.Id == playerReferenceId)
+                    {
+                        return playerReference;
+                    }
+                }
+            }
+
+            return null;
         }
     }
 }

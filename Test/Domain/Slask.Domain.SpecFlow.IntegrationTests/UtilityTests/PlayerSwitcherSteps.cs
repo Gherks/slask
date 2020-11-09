@@ -1,6 +1,8 @@
 ﻿using Slask.Domain.Groups;
 using Slask.Domain.Groups.GroupUtility;
 using Slask.Domain.SpecFlow.IntegrationTests.GroupTests;
+using System;
+using System.Collections.Generic;
 using TechTalk.SpecFlow;
 
 namespace Slask.Domain.SpecFlow.IntegrationTests.UtilityTests
@@ -20,29 +22,40 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.UtilityTests
             GroupBase group1 = createdGroups[group1Index];
             GroupBase group2 = createdGroups[group2Index];
 
-            Player player1 = FindPlayerInGroup(player1Name, group1);
-            Player player2 = FindPlayerInGroup(player2Name, group2);
+            List<PlayerReference> list = group1.Round.Tournament.PlayerReferences;
 
-            PlayerSwitcher.SwitchMatchesOn(player1, player2);
+            MatchPlayerReferencePair matchPlayerReferencePair1 = FindPlayerInGroup(player1Name, group1);
+            MatchPlayerReferencePair matchPlayerReferencePair2 = FindPlayerInGroup(player2Name, group2);
+
+            PlayerSwitcher.SwitchMatchesOn(
+                matchPlayerReferencePair1.Match,
+                matchPlayerReferencePair1.PlayerReferenceId,
+                matchPlayerReferencePair2.Match,
+                matchPlayerReferencePair2.PlayerReferenceId);
         }
 
-        private Player FindPlayerInGroup(string playerName, GroupBase group)
+        private MatchPlayerReferencePair FindPlayerInGroup(string playerName, GroupBase group)
         {
             foreach (Match match in group.Matches)
             {
-                if (match.Player1.GetName() == playerName)
+                if (match.GetPlayer1Name() == playerName)
                 {
-                    return match.Player1;
+                    return new MatchPlayerReferencePair { Match = match, PlayerReferenceId = match.PlayerReference1Id };
                 }
 
-                if (match.Player2.GetName() == playerName)
+                if (match.GetPlayer2Name() == playerName)
                 {
-                    return match.Player2;
+                    return new MatchPlayerReferencePair { Match = match, PlayerReferenceId = match.PlayerReference2Id };
                 }
             }
 
             return null;
         }
 
+        private class MatchPlayerReferencePair
+        {
+            public Match Match { get; set; }
+            public Guid PlayerReferenceId { get; set; }
+        }
     }
 }

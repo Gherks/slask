@@ -88,8 +88,8 @@ namespace Slask.Domain.SpecFlow.IntegrationTests.GroupTests
 
             foreach (BracketGroupMatchSetup setup in table.CreateSet<BracketGroupMatchSetup>())
             {
-                group.Matches[setup.MatchIndex].Player1.GetName().Should().Be(setup.Player1Name);
-                group.Matches[setup.MatchIndex].Player2.GetName().Should().Be(setup.Player2Name);
+                group.Matches[setup.MatchIndex].GetPlayer1Name().Should().Be(setup.Player1Name);
+                group.Matches[setup.MatchIndex].GetPlayer2Name().Should().Be(setup.Player2Name);
             }
         }
 

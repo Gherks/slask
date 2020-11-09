@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Slask.Domain;
 using Slask.Domain.Bets;
@@ -9,6 +10,8 @@ using Slask.Domain.ObjectState;
 using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Slask.Persistence
 {
@@ -48,7 +51,6 @@ namespace Slask.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            SetupRelationships(modelBuilder);
             SetupTables(modelBuilder);
             SetupIgnoredProperties(modelBuilder);
 
@@ -65,6 +67,13 @@ namespace Slask.Persistence
 
         private void UpdateEntityStates()
         {
+
+            List<EntityEntry<ObjectStateInterface>> asd = new List<EntityEntry<ObjectStateInterface>>();
+            foreach (var entry in ChangeTracker.Entries<ObjectStateInterface>())
+            {
+                asd.Add(entry);
+            }
+
             foreach (var entry in ChangeTracker.Entries<ObjectStateInterface>())
             {
                 entry.State = ConvertState(entry.Entity.ObjectState);
@@ -93,21 +102,6 @@ namespace Slask.Persistence
                 default:
                     return EntityState.Unchanged;
             }
-        }
-
-        private void SetupRelationships(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Match>()
-                .HasOne(match => match.Player1)
-                .WithOne()
-                .HasForeignKey<Match>(match => match.Player1Id)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Match>()
-                .HasOne(match => match.Player2)
-                .WithOne()
-                .HasForeignKey<Match>(match => match.Player2Id)
-                .OnDelete(DeleteBehavior.Restrict);
         }
 
         private void SetupTables(ModelBuilder modelBuilder)
@@ -147,8 +141,6 @@ namespace Slask.Persistence
             modelBuilder.Entity<BracketGroup>().Ignore(bracketGroup => bracketGroup.BracketNodeSystem);
 
             modelBuilder.Entity<Match>().Ignore(match => match.ObjectState);
-
-            modelBuilder.Entity<Player>().Ignore(player => player.ObjectState);
 
             modelBuilder.Entity<BetBase>().Ignore(bet => bet.ObjectState);
         }

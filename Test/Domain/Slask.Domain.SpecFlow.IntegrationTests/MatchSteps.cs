@@ -78,7 +78,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
             GroupBase group = createdGroups[groupIndex];
             Match match = group.Matches[matchIndex];
 
-            match.GetWinningPlayer().Should().NotBeNull();
+            match.GetWinningPlayerReference().Should().NotBeEmpty();
         }
 
         [Then(@"losing player can be fetched from match (.*) in group (.*)")]
@@ -87,7 +87,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
             GroupBase group = createdGroups[groupIndex];
             Match match = group.Matches[matchIndex];
 
-            match.GetLosingPlayer().Should().NotBeNull();
+            match.GetLosingPlayerReference().Should().NotBeEmpty();
         }
 
         [Then(@"winning player cannot be fetched from match (.*) in group (.*)")]
@@ -96,7 +96,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
             GroupBase group = createdGroups[groupIndex];
             Match match = group.Matches[matchIndex];
 
-            match.GetWinningPlayer().Should().BeNull();
+            match.GetWinningPlayerReference().Should().BeEmpty();
         }
 
         [Then(@"losing player cannot be fetched from match (.*) in group (.*)")]
@@ -105,7 +105,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
             GroupBase group = createdGroups[groupIndex];
             Match match = group.Matches[matchIndex];
 
-            match.GetLosingPlayer().Should().BeNull();
+            match.GetLosingPlayerReference().Should().BeEmpty();
         }
     }
 }

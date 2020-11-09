@@ -186,8 +186,8 @@ namespace Slask.Domain.Xunit.IntegrationTests.RoundTests
             Match match = round.GetFirstMatch();
 
             match.Group.Should().Be(round.Groups[0]);
-            match.Player1.GetName().Should().Be(playerNames[0]);
-            match.Player2.GetName().Should().Be(playerNames[1]);
+            match.GetPlayer1Name().Should().Be(playerNames[0]);
+            match.GetPlayer2Name().Should().Be(playerNames[1]);
         }
 
         [Fact]
@@ -206,8 +206,8 @@ namespace Slask.Domain.Xunit.IntegrationTests.RoundTests
             Match match = round.GetLastMatch();
 
             match.Group.Should().Be(round.Groups[1]);
-            match.Player1.GetName().Should().Be(playerNames[2]);
-            match.Player2.GetName().Should().Be(playerNames[3]);
+            match.GetPlayer1Name().Should().Be(playerNames[2]);
+            match.GetPlayer2Name().Should().Be(playerNames[3]);
         }
     }
 }

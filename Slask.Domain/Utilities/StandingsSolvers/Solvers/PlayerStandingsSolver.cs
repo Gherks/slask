@@ -23,14 +23,14 @@ namespace Slask.Domain.Utilities.StandingsSolvers
         {
             foreach (Match match in group.Matches)
             {
-                Player winner = match.GetWinningPlayer();
+                Guid winnerId = match.GetWinningPlayerReference();
 
-                if (winner == null)
+                if (winnerId == null)
                 {
                     continue;
                 }
 
-                StandingsEntry<PlayerReference> playerStandingEntry = playerStandings.Find(player => player.Object.Id == winner.PlayerReferenceId);
+                StandingsEntry<PlayerReference> playerStandingEntry = playerStandings.Find(player => player.Object.Id == winnerId);
 
                 if (playerStandingEntry == null)
                 {

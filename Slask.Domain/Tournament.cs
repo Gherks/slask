@@ -221,15 +221,15 @@ namespace Slask.Domain
                     {
                         match.ResetObjectState();
 
-                        if (match.Player1 != null)
-                        {
-                            match.Player1.ResetObjectState();
-                        }
+                        //if (match.Player1 != null)
+                        //{
+                        //    match.Player1.ResetObjectState();
+                        //}
 
-                        if (match.Player2 != null)
-                        {
-                            match.Player2.ResetObjectState();
-                        }
+                        //if (match.Player2 != null)
+                        //{
+                        //    match.Player2.ResetObjectState();
+                        //}
                     }
                 }
             }

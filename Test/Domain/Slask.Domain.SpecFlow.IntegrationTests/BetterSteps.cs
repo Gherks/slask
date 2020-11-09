@@ -3,6 +3,7 @@ using Slask.Domain.Groups;
 using Slask.Domain.Rounds;
 using Slask.Domain.SpecFlow.IntegrationTests.GroupTests;
 using Slask.Domain.Utilities.StandingsSolvers;
+using System;
 using System.Collections.Generic;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -33,12 +34,12 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
                 if (betterNameIsNotEmpty && playerNameIsNotEmpty)
                 {
                     Better better = round.Tournament.GetBetterByName(betterPlacesMatchBet.BetterName);
-                    Player player = match.FindPlayer(betterPlacesMatchBet.PlayerName);
+                    Guid playerReferenceId = match.FindPlayer(betterPlacesMatchBet.PlayerName);
 
                     better.Should().NotBeNull();
-                    player.Should().NotBeNull();
+                    playerReferenceId.Should().NotBeEmpty();
 
-                    better.PlaceMatchBet(match, player).Should().NotBeNull();
+                    better.PlaceMatchBet(match, playerReferenceId).Should().NotBeNull();
                 }
             }
         }

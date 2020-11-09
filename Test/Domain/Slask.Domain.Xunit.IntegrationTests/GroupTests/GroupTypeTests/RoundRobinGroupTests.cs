@@ -32,15 +32,15 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
 
             match = round.Groups.First().Matches[0];
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-            match.Player1.IncreaseScore(2);
+            match.IncreaseScoreForPlayer1(2);
 
             match = round.Groups.First().Matches[1];
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-            match.Player2.IncreaseScore(2);
+            match.IncreaseScoreForPlayer2(2);
 
             match = round.Groups.First().Matches[2];
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-            match.Player1.IncreaseScore(2);
+            match.IncreaseScoreForPlayer1(2);
 
             group.HasProblematicTie().Should().BeFalse();
         }
@@ -57,7 +57,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
             foreach (Match match in round.Groups.First().Matches)
             {
                 SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-                match.Player1.IncreaseScore(2);
+                match.IncreaseScoreForPlayer1(2);
             }
 
             group.HasProblematicTie().Should().BeTrue();
@@ -75,7 +75,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
             foreach (Match match in round.Groups.First().Matches)
             {
                 SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-                match.Player1.IncreaseScore(2);
+                match.IncreaseScoreForPlayer1(2);
             }
 
             group.GetPlayState().Should().Be(PlayStateEnum.Ongoing);
@@ -97,7 +97,7 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
             foreach (Match match in round.Groups.First().Matches)
             {
                 SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-                match.Player1.IncreaseScore(2);
+                match.IncreaseScoreForPlayer1(2);
             }
 
             group.HasProblematicTie().Should().BeTrue();
@@ -111,8 +111,8 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
             group.HasProblematicTie().Should().BeTrue();
             group.HasSolvedTie().Should().BeTrue();
 
-            bracketRound.Groups.First().Matches[0].Player1.GetName().Should().Be("Taeja");
-            bracketRound.Groups.First().Matches[0].Player2.GetName().Should().Be("Stork");
+            bracketRound.Groups.First().Matches[0].GetPlayer1Name().Should().Be("Taeja");
+            bracketRound.Groups.First().Matches[0].GetPlayer2Name().Should().Be("Stork");
         }
 
         [Fact]
@@ -128,15 +128,15 @@ namespace Slask.Domain.Xunit.IntegrationTests.GroupTests.GroupTypeTests
 
             match = round.Groups.First().Matches[0];
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-            match.Player1.IncreaseScore(2);
+            match.IncreaseScoreForPlayer1(2);
 
             match = round.Groups.First().Matches[1];
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-            match.Player2.IncreaseScore(2);
+            match.IncreaseScoreForPlayer2(2);
 
             match = round.Groups.First().Matches[2];
             SystemTimeMocker.SetOneSecondAfter(match.StartDateTime);
-            match.Player1.IncreaseScore(2);
+            match.IncreaseScoreForPlayer1(2);
 
             group.HasProblematicTie().Should().BeFalse();
             group.SolveTieByChoosing(maruPlayerReference.Id).Should().BeFalse();

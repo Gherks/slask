@@ -1,4 +1,5 @@
 ﻿using Slask.Domain.Utilities;
+using System;
 
 namespace Slask.Domain.Bets.BetTypes
 {
@@ -9,16 +10,16 @@ namespace Slask.Domain.Bets.BetTypes
             BetType = BetTypeEnum.MatchBet;
         }
 
-        public static MatchBet Create(Better better, Match match, Player player)
+        public static MatchBet Create(Better better, Match match, Guid playerReferenceId)
         {
-            bool anyParameterIsInvalid = !ParametersAreValid(better, match, player);
+            bool anyParameterIsInvalid = !ParametersAreValid(better, match, playerReferenceId);
 
             if (anyParameterIsInvalid)
             {
                 return null;
             }
 
-            bool matchBetIsInvalid = !MatchBetIsValid(match, player);
+            bool matchBetIsInvalid = !MatchBetIsValid(match, playerReferenceId);
 
             if (matchBetIsInvalid)
             {
@@ -30,7 +31,7 @@ namespace Slask.Domain.Bets.BetTypes
                 BetterId = better.Id,
                 Better = better,
                 MatchId = match.Id,
-                PlayerId = player.Id,
+                PlayerReferenceId = playerReferenceId
             };
         }
 
@@ -47,16 +48,16 @@ namespace Slask.Domain.Bets.BetTypes
                     return false;
                 }
 
-                Player winningPlayer = match.GetWinningPlayer();
+                Guid winningPlayerReferenceId = match.GetWinningPlayerReference();
 
-                bool betIsWon = PlayerId == winningPlayer.Id;
+                bool betIsWon = PlayerReferenceId == winningPlayerReferenceId;
                 return betIsWon;
             }
 
             return false;
         }
 
-        private static bool ParametersAreValid(Better better, Match match, Player player)
+        private static bool ParametersAreValid(Better better, Match match, Guid playerReferenceId)
         {
             bool invalidBetterGiven = better == null;
 
@@ -74,9 +75,9 @@ namespace Slask.Domain.Bets.BetTypes
                 return false;
             }
 
-            bool invalidPlayerGiven = player == null;
+            bool invalidPlayerReferenceIdGiven = playerReferenceId == Guid.Empty;
 
-            if (invalidPlayerGiven)
+            if (invalidPlayerReferenceIdGiven)
             {
                 // LOG Error: Cannot create match bet because given player was invalid
                 return false;
@@ -85,9 +86,9 @@ namespace Slask.Domain.Bets.BetTypes
             return true;
         }
 
-        private static bool MatchBetIsValid(Match match, Player player)
+        private static bool MatchBetIsValid(Match match, Guid playerReferenceId)
         {
-            bool givenPlayerIsNotParticipantInGivenMatch = match.FindPlayer(player.Id) == null;
+            bool givenPlayerIsNotParticipantInGivenMatch = match.HasPlayer(playerReferenceId) == false;
 
             if (givenPlayerIsNotParticipantInGivenMatch)
             {

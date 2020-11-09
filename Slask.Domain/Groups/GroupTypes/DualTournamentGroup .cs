@@ -129,26 +129,26 @@ namespace Slask.Domain.Groups.GroupTypes
 
         private void AssignPlayersToWinnersMatch()
         {
-            Guid match1Winner = GetMatch1().GetWinningPlayer().PlayerReferenceId;
-            Guid match2Winner = GetMatch2().GetWinningPlayer().PlayerReferenceId;
+            Guid match1Winner = GetMatch1().GetWinningPlayerReference();
+            Guid match2Winner = GetMatch2().GetWinningPlayerReference();
 
             GetWinnersMatch().AssignPlayerReferencesToPlayers(match1Winner, match2Winner);
         }
 
         private void AssignPlayersToLosersMatch()
         {
-            Guid match1Loser = GetMatch1().GetLosingPlayer().PlayerReferenceId;
-            Guid match2Loser = GetMatch2().GetLosingPlayer().PlayerReferenceId;
+            Guid match1Loser = GetMatch1().GetLosingPlayerReference();
+            Guid match2Loser = GetMatch2().GetLosingPlayerReference();
 
             GetLosersMatch().AssignPlayerReferencesToPlayers(match1Loser, match2Loser);
         }
 
         private void AssignPlayersToTiebreakerMatch()
         {
-            Guid WinnersMatchLoser = GetWinnersMatch().GetLosingPlayer().PlayerReferenceId;
-            Guid LosersMatchWinner = GetLosersMatch().GetWinningPlayer().PlayerReferenceId;
+            Guid winnersMatchLoser = GetWinnersMatch().GetLosingPlayerReference();
+            Guid losersMatchWinner = GetLosersMatch().GetWinningPlayerReference();
 
-            GetTiebreakerMatch().AssignPlayerReferencesToPlayers(WinnersMatchLoser, LosersMatchWinner);
+            GetTiebreakerMatch().AssignPlayerReferencesToPlayers(winnersMatchLoser, losersMatchWinner);
         }
 
         private Match GetMatch1()

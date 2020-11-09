@@ -112,7 +112,7 @@ namespace Slask.Domain.Groups.GroupTypes
                 BracketNode bracketNode = finalNode.GetBracketNodeByMatchId(match.Id);
                 BracketNode parentNode = bracketNode.Parent;
 
-                parentNode.Match.AssignPlayerReferenceToFirstAvailablePlayer(match.GetWinningPlayer().PlayerReferenceId);
+                parentNode.Match.AssignPlayerReferenceToFirstAvailablePlayer(match.GetWinningPlayerReference());
             }
         }
 

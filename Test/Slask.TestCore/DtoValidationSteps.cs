@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Slask.Common;
 using Slask.Domain.Utilities;
 using Slask.Dto;
@@ -129,10 +129,12 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
                 matchDto.SortOrder.Should().Be(tournamentMatchLayout.SortOrder);
                 matchDto.BestOf.Should().Be(tournamentMatchLayout.BestOf);
                 matchDto.StartDateTime.Should().BeBefore(SystemTime.Now);
-                matchDto.Player1.Name.Should().Be(tournamentMatchLayout.Player1Name);
-                matchDto.Player1.Score.Should().Be(tournamentMatchLayout.Player1Score);
-                matchDto.Player2.Name.Should().Be(tournamentMatchLayout.Player2Name);
-                matchDto.Player2.Score.Should().Be(tournamentMatchLayout.Player2Score);
+                matchDto.PlayerReference1Id.Should().NotBeEmpty();
+                matchDto.Player1Name.Should().Be(tournamentMatchLayout.Player1Name);
+                matchDto.Player1Score.Should().Be(tournamentMatchLayout.Player1Score);
+                matchDto.PlayerReference2Id.Should().NotBeEmpty();
+                matchDto.Player2Name.Should().Be(tournamentMatchLayout.Player2Name);
+                matchDto.Player2Score.Should().Be(tournamentMatchLayout.Player2Score);
             }
         }
 
@@ -191,15 +193,15 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             return null;
         }
 
-        private PlayerDto GetWinningPlayerDtoOfMatchDto(MatchDto matchDto)
+        private Guid GetWinningPlayerIdFromMatchDto(MatchDto matchDto)
         {
-            if (matchDto.Player1.Score > matchDto.Player2.Score)
+            if (matchDto.Player1Score > matchDto.Player2Score)
             {
-                return matchDto.Player1;
+                return matchDto.PlayerReference1Id;
             }
-            else if (matchDto.Player1.Score < matchDto.Player2.Score)
+            else if (matchDto.Player1Score < matchDto.Player2Score)
             {
-                return matchDto.Player2;
+                return matchDto.PlayerReference2Id;
             }
             else
             {
@@ -214,9 +216,9 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
             foreach (MatchBetDto matchBetDto in matchBetDtos)
             {
                 MatchDto matchDto = FindMatchInTournamentDto(tournamentDto, matchBetDto.MatchId);
-                PlayerDto winningPlayerDto = GetWinningPlayerDtoOfMatchDto(matchDto);
+                Guid winningPlayerReferenceId = GetWinningPlayerIdFromMatchDto(matchDto);
 
-                if (winningPlayerDto.Id == matchBetDto.PlayerId)
+                if (winningPlayerReferenceId == matchBetDto.PlayerReferenceId)
                 {
                     points++;
                 }

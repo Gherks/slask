@@ -31,13 +31,13 @@ namespace Slask.Domain.Xunit.UnitTests
             Match firstMatch = group.Matches[0];
             Match secondMatch = group.Matches[1];
 
-            bool result = PlayerSwitcher.SwitchMatchesOn(firstMatch.Player1, secondMatch.Player2);
+            bool result = PlayerSwitcher.SwitchMatchesOn(firstMatch, firstMatch.PlayerReference1Id, secondMatch, secondMatch.PlayerReference2Id);
 
             result.Should().BeFalse();
-            firstMatch.Player1.PlayerReferenceId.Should().Be(maruPlayerReference.Id);
-            firstMatch.Player2.PlayerReferenceId.Should().Be(storkPlayerReference.Id);
-            secondMatch.Player1.PlayerReferenceId.Should().Be(taejaPlayerReference.Id);
-            secondMatch.Player2.PlayerReferenceId.Should().BeEmpty();
+            firstMatch.PlayerReference1Id.Should().Be(maruPlayerReference.Id);
+            firstMatch.PlayerReference2Id.Should().Be(storkPlayerReference.Id);
+            secondMatch.PlayerReference1Id.Should().Be(taejaPlayerReference.Id);
+            secondMatch.PlayerReference2Id.Should().BeEmpty();
         }
     }
 }
