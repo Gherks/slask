@@ -113,6 +113,20 @@ namespace Slask.API.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
+        [HttpPut("{tournamentIdentifier}/rounds/{roundIdentifier}")]
+        public ActionResult ChangePlayersPerGroupCountInRound(string tournamentIdentifier, string roundIdentifier, PlayersPerGroupCountChangeDto playersPerGroupCountChangeDto)
+        {
+            ChangeGroupSizeInRound command = new ChangeGroupSizeInRound(tournamentIdentifier, roundIdentifier, playersPerGroupCountChangeDto.PlayersPerGroupCount);
+            Result result = _commandQueryDispatcher.Dispatch(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error);
+            }
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
         [HttpDelete("{tournamentIdentifier}/rounds/{roundIdentifier}")]
         public ActionResult DeleteRoundFromTournament(string tournamentIdentifier, string roundIdentifier)
         {

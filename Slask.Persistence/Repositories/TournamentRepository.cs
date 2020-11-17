@@ -351,7 +351,15 @@ namespace Slask.Persistence.Repositories
         {
             if (round != null)
             {
-                return round.SetPlayersPerGroupCount(count);
+                bool roundChangedSuccessfully = round.SetPlayersPerGroupCount(count);
+
+                if (roundChangedSuccessfully)
+                {
+                    _slaskContext.RemoveRange(round.Tournament.Rounds);
+                    _slaskContext.AddRange(round.Tournament.Rounds);
+                }
+
+                return roundChangedSuccessfully;
             }
 
             return false;
