@@ -67,17 +67,13 @@ namespace Slask.Persistence
 
         private void UpdateEntityStates()
         {
+            List<EntityEntry<ObjectStateInterface>> trackedEntities = new List<EntityEntry<ObjectStateInterface>>();
+            trackedEntities.AddRange(ChangeTracker.Entries<ObjectStateInterface>());
 
-            List<EntityEntry<ObjectStateInterface>> asd = new List<EntityEntry<ObjectStateInterface>>();
-            foreach (var entry in ChangeTracker.Entries<ObjectStateInterface>())
+            foreach (EntityEntry<ObjectStateInterface> trackedEntity in trackedEntities)
             {
-                asd.Add(entry);
-            }
-
-            foreach (var entry in ChangeTracker.Entries<ObjectStateInterface>())
-            {
-                entry.State = ConvertState(entry.Entity.ObjectState);
-                entry.Entity.ResetObjectState();
+                trackedEntity.State = ConvertState(trackedEntity.Entity.ObjectState);
+                trackedEntity.Entity.ResetObjectState();
             }
         }
 
