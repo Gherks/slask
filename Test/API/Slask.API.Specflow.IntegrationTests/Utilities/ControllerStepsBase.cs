@@ -1,7 +1,8 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Newtonsoft.Json;
 using Slask.Common;
 using Slask.Dto;
+using Slask.Dto.UpdateDtos;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,7 +44,7 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
         {
             foreach (TableRow row in table.Rows)
             {
-                _response = await _client.PostAsync(uri, GetHttpContentFromRow(row));
+                _response = await _client.PostAsync(uri, CreateHttpContentFromRow(row));
             }
         }
 
@@ -84,7 +85,7 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
                     finalizedUri = await ConvertNamesToIdsInUri(uri, row);
                 }
 
-                _response = await _client.PutAsync(finalizedUri, GetHttpContentFromRow(row));
+                _response = await _client.PutAsync(finalizedUri, CreateHttpContentFromRow(row));
             }
         }
 
@@ -262,13 +263,22 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
             return dtos.First();
         }
 
-        private HttpContent GetHttpContentFromRow(TableRow row)
+        private HttpContent CreateHttpContentFromRow(TableRow row)
         {
             Dictionary<string, object> rowDictionary = new Dictionary<string, object>();
 
             foreach (KeyValuePair<string, string> cell in row)
             {
-                if (cell.Key != _idReplacementToken)
+                if (cell.Key.Contains(_idReplacementToken))
+                {
+                    continue;
+                }
+
+                if (int.TryParse(cell.Value, out int number))
+                {
+                    rowDictionary[cell.Key] = number;
+                }
+                else
                 {
                     rowDictionary[cell.Key] = cell.Value;
                 }
