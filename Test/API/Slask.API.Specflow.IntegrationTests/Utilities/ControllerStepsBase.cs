@@ -2,7 +2,6 @@ using FluentAssertions;
 using Newtonsoft.Json;
 using Slask.Common;
 using Slask.Dto;
-using Slask.Dto.UpdateDtos;
 using Slask.SpecFlow.IntegrationTests.PersistenceTests;
 using System.Collections.Generic;
 using System.Linq;

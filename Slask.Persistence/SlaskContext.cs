@@ -11,7 +11,6 @@ using Slask.Domain.Rounds;
 using Slask.Domain.Rounds.RoundTypes;
 using Slask.Domain.Utilities;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Slask.Persistence
 {

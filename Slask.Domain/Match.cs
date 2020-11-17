@@ -4,7 +4,6 @@ using Slask.Domain.ObjectState;
 using Slask.Domain.Rounds.RoundUtilities;
 using Slask.Domain.Utilities;
 using System;
-using System.Collections.Generic;
 
 namespace Slask.Domain
 {
