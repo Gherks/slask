@@ -71,14 +71,16 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentRepositoryTests
                 Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
 
                 RoundRobinRound round = tournamentRepository.AddRoundRobinRoundToTournament(tournament);
+                tournamentRepository.Save();
+
                 tournamentRepository.SetPlayersPerGroupCountInRound(round, _playerNames.Count);
+                tournamentRepository.Save();
 
                 foreach (string playerName in _playerNames)
                 {
                     tournamentRepository.AddPlayerReference(tournament, playerName);
+                    tournamentRepository.Save();
                 }
-
-                tournamentRepository.Save();
             }
         }
     }
