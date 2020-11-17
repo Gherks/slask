@@ -50,7 +50,7 @@ namespace Slask.Application.Commands
 
             RoundBase round;
 
-            if (Guid.TryParse(command.TournamentIdentifier, out Guid roundId))
+            if (Guid.TryParse(command.RoundIdentifier, out Guid roundId))
             {
                 round = tournament.GetRoundById(roundId);
             }
