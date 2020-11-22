@@ -1,5 +1,5 @@
 Feature: TournamentControllerRound
-	Makes sure all api calls for the tournament controller relatiing to rounds are running correctly
+	Makes sure all api calls for the tournament controller regarding rounds are running correctly
 
 Background: 
 	Given Content-Type is set to "application/json" and Accept is set to "application/json"
