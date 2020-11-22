@@ -44,6 +44,7 @@ namespace Slask.Application.Interfaces.Persistence
         bool SolveTieByChoosingPlayerInGroup(GroupBase groupBase, Guid playerReferenceId);
         bool SolveTieByChoosingPlayerInGroup(GroupBase groupBase, PlayerReference playerReference);
         bool AddScoreToPlayerInMatch(Tournament tournament, Guid matchId, Guid playerId, int score);
+        void ReconfigureRounds(Tournament tournament);
         void Save();
     }
 }

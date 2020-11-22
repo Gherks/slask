@@ -80,34 +80,46 @@ Scenario: Can change group size in a round by round id in tournament by id
 		And PUT request is sent to "api/tournaments/GSL 2020/rounds"
 			| RoundType   |
 			| Round robin |
+		And PUT request is sent to "api/tournaments/GSL 2020/rounds"
+			| RoundType   |
+			| Round robin |
 	When PUT request is sent to "api/tournaments/IdReplacement0/rounds/IdReplacement1"
-		| IdReplacement0 | IdReplacement1 | PlayersPerGroupCount |
-		| GSL 2020       | Round A        | 8                    |
+		| IdReplacement0 | IdReplacement1 | Name        | PlayersPerGroupCount | AdvancingPerGroupCount |
+		| GSL 2020       | Round A        | "Round Ace" | 8                    | 4                      |
 	Then response return with status code "204"
 
 Scenario: Can change group size in a round by round name in tournament by id
 		And PUT request is sent to "api/tournaments/GSL 2020/rounds"
 			| RoundType   |
 			| Round robin |
+		And PUT request is sent to "api/tournaments/GSL 2020/rounds"
+			| RoundType   |
+			| Round robin |
 	When PUT request is sent to "api/tournaments/IdReplacement0/rounds/Round A"
-		| IdReplacement0 | PlayersPerGroupCount |
-		| GSL 2020       | 8                    |
+		| IdReplacement0 | Name        | PlayersPerGroupCount | AdvancingPerGroupCount |
+		| GSL 2020       | "Round Ace" | 8                    | 4                      |
 	Then response return with status code "204"
 
 Scenario: Can change group size in a round by round id in tournament by name
 		And PUT request is sent to "api/tournaments/GSL 2020/rounds"
 			| RoundType   |
 			| Round robin |
+		And PUT request is sent to "api/tournaments/GSL 2020/rounds"
+			| RoundType   |
+			| Round robin |
 	When PUT request is sent to "api/tournaments/GSL 2020/rounds/IdReplacement0"
-		| IdReplacement0 | PlayersPerGroupCount |
-		| Round A        | 8                    |
+		| IdReplacement0 | Name        | PlayersPerGroupCount | AdvancingPerGroupCount |
+		| Round A        | "Round Ace" | 8                    | 4                      |
 	Then response return with status code "204"
 
 Scenario: Can change group size in a round by round name in tournament by name
 		And PUT request is sent to "api/tournaments/GSL 2020/rounds"
 			| RoundType   |
 			| Round robin |
+		And PUT request is sent to "api/tournaments/GSL 2020/rounds"
+			| RoundType   |
+			| Round robin |
 	When PUT request is sent to "api/tournaments/GSL 2020/rounds/Round A"
-		| PlayersPerGroupCount |
-		| 8                    |
-	Then response return with status code "204"
+		| Name        | PlayersPerGroupCount | AdvancingPerGroupCount |
+		| "Round Ace" | 8                    | 4                      |
+	Then response return with status code "204"

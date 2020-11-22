@@ -341,6 +341,13 @@ namespace Slask.Persistence.Repositories
         {
             if (round != null)
             {
+                bool settingWillNotBeChanged = round.AdvancingPerGroupCount == count;
+
+                if (settingWillNotBeChanged)
+                {
+                    return true;
+                }
+
                 return round.SetAdvancingPerGroupCount(count);
             }
 
@@ -351,15 +358,14 @@ namespace Slask.Persistence.Repositories
         {
             if (round != null)
             {
-                bool roundChangedSuccessfully = round.SetPlayersPerGroupCount(count);
+                bool settingWillNotBeChanged = round.PlayersPerGroupCount == count;
 
-                if (roundChangedSuccessfully)
+                if(settingWillNotBeChanged)
                 {
-                    _slaskContext.RemoveRange(round.Tournament.Rounds);
-                    _slaskContext.AddRange(round.Tournament.Rounds);
+                    return true;
                 }
 
-                return roundChangedSuccessfully;
+                return round.SetPlayersPerGroupCount(count);
             }
 
             return false;
@@ -468,6 +474,12 @@ namespace Slask.Persistence.Repositories
             }
 
             return false;
+        }
+
+        public void ReconfigureRounds(Tournament tournament)
+        {
+            _slaskContext.RemoveRange(tournament.Rounds);
+            _slaskContext.AddRange(tournament.Rounds);
         }
 
         public void Save()

@@ -114,9 +114,9 @@ namespace Slask.API.Controllers
         }
 
         [HttpPut("{tournamentIdentifier}/rounds/{roundIdentifier}")]
-        public ActionResult ChangePlayersPerGroupCountInRound(string tournamentIdentifier, string roundIdentifier, PlayersPerGroupCountChangeDto playersPerGroupCountChangeDto)
+        public ActionResult ChangePlayersPerGroupCountInRound(string tournamentIdentifier, string roundIdentifier, UpdateRoundSettingsDto playersPerGroupCountChangeDto)
         {
-            ChangeGroupSizeInRound command = new ChangeGroupSizeInRound(tournamentIdentifier, roundIdentifier, playersPerGroupCountChangeDto.PlayersPerGroupCount);
+            UpdateRoundSettings command = new UpdateRoundSettings(tournamentIdentifier, roundIdentifier, playersPerGroupCountChangeDto);
             Result result = _commandQueryDispatcher.Dispatch(command);
 
             if (result.IsFailure)
