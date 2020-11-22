@@ -4,7 +4,6 @@ using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
 using Slask.Domain.Rounds;
 using Slask.Dto.UpdateDtos;
-using System;
 
 namespace Slask.Application.Commands
 {

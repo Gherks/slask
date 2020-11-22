@@ -4,7 +4,6 @@ using Slask.Application.Interfaces.Persistence;
 using Slask.Common;
 using Slask.Domain;
 using Slask.Domain.Rounds;
-using System;
 
 namespace Slask.Application.Commands
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Slask.Dto.CreationDtos
+﻿namespace Slask.Dto.CreationDtos
 {
     public class BetterCreationDto
     {

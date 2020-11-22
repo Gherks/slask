@@ -5,7 +5,6 @@ using Slask.Application.Interfaces.Persistence;
 using Slask.Application.Queries.Interfaces;
 using Slask.Domain;
 using Slask.Dto;
-using System;
 
 namespace Slask.Application.Querys
 {

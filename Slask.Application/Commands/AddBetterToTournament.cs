@@ -2,7 +2,6 @@
 using Slask.Application.Commands.Interfaces;
 using Slask.Application.Interfaces.Persistence;
 using Slask.Domain;
-using System;
 
 namespace Slask.Application.Commands
 {

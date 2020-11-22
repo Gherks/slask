@@ -2,8 +2,6 @@
 using Slask.Domain;
 using Slask.Domain.Rounds;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Slask.Application.Commands
 {
