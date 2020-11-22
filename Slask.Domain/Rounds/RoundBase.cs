@@ -54,6 +54,13 @@ namespace Slask.Domain.Rounds
         public bool RenameTo(string name)
         {
             name = name.Trim();
+            bool newNameIsSameAsCurrent = Name != null && Name.ToUpper() == name.ToUpper();
+
+            if (newNameIsSameAsCurrent)
+            {
+                return true;
+            }
+
             bool newNameIsEmpty = name.Length == 0;
 
             if (newNameIsEmpty)
