@@ -30,14 +30,14 @@ namespace Slask.Application.Commands
 
         public Result Handle(RemoveRoundFromTournament command)
         {
-            Tournament tournament = GetTournamentFromIdentifer(command.TournamentIdentifier);
+            Tournament tournament = CommandQueryUtilities.GetTournamentByIdentifier(_tournamentRepository, command.TournamentIdentifier);
 
             if (tournament == null)
             {
                 return Result.Failure($"Could not remove round ({ command.RoundIdentifier }) from tournament ({ command.TournamentIdentifier }). Tournament not found.");
             }
 
-            RoundBase round = GetRoundFromIdentifer(tournament, command.RoundIdentifier);
+            RoundBase round = CommandQueryUtilities.GetRoundByIdentifier(tournament, command.RoundIdentifier);
 
             if (round == null)
             {
@@ -53,30 +53,6 @@ namespace Slask.Application.Commands
 
             _tournamentRepository.Save();
             return Result.Success();
-        }
-
-        private Tournament GetTournamentFromIdentifer(string tournamentIdentifier)
-        {
-            if (Guid.TryParse(tournamentIdentifier, out Guid tournamentId))
-            {
-                return _tournamentRepository.GetTournament(tournamentId);
-            }
-            else
-            {
-                return _tournamentRepository.GetTournament(tournamentIdentifier);
-            }
-        }
-
-        private RoundBase GetRoundFromIdentifer(Tournament tournament, string roundIdentifier)
-        {
-            if (Guid.TryParse(roundIdentifier, out Guid roundId))
-            {
-                return tournament.GetRound(roundId);
-            }
-            else
-            {
-                return tournament.GetRound(roundIdentifier);
-            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
+using Slask.Application.Commands;
 using Slask.Application.Interfaces.Persistence;
 using Slask.Application.Queries.Interfaces;
 using Slask.Domain;
@@ -31,16 +32,7 @@ namespace Slask.Application.Querys
 
         public Result<TournamentDto> Handle(GetTournament query)
         {
-            Tournament tournament;
-
-            if (Guid.TryParse(query.TournamentIdentifier, out Guid tournamentId))
-            {
-                tournament = _tournamentRepository.GetTournament(tournamentId);
-            }
-            else
-            {
-                tournament = _tournamentRepository.GetTournament(query.TournamentIdentifier);
-            }
+            Tournament tournament = CommandQueryUtilities.GetTournamentByIdentifier(_tournamentRepository, query.TournamentIdentifier);
 
             if (tournament == null)
             {

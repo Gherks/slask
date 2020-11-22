@@ -31,17 +31,7 @@ namespace Slask.Application.Commands
 
         public Result Handle(AddRoundToTournament command)
         {
-            Tournament tournament;
-
-            if (Guid.TryParse(command.TournamentIdentifier, out Guid tournamentId))
-            {
-                tournament = _tournamentRepository.GetTournament(tournamentId);
-            }
-            else
-            {
-                tournament = _tournamentRepository.GetTournament(command.TournamentIdentifier);
-            }
-
+            Tournament tournament = CommandQueryUtilities.GetTournamentByIdentifier(_tournamentRepository, command.TournamentIdentifier);
 
             if (tournament == null)
             {

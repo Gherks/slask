@@ -33,14 +33,14 @@ namespace Slask.Application.Commands
 
         public Result Handle(UpdateRoundSettings command)
         {
-            Tournament tournament = GetTournamentByIdentifier(command.TournamentIdentifier);
+            Tournament tournament = CommandQueryUtilities.GetTournamentByIdentifier(_tournamentRepository, command.TournamentIdentifier);
 
             if (tournament == null)
             {
                 return Result.Failure($"Could not update settings to ({ BuildSettingsString(command.UpdateRoundSettingsDto) }) in round ({ command.RoundIdentifier }). Tournament ({ command.TournamentIdentifier }) not found.");
             }
 
-            RoundBase round = GetRoundByIdentifier(tournament, command.RoundIdentifier);
+            RoundBase round = CommandQueryUtilities.GetRoundByIdentifier(tournament, command.RoundIdentifier);
 
             if (round == null)
             {
@@ -56,26 +56,6 @@ namespace Slask.Application.Commands
             }
 
             return result;
-        }
-
-        private Tournament GetTournamentByIdentifier(string tournamentIdentifier)
-        {
-            if (Guid.TryParse(tournamentIdentifier, out Guid tournamentId))
-            {
-                return _tournamentRepository.GetTournament(tournamentId);
-            }
-
-            return _tournamentRepository.GetTournament(tournamentIdentifier);
-        }
-
-        private RoundBase GetRoundByIdentifier(Tournament tournament, string roundIdentifier)
-        {
-            if (Guid.TryParse(roundIdentifier, out Guid roundId))
-            {
-                return tournament.GetRound(roundId);
-            }
-
-            return tournament.GetRound(roundIdentifier);
         }
 
         private Result UpdateTournamentRound(RoundBase round, UpdateRoundSettingsDto updateRoundSettingsDto)
