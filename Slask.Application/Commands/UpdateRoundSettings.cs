@@ -72,10 +72,10 @@ namespace Slask.Application.Commands
         {
             if (Guid.TryParse(roundIdentifier, out Guid roundId))
             {
-                return tournament.GetRoundById(roundId);
+                return tournament.GetRound(roundId);
             }
 
-            return tournament.GetRoundByName(roundIdentifier);
+            return tournament.GetRound(roundIdentifier);
         }
 
         private Result UpdateTournamentRound(RoundBase round, UpdateRoundSettingsDto updateRoundSettingsDto)

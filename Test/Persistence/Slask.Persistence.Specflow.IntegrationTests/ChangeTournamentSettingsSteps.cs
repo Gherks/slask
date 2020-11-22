@@ -41,7 +41,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournament(tournamentName);
-                RoundBase round = tournament.GetRoundByName(roundName);
+                RoundBase round = tournament.GetRound(roundName);
 
                 tournamentRepository.SetAdvancingPerGroupCountInRound(round, newAdvancingPlayerCount);
                 tournamentRepository.Save();
@@ -55,7 +55,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
                 Tournament tournament = tournamentRepository.GetTournament(tournamentName);
-                RoundBase round = tournament.GetRoundByName(roundName);
+                RoundBase round = tournament.GetRound(roundName);
 
                 tournamentRepository.SetPlayersPerGroupCountInRound(round, newPlayersPerGroupCount);
                 tournamentRepository.Save();

@@ -43,7 +43,7 @@ namespace Slask.Domain.Xunit.UnitTests
         [Fact]
         public void CanGetRoundInTournamentByRoundId()
         {
-            RoundBase fetchedRound = tournament.GetRoundById(bracketRound.Id);
+            RoundBase fetchedRound = tournament.GetRound(bracketRound.Id);
 
             fetchedRound.Should().NotBeNull();
             fetchedRound.Id.Should().Be(bracketRound.Id);
@@ -53,7 +53,7 @@ namespace Slask.Domain.Xunit.UnitTests
         [Fact]
         public void CanGetRoundInTournamentByRoundName()
         {
-            RoundBase fetchedRound = tournament.GetRoundByName(bracketRound.Name);
+            RoundBase fetchedRound = tournament.GetRound(bracketRound.Name);
 
             fetchedRound.Should().NotBeNull();
             fetchedRound.Id.Should().Be(bracketRound.Id);

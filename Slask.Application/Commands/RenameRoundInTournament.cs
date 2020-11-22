@@ -39,7 +39,7 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not rename round ({ command.RoundId }) to { command.NewRoundName } in tournament ({ command.TournamentId }). Tournament not found.");
             }
 
-            RoundBase round = tournament.GetRoundById(command.RoundId);
+            RoundBase round = tournament.GetRound(command.RoundId);
 
             if (round == null)
             {

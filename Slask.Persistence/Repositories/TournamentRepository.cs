@@ -305,7 +305,7 @@ namespace Slask.Persistence.Repositories
 
         public bool RemoveRoundFromTournament(Tournament tournament, Guid roundId)
         {
-            RoundBase roundToRemove = tournament.GetRoundById(roundId);
+            RoundBase roundToRemove = tournament.GetRound(roundId);
 
             if (roundToRemove != null)
             {
@@ -317,7 +317,7 @@ namespace Slask.Persistence.Repositories
 
         public bool RemoveRoundFromTournament(Tournament tournament, string roundName)
         {
-            RoundBase roundToRemove = tournament.GetRoundByName(roundName);
+            RoundBase roundToRemove = tournament.GetRound(roundName);
 
             if (roundToRemove != null)
             {

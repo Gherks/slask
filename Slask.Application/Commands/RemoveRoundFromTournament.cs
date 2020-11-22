@@ -71,11 +71,11 @@ namespace Slask.Application.Commands
         {
             if (Guid.TryParse(roundIdentifier, out Guid roundId))
             {
-                return tournament.GetRoundById(roundId);
+                return tournament.GetRound(roundId);
             }
             else
             {
-                return tournament.GetRoundByName(roundIdentifier);
+                return tournament.GetRound(roundIdentifier);
             }
         }
     }

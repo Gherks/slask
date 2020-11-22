@@ -260,12 +260,12 @@ namespace Slask.Domain
             return TournamentIssueReporter.Issues.Count > 0;
         }
 
-        public RoundBase GetRoundById(Guid roundId)
+        public RoundBase GetRound(Guid roundId)
         {
             return Rounds.FirstOrDefault(round => round.Id == roundId);
         }
 
-        public RoundBase GetRoundByName(string roundName)
+        public RoundBase GetRound(string roundName)
         {
             return Rounds.FirstOrDefault(round => round.Name.ToLower() == roundName.ToLower());
         }
