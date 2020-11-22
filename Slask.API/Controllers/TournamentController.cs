@@ -141,6 +141,20 @@ namespace Slask.API.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
 
+        [HttpPut("{tournamentIdentifier}/betters")]
+        public ActionResult AddBetterToTournament(string tournamentIdentifier, BetterCreationDto betterCreationDto)
+        {
+            AddBetterToTournament command = new AddBetterToTournament(tournamentIdentifier, betterCreationDto.UserIdentifier);
+            Result result = _commandQueryDispatcher.Dispatch(command);
+
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error);
+            }
+
+            return StatusCode(StatusCodes.Status204NoContent);
+        }
+
         [HttpOptions]
         public ActionResult GetTournamentOptions()
         {
