@@ -38,7 +38,7 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not rename player ({ command.CurrentPlayerName }) to { command.NewPlayerName } in tournament ({ command.TournamentId }). Tournament not found.");
             }
 
-            PlayerReference playerReference = tournament.GetPlayerReferenceByName(command.CurrentPlayerName);
+            PlayerReference playerReference = tournament.GetPlayerReference(command.CurrentPlayerName);
 
             if (playerReference == null)
             {

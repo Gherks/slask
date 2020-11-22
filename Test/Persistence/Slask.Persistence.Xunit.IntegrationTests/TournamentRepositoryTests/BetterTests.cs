@@ -42,7 +42,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentRepositoryTests
             {
                 Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
 
-                List<Better> betters = tournamentRepository.GetBettersByTournamentId(tournament.Id).ToList();
+                List<Better> betters = tournamentRepository.GetBettersInTournament(tournament.Id).ToList();
 
                 betters.Should().NotBeNullOrEmpty();
                 betters.Should().HaveCount(3);
@@ -59,7 +59,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentRepositoryTests
 
             using (TournamentRepository tournamentRepository = CreateTournamentRepository())
             {
-                List<Better> betters = tournamentRepository.GetBettersByTournamentName(_tournamentName).ToList();
+                List<Better> betters = tournamentRepository.GetBettersInTournament(_tournamentName).ToList();
 
                 betters.Should().NotBeNullOrEmpty();
                 betters.Should().HaveCount(3);
@@ -80,8 +80,8 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentRepositoryTests
 
                 tournament.Betters.Should().HaveCount(3);
 
-                List<Better> betters = tournamentRepository.GetBettersByTournamentName(_tournamentName).ToList();
-                bool removalResult = tournamentRepository.RemoveBetterFromTournamentById(tournament, betters.First().Id);
+                List<Better> betters = tournamentRepository.GetBettersInTournament(_tournamentName).ToList();
+                bool removalResult = tournamentRepository.RemoveBetterFromTournament(tournament, betters.First().Id);
                 tournamentRepository.Save();
 
                 removalResult.Should().BeTrue();
@@ -100,7 +100,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentRepositoryTests
 
                 tournament.Betters.Should().HaveCount(3);
 
-                bool removalResult = tournamentRepository.RemoveBetterFromTournamentByName(tournament, "Stålberto");
+                bool removalResult = tournamentRepository.RemoveBetterFromTournament(tournament, "Stålberto");
                 tournamentRepository.Save();
 
                 removalResult.Should().BeTrue();
@@ -125,7 +125,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentRepositoryTests
 
                 tournament.Betters.Should().HaveCount(3);
 
-                bool removalResult = tournamentRepository.RemoveBetterFromTournamentById(tournament, Guid.NewGuid());
+                bool removalResult = tournamentRepository.RemoveBetterFromTournament(tournament, Guid.NewGuid());
                 tournamentRepository.Save();
 
                 removalResult.Should().BeFalse();
@@ -144,7 +144,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentRepositoryTests
 
                 tournament.Betters.Should().HaveCount(3);
 
-                bool removalResult = tournamentRepository.RemoveBetterFromTournamentByName(tournament, "Kimmieboi");
+                bool removalResult = tournamentRepository.RemoveBetterFromTournament(tournament, "Kimmieboi");
                 tournamentRepository.Save();
 
                 removalResult.Should().BeFalse();

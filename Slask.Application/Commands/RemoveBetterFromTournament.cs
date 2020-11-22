@@ -36,7 +36,7 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not remove better ({ command.BetterId }) from tournament ({ command.TournamentId }). Tournament not found.");
             }
 
-            bool betterRemoved = _tournamentRepository.RemoveBetterFromTournamentById(tournament, command.BetterId);
+            bool betterRemoved = _tournamentRepository.RemoveBetterFromTournament(tournament, command.BetterId);
 
             if (!betterRemoved)
             {

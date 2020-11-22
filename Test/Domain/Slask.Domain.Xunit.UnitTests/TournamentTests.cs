@@ -65,7 +65,7 @@ namespace Slask.Domain.Xunit.UnitTests
         {
             PlayerReference playerReference = tournament.RegisterPlayerReference("Maru");
 
-            PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceById(playerReference.Id);
+            PlayerReference fetchedPlayerReference = tournament.GetPlayerReference(playerReference.Id);
 
             fetchedPlayerReference.Should().NotBeNull();
             fetchedPlayerReference.Id.Should().Be(playerReference.Id);
@@ -77,7 +77,7 @@ namespace Slask.Domain.Xunit.UnitTests
         {
             PlayerReference playerReference = tournament.RegisterPlayerReference("Maru");
 
-            PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByName(playerReference.Name);
+            PlayerReference fetchedPlayerReference = tournament.GetPlayerReference(playerReference.Name);
 
             fetchedPlayerReference.Should().NotBeNull();
             fetchedPlayerReference.Id.Should().Be(playerReference.Id);
@@ -87,7 +87,7 @@ namespace Slask.Domain.Xunit.UnitTests
         [Fact]
         public void CanGetBetterInTournamentByBetterId()
         {
-            Better fetchedBetter = tournament.GetBetterById(better.Id);
+            Better fetchedBetter = tournament.GetBetter(better.Id);
 
             fetchedBetter.Should().NotBeNull();
             fetchedBetter.User.Should().NotBeNull();
@@ -98,7 +98,7 @@ namespace Slask.Domain.Xunit.UnitTests
         [Fact]
         public void CanGetBetterInTournamentByBetterName()
         {
-            Better fetchedBetter = tournament.GetBetterByName(better.User.Name);
+            Better fetchedBetter = tournament.GetBetter(better.User.Name);
 
             fetchedBetter.Should().NotBeNull();
             fetchedBetter.User.Should().NotBeNull();
@@ -109,7 +109,7 @@ namespace Slask.Domain.Xunit.UnitTests
         [Fact]
         public void CanGetBetterInTournamentByBetterNameNoMatterLetterCasing()
         {
-            Better fetchedBetter = tournament.GetBetterByName(better.User.Name.ToLower());
+            Better fetchedBetter = tournament.GetBetter(better.User.Name.ToLower());
 
             fetchedBetter.Should().NotBeNull();
             fetchedBetter.User.Should().NotBeNull();

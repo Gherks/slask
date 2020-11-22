@@ -177,7 +177,7 @@ namespace Slask.Persistence.Specflow.IntegrationTests
                     RoundBase roundBase = tournament.Rounds[tieSolving.RoundIndex];
                     GroupBase groupBase = roundBase.Groups[tieSolving.GroupIndex];
 
-                    PlayerReference playerReference = tournament.GetPlayerReferenceByName(tieSolving.PlayerName);
+                    PlayerReference playerReference = tournament.GetPlayerReference(tieSolving.PlayerName);
 
                     tournamentRepository.SolveTieByChoosingPlayerInGroup(groupBase, playerReference);
                 }

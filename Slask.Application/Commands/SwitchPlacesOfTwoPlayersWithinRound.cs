@@ -42,14 +42,14 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not switch places on two players ({ command.PlayerReference1Id }, { command.PlayerReference2Id }) in matches ({ command.Match1Id }, { command.Match2Id }). Tournament ({ command.TournamentId }) not found.");
             }
 
-            Match match1 = tournament.GetMatchById(command.Match1Id);
+            Match match1 = tournament.GetMatch(command.Match1Id);
 
             if (match1 == null)
             {
                 return Result.Failure($"Could not switch places on two players ({ command.PlayerReference1Id }, { command.PlayerReference2Id }) in matches ({ command.Match1Id }, { command.Match2Id }). Match ({ command.Match1Id }) not found.");
             }
 
-            Match match2 = tournament.GetMatchById(command.Match2Id);
+            Match match2 = tournament.GetMatch(command.Match2Id);
 
             if (match2 == null)
             {

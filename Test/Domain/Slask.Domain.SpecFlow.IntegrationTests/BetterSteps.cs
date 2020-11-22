@@ -33,7 +33,7 @@ namespace Slask.Domain.SpecFlow.IntegrationTests
 
                 if (betterNameIsNotEmpty && playerNameIsNotEmpty)
                 {
-                    Better better = round.Tournament.GetBetterByName(betterPlacesMatchBet.BetterName);
+                    Better better = round.Tournament.GetBetter(betterPlacesMatchBet.BetterName);
                     Guid playerReferenceId = match.FindPlayer(betterPlacesMatchBet.PlayerName);
 
                     better.Should().NotBeNull();

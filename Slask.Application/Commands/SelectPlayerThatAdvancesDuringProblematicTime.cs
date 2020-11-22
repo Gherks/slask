@@ -39,7 +39,7 @@ namespace Slask.Application.Commands
                 return Result.Failure($"Could not select advancing player ({ command.PlayerName }) in group ({ command.GroupId }) during problematic tie. Tournament ({ command.TournamentId }) not found.");
             }
 
-            GroupBase group = tournament.GetGroupById(command.GroupId);
+            GroupBase group = tournament.GetGroup(command.GroupId);
 
             if (group == null)
             {

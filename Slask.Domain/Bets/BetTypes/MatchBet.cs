@@ -37,7 +37,7 @@ namespace Slask.Domain.Bets.BetTypes
 
         public override bool IsWon()
         {
-            Match match = Better.Tournament.GetMatchById(MatchId);
+            Match match = Better.Tournament.GetMatch(MatchId);
 
             if (match != null)
             {

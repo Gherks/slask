@@ -178,7 +178,7 @@ namespace Slask.Domain.Groups
 
         public bool SolveTieByChoosing(Guid playerReferenceId)
         {
-            PlayerReference playerReference = Round.Tournament.GetPlayerReferenceById(playerReferenceId);
+            PlayerReference playerReference = Round.Tournament.GetPlayerReference(playerReferenceId);
 
             return SolveTieByChoosing(playerReference);
         }

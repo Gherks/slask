@@ -25,7 +25,7 @@ namespace Slask.Domain
                 return null;
             }
 
-            PlayerReference fetchedPlayerReference = tournament.GetPlayerReferenceByName(name);
+            PlayerReference fetchedPlayerReference = tournament.GetPlayerReference(name);
 
             if (fetchedPlayerReference == null)
             {
@@ -48,7 +48,7 @@ namespace Slask.Domain
 
             if (name.Length > 0)
             {
-                bool newNameIsntAlreadyInUse = Tournament.GetPlayerReferenceByName(name) == null;
+                bool newNameIsntAlreadyInUse = Tournament.GetPlayerReference(name) == null;
 
                 if (newNameIsntAlreadyInUse)
                 {

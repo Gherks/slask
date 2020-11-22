@@ -167,7 +167,7 @@ namespace Slask.Domain
 
         public Better AddBetter(User user)
         {
-            bool betterAlreadyExists = GetBetterByName(user.Name) != null;
+            bool betterAlreadyExists = GetBetter(user.Name) != null;
 
             if (betterAlreadyExists)
             {
@@ -270,7 +270,7 @@ namespace Slask.Domain
             return Rounds.FirstOrDefault(round => round.Name.ToLower() == roundName.ToLower());
         }
 
-        public GroupBase GetGroupById(Guid groupId)
+        public GroupBase GetGroup(Guid groupId)
         {
             foreach (RoundBase round in Rounds)
             {
@@ -285,7 +285,7 @@ namespace Slask.Domain
             return null;
         }
 
-        public GroupBase GetGroupByName(string groupName)
+        public GroupBase GetGroup(string groupName)
         {
             foreach (RoundBase round in Rounds)
             {
@@ -300,7 +300,7 @@ namespace Slask.Domain
             return null;
         }
 
-        public Match GetMatchById(Guid matchId)
+        public Match GetMatch(Guid matchId)
         {
             foreach (RoundBase round in Rounds)
             {
@@ -342,12 +342,12 @@ namespace Slask.Domain
             return Rounds.Last();
         }
 
-        public PlayerReference GetPlayerReferenceById(Guid id)
+        public PlayerReference GetPlayerReference(Guid id)
         {
             return PlayerReferences.FirstOrDefault(playerReference => playerReference.Id == id);
         }
 
-        public PlayerReference GetPlayerReferenceByName(string name)
+        public PlayerReference GetPlayerReference(string name)
         {
             return PlayerReferences.FirstOrDefault(playerReference => playerReference.Name == name);
         }
@@ -358,7 +358,7 @@ namespace Slask.Domain
 
             foreach (Guid playerReferenceId in playerReferenceIds)
             {
-                PlayerReference playerReference = GetPlayerReferenceById(playerReferenceId);
+                PlayerReference playerReference = GetPlayerReference(playerReferenceId);
 
                 if (playerReference != null)
                 {
@@ -375,7 +375,7 @@ namespace Slask.Domain
 
             foreach (string playerReferenceName in playerReferenceNames)
             {
-                PlayerReference playerReference = GetPlayerReferenceByName(playerReferenceName);
+                PlayerReference playerReference = GetPlayerReference(playerReferenceName);
 
                 if (playerReference != null)
                 {
@@ -386,12 +386,12 @@ namespace Slask.Domain
             return playerReferences;
         }
 
-        public Better GetBetterById(Guid id)
+        public Better GetBetter(Guid id)
         {
             return Betters.FirstOrDefault(better => better.Id == id);
         }
 
-        public Better GetBetterByName(string name)
+        public Better GetBetter(string name)
         {
             return Betters.FirstOrDefault(better => better.User.Name.ToLower() == name.ToLower());
         }

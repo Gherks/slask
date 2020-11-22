@@ -168,7 +168,7 @@ namespace Slask.Domain
 
         public Guid FindPlayer(string name)
         {
-            PlayerReference playerReference = Group.Round.Tournament.GetPlayerReferenceByName(name);
+            PlayerReference playerReference = Group.Round.Tournament.GetPlayerReference(name);
 
             if (playerReference != null)
             {

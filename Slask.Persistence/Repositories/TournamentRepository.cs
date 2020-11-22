@@ -192,7 +192,7 @@ namespace Slask.Persistence.Repositories
             return false;
         }
 
-        public IEnumerable<PlayerReference> GetPlayerReferencesByTournamentId(Guid id)
+        public IEnumerable<PlayerReference> GetPlayerReferencesInTournament(Guid id)
         {
             Tournament tournament = GetTournament(id);
 
@@ -207,7 +207,7 @@ namespace Slask.Persistence.Repositories
             return tournament.PlayerReferences;
         }
 
-        public IEnumerable<PlayerReference> GetPlayerReferencesByTournamentName(string name)
+        public IEnumerable<PlayerReference> GetPlayerReferencesInTournament(string name)
         {
             Tournament tournament = GetTournament(name);
 
@@ -234,9 +234,9 @@ namespace Slask.Persistence.Repositories
             return better;
         }
 
-        public bool RemoveBetterFromTournamentById(Tournament tournament, Guid betterId)
+        public bool RemoveBetterFromTournament(Tournament tournament, Guid betterId)
         {
-            Better better = tournament.GetBetterById(betterId);
+            Better better = tournament.GetBetter(betterId);
 
             if (better != null)
             {
@@ -246,9 +246,9 @@ namespace Slask.Persistence.Repositories
             return false;
         }
 
-        public bool RemoveBetterFromTournamentByName(Tournament tournament, string betterName)
+        public bool RemoveBetterFromTournament(Tournament tournament, string betterName)
         {
-            Better better = tournament.GetBetterByName(betterName);
+            Better better = tournament.GetBetter(betterName);
 
             if (better != null)
             {
@@ -258,7 +258,7 @@ namespace Slask.Persistence.Repositories
             return false;
         }
 
-        public IEnumerable<Better> GetBettersByTournamentId(Guid id)
+        public IEnumerable<Better> GetBettersInTournament(Guid id)
         {
             Tournament tournament = GetTournament(id);
 
@@ -273,7 +273,7 @@ namespace Slask.Persistence.Repositories
             return tournament.Betters;
         }
 
-        public IEnumerable<Better> GetBettersByTournamentName(string name)
+        public IEnumerable<Better> GetBettersInTournament(string name)
         {
             Tournament tournament = GetTournament(name);
 
@@ -401,7 +401,7 @@ namespace Slask.Persistence.Repositories
                 return false;
             }
 
-            Better better = tournament.GetBetterByName(betterName);
+            Better better = tournament.GetBetter(betterName);
 
             if (better == null)
             {
