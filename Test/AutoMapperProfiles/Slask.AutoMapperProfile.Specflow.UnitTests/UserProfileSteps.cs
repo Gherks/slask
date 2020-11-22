@@ -34,7 +34,7 @@ namespace Slask.AutoMapperProfile.Specflow.UnitTests
             {
                 foreach (string userName in userNames)
                 {
-                    User user = userRepository.GetUserByName(userName);
+                    User user = userRepository.GetUser(userName);
                     _userDtos.Add(_mapper.Map<UserDto>(user));
                 }
             }

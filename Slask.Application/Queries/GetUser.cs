@@ -35,11 +35,11 @@ namespace Slask.Application.Querys
 
             if (Guid.TryParse(query.UserIdentifier, out Guid userId))
             {
-                user = _userRepository.GetUserById(userId);
+                user = _userRepository.GetUser(userId);
             }
             else
             {
-                user = _userRepository.GetUserByName(query.UserIdentifier);
+                user = _userRepository.GetUser(query.UserIdentifier);
             }
 
             if (user == null)

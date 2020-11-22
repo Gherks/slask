@@ -67,7 +67,7 @@ namespace Slask.SpecFlow.IntegrationTests.PersistenceTests
 
                     foreach (string userName in userNames)
                     {
-                        User user = userRepository.GetUserByName(userName);
+                        User user = userRepository.GetUser(userName);
                         tournamentRepository.AddBetterToTournament(tournament, user);
                     }
 

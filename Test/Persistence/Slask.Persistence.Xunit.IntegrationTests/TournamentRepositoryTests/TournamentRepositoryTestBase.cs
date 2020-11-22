@@ -56,9 +56,9 @@ namespace Slask.Persistence.Xunit.IntegrationTests.TournamentRepositoryTests
                 {
                     Tournament tournament = tournamentRepository.GetTournament(_tournamentName);
 
-                    tournamentRepository.AddBetterToTournament(tournament, userRepository.GetUserByName("Stålberto"));
-                    tournamentRepository.AddBetterToTournament(tournament, userRepository.GetUserByName("Bönis"));
-                    tournamentRepository.AddBetterToTournament(tournament, userRepository.GetUserByName("Guggelito"));
+                    tournamentRepository.AddBetterToTournament(tournament, userRepository.GetUser("Stålberto"));
+                    tournamentRepository.AddBetterToTournament(tournament, userRepository.GetUser("Bönis"));
+                    tournamentRepository.AddBetterToTournament(tournament, userRepository.GetUser("Guggelito"));
                     tournamentRepository.Save();
                 }
             }

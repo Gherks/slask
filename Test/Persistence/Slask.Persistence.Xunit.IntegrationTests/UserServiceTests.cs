@@ -87,8 +87,8 @@ namespace Slask.Persistence.Xunit.IntegrationTests
                 userRepository.RenameUser(user2.Id, username1.ToUpper());
                 userRepository.Save();
 
-                User after_renamed_user1 = userRepository.GetUserById(user1.Id);
-                User after_renamed_user2 = userRepository.GetUserById(user2.Id);
+                User after_renamed_user1 = userRepository.GetUser(user1.Id);
+                User after_renamed_user2 = userRepository.GetUser(user2.Id);
 
                 after_renamed_user1.Id.Should().Be(user1.Id);
                 after_renamed_user1.Name.Should().Be(username1);
@@ -112,8 +112,8 @@ namespace Slask.Persistence.Xunit.IntegrationTests
                 userRepository.RenameUser(user2.Id, username1 + " ");
                 userRepository.Save();
 
-                User after_renamed_user1 = userRepository.GetUserById(user1.Id);
-                User after_renamed_user2 = userRepository.GetUserById(user2.Id);
+                User after_renamed_user1 = userRepository.GetUser(user1.Id);
+                User after_renamed_user2 = userRepository.GetUser(user2.Id);
 
                 after_renamed_user1.Id.Should().Be(user1.Id);
                 after_renamed_user1.Name.Should().Be(username1);
@@ -156,7 +156,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests
                 User createdUser = userRepository.CreateUser("Stålberto");
                 userRepository.Save();
 
-                User fetchedUser = userRepository.GetUserById(createdUser.Id);
+                User fetchedUser = userRepository.GetUser(createdUser.Id);
                 fetchedUser.Id.Should().Be(createdUser.Id);
                 fetchedUser.Name.Should().Be(createdUser.Name);
             }
@@ -170,7 +170,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests
                 User createdUser = userRepository.CreateUser("Stålberto");
                 userRepository.Save();
 
-                User fetchedUser = userRepository.GetUserByName(createdUser.Name.ToUpper());
+                User fetchedUser = userRepository.GetUser(createdUser.Name.ToUpper());
 
                 fetchedUser.Should().NotBeNull();
                 fetchedUser.Id.Should().Be(createdUser.Id);
@@ -183,7 +183,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests
         {
             using (UserRepository userRepository = CreateuserRepository())
             {
-                User fetchedUser = userRepository.GetUserById(Guid.NewGuid());
+                User fetchedUser = userRepository.GetUser(Guid.NewGuid());
 
                 fetchedUser.Should().BeNull();
             }
@@ -194,7 +194,7 @@ namespace Slask.Persistence.Xunit.IntegrationTests
         {
             using (UserRepository userRepository = CreateuserRepository())
             {
-                User fetchedUser = userRepository.GetUserByName("my-god-thats-jason-bourne");
+                User fetchedUser = userRepository.GetUser("my-god-thats-jason-bourne");
 
                 fetchedUser.Should().BeNull();
             }

@@ -9,8 +9,8 @@ namespace Slask.Application.Interfaces.Persistence
         User CreateUser(string name);
         bool RenameUser(Guid id, string name);
         IEnumerable<User> GetUsers();
-        User GetUserByName(string name);
-        User GetUserById(Guid id);
+        User GetUser(string name);
+        User GetUser(Guid id);
         void Save();
     }
 }

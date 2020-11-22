@@ -23,7 +23,7 @@ namespace Slask.Persistence.Repositories
         public User CreateUser(string name)
         {
             bool nameIsEmpty = name == "";
-            bool userAlreadyExists = GetUserByName(name) != null;
+            bool userAlreadyExists = GetUser(name) != null;
 
             if (nameIsEmpty || userAlreadyExists)
             {
@@ -40,12 +40,12 @@ namespace Slask.Persistence.Repositories
         {
             name = name.Trim();
 
-            User user = GetUserById(id);
+            User user = GetUser(id);
             bool userFound = user != null;
 
             if (userFound)
             {
-                User userWithName = GetUserByName(name);
+                User userWithName = GetUser(name);
                 bool noUserWithNameExist = userWithName == null;
 
                 if (noUserWithNameExist)
@@ -67,12 +67,12 @@ namespace Slask.Persistence.Repositories
             return _slaskContext.Users.AsNoTracking();
         }
 
-        public User GetUserByName(string name)
+        public User GetUser(string name)
         {
             return _slaskContext.Users.FirstOrDefault(user => user.Name.ToLower() == name.ToLower());
         }
 
-        public User GetUserById(Guid id)
+        public User GetUser(Guid id)
         {
             return _slaskContext.Users.FirstOrDefault(user => user.Id == id);
         }
