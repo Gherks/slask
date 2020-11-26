@@ -31,7 +31,7 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
 
         [Given(@"Content-Type is set to ""(.*)"" and Accept is set to ""(.*)""")]
         [When(@"Content-Type is set to ""(.*)"" and Accept is set to ""(.*)""")]
-        public void GivenContentTypeIsSetToAndAcceptIsSetTo(string contentType, string accept)
+        public virtual void GivenContentTypeIsSetToAndAcceptIsSetTo(string contentType, string accept)
         {
             _contentType = contentType;
             _accept = accept;
@@ -39,7 +39,7 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
 
         [Given(@"POST request is sent to ""(.*)""")]
         [When(@"POST request is sent to ""(.*)""")]
-        public async Task GivenPOSTRequestIsSentTo(string uri, Table table)
+        public virtual async Task GivenPOSTRequestIsSentTo(string uri, Table table)
         {
             foreach (TableRow row in table.Rows)
             {
@@ -49,14 +49,14 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
 
         [Given(@"GET request is sent to ""(.*)""")]
         [When(@"GET request is sent to ""(.*)""")]
-        public async Task GivenGETRequestIsSentTo(string uri)
+        public virtual async Task GivenGETRequestIsSentTo(string uri)
         {
             _response = await _client.GetAsync(uri);
         }
 
         [Given(@"GET request is sent to ""(.*)""")]
         [When(@"GET request is sent to ""(.*)""")]
-        public async Task GivenGETRequestIsSentTo(string uri, Table table)
+        public virtual async Task GivenGETRequestIsSentTo(string uri, Table table)
         {
             foreach (TableRow row in table.Rows)
             {
@@ -73,7 +73,7 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
 
         [Given(@"PUT request is sent to ""(.*)""")]
         [When(@"PUT request is sent to ""(.*)""")]
-        public async Task GivenPUTRequestIsSentTo(string uri, Table table)
+        public virtual async Task GivenPUTRequestIsSentTo(string uri, Table table)
         {
             foreach (TableRow row in table.Rows)
             {
@@ -89,13 +89,13 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
         }
 
         [When(@"DELETE request is sent to ""(.*)""")]
-        public async Task WhenDELETERequestIsSentTo(string uri)
+        public virtual async Task WhenDELETERequestIsSentTo(string uri)
         {
             _response = await _client.DeleteAsync(uri);
         }
 
         [When(@"DELETE request is sent to ""(.*)""")]
-        public async Task WhenDELETERequestIsSentTo(string uri, Table table)
+        public virtual async Task WhenDELETERequestIsSentTo(string uri, Table table)
         {
             foreach (TableRow row in table.Rows)
             {
@@ -111,14 +111,14 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
         }
 
         [When(@"HEAD request is sent to ""(.*)""")]
-        public async Task WhenHEADRequestIsSentTo(string uri)
+        public virtual async Task WhenHEADRequestIsSentTo(string uri)
         {
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Head, uri);
             _response = await _client.SendAsync(message);
         }
 
         [When(@"HEAD request is sent to ""(.*)""")]
-        public async Task WhenHEADRequestIsSentTo(string uri, Table table)
+        public virtual async Task WhenHEADRequestIsSentTo(string uri, Table table)
         {
             foreach (TableRow row in table.Rows)
             {
@@ -135,7 +135,7 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
         }
 
         [When(@"OPTIONS request is sent to ""(.*)""")]
-        public async Task WhenOPTIONSRequestIsSentTo(string uri)
+        public virtual async Task WhenOPTIONSRequestIsSentTo(string uri)
         {
             HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Options, uri);
             _response = await _client.SendAsync(message);
@@ -144,13 +144,13 @@ namespace Slask.API.Specflow.IntegrationTests.Utilities
         [Given(@"response return with status code ""(.*)""")]
         [When(@"response return with status code ""(.*)""")]
         [Then(@"response return with status code ""(.*)""")]
-        public void ThenResponseReturnWithStatusCode(int statusCode)
+        public virtual void ThenResponseReturnWithStatusCode(int statusCode)
         {
             _response.StatusCode.Should().Be(statusCode);
         }
 
         [Then(@"response header contain endpoints ""(.*)""")]
-        public void ThenResponseHeaderContainEndpoints(string commaSeparatedEndpoints)
+        public virtual void ThenResponseHeaderContainEndpoints(string commaSeparatedEndpoints)
         {
             List<string> endpoints = commaSeparatedEndpoints.ToStringList(",");
             List<string> allowed = _response.Content.Headers.Allow.ToList();
