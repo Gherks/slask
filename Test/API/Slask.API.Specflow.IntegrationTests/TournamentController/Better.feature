@@ -10,11 +10,23 @@ Background:
 			| TournamentName |
 			| GSL 2020       |
 
-@TournamentControllerBetterTag	
+@TournamentControllerBetterTag
+Scenario: Can add better by id to tournament by id
+	When PUT request is sent to "api/tournaments/IdReplacement0/betters"
+		| IdReplacement0 | UserIdentifier |
+		| GSL 2020       | Stålberto-Id   |
+	Then response return with status code "204"
+	
 Scenario: Can add better by name to tournament by id
 	When PUT request is sent to "api/tournaments/IdReplacement0/betters"
 		| IdReplacement0 | UserIdentifier |
 		| GSL 2020       | Stålberto      |
+	Then response return with status code "204"
+	
+Scenario: Can add better by id to tournament by name
+	When PUT request is sent to "api/tournaments/GSL 2020/betters"
+		| UserIdentifier |
+		| Stålberto-Id   |
 	Then response return with status code "204"
 	
 Scenario: Can add better by name to tournament by name
